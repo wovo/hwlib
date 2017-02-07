@@ -42,9 +42,16 @@ public:
    constexpr location operator-( const location rhs ) const {
       return location{ x - rhs.x, y - rhs.y };      
    }      
-   
+
 }; 
 
+/// print a location
+ostream & operator<<( ostream & lhs, location rhs );
+#ifdef HWLIB_ONCE
+ostream & operator<<( ostream & lhs, location rhs ){
+   return lhs << "[" << rhs.x << ":" << rhs.y << "]";
+}
+#endif
 /// graphics color
 //
 /// This class abstracts a color as used in a graphics window.
@@ -141,7 +148,7 @@ public:
    constexpr bool operator != ( const color c ) const {
       return ! ( *this == c );  
    }     
-      
+
 };
 
 /// some basic colors
@@ -167,7 +174,88 @@ constexpr color salmon      = color( 0xFA8072 );
 
 // ==========================================================================
    
-/// a graphics windows
+/// an image
+//
+/// An image is a rectangular set of pixel values (colors).
+class image {
+private:
+
+   virtual color get_implementation( location pos ) const = 0;
+
+public:
+
+   /// the size of the image
+   //
+   /// This is the size of the image: the number of pixels
+   /// in the x and y direction.
+   // wovo: should be const, but that conflicts with the 16x16 font
+   location size;
+
+   /// construct an image by specifying its size.
+   constexpr image( location size)
+      : size{ size }
+   {}
+
+   /// return the coclor at the specified location
+   color operator[]( location pos ) const {
+      return (
+               ( pos.x >= 0 ) && ( pos.x < size.x )
+            && ( pos.y >= 0 ) && ( pos.y < size.y )
+         )
+            ? get_implementation( pos )
+            : black;
+   }
+
+};
+
+/// an 8x8 pixel image that contains its pixels
+class image_8x8 : public image {
+private:
+   unsigned char data[ 8 ];
+
+   color get_implementation( location pos ) const override {
+      return
+         ( data[ pos.y ] & ( 0x01 << pos.x )) == 0
+            ? white
+            : black;
+   }
+
+public:
+
+   /// create the image_8x8 by supplying the pixels
+   //
+   /// The d0 argument contains the top row, bit 0 is the leftmost pixel.
+   constexpr image_8x8(
+      unsigned char d0, unsigned char d1,
+      unsigned char d2, unsigned char d3,
+      unsigned char d4, unsigned char d5,
+      unsigned char d6, unsigned char d7
+   ):
+      image( location( 8, 8 ) ),
+      data{ d0, d1, d2, d3, d4, d5, d6, d7 }
+   {}
+};
+
+
+// ==========================================================================
+
+/// a font
+//
+/// A font provides an image for each supported character
+class font {
+public:
+
+   /// get image for a character
+   //
+   /// This function returns the image for the specified character.
+   virtual const image & operator[]( char c ) const = 0;
+};
+
+
+// ==========================================================================
+
+
+/// a graphics window
 //
 /// This class abstracts the interface to a graphic window.
 class window {
@@ -179,6 +267,16 @@ private:
    /// Loc is guaranteed to be within the window, and the color
    /// is guranteed to be not transparent.
    virtual void write_implementation( location pos, color col ) = 0;
+   
+   /// write a pixel buffered - implementation
+   //
+   /// This NVI function writes a the color col to the pixel buffer at location loc.
+   /// Loc is guaranteed to be within the window, and the color
+   /// is guranteed to be not transparent.
+   virtual void write_buffered_implementation( location pos, color col ){
+      write_implementation( pos, col );
+   }   
+      
    
 public:
    /// the size of the window
@@ -206,7 +304,7 @@ public:
    //
    /// This function writes a the color col to the pixel at location loc.
    /// If either the color is transparent, or the location is outside the window 
-   /// the call has no effect. When no locor is specificied, the window's
+   /// the call has no effect. When no color is specificied, the window's
    /// foreground color is used.
    void write( location pos, color col ){
       if(  ( ! col.is_transparent )
@@ -217,11 +315,71 @@ public:
       }   
    }
    
+   /// write a pixel buffered
+   //
+   /// This function writes a the color col to the pixel buffer at location loc.
+   /// If either the color is transparent, or the location is outside the window 
+   /// the call has no effect. When no color is specificied, the window's
+   /// foreground color is used.
+   void write_buffered( location pos, color col ){
+      if(  ( ! col.is_transparent )
+        && ( pos.x >= 0 ) && ( pos.x < size.x ) 
+        && ( pos.y >= 0 ) && ( pos.y < size.y ) 
+      ){
+         write_buffered_implementation( pos, col );
+      }   
+   }
+   
+   /// flush the pixel buffer
+   //
+   /// This function fluhses the pixel buffer: it writes pixels that
+   /// have not yet been written.
+   /// Flushing might occur as a side-effect of other operations.
+   virtual void flush(){ }
+   
+   /// write a rectangle of pixels
+   //
+   /// This function writes a rectangle of pixels, as specified by img,
+   /// at location pos.                 
+   void write( location pos, const image & img ){                 
+      for( int x = 0; x < img.size.x; ++x ){
+         for( int y = 0; y < img.size.y; ++y ){
+            auto loc = hwlib::location( x, y );
+            write( pos + loc, img[ loc ] );
+         }
+      }
+   }
+
+   /// write a rectangle of pixels buffered
+   //
+   /// This function writes a rectangle of pixels, as specified by img,
+   /// at location pos, to the pixel buffer.                      
+   void write_buffered( location pos, const image & img ){                 
+      for( int x = 0; x < img.size.x; ++x ){
+         for( int y = 0; y < img.size.y; ++y ){
+            auto loc = hwlib::location( x, y );
+            write_buffered( pos + loc, img[ loc ] );
+         }
+      }
+   }
+
    #ifndef DOXYGEN // hide from doxygen
    void write( location pos ){
       write( pos, foreground );
    }   
    #endif
+   
+   /// clear the window buffered
+   //
+   /// This function clears the write buffer by writing the background
+   /// color to all its pixels.
+   virtual void clear_buffered(){
+      for( int x = 0; x < size.x; ++x ){
+         for( int y = 0; y < size.y; ++y ){
+            write_buffered( location{ x, y }, background );    
+         }                 
+      }         
+   }   
    
    /// clear the window
    //
@@ -230,12 +388,57 @@ public:
    /// The default implementation writes to all pixels in sequence.
    /// A concrete window can probably provide a faster implementation.
    virtual void clear(){
-      for( int x = 0; x < size.x; ++x ){
-         for( int y = 0; y < size.y; ++y ){
-            write( location{ x, y }, background );    
-         }                 
-      }         
+      clear_buffered();
+      flush();      
    }
+   
+};
+
+
+// ==========================================================================
+
+class window_ostream : public console {
+private:
+   window & w;
+   const font &f;
+   location cursor;
+
+   int x_size( const window & w, const font &f ){
+      const image & im = f[ ' ' ];
+      return w.size.x / im.size.x;
+   }
+   int y_size( const window & w, const font &f ){
+      const image & im = f[ ' ' ];
+      return w.size.y / im.size.y;
+   }
+
+   void goto_xy_implementation( int x, int y ) override {
+      const image & im = f[ ' ' ];
+      cursor.x = x * im.size.x;
+      cursor.y = y * im.size.y;
+   }
+
+   void putc_implementation( char c ) override {
+      const image & im = f[ c ];
+
+      w.write_buffered( cursor, im );
+      cursor.x += im.size.x;
+   }
+
+   void clear() override {
+      w.clear();
+      goto_xy( 0, 0 );
+   }
+
+	void flush() override {
+		w.flush();
+	}
+
+public:
+   /// construct an ostrem from a window and a font
+   window_ostream( window & w, const font &f ):
+      console( x_size( w, f ), y_size( w, f ) ), w( w ), f( f ), cursor( 0, 0 )
+   { }
 };
 
 
@@ -251,6 +454,14 @@ private:
    
    void write_implementation( location pos, color col ) override {
       w.write( start + pos, col );
+   }      
+   
+   void write_buffered_implementation( location pos, color col ) override {
+      w.write_buffered( start + pos, col );
+   }    
+
+   void flush() override {
+      w.flush();
    }      
    
 public:      
@@ -282,6 +493,14 @@ private:
       w.write( pos, - col );
    }      
    
+   void write_buffered_implementation( location pos, color col ) override {
+      w.write( pos, - col );
+   } 
+
+   void flush() override {
+      w.flush();
+   }      
+   
 public:      
    /// create a window_invert from a window
    //
@@ -293,20 +512,36 @@ public:
       window( w.size, w.foreground, w.background ),
       w( w )
    {}   
-      
+
 };
 
 // ==========================================================================
 
+/// interface to an drawable object
 class drawable {
-public: 
+public:
+
+   /// the location where the object is drawn
    location start;
-    
+
+   /// create a drawable object by bsupplying its (initial) location
    drawable( location start ): start{ start }{}
+
+   /// interface to draw the object
+   //
+   /// You must supply the window.
+   virtual void draw( window & w ){
+      draw_buffered( w ); w.flush();
+   }      
    
-   virtual void draw( window & w ) = 0;
+   /// interface to draw the object buffered
+   //
+   /// You must supply the window, and you must flus() 
+   /// the window at some time to make sure that the object becomes visible.
+   virtual void draw_buffered( window & w );    
 };
 
+/// a line object                 
 class line : public drawable {
 private:   
    location end;
@@ -324,10 +559,10 @@ private:
    }
 
 public:
+   /// create a line object
    line( location start, location end, color fg = black )
       : drawable{ start }, end{ end }, fg{ fg }
    {}   
-   
    
    void draw( window & w ) override { 
       int x0 = start.x;
@@ -388,8 +623,14 @@ public:
       }
    }
    
+   void draw_buffered( window & w ) override { 
+      draw( w ); 
+   }
+   
 }; // class line   
 
+
+/// a circle object                   
 class circle : public drawable {
 private:   
    int radius;
@@ -397,6 +638,7 @@ private:
    color bg;
    
 public:
+   /// create a circle object
    circle( location start, int radius, color fg = black, color bg = transparent )
       : drawable{ start }, radius{ radius }, fg{ fg }, bg{ bg }
    {}     
@@ -466,6 +708,10 @@ public:
             line( start + location( -y, -x ), start + location(  y, -x ), bg ).draw( w );
          }
       }
+   }   
+   
+   void draw_buffered( window & w ) override { 
+      draw( w ); 
    }   
     
 }; // class circle

@@ -1,0 +1,22 @@
+#############################################################################
+#
+# makefile.link
+#
+# common settings and uplink for ARduino Due projects
+#
+# (c) Wouter van Ooijen (www.voti.nl) 2017
+#
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt)
+# 
+#############################################################################
+
+# common settings for Arduino Due projects
+TARGET            ?= arduino_due
+SERIAL_PORT       ?= COM2
+CONSOLE_BAUDRATE  ?= 2400
+
+# defer to the next-level makefile
+RELATIVE          := $(RELATIVE)/..
+include           $(RELATIVE)/Makefile.link

@@ -1,10 +1,11 @@
 // ==========================================================================
 //
 // File      : hwlib-doxygen.hpp
-// Part of   : hwlib library for V1OOPC and V1IPAS
-// Copyright : wouter@voti.nl 2016
+// Part of   : C++ OO library for close-to-the-metal programming
+// Copyright : wouter@voti.nl 2017
 //
-// input for doxygen that is never included in a compilation
+// this file contains the input for Doxygen 
+// that is never included in a compilation
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -26,15 +27,13 @@ namespace hwlib {}
 /// \image html toolset.png
 ///
 /// \author Wouter van Ooijen (wouter@voti.nl)
-/// \version 1.0 (last modified 2015-01-21)
+/// \version 1.1 (last modified 2017-02-03)
 /// \copyright boost license (some files public domain)
 ///
 /// Hwlib is a C++ OO library for close-to-the-hardware programming.
-/// It is used in the V1IPAS-TI course at the Hogeschool Utrecht.
-/// The library is meant to be used within bmptk.
-/// The language is the 2011 C++ standard. 
-/// (But for compiling for the Arduino Uno the 2011 standard is used 
-/// because gcc-avr doesn't yet support the 2014 standard.)
+/// It is used in an number of courses at the Hogeschool Utrecht.
+/// The library is meant to be used with bmptk.
+/// The language use is the 2014 C++ standard. 
 ///
 /// Hardware pins and ports, and other hardware-related interfaces like
 /// A/D converters and character streams are represented by abstract
@@ -52,7 +51,7 @@ namespace hwlib {}
 /// (hwlib-due.hpp, hwlib-db103.hpp, hwlib-uno.hpp or hwlib-pi.hpp),
 /// or (preferrably) by including hwlib.hpp, which will include the
 /// correct target header based on the macro that is set by bmptk 
-/// (BMPTK_TARGET_ARDUIN_DUE etc.) in the compiler command line.
+/// (BMPTK_TARGET_ARDUIN_DUE etc.) on the compiler command line.
 ///
 /// \snippet "due\blink\main.cpp" [Doxygen blink example]
 /// 
@@ -74,12 +73,8 @@ namespace hwlib {}
 ///         - channels (queue-like synchronization mechanism)
 ///
 /// Hwlib must be effective on micro-controllers with different word sizes.
-/// Hence plain int types are (almost) never used. 
-/// For single 8-bit variables hwlib::fast_byte is used, which translates
-/// to the fastest unsigned integer type that can hold 8 bits (uint_fast8_t):
-/// 8 bit on 8-bit targets, 16 bits on 16-bit targets, etc.
-/// For array variables and parameters hwlib::byte (uint8_t)
-/// will often be a better choice.
+/// Hence plain int types are (almost) never used, 
+/// instead the likes of uint_fast8_t are used.
 ///
 /// Hwlib is meant to be usable and understandable by users with (only) 
 /// a basic knowledge of C++, specifically:
@@ -106,7 +101,7 @@ namespace hwlib {}
 /// The following C++ features are deliberately *not* used, 
 /// because they are eiter too advanced, 
 /// or not appropriate for use on small micro-controllers:
-///    - dynamic memory (new, delete)
+///    - dynamic memory (new, delete, STL containers)
 ///    - exception handling (throw, try ... catch)
 ///    - templates (except static_cast<>)
 ///    - RTTI, dynamic_cast
@@ -134,6 +129,7 @@ namespace hwlib {}
 ///   - faster I2C by exposing the elements, use in oled?
 ///
 /// Quality & consistency issues 
+///   - uint_fast8_t all over
 ///   - main() not (void)
 ///   - file-local objects are not documented? (check ostream)
 ///   - author & change date everywhere?

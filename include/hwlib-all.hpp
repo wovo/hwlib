@@ -21,6 +21,8 @@
 #include "hwlib-dac.hpp"
 #include "hwlib-console.hpp"
 #include "hwlib-graphics.hpp"
+#include "hwlib-font-default-8x8.hpp"
+#include "hwlib-font-default-16x16.hpp"
 #include "hwlib-wait.hpp"
 #include "hwlib-ostream.hpp"
 #include "hwlib-panic.hpp"

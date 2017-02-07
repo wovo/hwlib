@@ -130,15 +130,16 @@ void HWLIB_WEAK HWLIB_NORETURN graphics_random_lines( window & w ){
 //
 /// This functions repeats the following actions:
 /// - clears the window
-/// - draws 30 random circles (which might be partially out-of-screen),
+/// - draws n_circles (default is 30) random circles 
+///      (which might be partially out-of-screen),
 /// - waits half a second.
-void HWLIB_WEAK HWLIB_NORETURN graphics_random_circles( window & w ){
+void HWLIB_WEAK HWLIB_NORETURN graphics_random_circles( window & w, int n_circles = 30 ){
    for(;;){
       w.clear();
-      for( int n = 0; n < 30; n++ ){
+      for( int n = 0; n < n_circles; n++ ){
          int x  = random_in_range( 10, w.size.x - 10 );
-         int y = random_in_range( 10, w.size.y - 10 );
-         int s  = random_in_range( 0, w.size.y / 4 );
+         int y  = random_in_range( 10, w.size.y - 10 );
+         int s  = random_in_range(  0, w.size.y / 4 );
          auto circle = hwlib::circle( 
             hwlib::location{  x,  y },
             s,

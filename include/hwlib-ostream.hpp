@@ -301,7 +301,7 @@ namespace hwlib {
       //
       /// This function is called by the other functions to output
       /// each character.
-      virtual void putc( char c ) = 0;
+      virtual void putc( char c ) = 0;    
        
       /// char output operator 
       ostream & operator<< ( char c ){ 

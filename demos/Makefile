@@ -1,8 +1,8 @@
 #############################################################################
 # 
-# hwlib top-level Makefile 
+# Makefile that defers clean and build to subdirectories
 #
-# (c) Wouter van Ooijen (www.voti.nl) 2017
+# (c) Wouter van Ooijen (www.voti.nl) 2016
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,7 +10,22 @@
 # 
 #############################################################################
 
-.PHONY: clean build run error
+SUBDIRS += arduino-due
+SUBDIRS += arduino-uno
+SUBDIRS += db103
+
+BUILDDIRS = $(SUBDIRS:%=build-%)
+CLEANDIRS = $(SUBDIRS:%=clean-%)
+
+.phony: clean build run error $(BUILDDIRS) $(CLEANDIRS)
+
+clean: $(CLEANDIRS)
+$(CLEANDIRS): 
+	bmptk-make -C $(@:clean-%=%) clean
+   
+build: $(BUILDDIRS)
+$(BUILDDIRS):
+	bmptk-make -C $(@:build-%=%) build
 
 run: error
 
@@ -19,22 +34,5 @@ MSG += Make one of the project source files your current editor file.
 
 error:
 	$(error $(MSG) )   
-   
-REMOVE := ../bmptk/tools/bmptk-rm 
-   
-build:   
-	Doxygen
-	cd demos && bmptk-make build
-	@echo "**** build completed succesfully"   
-   
-clean:   
-	$(REMOVE) -rf html
-	cd demos && bmptk-make clean   
-	@echo "**** cleanup completed succesfully"   
-   
-push: 
-	bmptk-make clean
-   # git add -A
-	# git commit -a -m 'work'
-	# git push		
+	
 		

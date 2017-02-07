@@ -1,0 +1,20 @@
+#############################################################################
+#
+# makefile.link
+#
+# (c) Wouter van Ooijen (www.voti.nl) 2017
+#
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt)
+# 
+#############################################################################
+
+# add the hwlib main directory to the search list
+SEARCH            += $(RELATIVE)/../include
+
+# defer to the makefile.inc
+# assuming that hwlib and bmptk are 'next to each other'
+# otherwise change the next line appropriately
+BMPTK             := $(RELATIVE)/../../bmptk
+include           $(BMPTK)/Makefile.inc

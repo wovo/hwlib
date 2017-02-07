@@ -39,6 +39,8 @@ namespace hwlib {
 ///
 class glcd_oled : public window {
 private:
+   static const byte DATA_MODE = 0x40;
+   static const byte CMD_MODE  = 0x80;                                               
    i2c_bus & bus;
    
    // the 7-bit i2c address of the controller
@@ -83,7 +85,7 @@ private:
    static constexpr const uint8_t VERTICAL_AND_LEFT_HORIZONTAL_SCROLL   = 0x2A;   
    
    void command( byte d ){
-      byte data[] = { 0x80, d };
+      byte data[] = { CMD_MODE, d };
       bus.write( 
          address, 
          data, 
@@ -92,7 +94,7 @@ private:
    } 	
    
    void command( byte d0, byte d1 ){
-      byte data[] = { 0x80, d0, 0x80, d1 };
+      byte data[] = { CMD_MODE, d0, CMD_MODE, d1 };
       bus.write( 
          address, 
          data, 
@@ -101,7 +103,7 @@ private:
    } 	
    
    void command( byte d0, byte d1, byte d2 ){
-      byte data[] = { 0x80, d0, 0x80, d1, 0x80, d2 };
+      byte data[] = { CMD_MODE, d0, CMD_MODE, d1, CMD_MODE, d2 };
       bus.write( 
          address, 
          data, 
@@ -120,7 +122,7 @@ private:
          cursor_x = x;
          cursor_y = y;
       }   
-      byte data[] = { 0x40, d };
+      byte data[] = { DATA_MODE, d };
       bus.write( 
          address, 
          data, 
@@ -129,17 +131,26 @@ private:
       cursor_x++;      
    }
    
-   uint8_t buffer[ 128 * 64 / 8 ];
+   // first byte is permanently set to DATA_MODE
+   uint8_t buffer[ 1 + 128 * 64 / 8 ];
+   
+   void write_to_buffer( location pos, color col, int a ){
+      if( col == foreground ){ 
+         buffer[ 1 + a ] |=  ( 0x01 << (pos.y % 8 ));  
+      } else {
+         buffer[ 1 + a ] &= ~( 0x01 << ( pos.y % 8 )); 
+      }   
+   }      
 
+   void write_buffered_implementation( location pos, color col ) override {
+      int a = pos.x + ( pos.y / 8 ) * size.x;
+      write_to_buffer( pos, col, a );
+   }   
+   
    void write_implementation( location pos, color col ) override {
       int a = pos.x + ( pos.y / 8 ) * size.x;
-
-      if( col == foreground ){ 
-         buffer[ a ] |=  ( 0x01 << (pos.y % 8 ));  
-      } else {
-         buffer[ a ] &= ~( 0x01 << ( pos.y % 8 )); 
-      }   
-      pixels( pos.x, pos.y / 8, buffer[ a ] );      
+      write_to_buffer( pos, col, a );
+      pixels( pos.x, pos.y / 8, buffer[ 1 + a ] );      
    }
    
 public:
@@ -151,48 +162,44 @@ public:
       cursor_x( 255 ), cursor_y( 255 )
    {
       static constexpr const byte init_sequence[] = {
-         0x80,  DISPLAYOFF,                   
-         0x80,  SETDISPLAYCLOCKDIV,   0x80,   
-         0x80,  SETMULTIPLEX,         0x3F,   
-         0x80,  SETDISPLAYOFFSET,     0x00,   
-         0x80,  SETSTARTLINE        | 0x00,  
-         0x80,  CHARGEPUMP,           0x14,   
-         0x80,  MEMORYMODE,           0x00,   
-         0x80,  SEGREMAP            | 0x01,
-         0x80,  COMSCANDEC,
-         0x80,  SETCOMPINS,           0x12,   
-         0x80,  SETCONTRAST,          0xCF,   
-         0x80,  SETPRECHARGE,         0xF1,  
-         0x80,  SETVCOMDETECT,        0x40,   
-         0x80,  DISPLAYALLON_RESUME,          
-         0x80,  NORMALDISPLAY,                
-         0x80,  DISPLAYON                     
+         CMD_MODE,  DISPLAYOFF,                   
+         CMD_MODE,  SETDISPLAYCLOCKDIV,   0x80,   
+         CMD_MODE,  SETMULTIPLEX,         0x3F,   
+         CMD_MODE,  SETDISPLAYOFFSET,     0x00,   
+         CMD_MODE,  SETSTARTLINE        | 0x00,  
+         CMD_MODE,  CHARGEPUMP,           0x14,   
+         CMD_MODE,  MEMORYMODE,           0x00,   
+         CMD_MODE,  SEGREMAP            | 0x01,
+         CMD_MODE,  COMSCANDEC,
+         CMD_MODE,  SETCOMPINS,           0x12,   
+         CMD_MODE,  SETCONTRAST,          0xCF,   
+         CMD_MODE,  SETPRECHARGE,         0xF1,  
+         CMD_MODE,  SETVCOMDETECT,        0x40,   
+         CMD_MODE,  DISPLAYALLON_RESUME,          
+         CMD_MODE,  NORMALDISPLAY,                
+         CMD_MODE,  DISPLAYON                     
       };
       wait_ms( 20 );
       bus.write( 
          address, 
          init_sequence, 
          sizeof( init_sequence ) / sizeof( byte ) 
-      );     
+      );    
+      
+      // init first byte of write buffer
+      buffer[0] = DATA_MODE;      
    }
    
-   // can be done 3 times faster ...
-   virtual void clear(){
+   virtual void flush(){    
       command( COLUMNADDR,  0,  127 );
       command( PAGEADDR,    0,    7 );   
-      for( int y = 0; y < 64 / 8; y++ ){
-         for( int x = 0; x < 128; x++ ){
-            buffer[ x + 128 * y ] = 0x00;
-            byte data[] = { 0x40, 0x00 };
-            bus.write( 
-               address, 
-               data, 
-               sizeof( data ) / sizeof( byte ) 
-            );
-         }                 
-      }         
-   }   
-   
+      bus.write( 
+         address, 
+         buffer, 
+         sizeof( buffer ) / sizeof( byte )
+      );
+   }     
+
 }; // class glcd_oled
    
 }; // namespace hwlib
