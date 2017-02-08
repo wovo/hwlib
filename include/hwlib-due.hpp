@@ -234,9 +234,9 @@ struct ad_seq_type {
    uint32_t seq2;
 };
 
-const HWLIB_WEAK ad_seq_type & ad_seq_info( int channel ){
+const HWLIB_WEAK ad_seq_type & ad_seq_info( uint32_t channel ){
     
-   static constexpr int n_seq = 14;
+   static constexpr uint32_t n_seq = 14;
     
    static const ad_seq_type ad_seq_array[ n_seq ] = {
       {  0xFFFF'FFF0, 0xFFFF'FFFF },   // 0
@@ -263,7 +263,7 @@ const HWLIB_WEAK ad_seq_type & ad_seq_info( int channel ){
 
 /// \endcond 
  
-Pio & __attribute__((weak)) port_registers( int port ){
+Pio & __attribute__((weak)) port_registers( uint32_t port ){
    // a bit of a cludge to put this here:
    // enable the clock to all GPIO ports
    PMC->PMC_PCER0 = ( 0x3F << 11 );
@@ -285,7 +285,7 @@ Pio & __attribute__((weak)) port_registers( int port ){
 class pin_in : public hwlib::pin_in {
 private:
    Pio & port;
-   int mask;
+   uint32_t mask;
    
 public:
 
@@ -297,9 +297,9 @@ public:
    /// not to the Arduino board pin names.
    ///
    /// This constructor sets the pin direction to input.
-   pin_in( int port_number, int pin_number ): 
+   pin_in( uint32_t port_number, uint32_t pin_number ): 
       port{ port_registers( port_number ) }, 
-      mask{ 0x1 << pin_number }
+      mask{ 0x1U << pin_number }
    {
       port.PIO_ODR = mask;
    }
@@ -325,7 +325,7 @@ public:
 class pin_out : public hwlib::pin_out {
 private:
    Pio & port;
-   int mask;
+   uint32_t mask;
    
 public:
 
@@ -337,9 +337,9 @@ public:
    /// not to the Arduino board pin names.
    ///
    /// This constructor sets the pin direction to output.
-   pin_out( int port_number, int pin_number ): 
+   pin_out( uint32_t port_number, uint32_t pin_number ): 
       port{ port_registers( port_number ) }, 
-      mask{ 0x1 << pin_number }
+      mask{ 0x1U << pin_number }
    {
       port.PIO_OER  = mask; 
    }
@@ -368,7 +368,7 @@ public:
 class pin_in_out : public hwlib::pin_in_out {
 private:
    Pio & port;
-   int mask;
+   uint32_t mask;
    
 public:
 
@@ -382,9 +382,9 @@ public:
    /// This constructor doesn't set the pin direction 
    /// to input or output, a direction_set function must
    /// be called to do so.
-   pin_in_out( int port_number, int pin_number ): 
+   pin_in_out( uint32_t port_number, uint32_t pin_number ): 
       port{ port_registers( port_number ) }, 
-      mask{ 0x1 << pin_number }
+      mask{ 0x1U << pin_number }
    {}
    
    /// Arduino Due pin_out constructor from a Due pin name
@@ -425,7 +425,7 @@ public:
 class pin_oc : public hwlib::pin_oc {
 private:
    Pio & port;
-   int mask;
+   uint32_t mask;
    
 public:
 
@@ -437,9 +437,9 @@ public:
    /// not to the Arduino board pin names.
    ///
    /// This constructor sets the pin to high (high-impedance). 
-   pin_oc( int port_number, int pin_number ): 
+   pin_oc( uint32_t port_number, uint32_t pin_number ): 
       port{ port_registers( port_number ) }, 
-      mask{ 0x1 << pin_number }
+      mask{ 0x1U << pin_number }
    {
       port.PIO_ODR = mask;
    }
@@ -477,7 +477,7 @@ public:
 /// pin_adc implementation for a ATSAM3X8E
 class pin_adc_try single : public hwlib::adc {
 private:
-   int channel;
+   uint32_t channel;
    const ad_seq_type & seq;   
    
 public:
@@ -485,7 +485,7 @@ public:
    /// Constructor for a ATSAM3X8E AD channel number.
    ///
    /// This constructor initializes the pin to be an ADC input. 
-   pin_adc( int channel ): 
+   pin_adc( uint32_t channel ): 
       adc( 12 ),
       channel( channel ),
       seq( ad_seq_info( channel ))
@@ -555,7 +555,7 @@ public:
 /// pin_adc implementation for a ATSAM3X8E
 class pin_adc : public hwlib::adc {
 private:
-   int channel;
+   uint32_t channel;
    const ad_seq_type & seq;   
    
 public:
@@ -563,7 +563,7 @@ public:
    /// Constructor for a ATSAM3X8E AD channel number.
    ///
    /// This constructor initializes the pin to be an ADC input. 
-   pin_adc( int channel ): 
+   pin_adc( uint32_t channel ): 
       adc( 12 ),
       channel( channel ),
       seq( ad_seq_info( channel ))
@@ -632,7 +632,7 @@ public:
    }
 };
 
-long long int HWLIB_WEAK now_us(){
+uint32_t HWLIB_WEAK now_us(){
    static bool init_done = false;
    if( ! init_done ){
       
@@ -647,11 +647,11 @@ long long int HWLIB_WEAK now_us(){
       init_done = true;      
    }
    
-   static unsigned int last_low = 0;
-   static unsigned long long int high = 0;
+   uint32_t last_low = 0;
+   uint64_t high = 0;
 
    // the timer ticks down, but we want an up counter
-   unsigned int low = 0xFFFFFF - ( SysTick->VAL & 0xFFFFFF );
+   uint32_t low = 0xFFFFFF - ( SysTick->VAL & 0xFFFFFF );
    if( low < last_low ){
    
       // the timer rolled over, so increment the high part
@@ -717,7 +717,7 @@ char HWLIB_WEAK uart_getc( ){
    return uart_getc_bit_banged_pin( pin );
 }
 
-long long int HWLIB_WEAK now_us(){
+uint64_t HWLIB_WEAK now_us(){
    return target::now_us();
 }   
 

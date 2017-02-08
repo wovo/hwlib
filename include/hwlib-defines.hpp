@@ -14,8 +14,6 @@
 #ifndef HWLIB_DEFINES_H
 #define HWLIB_DEFINES_H
 
-#include <stdint.h>
-
 /// mark a function declaration as never returning
 //
 /// This is useful when other code relies a function not to return.
@@ -88,29 +86,5 @@
 //
 /// This macro calls panic( __FILE__, __LINE__ ).
 #define HWLIB_PANIC_WITH_LOCATION ::hwlib::panic( __FILE__, __LINE__ )
-
-/// byte (8 bit unsigned, 1 byte) type
-//
-/// This type is used when the range 0..255 is sufficient, and 
-/// size is important too, for instance when passing a large array
-/// to i2c or spi library functions.
-///
-/// For single (non-array) variables and parameters fast_byte
-/// will often be a better choice.
-typedef uint8_t byte;
-
-/// fast byte (8 bit unsigned) type
-//
-/// This type is used when the range 0..255 is sufficient, but speed
-/// is important too, for instance as parameter (single or small array)
-/// to i2c or spi library functions.
-///
-/// On 8 bit targets, the byte type will (likely) be unsigned char. 
-/// On 16 bit targets, it will (likely) be a 16-bit unsigned integer.
-/// On 32 bit targets, it will (likely) be a 32-bit unsigned integer.
-/// A consequence is that on 16 and 32 bit targets, latent bugs can
-/// exist that (using values > 255) that will only surface when 
-/// an 8-bit target is used. 
-typedef uint_fast8_t fast_byte;
 
 #endif // HWLIB_DEFINES_H

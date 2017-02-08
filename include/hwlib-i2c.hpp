@@ -108,14 +108,22 @@ public:
    /// This function write n bytes from data[] to the slave at address a.
    ///
    /// Note that n is a byte, hence the maximum number of bytes is 255.
-   virtual void write( fast_byte a, const byte data[], fast_byte n ) = 0;
+   virtual void write( 
+      uint_fast8_t a, 
+      const uint8_t data[], 
+      uint_fast8_t n 
+) = 0;
 
    /// i2c read transaction
    //
    /// This function reads n bytes from the slave at address a to data[].
    ///
    /// Note that n is a byte, hence the maximum number of bytes is 255. 
-   virtual void read( fast_byte a, byte data[], fast_byte n ) = 0;
+   virtual void read( 
+      uint_fast8_t a, 
+      uint8_t data[], 
+      uint_fast8_t n 
+) = 0;
   
    
 }; // class i2c_bus  
@@ -186,16 +194,16 @@ private:
       write_bit( 1 );
    }
 
-   void write_byte( fast_byte x ){
-      for( fast_byte i = 0; i < 8; i++ ){
+   void write_byte( uint_fast8_t x ){
+      for( uint_fast8_t i = 0; i < 8; i++ ){
          write_bit( ( x & 0x80 ) != 0 );
          x = x << 1;
       }         
     }
 
-   fast_byte read_byte(){
-      fast_byte result = 0;
-      for( fast_byte i = 0; i < 8; i++ ){
+   uint_fast8_t read_byte(){
+      uint_fast8_t result = 0;
+      for( uint_fast8_t i = 0; i < 8; i++ ){
          result = result << 1;
          if( read_bit() ){
             result |= 0x01;
@@ -221,10 +229,14 @@ public:
    //
    /// This function writes n bytes of data to the device with address a
    /// that is connected to the I2C bus.
-   void write( fast_byte a, const byte data[], fast_byte n ) override {
+   void write( 
+      uint_fast8_t a, 
+      const uint8_t data[], 
+      uint_fast8_t n 
+   ) override {
       write_start();
       write_byte( a << 1 );
-      for( fast_byte i = 0; i < n; i++ ){
+      for( uint_fast8_t i = 0; i < n; i++ ){
          read_ack();
          write_byte( data[ i ] );
       }               
@@ -236,11 +248,15 @@ public:
    //
    /// This function reads n bytes of data from the device with address a
    /// that is connected to the I2C bus.
-   void read( fast_byte a, byte data[], fast_byte n ) override {
+   void read( 
+      uint_fast8_t a, 
+      uint8_t data[], 
+      uint_fast8_t n 
+   ) override {
       write_start();
       write_byte( ( a << 1 ) | 0x01 );    
       read_ack();
-      for( fast_byte i = 0; i < n; i++ ){
+      for( uint_fast8_t i = 0; i < n; i++ ){
          if( i > 0 ){
             write_ack();
          }   

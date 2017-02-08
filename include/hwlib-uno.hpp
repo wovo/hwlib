@@ -410,7 +410,7 @@ void HWLIB_WEAK wait_ns( int_fast32_t n ){
 }
 
 void HWLIB_WEAK wait_us( int_fast32_t n ){ 
-    // first int parameter is passd in r24/r25
+    // first integer parameter is passd in r24/r25
     __asm volatile(                  // clocks
        "1:  cp    r1, r24     \t\n"   // 1
        "    cpc   r1, r25     \t\n"   // 1

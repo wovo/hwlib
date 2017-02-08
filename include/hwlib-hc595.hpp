@@ -61,7 +61,7 @@ class hc595 : public port_out {
 private:
    spi_bus & bus;
    pin_out & sel;
-   byte write_buffer;
+   uint8_t write_buffer;
    
    void flush(){
       bus.write_and_read( sel, 1, &write_buffer, nullptr ); 
@@ -69,12 +69,12 @@ private:
    
    class _one_pin : public pin_out {
       hc595 & chip;
-      fast_byte mask;
+      uint_fast8_t mask;
       
    public:
-      _one_pin( hc595 & chip, fast_byte n ): 
+      _one_pin( hc595 & chip, uint_fast8_t n ): 
          chip( chip ), 
-         mask{ static_cast< fast_byte>( 0x01 << n ) }
+         mask{ static_cast< uint_fast8_t >( 0x01 << n ) }
       {}
       
       void set( bool v ) override {

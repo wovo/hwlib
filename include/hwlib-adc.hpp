@@ -25,10 +25,10 @@ class adc {
 public:
 
    /// the number of bits in the result returned by get()
-   const int adc_n_bits;
+   const uint_fast8_t adc_n_bits;
    
    /// the type of the result returned by get()
-   typedef unsigned int adc_value_type; 
+   typedef uint_fast32_t adc_value_type; 
     
    /// do an A/D conversion and return the result
    //
@@ -38,7 +38,7 @@ public:
    virtual adc_value_type get() = 0;
    
    /// specify the number of bits
-   adc( int n_bits ): adc_n_bits{ n_bits }{
+   adc( uint_fast8_t n_bits ): adc_n_bits{ n_bits }{
       if( n_bits > static_cast<int>( 8 * sizeof( adc_value_type ))){
          // the number of bits won't fit in the return type of get()
          HWLIB_PANIC_WITH_LOCATION;

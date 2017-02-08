@@ -25,10 +25,10 @@ class dac {
 public:
 
    /// the number of bits in the result returned by get()
-   const int dac_n_bits;
+   const uint_fast8_t dac_n_bits;
    
    /// the type of the result returned by get()
-   typedef unsigned int dac_value_type; 
+   typedef uint_fast32_t dac_value_type; 
     
    /// write a value to the D/A output 
    //
@@ -37,7 +37,7 @@ public:
    virtual void set( dac_value_type x ) = 0;
    
    /// specify the number of bits
-   dac( int n_bits ): dac_n_bits{ n_bits }{
+   dac( uint_fast8_t n_bits ): dac_n_bits{ n_bits }{
       if( dac_n_bits > static_cast<int>( 8 * sizeof( dac_value_type ))){
          // the number of bits won't fit in the return type of get()
          HWLIB_PANIC_WITH_LOCATION;

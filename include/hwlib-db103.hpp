@@ -42,24 +42,24 @@ namespace db103 {
    /// \cond INTERNAL    
 
    // return the pointer to an IO port related register
-   volatile __attribute__((weak)) int *gpioreg( int port, int offset ){
-      return (volatile int *)( 0x50000000 + port * 0x10000 + offset );
+   volatile __attribute__((weak)) uint32_t *gpioreg( uint32_t port, uint32_t offset ){
+      return (volatile uint32_t *)( 0x50000000 + port * 0x10000 + offset );
    }
    
    // configure a pin that has no AD capability
-   void __attribute__((weak)) pin_gp_conf( volatile uint32_t *p, int value ){
+   void __attribute__((weak)) pin_gp_conf( volatile uint32_t *p, uint32_t value ){
       *p = value | ( *p & ~0x07 );
    }   
 
    // configure a pin with AD capability  
-   void __attribute__((weak)) pin_ad_conf( volatile uint32_t *p, int value ){
+   void __attribute__((weak)) pin_ad_conf( volatile uint32_t *p, uint32_t value ){
       *p = 
          ( value << 0 ) 
          | ( *p & ~ ( ( 0x07 << 0 ) | ( 0x01 << 7 )));
    }   
    
    // configure a pin as GPIO
-   void __attribute__((weak)) configure_as_gpio( int port, int pin ){
+   void __attribute__((weak)) configure_as_gpio( uint32_t port, uint32_t pin ){
       LPC_SYSCON->SYSAHBCLKCTRL |= (1<<16);     // enable IOCON
       switch( ( port << 8 ) | pin ){
          case 0x0000: pin_gp_conf( &LPC_IOCON->RESET_PIO0_0,  0x01 ); break;
@@ -113,7 +113,7 @@ namespace db103 {
    } 
    
    // configure a pin as ADC
-   int __attribute__((weak)) configure_as_adc( int port, int pin ){ 
+   uint32_t __attribute__((weak)) configure_as_adc( uint32_t port, uint32_t pin ){ 
    
          // enable IOCON & A/D clock
       LPC_SYSCON->SYSAHBCLKCTRL |= ( 0x01 << 16 ) | ( 0x01 << 13 );
@@ -139,7 +139,7 @@ namespace db103 {
 /// pin_in implementation for the LPC1114
 class pin_in : public hwlib::pin_in {
 private:
-   int port, pin, mask;
+   uint32_t port, pin, mask;
    
 public:
 
@@ -148,7 +148,7 @@ public:
    /// Constructor for an LPC11114 input pin.
    ///
    /// This constructor sets the pin direction to input.   
-   pin_in( int port, int pin ): 
+   pin_in( uint32_t port, uint32_t pin ): 
       port{ port },
       pin{ pin },
       mask{ 0x01 << pin }
@@ -165,7 +165,7 @@ public:
 /// pin_out implementation for the LPC1114
 class pin_out : public hwlib::pin_out {
 private:
-   int port, pin, mask;
+   uint32_t port, pin, mask;
    
 public:
 
@@ -174,7 +174,7 @@ public:
    /// Constructor for an LPC11114 output pin.
    ///
    /// This constructor sets the pin direction to output.   
-   pin_out( int port, int pin ): 
+   pin_out( uint32_t port, uint32_t pin ): 
       port{ port },
       pin{ pin },
       mask{ 0x01 << pin }
@@ -191,7 +191,7 @@ public:
 /// pin_in_out implementation for the LPC1114
 class pin_in_out : public hwlib::pin_in_out {
 private:
-   int port, pin, mask;
+   uint32_t port, pin, mask;
    
 public:
 
@@ -202,7 +202,7 @@ public:
    /// This constructor doesn't set the pin direction 
    /// to input or output, a direction_set function must
    /// be called to do so.   
-   pin_in_out( int port, int pin ): 
+   pin_in_out( uint32_t port, uint32_t pin ): 
       port{ port },
       pin{ pin }, 
       mask{ 0x1 << pin }
@@ -230,7 +230,7 @@ public:
 /// pin_oc implementation for the LPC1114
 class pin_oc : public hwlib::pin_oc {
 private:
-   int port, pin, mask;
+   uint32_t port, pin, mask;
    
 public:
 
@@ -239,7 +239,7 @@ public:
    /// Constructor for an LPC1114 input pin.
    ///
    /// This constructor sets the pin to high (high-impedance). 
-   pin_oc( int port, int pin ): 
+   pin_oc( uint32_t port, uint32_t pin ): 
       port{ port },
       pin{ pin }, 
       mask{ 0x1 << pin }
@@ -271,11 +271,11 @@ public:
 
    class pin_adc : public hwlib::adc {   
    private:
-      int channel;      
+      uint32_t channel;      
       
    public:
    
-      pin_adc( int port, int pin )
+      pin_adc( uint32_t port, uint32_t pin )
          : adc{ 10 }, channel{ configure_as_adc( port, pin ) }
       {}         
       

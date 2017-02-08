@@ -39,16 +39,16 @@ namespace hwlib {
 ///
 class glcd_oled : public window {
 private:
-   static const byte DATA_MODE = 0x40;
-   static const byte CMD_MODE  = 0x80;                                               
+   static const uint_fast8_t DATA_MODE = 0x40;
+   static const uint_fast8_t CMD_MODE  = 0x80;                                               
    i2c_bus & bus;
    
    // the 7-bit i2c address of the controller
-   fast_byte address;
+   uint_fast8_t address;
    
    // current cursor setting in the controller;
    // used to avoid explicit cursor updates when such are not needed
-   fast_byte cursor_x, cursor_y;
+   uint_fast8_t cursor_x, cursor_y;
    
    // SSD1306 commands
    static constexpr const uint8_t SETCONTRAST                           = 0x81;
@@ -84,37 +84,52 @@ private:
    static constexpr const uint8_t VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL  = 0x29;
    static constexpr const uint8_t VERTICAL_AND_LEFT_HORIZONTAL_SCROLL   = 0x2A;   
    
-   void command( byte d ){
-      byte data[] = { CMD_MODE, d };
+   void command( const uint_fast8_t d ){
+      uint8_t data[] = { 
+          static_cast< uint8_t >( CMD_MODE ), 
+          static_cast< uint8_t >( d )
+      };
       bus.write( 
          address, 
          data, 
-         sizeof( data ) / sizeof( byte ) 
+         sizeof( data ) / sizeof( uint8_t ) 
       );      
    } 	
    
-   void command( byte d0, byte d1 ){
-      byte data[] = { CMD_MODE, d0, CMD_MODE, d1 };
+   void command( const uint_fast8_t d0, const uint_fast8_t d1 ){
+      uint8_t data[] = { 
+         static_cast< uint8_t >( CMD_MODE ), 
+         static_cast< uint8_t >( d0 ),
+         static_cast< uint8_t >( CMD_MODE ), 
+         static_cast< uint8_t >( d1 ) 
+      };
       bus.write( 
          address, 
          data, 
-         sizeof( data ) / sizeof( byte ) 
+         sizeof( data ) / sizeof( uint8_t ) 
       );    
    } 	
    
-   void command( byte d0, byte d1, byte d2 ){
-      byte data[] = { CMD_MODE, d0, CMD_MODE, d1, CMD_MODE, d2 };
+   void command( const uint_fast8_t d0, const uint_fast8_t d1, const uint_fast8_t d2 ){
+      uint8_t data[] = { 
+         static_cast< uint8_t >( CMD_MODE ), 
+         static_cast< uint8_t >( d0 ),
+         static_cast< uint8_t >( CMD_MODE ), 
+         static_cast< uint8_t >( d1 ), 
+         static_cast< uint8_t >( CMD_MODE ), 
+         static_cast< uint8_t >( d2 ) 
+      };
       bus.write( 
          address, 
          data, 
-         sizeof( data ) / sizeof( byte ) 
+         sizeof( data ) / sizeof( uint8_t ) 
       );     
    } 	
    
    void pixels( 
-      byte x, 
-      byte y, 
-      byte d 
+      uint_fast8_t x, 
+      uint_fast8_t y, 
+      uint_fast8_t d 
    ){
       if(( x != cursor_x ) || ( y != cursor_y )){
          command( COLUMNADDR,  x,  127 );
@@ -122,11 +137,14 @@ private:
          cursor_x = x;
          cursor_y = y;
       }   
-      byte data[] = { DATA_MODE, d };
+      uint8_t data[] = { 
+         static_cast< uint8_t >( DATA_MODE ), 
+         static_cast< uint8_t >( d ) 
+      };
       bus.write( 
          address, 
          data, 
-         sizeof( data ) / sizeof( byte ) 
+         sizeof( data ) / sizeof( uint8_t ) 
       ); 
       cursor_x++;      
    }
@@ -134,7 +152,7 @@ private:
    // first byte is permanently set to DATA_MODE
    uint8_t buffer[ 1 + 128 * 64 / 8 ];
    
-   void write_to_buffer( location pos, color col, int a ){
+   void write_to_buffer( location pos, color col, uint_fast8_t a ){
       if( col == foreground ){ 
          buffer[ 1 + a ] |=  ( 0x01 << (pos.y % 8 ));  
       } else {
@@ -143,25 +161,25 @@ private:
    }      
 
    void write_buffered_implementation( location pos, color col ) override {
-      int a = pos.x + ( pos.y / 8 ) * size.x;
+      uint_fast8_t a = pos.x + ( pos.y / 8 ) * size.x;
       write_to_buffer( pos, col, a );
    }   
    
    void write_implementation( location pos, color col ) override {
-      int a = pos.x + ( pos.y / 8 ) * size.x;
+      uint_fast8_t a = pos.x + ( pos.y / 8 ) * size.x;
       write_to_buffer( pos, col, a );
       pixels( pos.x, pos.y / 8, buffer[ 1 + a ] );      
    }
    
 public:
    
-   glcd_oled( i2c_bus & bus, fast_byte address = 0x3C ):
+   glcd_oled( i2c_bus & bus, const uint_fast8_t address = 0x3C ):
       window( location( 128, 64 ), black, white ),
       bus( bus ),
       address( address ),
       cursor_x( 255 ), cursor_y( 255 )
    {
-      static constexpr const byte init_sequence[] = {
+      static constexpr const uint8_t init_sequence[] = {
          CMD_MODE,  DISPLAYOFF,                   
          CMD_MODE,  SETDISPLAYCLOCKDIV,   0x80,   
          CMD_MODE,  SETMULTIPLEX,         0x3F,   
@@ -183,7 +201,7 @@ public:
       bus.write( 
          address, 
          init_sequence, 
-         sizeof( init_sequence ) / sizeof( byte ) 
+         sizeof( init_sequence ) / sizeof( uint8_t ) 
       );    
       
       // init first byte of write buffer
@@ -196,7 +214,7 @@ public:
       bus.write( 
          address, 
          buffer, 
-         sizeof( buffer ) / sizeof( byte )
+         sizeof( buffer ) / sizeof( uint8_t )
       );
    }     
 

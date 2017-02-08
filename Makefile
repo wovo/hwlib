@@ -34,7 +34,7 @@ clean:
    
 push: 
 	bmptk-make clean
-   # git add -A
-	# git commit -a -m 'work'
-	# git push		
+	git add -A
+	git commit -a -m 'work'
+	git push		
 		

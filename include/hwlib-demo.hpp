@@ -24,7 +24,7 @@ namespace hwlib {
 //
 /// This function blinks the pin: ms milliseconds on, and
 /// ms milliseconds off. It never returns.
-void HWLIB_WEAK HWLIB_NORETURN blink( pin_out & pin, int ms = 200 ){
+void HWLIB_WEAK HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t  ms = 200 ){
    for(;;){
       pin.set( 1 );
       wait_ms( ms );      
@@ -37,7 +37,7 @@ void HWLIB_WEAK HWLIB_NORETURN blink( pin_out & pin, int ms = 200 ){
 //
 /// This function shows a kitt display on the pins of a port.
 /// Each LED is on for m milliseconds. It never returns.
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, int ms = 100 ){
+void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t  ms = 100 ){
    port.direction_set_output();
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
@@ -50,7 +50,7 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, int ms = 100 ){
       }
    }      
 }
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, int ms = 100 ){
+void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms = 100 ){
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
          port.set( 0x01 << i );      
@@ -62,7 +62,7 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, int ms = 100 ){
       }
    }      
 }
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_oc & port, int ms = 100 ){
+void HWLIB_WEAK HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms = 100 ){
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
          port.set( 0x01 << i );      
@@ -78,14 +78,17 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_oc & port, int ms = 100 ){
 // hide from Doxygen
 #ifndef DOXYGEN
 
-int HWLIB_WEAK rand(){
-   static int n = 0;
+uint_fast32_t HWLIB_WEAK rand(){
+   static uint_fast32_t n = 0;
    n = n * 214013L + 2531011L; 
    return ( n >> 16) & 0x7fff; 
 }
 
-unsigned int HWLIB_WEAK random_in_range( unsigned int min, unsigned int max ){
-   unsigned int x = rand();
+uint_fast32_t HWLIB_WEAK random_in_range( 
+   uint_fast32_t min, 
+   uint_fast32_t max 
+){
+   auto x = rand();
    x = x % ( max - min + 1 ); 
    return min + x;
 }
@@ -99,22 +102,25 @@ unsigned int HWLIB_WEAK random_in_range( unsigned int min, unsigned int max ){
 /// - draws a border
 /// - draws 30 random lines,
 /// - waits half a second.
-void HWLIB_WEAK HWLIB_NORETURN graphics_random_lines( window & w ){
+void HWLIB_WEAK HWLIB_NORETURN graphics_random_lines( 
+   window & w, 
+   uint_fast16_t n_lines = 30 
+){
    for(;;){
       w.clear();
-      for( int x = 0; x < w.size.x; x++ ){
+      for( uint_fast16_t x = 0; x < w.size.x; x++ ){
          w.write( hwlib::location{ x,            0 } );
          w.write( hwlib::location{ x, w.size.y - 1 } );
       }   
-      for( int y = 0; y < w.size.y; y++ ){
+      for( uint_fast16_t y = 0; y < w.size.y; y++ ){
          w.write( hwlib::location{            0, y } );
          w.write( hwlib::location{ w.size.x - 1, y } );
       }   
-      for( int n = 0; n < 30; n++ ){
-         int x  = random_in_range( 0, w.size.y );
-         int x1 = random_in_range( 0, w.size.x );
-         int y  = random_in_range( 0, w.size.y );
-         int y1 = random_in_range( 0, w.size.y );
+      for( uint_fast16_t n = 0; n < n_lines; n++ ){
+         const uint_fast16_t x  = random_in_range( 0, w.size.y );
+         const uint_fast16_t x1 = random_in_range( 0, w.size.x );
+         const uint_fast16_t y  = random_in_range( 0, w.size.y );
+         const uint_fast16_t y1 = random_in_range( 0, w.size.y );
          auto line = hwlib::line( 
             hwlib::location{  x,  y },
             hwlib::location{ x1, y1 }, 
@@ -133,13 +139,16 @@ void HWLIB_WEAK HWLIB_NORETURN graphics_random_lines( window & w ){
 /// - draws n_circles (default is 30) random circles 
 ///      (which might be partially out-of-screen),
 /// - waits half a second.
-void HWLIB_WEAK HWLIB_NORETURN graphics_random_circles( window & w, int n_circles = 30 ){
+void HWLIB_WEAK HWLIB_NORETURN graphics_random_circles( 
+   window & w, 
+   uint_fast16_t n_circles = 30 
+){
    for(;;){
       w.clear();
-      for( int n = 0; n < n_circles; n++ ){
-         int x  = random_in_range( 10, w.size.x - 10 );
-         int y  = random_in_range( 10, w.size.y - 10 );
-         int s  = random_in_range(  0, w.size.y / 4 );
+      for( uint_fast16_t n = 0; n < n_circles; n++ ){
+         const uint_fast16_t x  = random_in_range( 10, w.size.x - 10 );
+         const uint_fast16_t y  = random_in_range( 10, w.size.y - 10 );
+         const uint_fast16_t s  = random_in_range(  0, w.size.y / 4 );
          auto circle = hwlib::circle( 
             hwlib::location{  x,  y },
             s,

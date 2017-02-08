@@ -14,6 +14,8 @@
 #ifndef HWLIB_OSTREAM_H
 #define HWLIB_OSTREAM_H
 
+#include <cstdlib>
+
 namespace hwlib {
 
    /// end-of-line constant
@@ -31,7 +33,7 @@ namespace hwlib {
    /// ostream output field width manipulator
    struct setw {
       /// \cond INTERNAL  
-      const int x;
+      const uint_fast16_t x;
       /// \endcond  
       
       /// ostream output field width manipulator
@@ -46,15 +48,15 @@ namespace hwlib {
       /// resets to its initial value of 0.
       ///
       /// The same effect can be achieved by calling stream.setw(N).
-      constexpr setw( int x ) : x( x ){}
+      constexpr setw( uint_fast16_t x ) : x( x ){}
    };
          
    struct _setbase {
       /// \cond INTERNAL        
-      const int x;
+      const uint_fast16_t x;
       /// \endcond        
       
-      constexpr _setbase( int x ) : x( x ){}
+      constexpr _setbase( uint_fast16_t x ) : x( x ){}
    };
    
    /// set ostream radix to 2
@@ -214,8 +216,8 @@ namespace hwlib {
    class ostream {
    private:
    
-      int field_width;
-      int numerical_radix;
+      uint_fast16_t field_width;
+      uint_fast16_t numerical_radix;
       char fill_char;
       char hex_base;
       bool align_right;
@@ -223,8 +225,8 @@ namespace hwlib {
       bool bool_alpha;
       bool show_base;
         
-      static int strlen( const char *s ){
-         int n = 0;
+      static size_t strlen( const char *s ){
+         size_t n = 0;
          while( *s != '\0' ){
             n++;
             s++;
@@ -232,7 +234,8 @@ namespace hwlib {
          return n; 
       }     
    
-      void filler( int n ){
+      // must handle negative numbers!
+      void filler( int_fast16_t n ){
          while( n-- > 0 ){
             *this << fill_char;
          }
@@ -247,7 +250,7 @@ namespace hwlib {
       // ====================================================================
       
       struct reverse {
-         static constexpr int length = 70;
+         static constexpr uint_fast16_t length = 70;
          char body[ length ];
          char *content;
          
@@ -334,11 +337,11 @@ namespace hwlib {
       // ====================================================================
   
       /// return the current field width
-      int width( void ) const { return field_width; }
+      uint_fast16_t width( void ) const { return field_width; }
       
       /// set the field width, return the old field width
-      int width( int x ) { 
-         int temp = field_width; 
+      uint_fast16_t width( uint_fast16_t x ) { 
+         auto temp = field_width; 
          field_width = x; 
          return temp;
       }
@@ -351,11 +354,11 @@ namespace hwlib {
       /// \endcond 
       
       /// return the numerical radix       
-      int base( void ) const { return numerical_radix; }
+      uint_fast16_t base( void ) const { return numerical_radix; }
       
       /// set the numerical radix, return the old numerical radix  
-      int base( int x ) { 
-         int temp = numerical_radix;
+      uint_fast16_t base( uint_fast16_t x ) { 
+         auto temp = numerical_radix;
          numerical_radix = x; 
          return temp;
       }
@@ -497,13 +500,13 @@ namespace hwlib {
       /// output operator for const char pointer (literal string)
       friend ostream & operator<< ( ostream & stream, const char *s ){
          if( stream.align_right ){
-            stream.filler( stream.width() - strlen( s )); 
+            stream.filler( static_cast< int_fast16_t >( stream.width()) - strlen( s )); 
          }       
          for( const char *p = s; *p != '\0'; p++ ){
             stream << *p;
          }
          if( ! stream.align_right ){
-           stream.filler( stream.width() - strlen( s )); 
+           stream.filler( static_cast< int_fast16_t >( stream.width()) - strlen( s )); 
          }  
          stream.width( 0 );
          return stream;
@@ -640,7 +643,7 @@ namespace hwlib {
       wait_us( bit_cel );
    
       // 8 data bits
-      for( int i = 0; i < 8; ++i ){
+      for( uint_fast8_t i = 0; i < 8; ++i ){
          pin.set( ( c & 0x01 ) != 0x00 );
          c = c >> 1;
          wait_us( bit_cel );
@@ -673,7 +676,7 @@ namespace hwlib {
       while( now_us() < t ){};
       
       // 8 data bits
-      for( int i = 0; i < 8; ++i ){
+      for( uint_fast8_t i = 0; i < 8; ++i ){
          c = c >> 1;            
          if( pin.get() ){
             c = c | 0x80;                

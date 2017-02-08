@@ -20,7 +20,7 @@ namespace hwlib {
 // This function must be in a .cpp because otherwise it would
 // (when it is overruled by an application-defined alternative)
 // be defined twice *in one compilation unit*.
-void  __attribute__ (( weak )) panic( const char * file, int line ){
+void  __attribute__ (( weak )) panic( const char * file, uint_fast32_t line ){
    for(;;);
 }
 

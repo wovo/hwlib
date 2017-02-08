@@ -47,7 +47,7 @@ void wait_ms( int_fast32_t n );
 //
 /// A call of this function returns the number of microseconds since
 /// some arbitrary moment (in most cases the first call to this function).
-long long int now_us();
+uint_fast64_t now_us();
 
 }; // namespace hwlib
 

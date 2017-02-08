@@ -32,7 +32,7 @@ namespace hwlib {
 /// panic function:
 /// \snippet "due\panic\main.cpp" [Doxygen panic example]
 ///
-void HWLIB_NORETURN HWLIB_WEAK panic( const char * file, int line );
+void HWLIB_NORETURN HWLIB_WEAK panic( const char * file, uint_fast32_t line );
 
 /// convenience panic macro 
 //

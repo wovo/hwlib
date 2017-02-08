@@ -77,9 +77,9 @@ public:
    /// When data_in is a nullptr, the data that is read is not stored.
    virtual void write_and_read( 
       pin_out & sel, 
-      int n, 
-      const byte data_out[], 
-      byte data_in[] 
+      const uint_fast8_t n, 
+      const uint8_t data_out[], 
+      uint8_t data_in[] 
    ) = 0;
 
 }; // class spi_bus  
@@ -128,20 +128,20 @@ public:
    /// argument can be a nullptr.
    void write_and_read( 
       pin_out & sel, 
-      int n, 
-      const byte data_out[], 
-      byte data_in[] 
+      const uint_fast8_t n, 
+      const uint8_t data_out[], 
+      uint8_t data_in[] 
    ) override {
 
       sel.set( 0 );
-      for( int i = 0; i < n; ++i ){
+      for( uint_fast8_t i = 0; i < n; ++i ){
           
-          byte d = 
+          uint_fast8_t d = 
              ( data_out == nullptr )
              ? 0 
              : *data_out++;
              
-          for( int j = 0; j < 8; ++j ){
+          for( uint_fast8_t j = 0; j < 8; ++j ){
               mosi.set( ( d & 0x80 ) != 0 );
               wait_half_period();
               sclk.set( 1 );

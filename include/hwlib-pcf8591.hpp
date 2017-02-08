@@ -45,20 +45,20 @@ namespace hwlib {
 class pcf8591 {
 private:
    i2c_bus & bus;
-   fast_byte address;
+   uint_fast8_t address;
    
-   static constexpr int base = 0x48;
+   static constexpr uint_fast8_t base = 0x48;
    
-   byte configuration;
+   uint_fast8_t configuration;
    
-   byte get( byte channel ){
+   uint_fast8_t get( uint_fast8_t channel ){
       // select the correct channel
-      byte control = ( configuration & ( ~ 0x03 )) + channel; 
-      bus.write( base + address, &control, 1 ); 
+      uint8_t control = ( configuration & ( ~ 0x03 )) + channel; 
+      bus.write( base + address, & control, 1 ); 
       
       // read results, note that the first byte is the 
       // *previous* ADC result, the second byte is what we want
-      byte results[ 2 ];
+      uint8_t results[ 2 ];
       bus.read( base + address, results, 2 );
       return results[ 1 ];
    }   
@@ -89,11 +89,15 @@ private:
       {}
       
       void set( dac_value_type x ) override {
-         byte message[ 2 ] = { 
-            chip.configuration, 
-            static_cast< byte >( x )
+         uint8_t message[ 2 ] = { 
+            static_cast< uint8_t >( chip.configuration ), 
+            static_cast< uint8_t >( x )
          };
-         chip.bus.write( chip.base + chip.address, message, 2 ); 
+         chip.bus.write( 
+            chip.base + chip.address, 
+            message, 
+            sizeof( message ) / sizeof( uint8_t ) 
+         ); 
       }   
    };
    
@@ -115,7 +119,7 @@ public:
    /// and the chip address.
    /// The address is the 3-bit address that is determined by the 3 
    /// address input pins of the chip.
-   pcf8591( i2c_bus & bus, fast_byte address ):
+   pcf8591( i2c_bus & bus, uint_fast8_t address ):
       bus( bus ), 
       address{ address }, 
       configuration{ 0x40 }

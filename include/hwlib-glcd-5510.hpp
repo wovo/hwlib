@@ -38,8 +38,7 @@ private:
    pin_out & sclk;
 	
    void send_byte( unsigned char d ){
-      int i;
-      for( i = 0; i < 8; i++ ){
+      for( uint_fast8_t i = 0; i < 8; i++ ){
          sdin.set( d & 0x80 );
          sclk.set( 1 );
          d = d << 1;
@@ -108,8 +107,8 @@ private:
    unsigned char pixel_buffer[ 504 ];
 
    void write_implementation( location pos, color col ) override {
-      unsigned int a = pos.x + ( pos.y / 8 ) * 84;
-      unsigned int m = 1 << ( pos.y % 8 );
+      uint_fast8_t a = pos.x + ( pos.y / 8 ) * 84;
+      uint_fast8_t m = 1 << ( pos.y % 8 );
    
       if( col == black ){
          pixel_buffer[ a ] |= m;
@@ -123,11 +122,10 @@ private:
 public:   
    
    void clear() override {
-      int i;
       unsigned char d = (( background == white ) ? 0 : 0xFF );
       command( 0x80 | 0 );   
       command( 0x40 | 0 );  
-      for( i = 0; i < 504; i++ ){
+      for( uint_fast8_t i = 0; i < 504; i++ ){
          pixel_buffer[ i ] = d;
          data( d );
       }         

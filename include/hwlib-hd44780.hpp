@@ -119,8 +119,8 @@ public:
       pin_out & rs, 
       pin_out & e, 
       port_out & data, 
-      int lines, 
-      int columns
+      uint_fast8_t lines, 
+      uint_fast8_t columns
     ):
       console{ lines, columns },
       pin_e( e ), 
@@ -174,7 +174,7 @@ public:
    
 private:
 
-   void goto_xy_implementation( int new_x, int new_y ) override {
+   void goto_xy_implementation( uint_fast8_t new_x, uint_fast8_t new_y ) override {
       // the NVI goto_xy() has already set the x and y variables
       
       if( columns == 1 ){

@@ -57,8 +57,8 @@ private:
    
 public:   
    font_default_16x16(){
-      for( int i = 0; i < 128; ++i ){
-         int c = 
+      for( uint_fast8_t i = 0; i < 128; ++i ){
+         uint_fast8_t c = 
             ( i < 32 ) || ( i == 127 )
             ? 0
             : i - 32;

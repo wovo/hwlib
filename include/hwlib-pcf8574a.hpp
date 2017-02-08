@@ -61,19 +61,19 @@ namespace hwlib {
 class pcf8574a : public port_oc {
 private:
    i2c_bus & bus;
-   fast_byte address;
+   uint_fast8_t address;
    
-   static constexpr int base = 0x38;
+   static constexpr uint_fast8_t base = 0x38;
    
-   byte write_buffer;
-   byte read_buffer;
+   uint8_t write_buffer;
+   uint8_t read_buffer;
    
    void flush(){
-      bus.write( base + address, &write_buffer, 1 ); 
+      bus.write( base + address, & write_buffer, 1 ); 
    }
    
    void refresh(){
-      bus.read( base + address, &read_buffer, 1 ); 
+      bus.read( base + address, & read_buffer, 1 ); 
    }
    
    class _one_pin : public pin_oc {
@@ -81,9 +81,9 @@ private:
       uint_fast8_t mask;
       
    public:
-      _one_pin( pcf8574a & chip, int n ): 
+      _one_pin( pcf8574a & chip, uint_fast8_t n ): 
          chip( chip ), 
-         mask{ static_cast< fast_byte >( 0x01 << n ) }
+         mask{ static_cast< uint_fast8_t >( 0x01 << n ) }
       {}
       
       void set( bool v ) override {
@@ -110,7 +110,7 @@ public:
    /// and the chip address.
    /// The address is the 3-bit address that is determined by the 3 
    /// address input pins of the chip.
-   pcf8574a( i2c_bus & bus, fast_byte address ):
+   pcf8574a( i2c_bus & bus, uint_fast8_t address ):
       bus( bus ), address{ address } {}    
 
    uint_fast8_t number_of_pins() override {

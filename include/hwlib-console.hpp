@@ -41,7 +41,7 @@ namespace hwlib {
 ///
 class console : public ostream {
 private:
-   int goto_xy_state;
+   uint_fast8_t goto_xy_state;
 
 protected:
 
@@ -59,7 +59,7 @@ protected:
    /// position by a call to putc_implementation.
    ///
    /// The default implementation does nothing.
-   virtual void goto_xy_implementation( int x, int y ){}
+   virtual void goto_xy_implementation( uint_fast16_t x, uint_fast16_t y ){}
 
    /// The default implementation of flush does nothing.
 	virtual void flush(){}
@@ -67,28 +67,28 @@ protected:
 public:
 
    /// the number of colums in the console
-   const int columns;
+   const uint_fast16_t  columns;
 
    /// the number of lines (rows) in the console
-   const int lines;
+   const uint_fast16_t  lines;
 
    /// the current write column;
-   int x;
+   uint_fast16_t  x;
 
    /// the current write line;
-   int y;
+   uint_fast16_t  y;
 
    /// construct a console from its columns (X size) and lines (Y size)
    console(
-      int columns,
-      int lines
+      uint_fast16_t  columns,
+      uint_fast16_t  lines
    ):
       columns{ columns },
       lines{ lines }
    { }
 
    /// put the cursor (write location) at x, y
-   virtual void goto_xy( int new_x, int new_y ){
+   virtual void goto_xy( uint_fast16_t  new_x, uint_fast16_t  new_y ){
       x = new_x;
       y = new_y;
       goto_xy_implementation( x, y );
@@ -158,9 +158,9 @@ public:
    /// locations. A concrete implementation might provide
    /// a better (faster) way.
    virtual void clear(){
-      for( int y = 0; y < lines; ++y ){
+      for( uint_fast16_t y = 0; y < lines; ++y ){
          goto_xy( 0, y );
-         for( int x = 0; x < columns; ++x ){
+         for( uint_fast16_t x = 0; x < columns; ++x ){
             putc( ' ' );
          }
       }

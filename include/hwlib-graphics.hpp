@@ -25,13 +25,13 @@ namespace hwlib {
 class location final {
 public:
    /// x value of the location
-   int x;
+   uint_fast16_t x;
    
    /// y value of the location
-   int y;
+   uint_fast16_t y;
    
    /// construct a location from its x and y values
-   constexpr location( int x, int y ): x{ x }, y{ y }{}
+   constexpr location( uint_fast16_t x, uint_fast16_t y ): x{ x }, y{ y }{}
 
    /// add two locations
    constexpr location operator+( const location rhs ) const {
@@ -59,7 +59,7 @@ ostream & operator<<( ostream & lhs, location rhs ){
 class color final {
 private:    
               
-   static constexpr uint8_t clip( int x, bool transparent = false ){
+   static constexpr uint8_t clip( uint_fast16_t x, bool transparent = false ){
       return ( transparent )
          ? 0
          : ( x < 0 ) 
@@ -102,9 +102,9 @@ public:
    /// The arguments are integers, but they are clipped
    /// to the 0..255 range by the constructor.   
    constexpr color( 
-      int red, 
-      int green, 
-      int blue, 
+      uint8_t red, 
+      uint8_t green, 
+      uint8_t blue, 
       bool transparent = false 
    ): 
       is_transparent{ transparent },
@@ -126,9 +126,9 @@ public:
    /// return the negative of a color   
    constexpr color operator - ( void ) const {
       return color( 
-         0xFF - static_cast< int >( red ), 
-         0xFF - static_cast< int >( green ), 
-         0xFF - static_cast< int >( blue ), 
+         0xFF - static_cast< uint8_t >( red ), 
+         0xFF - static_cast< uint8_t >( green ), 
+         0xFF - static_cast< uint8_t >( blue ), 
          is_transparent ); 
    }   
    
@@ -342,8 +342,8 @@ public:
    /// This function writes a rectangle of pixels, as specified by img,
    /// at location pos.                 
    void write( location pos, const image & img ){                 
-      for( int x = 0; x < img.size.x; ++x ){
-         for( int y = 0; y < img.size.y; ++y ){
+      for( uint_fast16_t x = 0; x < img.size.x; ++x ){
+         for( uint_fast16_t y = 0; y < img.size.y; ++y ){
             auto loc = hwlib::location( x, y );
             write( pos + loc, img[ loc ] );
          }
@@ -355,8 +355,8 @@ public:
    /// This function writes a rectangle of pixels, as specified by img,
    /// at location pos, to the pixel buffer.                      
    void write_buffered( location pos, const image & img ){                 
-      for( int x = 0; x < img.size.x; ++x ){
-         for( int y = 0; y < img.size.y; ++y ){
+      for( uint_fast16_t x = 0; x < img.size.x; ++x ){
+         for( uint_fast16_t y = 0; y < img.size.y; ++y ){
             auto loc = hwlib::location( x, y );
             write_buffered( pos + loc, img[ loc ] );
          }
@@ -374,8 +374,8 @@ public:
    /// This function clears the write buffer by writing the background
    /// color to all its pixels.
    virtual void clear_buffered(){
-      for( int x = 0; x < size.x; ++x ){
-         for( int y = 0; y < size.y; ++y ){
+      for( uint_fast16_t x = 0; x < size.x; ++x ){
+         for( uint_fast16_t y = 0; y < size.y; ++y ){
             write_buffered( location{ x, y }, background );    
          }                 
       }         
@@ -403,16 +403,16 @@ private:
    const font &f;
    location cursor;
 
-   int x_size( const window & w, const font &f ){
+   uint_fast16_t x_size( const window & w, const font &f ){
       const image & im = f[ ' ' ];
       return w.size.x / im.size.x;
    }
-   int y_size( const window & w, const font &f ){
+   uint_fast16_t y_size( const window & w, const font &f ){
       const image & im = f[ ' ' ];
       return w.size.y / im.size.y;
    }
 
-   void goto_xy_implementation( int x, int y ) override {
+   void goto_xy_implementation( uint_fast16_t x, uint_fast16_t y ) override {
       const image & im = f[ ' ' ];
       cursor.x = x * im.size.x;
       cursor.y = y * im.size.y;
@@ -547,14 +547,13 @@ private:
    location end;
    color fg;
    
-   static void swap( int & a, int & b ){
-      unsigned int t;
-      t = a; 
+   static void swap( uint_fast16_t & a, uint_fast16_t & b ){
+      auto t = a; 
       a = b;
       b = t;
    }
 
-   static int abs( int x ){
+   static uint_fast16_t abs( uint_fast16_t x ){
       return x >= 0 ? x : -x;
    }
 
@@ -565,18 +564,18 @@ public:
    {}   
    
    void draw( window & w ) override { 
-      int x0 = start.x;
-      int y0 = start.y;
-      int x1 = end.x; 
-      int y1 = end.y;
+      uint_fast16_t x0 = start.x;
+      uint_fast16_t y0 = start.y;
+      uint_fast16_t x1 = end.x; 
+      uint_fast16_t y1 = end.y;
                    
       // http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
       // http://homepages.enterprise.net/murphy/thickline/index.html
      
-      int Dx = x1 - x0; 
-      int Dy = y1 - y0;
+      uint_fast16_t Dx = x1 - x0; 
+      uint_fast16_t Dy = y1 - y0;
    
-      int steep = (abs(Dy) >= abs(Dx));
+      uint_fast16_t steep = (abs(Dy) >= abs(Dx));
    
       if( steep ){
          swap( x0, y0 );
@@ -587,22 +586,22 @@ public:
          Dy = y1 - y0;
       }
    
-      int xstep = 1;
+      uint_fast16_t xstep = 1;
       if( Dx < 0 ){
          xstep = -1;
          Dx = -Dx;
       }
    
-      int ystep = 1;
+      uint_fast16_t ystep = 1;
       if( Dy < 0 ){
          ystep = -1;    
          Dy = -Dy; 
       }
-      int TwoDy = 2*Dy; 
-      int TwoDyTwoDx = TwoDy - 2*Dx; // 2*Dy - 2*Dx
-      int E = TwoDy - Dx; //2*Dy - Dx
-      int y = y0;
-      int xDraw, yDraw, x;  
+      uint_fast16_t TwoDy = 2*Dy; 
+      uint_fast16_t TwoDyTwoDx = TwoDy - 2*Dx; // 2*Dy - 2*Dx
+      uint_fast16_t E = TwoDy - Dx; //2*Dy - Dx
+      uint_fast16_t y = y0;
+      uint_fast16_t xDraw, yDraw, x;  
       for( x = x0; x != x1; x += xstep ){    
          if (steep) {     
             xDraw = y;
@@ -633,13 +632,13 @@ public:
 /// a circle object                   
 class circle : public drawable {
 private:   
-   int radius;
+   uint_fast16_t radius;
    color fg;
    color bg;
    
 public:
    /// create a circle object
-   circle( location start, int radius, color fg = black, color bg = transparent )
+   circle( location start, uint_fast16_t radius, color fg = black, color bg = transparent )
       : drawable{ start }, radius{ radius }, fg{ fg }, bg{ bg }
    {}     
    
@@ -652,11 +651,11 @@ public:
    
       // http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
    
-      int fx = 1 - radius;
-      int ddFx = 1;
-      int ddFy = -2 * radius;
-      int x = 0;
-      int y = radius;
+      int_fast16_t fx = 1 - radius;
+      int_fast16_t ddFx = 1;
+      int_fast16_t ddFy = -2 * radius;
+      int_fast16_t x = 0;
+      int_fast16_t y = radius;
     
       // top and bottom
       w.write( start + location( 0, + radius ), fg );
