@@ -32,7 +32,7 @@ namespace hwlib {
 ///
 /// The following fragment is an example of an application-defined
 /// panic function:
-/// \snippet "due\panic\main.cpp" [Doxygen panic example]
+/// \snippet "demos\arduino-due\panic\main.cpp" [Doxygen panic example]
 ///
 void HWLIB_NORETURN HWLIB_WEAK panic( const char * file, uint_fast32_t line );
 
@@ -40,6 +40,15 @@ void HWLIB_NORETURN HWLIB_WEAK panic( const char * file, uint_fast32_t line );
 //
 /// This macro calls panic( __FILE__, __LINE__ ).
 #define HWLIB_PANIC_WITH_LOCATION ::hwlib::panic( __FILE__, __LINE__ )
+
+#ifdef HBLIB_ONCE 
+
+// The weak attribute allows an application to specify its own panic function
+void HWLIB_WEAK panic( const char * file, uint_fast32_t line ){
+   for(;;);
+}
+
+#endif // #ifdef HBLIB_ONCE
 
 }; // namespace hwlib
 

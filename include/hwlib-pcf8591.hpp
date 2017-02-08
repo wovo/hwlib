@@ -38,7 +38,7 @@ namespace hwlib {
 /// The next code repeatedly prints the values read
 /// by the 4 (single-ended) A/D converters.
 ///
-/// \snippet "db103\pcf8591-adc\main.cpp" [Doxygen pcf8591-adc example]
+/// \snippet "demos\db103\pcf8591-adc\main.cpp" [Doxygen pcf8591-adc example]
 ///
 /// references:
 ///    - <A HREF="http://www.nxp.com/documents/data_sheet/PCF8591.pdf">

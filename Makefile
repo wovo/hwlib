@@ -20,7 +20,9 @@ MSG += Make one of the project source files your current editor file.
 error:
 	$(error $(MSG) )   
    
-REMOVE := ../bmptk/tools/bmptk-rm 
+BMPTK  := ../bmptk
+   
+REMOVE := $(BMPTK)/tools/bmptk-rm 
    
 build:   
 	Doxygen

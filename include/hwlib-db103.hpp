@@ -157,7 +157,9 @@ public:
       *gpioreg( port, 0x8000 ) &= ~ mask;
    }
    
-   bool get() override {
+   bool get( 
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       return *gpioreg( port, 0x3FFC ) & mask;
    }
 };   
@@ -183,7 +185,10 @@ public:
       *gpioreg( port, 0x8000 ) |= mask ;   
    }
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       *gpioreg( port, 0x04 << pin ) = v ? -1 : 0;
    }
 };
@@ -214,7 +219,9 @@ public:
       *gpioreg( port, 0x8000 ) &= ~ mask;
    }
    
-   bool get() override {
+   bool get(
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       return *gpioreg( port, 0x3FFC ) & mask;
    }
    
@@ -222,7 +229,10 @@ public:
      *gpioreg( port, 0x8000 ) |= mask ;    
    }
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       *gpioreg( port, 0x04 << pin ) = v ? -1 : 0;
    }
 };   
@@ -248,11 +258,16 @@ public:
       *gpioreg( port, 0x8000 ) &= ~ mask;
    }
    
-   bool get() override {
+   bool get(
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       return *gpioreg( port, 0x3FFC ) & mask;
    } 
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       if( v ){
       
          // make the pin an input
@@ -269,33 +284,35 @@ public:
    }
 };   
 
-   class pin_adc : public hwlib::adc {   
-   private:
-      uint32_t channel;      
+/// adc implementation for an LPC1114
+class pin_adc : public hwlib::adc {   
+private:
+   uint32_t channel;      
       
-   public:
+public:
    
-      pin_adc( uint32_t port, uint32_t pin )
-         : adc{ 10 }, channel{ configure_as_adc( port, pin ) }
-      {}         
+   /// create an A/D pin from its port and pin numbers
+   pin_adc( uint32_t port, uint32_t pin )
+      : adc{ 10 }, channel{ configure_as_adc( port, pin ) }
+   {}         
       
-      adc_value_type get() override {
+   adc_value_type get() override {
       
-         // configure the A/D for the pin
-         LPC_ADC->CR = ( 0x01 << channel ) | ( 12 << 8 );
+      // configure the A/D for the pin
+      LPC_ADC->CR = ( 0x01 << channel ) | ( 12 << 8 );
      
-         // start the conversion
-         LPC_ADC->CR |= ( 0x01 << 24 );
+      // start the conversion
+      LPC_ADC->CR |= ( 0x01 << 24 );
    
-         // wait for the conversion to complete
-         while( ( LPC_ADC->GDR & ( 1 << 31 )) == 0 );
+      // wait for the conversion to complete
+      while( ( LPC_ADC->GDR & ( 1 << 31 )) == 0 );
          
-         hwlib::wait_ms( 10 );
+      hwlib::wait_ms( 10 );
      
-         // return the A/D result
-         return 3 | (( LPC_ADC->GDR >> 6 ) & 0x3FF);   
-      }
-   };
+      // return the A/D result
+      return 3 | (( LPC_ADC->GDR >> 6 ) & 0x3FF);   
+   }
+};
 
 
 }; // namespace db103

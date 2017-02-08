@@ -21,6 +21,7 @@
 
 namespace hwlib {  
    
+/// an 8x8 font   
 class font_default_8x8 : public font {
 private:   
    
@@ -31,6 +32,13 @@ public:
       return images[ c & 0x7F ];      
    }      
 };
+
+/// an 8x8 font
+// needs a constructor??
+//extern const image_8x8 font_default_8x8::images[ 128 ];
+
+// hide this from DOXYGEN
+#ifndef DOXYGEN
 
 #ifdef HWLIB_ONCE
 
@@ -165,7 +173,10 @@ const image_8x8 font_default_8x8::images[ 128 ] = {
    image_8x8( 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 )  // U+007F
 };   
 
-#endif
+#endif // #ifdef HWLIB_ONCE
+
+#endif // #ifdef DOXYGEN
+
 
 }; //namespace hwlib 
 

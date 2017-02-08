@@ -208,7 +208,9 @@ public:
       }
    {}
    
-   bool get() override {
+   bool get( 
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       return ( port & mask ) != 0;   
    }
 };
@@ -247,7 +249,10 @@ public:
       }
    {}   
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       if( v ){
          port |= mask;
       } else {
@@ -301,7 +306,9 @@ public:
       port_direction( port_number ) &= ~ mask;
    }
    
-   bool get() override {
+   bool get(
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       return ( port & mask ) != 0;   
    }
    
@@ -309,7 +316,10 @@ public:
       port_direction( port_number ) |= mask;   
    }
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       if( v ){
          port |= mask;
       } else {
@@ -355,11 +365,16 @@ public:
       }
    {}    
    
-   bool get() override {
+   bool get(
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       return ( port & mask ) != 0;   
    }   
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered
+   ) override {
       if( v ){
          port_direction( port_number ) &= ~ mask;
       } else {
@@ -370,6 +385,7 @@ public:
 
 };
 
+/*
 // should be part of due, anders for Uno!
 class shield_lcd_mcufriend {
 private:
@@ -398,6 +414,7 @@ public:
       lcd{ rst, cs, rs, wr, rd, data }
    {}    
 };
+*/
 
 }; // namespace due
 

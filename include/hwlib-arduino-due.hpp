@@ -199,7 +199,10 @@ enum class ad_pins {
 /// \endcond   
 };
 
+/// definition of an A/D input
 struct ad_pin_info_type {
+   
+   /// the channel number
    uint8_t channel;
 };
 
@@ -646,6 +649,7 @@ public:
    }
 };
 
+/// returns the time since the3 first call
 uint32_t HWLIB_WEAK now_us(){
    static bool init_done = false;
    if( ! init_done ){

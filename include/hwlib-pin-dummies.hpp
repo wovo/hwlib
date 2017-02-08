@@ -20,7 +20,7 @@
 
 namespace hwlib {
     
-/// a dummy (do-nothing) pin_in_out
+/// a dummy (do-nothing) pin_in_out class
 class _pin_in_out_dummy_class : public pin_in_out {
 public:
    void set( bool v, buffering buf = buffering::unbuffered ) override {}
@@ -29,19 +29,19 @@ public:
    void direction_set_output() override{}
 };  
 
-/// a dummy (do-nothing) pin_in
+/// a dummy (do-nothing) pin_in class
 class _pin_in_dummy_class : public pin_in {
 public:
    bool get( buffering buf = buffering::unbuffered ) override { return 0; }
 };   
 
-/// a dummy (do-nothing) pin_out
+/// a dummy (do-nothing) pin_out class
 class _pin_out_dummy_class : public pin_out {
 public:
    void set( bool v, buffering buf = buffering::unbuffered  ) override {}
 };   
 
-/// a d/ a dummy (do-nothing) pin_oc
+/// a d/ a dummy (do-nothing) pin_oc class
 class _pin_oc_dummy_class : public pin_oc {
 public:
    void set( bool v, buffering buf = buffering::unbuffered ) override {}
@@ -49,9 +49,16 @@ public:
    
 };   
 
+/// a dummy (do-nothing) pin_in_out 
 extern _pin_in_out_dummy_class  pin_in_out_dummy;
+
+/// a dummy (do-nothing) pin_in 
 extern _pin_in_dummy_class      pin_in_dummy;
+
+/// a dummy (do-nothing) pin_out
 extern _pin_out_dummy_class     pin_out_dummy;
+
+/// a d/ a dummy (do-nothing) pin_oc
 extern _pin_oc_dummy_class      pin_oc_dummy;
 
 #ifdef HWLIB_ONCE

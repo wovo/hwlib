@@ -1,3 +1,12 @@
+// ==========================================================================
+//
+// blink the LED on an Arduino Due
+//
+// This file is in the public domain.
+//
+// =========================================================================
+
+//! [[Doxygen blink example]]
 #include "hwlib.hpp"
 
 int main( void ){	
@@ -7,3 +16,4 @@ int main( void ){
    auto led = hwlib::target::pin_out( 1, 27 );
    hwlib::blink( led );
 }
+//! [[Doxygen blink example]]

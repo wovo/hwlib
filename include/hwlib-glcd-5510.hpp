@@ -74,6 +74,9 @@ private:
 
 public:
    
+   /// create a 5510 LCD
+   //
+   /// This constructor creates a 5510 LCD from its interface pins.
    glcd_5510( 
       pin_out & sce,
       pin_out & res,

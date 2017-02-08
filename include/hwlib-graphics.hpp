@@ -399,6 +399,7 @@ public:
 
 // ==========================================================================
 
+/// implements a console inside graphic window
 class window_ostream : public console {
 private:
    window & w;
@@ -437,7 +438,7 @@ private:
 	}
 
 public:
-   /// construct an ostrem from a window and a font
+   /// construct an console from a window and a font
    window_ostream( window & w, const font &f ):
       console( x_size( w, f ), y_size( w, f ) ), w( w ), f( f ), cursor( 0, 0 )
    { }

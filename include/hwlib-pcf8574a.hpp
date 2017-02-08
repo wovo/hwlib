@@ -49,7 +49,7 @@ namespace hwlib {
 /// Because the output pins are open-collector, the LEDs
 /// are connected to power (instead of to the ground), hence
 /// the use of hwlib::port_out_invert().
-/// \snippet "due\pcf8574a\main.cpp" [Doxygen pcf8574a example]
+/// \snippet "demos\db103\pcf8574a\main.cpp" [Doxygen pcf8574a example]
 ///
 /// The pcf8574 (without the -a) is the same chip, but with a different
 /// I2C bus address.
@@ -78,12 +78,13 @@ private:
       bus.read( base + address, & read_buffer, 1 ); 
    }
    
-   class _one_pin : public pin_oc {
+   /// one_pin is an implemenation detail
+   class one_pin : public pin_oc {
       pcf8574a & chip;
       uint_fast8_t mask;
       
    public:
-      _one_pin( pcf8574a & chip, uint_fast8_t n ): 
+      one_pin( pcf8574a & chip, uint_fast8_t n ): 
          chip( chip ), 
          mask{ static_cast< uint_fast8_t >( 0x01 << n ) }
       {}
@@ -146,13 +147,6 @@ public:
       }
       return read_buffer;  
    }  
-   
-   // hide _one_pin for Doxygen
-   #ifdef DOXYGEN
-      typedef pin_out one_pin;
-   #else
-      typedef _one_pin one_pin;
-   #endif   
 
    /// the open-collector pins of the chip
    //

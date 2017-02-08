@@ -52,6 +52,8 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t  ms = 100
       }
    }      
 }
+
+/// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
 void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms = 100 ){
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
@@ -64,6 +66,8 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms = 100 ){
       }
    }      
 }
+
+/// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
 void HWLIB_WEAK HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms = 100 ){
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){

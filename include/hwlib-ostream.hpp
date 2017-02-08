@@ -619,8 +619,16 @@ namespace hwlib {
       
    }; // class ostream  
    
+   /// character input
+   //
+   /// This class is a minimal std::istream work-alike for small embedded systems.
+   /// (only reading a single character is supported)
+   /// 
+   /// This class is abstract: a concrete subclass must implement getc()
+   /// (and, when appropriate, flush()).   
    class istream {     
    public:        
+      /// read and return a single character
       virtual char getc() = 0;
         
       /// input operator for char
@@ -738,6 +746,13 @@ namespace hwlib {
 /// an application to provide its own definition.
 cout_using_uart_putc HWLIB_WEAK  cout;   
 
+/// embedded input console
+//
+/// This is the embedded work-alike for std::cin.
+/// The default implementation uses uart_getc
+/// to read the characters.
+/// This definition is weak, which allows 
+/// an application to provide its own definition.
 cin_using_uart_getc HWLIB_WEAK  cin;  
 
 }; // namespace hwlib

@@ -47,7 +47,7 @@ namespace hwlib {
 ///
 /// The next code shows a kitt display 
 /// on 8 LEDs connected to the HC595 output pins:
-/// \snippet "due\hc595\main.cpp" [Doxygen hc595 example]
+/// \snippet "demos\db103\hc595\main.cpp" [Doxygen hc595 example]
 ///
 /// The 74HCT595 is a similar chip, but intended (only) for 5V power,
 /// and for use with the old TTL signal levels 
@@ -66,13 +66,14 @@ private:
    void flush(){
       bus.write_and_read( sel, 1, &write_buffer, nullptr ); 
    }
-   
-   class _one_pin : public pin_out {
+     
+   /// one_pin is an implemenation detail
+   class one_pin : public pin_out {
       hc595 & chip;
       uint_fast8_t mask;
       
    public:
-      _one_pin( hc595 & chip, uint_fast8_t n ): 
+      one_pin( hc595 & chip, uint_fast8_t n ): 
          chip( chip ), 
          mask{ static_cast< uint_fast8_t >( 0x01 << n ) }
       {}
@@ -91,7 +92,7 @@ private:
          }
       }   
       
-   };
+   };  
    
 public:
 
@@ -117,13 +118,6 @@ public:
          flush();     
       }   
    }  
-   
-   // hide _one_pin for Doxygen
-   #ifdef DOXYGEN
-      typedef pin_out one_pin;
-   #else
-      typedef _one_pin one_pin;
-   #endif
 
    /// the output pins of the chip
    //

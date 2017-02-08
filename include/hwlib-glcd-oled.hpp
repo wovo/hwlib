@@ -37,7 +37,7 @@ namespace hwlib {
 /// This type of display is reasonably priced 
 /// and available from lots of sources.
 ///
-/// \image html lcdoled-empty.jpg
+/// \image html oled.jpg
 ///
 class glcd_oled : public window {
 private:
@@ -175,6 +175,9 @@ private:
    
 public:
    
+   /// create an OLED
+   //
+   /// This constructor creates an OLED from the I2C bus and its I2C address.   
    glcd_oled( i2c_bus & bus, const uint_fast8_t address = 0x3C ):
       window( location( 128, 64 ), black, white ),
       bus( bus ),

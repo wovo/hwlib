@@ -52,7 +52,7 @@ namespace hwlib {}
 /// correct target header based on the macro that is set by bmptk 
 /// (BMPTK_TARGET_ARDUIN_DUE etc.) on the compiler command line.
 ///
-/// \snippet "due\blink\main.cpp" [Doxygen blink example]
+/// \snippet "demos\arduino-due\blink\main.cpp" [Doxygen blink example]
 /// 
 /// The following naming convention is used:
 ///    - functions that are called set() and get() (or have set or get as

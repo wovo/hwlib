@@ -21,6 +21,9 @@
 
 namespace hwlib {  
 
+// hide this from DOXYGEN
+#ifndef DOXYGEN
+
 // points to its data, in a particular format
 class image_16x16 : public image {
 private:   
@@ -50,7 +53,10 @@ public:
 };
 
 extern uint8_t font_16x16_data[ 3044 ];
-   
+
+#endif // #ifdef DOXYGEN
+
+/// a 16x16 font
 class font_default_16x16 : public font {
 private:   
    
@@ -71,6 +77,9 @@ public:
       return images[ c & 0x7F ];      
    }      
 };
+
+// hide this from DOXYGEN
+#ifndef DOXYGEN
 
 #ifdef HWLIB_ONCE
 
@@ -178,7 +187,9 @@ uint8_t font_16x16_data[ 3044 ] = {
 0x00,0x00,0x00,0x00,0x1F,0x1C,0x3B,0x9C,0x39,0xDC,0x38,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,  // ~
 };
 
-#endif
+#endif // #ifdef HWLIB_ONCE
+
+#endif // #ifdef DOXYGEN
 
 }; //namespace hwlib 
 

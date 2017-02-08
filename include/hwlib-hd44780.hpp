@@ -69,15 +69,15 @@ namespace hwlib {
 /// while the cursor is outside the visible characters (beyond the end of the line,
 /// or beyond the number of lines) any character writes will be ignored.
 /// Some characters are treated special:
-///    - '\n' clears the rest of the line, and then 
+///    - '\\n' clears the rest of the line, and then 
 ///      moves to the first position of the next line
-///    - '\r' puts the cursor at the start of the current line
-///    - '\c' moves the cursor to the top-left position 
+///    - '\\r' puts the cursor at the start of the current line
+///    - '\\c' moves the cursor to the top-left position 
 ///
 /// The best way to get a flicker-free display is to overwite 
 /// instead of clear-and-then-write:
-/// use '\c' to got to the 'origin', then rewrite the whole display, 
-/// using '\n' to go to a next line (because it clears the remainder of the line).
+/// use '\\c' to got to the 'origin', then rewrite the whole display, 
+/// using '\\n' to go to a next line (because it clears the remainder of the line).
 ///
 /// references:
 ///    - <A HREF="https://en.wikipedia.org/wiki/Hitachi_HD44780_LCD_controller">
