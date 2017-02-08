@@ -1,17 +1,16 @@
 // ==========================================================================
 //
 // File      : hwlib-doxygen.hpp
-// Part of   : C++ OO library for close-to-the-metal programming
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
 // Copyright : wouter@voti.nl 2017
-//
-// this file contains the input for Doxygen 
-// that is never included in a compilation
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // ==========================================================================
+
+// this file contains Doxygen lines (of course, that is its only purpose)
 /// @file
 
 // This file contains doxygen stuff that doesn't belong in any specific

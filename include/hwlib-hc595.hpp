@@ -77,14 +77,18 @@ private:
          mask{ static_cast< uint_fast8_t >( 0x01 << n ) }
       {}
       
-      void set( bool v ) override {
+      void set( 
+         bool v,
+         buffering buf = buffering::unbuffered 
+      ) override {
          if( v ){
             chip.write_buffer |= mask;
          } else {
             chip.write_buffer &= ~ mask;
          }      
-         HWLIB_TRACE << hex << setw( 2 ) << (int) chip.write_buffer;
-         chip.flush();
+         if( buf == buffering::unbuffered ){
+            chip.flush();
+         }
       }   
       
    };
@@ -104,9 +108,14 @@ public:
       return 8;
    }   
       
-   void set( uint_fast8_t x ) override {
+   void set( 
+      uint_fast8_t x,
+      buffering buf = buffering::unbuffered 
+   ) override {
       write_buffer = x;
-      flush();     
+      if( buf == buffering::unbuffered ){
+         flush();     
+      }   
    }  
    
    // hide _one_pin for Doxygen

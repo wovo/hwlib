@@ -1,16 +1,16 @@
 // ==========================================================================
 //
 // File      : hwlib-due.hpp
-// Part of   : hwlib library for V1OOPC and V1IPAS
-// Copyright : wouter@voti.nl 2016
-//
-// hwlib implementation for an Arduino Due (ATSAM3X8E chip)
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
+// Copyright : wouter@voti.nl 2017
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // ==========================================================================
+
+// this file contains Doxygen lines
 /// @file
 
 #ifndef HWLIB_DUE_H
@@ -316,7 +316,9 @@ public:
       }
    {}   
    
-   bool get() override {
+   bool get( 
+      hwlib::buffering buf = hwlib::buffering::unbuffered 
+   ) override {
       return (( port.PIO_PDSR & mask ) != 0 );   
    }
 };
@@ -356,7 +358,10 @@ public:
       }
    {}     
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered  
+   ) override {
       ( v 
          ?  port.PIO_SODR 
          :  port.PIO_CODR 
@@ -405,7 +410,9 @@ public:
       port.PIO_ODR = mask;
    }
    
-   bool get() override {
+   bool get(
+      hwlib::buffering buf = hwlib::buffering::unbuffered 
+   ) override {
       return ( port.PIO_PDSR & mask ) != 0;   
    }   
    
@@ -413,7 +420,10 @@ public:
       port.PIO_OER  = mask;    
    }
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered 
+   ) override {
       ( v 
          ?  port.PIO_SODR 
          :  port.PIO_CODR 
@@ -456,12 +466,16 @@ public:
       }
    {}       
    
-   bool get() override {
-      // hwlib::cout << "=>" << (int) port.PIO_PDSR << "\n";
+   bool get(
+      hwlib::buffering buf = hwlib::buffering::unbuffered 
+   ) override {
       return ( port.PIO_PDSR & mask ) != 0;   
    }   
    
-   void set( bool v ) override {
+   void set( 
+      bool v,
+      hwlib::buffering buf = hwlib::buffering::unbuffered 
+   ) override {
       if( v ){
          port.PIO_ODR = mask;
       } else {

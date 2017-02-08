@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// File      : hwlib.hpp
+// File      : hwlib-pin-decorators.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
 // Copyright : wouter@voti.nl 2017
 //
@@ -10,23 +10,18 @@
 //
 // ==========================================================================
 
-#ifndef HWLIB_H
-#define HWLIB_H
+// this file contains Doxygen linesd
+/// @file
 
-#ifdef BMPTK_TARGET_arduino_due
-   #include "hwlib-due.hpp"
-#endif
+#ifndef HWLIB_PIN_H
+#define HWLIB_PIN_H
 
-#ifdef BMPTK_TARGET_db103
-   #include "hwlib-db103.hpp"
-#endif
+#include "hwlib-pins.hpp"
 
-#ifdef BMPTK_TARGET_arduino_uno
-   #include "hwlib-uno.hpp"
-#endif
+namespace hwlib {
 
-#ifndef BMPTK_TARGET
-   #include "hwlib-all.hpp"
-#endif
 
-#endif // HWLIB_ALL_H
+
+}; // namespace hwlib
+
+#endif // HWLIB_PIN_H

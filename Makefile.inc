@@ -2,9 +2,13 @@ SEARCH            += $(HWLIB)/include
 SOURCES           += hwlib.cpp
 
 HEADERS           +=  hwlib-defines.hpp
+HEADERS           +=  hwlib-common.hpp
 HEADERS           +=  hwlib-pin.hpp
 HEADERS           +=  hwlib-pin-dummies.hpp
+HEADERS           +=  hwlib-pin-decorators.hpp
 HEADERS           +=  hwlib-port.hpp
+HEADERS           +=  hwlib-port-from-pins.hpp
+HEADERS           +=  hwlib-port-decorators.hpp
 HEADERS           +=  hwlib-adc.hpp
 HEADERS           +=  hwlib-dac.hpp
 HEADERS           +=  hwlib-console.hpp

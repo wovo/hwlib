@@ -1,14 +1,16 @@
 // ==========================================================================
 //
 // File      : hwlib-pcf8574.hpp
-// Part of   : hwlib library for V1OOPC and V1IPAS
-// Copyright : wouter@voti.nl 2016
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
+// Copyright : wouter@voti.nl 2017
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // ==========================================================================
+
+// this file contains Doxygen lines
 /// @file
 
 #ifndef HWLIB_PCF8574_H
@@ -86,17 +88,26 @@ private:
          mask{ static_cast< uint_fast8_t >( 0x01 << n ) }
       {}
       
-      void set( bool v ) override {
+      void set( 
+         bool v, 
+         buffering buf = buffering::unbuffered
+      ) override {
          if( v ){
             chip.write_buffer |= mask;
          } else {
             chip.write_buffer &= ~ mask;
          }      
-         chip.flush();
+         if( buf == buffering::unbuffered ){
+            chip.flush();
+         }
       }   
       
-      bool get() override {
-         chip.refresh();
+      bool get(
+         buffering buf = buffering::unbuffered
+      ) override {
+         if( buf == buffering::unbuffered ){
+            chip.refresh();
+         }   
          return ( chip.read_buffer & mask ) != 0;
       }
    };
@@ -117,13 +128,22 @@ public:
       return 8;
    }   
       
-   void set( uint_fast8_t x ) override {
+   void set( 
+      uint_fast8_t x,
+      buffering buf = buffering::unbuffered
+   ) override {
       write_buffer = x;
-      flush();     
+      if( buf == buffering::unbuffered ){
+         flush();     
+      }   
    }  
    
-   uint_fast8_t get() override {
-      refresh(); 
+   uint_fast8_t get(
+      buffering buf = buffering::unbuffered
+   ) override {
+      if( buf == buffering::unbuffered ){
+         refresh(); 
+      }
       return read_buffer;  
    }  
    

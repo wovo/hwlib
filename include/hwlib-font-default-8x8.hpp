@@ -1,10 +1,8 @@
 // ==========================================================================
 //
 // File      : hwlib-font-default-8x8.hpp
-// Part of   : hwlib library for V1OOPC and V1IPAS
-// Copyright : wouter@voti.nl 2016
-//
-// default 8x8 font
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
+// Copyright : wouter@voti.nl 2017
 //
 // based on https://github.com/dhepper/font8x8, which is based on
 // http://dimensionalrift.homelinux.net/combuster/mos3/?p=viewsource&file=/modules/gfx/font8_8.asm
@@ -14,6 +12,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // ==========================================================================
+
+// this file contains Doxygen lines
 /// @file
 
 #ifndef HWLIB_FONT_DEFAULT_8X8_H

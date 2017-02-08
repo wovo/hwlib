@@ -1,10 +1,9 @@
 // ==========================================================================
 //
 // File      : hwlib-font-default-16x16.hpp
-// Part of   : hwlib library for V1OOPC and V1IPAS
-// Copyright : wouter@voti.nl 2016
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
+// Copyright : wouter@voti.nl 2017
 //
-// default 16x16 font
 //
 // based on http://www.rinkydinkelectronics.com/r_fonts.php
 //
@@ -13,6 +12,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // ==========================================================================
+
+// this file contains Doxygen lines
 /// @file
 
 #ifndef HWLIB_FONT_DEFAULT_16X16_H

@@ -11,8 +11,8 @@
 #############################################################################
 
 SUBDIRS += arduino-due
-SUBDIRS += arduino-uno
-SUBDIRS += db103
+#SUBDIRS += arduino-uno
+#SUBDIRS += db103
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

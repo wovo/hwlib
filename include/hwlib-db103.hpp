@@ -1,16 +1,16 @@
 // ==========================================================================
 //
 // File      : hwlib-db103.hpp
-// Part of   : hwlib library for V1OOPC and V1IPAS
-// Copyright : wouter@voti.nl 2016
-//
-// hwlib implementation for a DB103 (LPC1114FN28 chip)
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
+// Copyright : wouter@voti.nl 2017
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // ==========================================================================
+
+// this file contains Doxygen lines
 /// @file
 
 #ifndef HWLIB_DB103_H
