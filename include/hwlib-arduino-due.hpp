@@ -267,9 +267,10 @@ const HWLIB_WEAK ad_seq_type & ad_seq_info( uint32_t channel ){
 /// \endcond 
  
 Pio & __attribute__((weak)) port_registers( uint32_t port ){
+   
    // a bit of a cludge to put this here:
    // enable the clock to all GPIO ports
-   PMC->PMC_PCER0 = ( 0x3F << 11 );
+   PMC->PMC_PCER0 = ( 0x3F << 11 );  
 
    switch( port ){
       case 0  : return *PIOA;
@@ -277,9 +278,10 @@ Pio & __attribute__((weak)) port_registers( uint32_t port ){
       case 2  : return *PIOC;
       case 3  : return *PIOD;
       default : break;
-   }   
+   }  
+   
+   // doesn't return   
    HWLIB_PANIC_WITH_LOCATION; 
-   // doesn't return
 }
 
 /// \endcond

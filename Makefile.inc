@@ -27,3 +27,7 @@ HEADERS           +=  hwlib-hd44780.hpp
 HEADERS           +=  hwlib-glcd-5510.hpp
 HEADERS           +=  hwlib-glcd-oled.hpp
 HEADERS           +=  hwlib-demo.hpp
+
+HEADERS           +=  hwlib-arduino-due.hpp
+HEADERS           +=  hwlib-arduino-uno.hpp
+HEADERS           +=  hwlib-db103.hpp

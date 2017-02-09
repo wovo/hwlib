@@ -32,11 +32,12 @@ build:
 clean:   
 	$(REMOVE) -rf html
 	cd demos && bmptk-make clean   
-	@echo "**** cleanup completed succesfully"   
+	@echo "**** cleanup completed succesfully"  
    
+# git commit -a -m 'work'   
 push: 
 	bmptk-make clean
 	git add -A
-	git commit -a -m 'work'
+	git commit -a
 	git push		
 		
