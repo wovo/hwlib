@@ -41,4 +41,8 @@ push:
 	git add -A
 	git commit -a -m 'filename case troubles'
 	git push		
-		
+   
+push-no-clean: 
+	git add -A
+	git commit -a -m 'filename case troubles'
+	git push				
