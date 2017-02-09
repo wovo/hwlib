@@ -2,7 +2,7 @@
 # 
 # hwlib top-level Makefile 
 #
-# (c) Wouter van Ooijen (www.voti.nl) 2017
+# (c) Wouter van Ooijen (wouter@voti.nl) 2017
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at 
@@ -39,10 +39,10 @@ clean:
 push: 
 	bmptk-make clean
 	git add -A
-	git commit -a -m 'filename case troubles'
+	git commit -a
 	git push		
    
 push-no-clean: 
 	git add -A
-	git commit -a -m 'filename case troubles'
+	git commit -a -m 'work'
 	git push				

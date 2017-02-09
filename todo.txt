@@ -1,6 +1,7 @@
 meer examples
+   hello
 check uno en db103
 uart gebruikt??
 rtos??
-demos doesn't include dependencies?
-md file in iedere directory?
+images licences!!
+check all documentation

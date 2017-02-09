@@ -1,14 +1,16 @@
-#############################################################################
+#============================================================================
 #
-# Project Makefile
+# simple project makefile (just a main file)
 #
-# (c) Wouter van Ooijen (www.voti.nl) 2016
+# (c) Wouter van Ooijen (wouter@voti.nl) 2017
 #
-# This file is in the public domain.
-# 
-#############################################################################
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt) 
+#
+#============================================================================
 
-# source files in this project (main.cpp is automatically assumed)
+# source files in this project (main.* is automatically assumed)
 SOURCES :=
 
 # header files in this project
