@@ -2,7 +2,7 @@
 #
 # Project Makefile
 #
-# (c) Wouter van Ooijen (www.voti.nl) 2017
+# (c) Wouter van Ooijen (www.voti.nl) 2016
 #
 # This file is in the public domain.
 # 
@@ -18,6 +18,6 @@ HEADERS :=
 SEARCH  := 
 
 # set RELATIVE to the next higher directory 
-# and defer to the Makefile.link there
+# and defer to the appropriate Makefile.* there
 RELATIVE := ..
 include $(RELATIVE)/makefile.link
