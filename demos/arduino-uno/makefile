@@ -5,14 +5,13 @@
 # (c) Wouter van Ooijen (www.voti.nl) 2016
 #
 # Distributed under the Boost Software License, Version 1.0.
-# (See accompanying file LICENSE_1_0.txt or copy at
+# (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt)
 # 
 #############################################################################
 
-REMOVE ?= ../../bmptk/tools/bmptk-rm 
-
 SUBDIRS += blink
+SUBDIRS += panic
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)
@@ -20,6 +19,7 @@ CLEANDIRS = $(SUBDIRS:%=clean-%)
 .phony: clean build run error $(BUILDDIRS) $(CLEANDIRS)
 
 clean: $(CLEANDIRS)
+	bmptk-make -f makefile.link clean
 $(CLEANDIRS): 
 	bmptk-make -C $(@:clean-%=%) clean
    
