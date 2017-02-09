@@ -174,7 +174,7 @@ public:
    
 private:
 
-   void goto_xy_implementation( uint_fast8_t new_x, uint_fast8_t new_y ) override {
+   void goto_xy_implementation( uint_fast16_t new_x, uint_fast16_t new_y ) override {
       // the NVI goto_xy() has already set the x and y variables
       
       if( columns == 1 ){

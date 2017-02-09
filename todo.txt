@@ -5,3 +5,7 @@ uart gebruikt??
 rtos??
 images licences!!
 check all documentation
+check two-file project
+make (catch) tests
+run tests without CMD pause
+meer tests voor hwlib::string

@@ -219,7 +219,7 @@ public:
       bus.write( 
          address, 
          buffer, 
-         sizeof( buffer ) / sizeof( uint8_t )
+         static_cast< uint_fast8_t >( sizeof( buffer ) / sizeof( uint8_t ) )
       );
    }     
 

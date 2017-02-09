@@ -37,12 +37,18 @@ public:
 
    /// add two locations
    constexpr location operator+( const location rhs ) const {
-      return location{ x + rhs.x, y + rhs.y };      
+      return location{ 
+          static_cast< uint_fast16_t >( x + rhs.x ),
+          static_cast< uint_fast16_t >( y + rhs.y )
+      };      
    }      
    
    /// subtract two locations
    constexpr location operator-( const location rhs ) const {
-      return location{ x - rhs.x, y - rhs.y };      
+      return location{ 
+          static_cast< uint_fast16_t >( x - rhs.x ),
+          static_cast< uint_fast16_t >( y - rhs.y )
+      };         
    }      
 
 }; 

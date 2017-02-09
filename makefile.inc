@@ -17,6 +17,8 @@
 SEARCH            += $(HWLIB)/include
 SOURCES           += hwlib.cpp
 
+HEADERS           +=  hwlib.hpp
+HEADERS           +=  hwlib-all.hpp
 HEADERS           +=  hwlib-defines.hpp
 HEADERS           +=  hwlib-common.hpp
 HEADERS           +=  hwlib-pin.hpp
@@ -42,8 +44,10 @@ HEADERS           +=  hwlib-hc595.hpp
 HEADERS           +=  hwlib-hd44780.hpp
 HEADERS           +=  hwlib-glcd-5510.hpp
 HEADERS           +=  hwlib-glcd-oled.hpp
+HEADERS           +=  hwlib-string.hpp
 HEADERS           +=  hwlib-demo.hpp
 
 HEADERS           +=  hwlib-arduino-due.hpp
 HEADERS           +=  hwlib-arduino-uno.hpp
 HEADERS           +=  hwlib-db103.hpp
+HEADERS           +=  hwlib-native.hpp

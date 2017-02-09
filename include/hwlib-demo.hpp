@@ -115,12 +115,20 @@ void HWLIB_WEAK HWLIB_NORETURN graphics_random_lines(
    for(;;){
       w.clear();
       for( uint_fast16_t x = 0; x < w.size.x; x++ ){
-         w.write( hwlib::location{ x,            0 } );
-         w.write( hwlib::location{ x, w.size.y - 1 } );
+         w.write( hwlib::location{ 
+            x,            
+            0 } );
+         w.write( hwlib::location{ 
+            x, 
+            static_cast< uint_fast16_t >( w.size.y - 1 ) } );
       }   
       for( uint_fast16_t y = 0; y < w.size.y; y++ ){
-         w.write( hwlib::location{            0, y } );
-         w.write( hwlib::location{ w.size.x - 1, y } );
+         w.write( hwlib::location{            
+            0, 
+            y } );
+         w.write( hwlib::location{ 
+            static_cast< uint_fast16_t >( w.size.x - 1 ), 
+            y } );
       }   
       for( uint_fast16_t n = 0; n < n_lines; n++ ){
          const uint_fast16_t x  = random_in_range( 0, w.size.y );

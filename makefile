@@ -10,7 +10,7 @@
 # 
 #############################################################################
 
-.PHONY: clean build run error
+.PHONY: clean build run error test
 
 run: error
 
@@ -26,12 +26,17 @@ REMOVE := $(BMPTK)/tools/bmptk-rm
    
 build:   
 	Doxygen
-	cd demos && bmptk-make build
+	cd demo && bmptk-make build
+	cd test && bmptk-make build
 	@echo "**** build completed succesfully"   
+   
+test:
+	cd test && bmptk-make build && bmptk-make run
+	@echo "**** test completed succesfully"   
    
 clean:   
 	$(REMOVE) -rf html
-	cd demos && bmptk-make clean   
+	cd demo && bmptk-make clean   
 	@echo "**** cleanup completed succesfully"  
    
 # git commit -a -m 'work'   
