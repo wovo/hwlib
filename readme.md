@@ -1,9 +1,3 @@
-Distributed under the Boost Software License, Version 1.0.
-(See accompanying file LICENSE_1_0.txt or copy at 
-http://www.boost.org/LICENSE_1_0.txt)
-
-xxx
-
 Hwlib is a C++ classic-OO-style library for close-to-the-hardware programming.
 It is used in a number of courses at the Hogeschool Utrecht, HBO-ICT.
 
@@ -21,5 +15,11 @@ To use hwlib without bmptk:
    - include the appropriate top-level target file in your code,
       for instance hwlib-due.hpp
       
-      
+(c) Wouter van Ooijen (wouter@voti.nl) 2017
+
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at 
+http://www.boost.org/LICENSE_1_0.txt)     
+
+note: include/hwlib-arduino-due-system-sam3xa.inc is (c) atmel, under asf license.      
       
