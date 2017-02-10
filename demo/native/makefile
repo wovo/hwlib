@@ -15,18 +15,29 @@ SUBDIRS += panic
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)
+NOTABDIRS = $(SUBDIRS:%=notab-%)
 
-.phony: clean build run error $(BUILDDIRS) $(CLEANDIRS)
+.phony: clean build run error notab (BUILDDIRS) $(CLEANDIRS) $(NOTABDIRS)
+
+# include the bmptk makefile, and clean this directory
 
 clean: $(CLEANDIRS)
 	bmptk-make -f makefile.link clean
    
+# defer to the subdirectories
+
 $(CLEANDIRS): 
 	bmptk-make -C $(@:clean-%=%) clean
    
 build: $(BUILDDIRS)
 $(BUILDDIRS):
 	bmptk-make -C $(@:build-%=%) build
+   
+notab: $(NOTABDIRS)
+$(NOTABDIRS):
+	bmptk-make -C $(@:notab-%=%) notab 
+   
+# user error handling   
 
 run: error
 

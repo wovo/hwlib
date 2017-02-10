@@ -13,7 +13,7 @@
 //! [[Doxygen hc595 example]]
 #include "hwlib.hpp"
 
-int main( void ){	
+int main( void ){
 
    auto sclk = hwlib::target::pin_out{ 1, 2 };
    auto mosi = hwlib::target::pin_out{ 1, 0 };

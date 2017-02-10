@@ -96,7 +96,7 @@ private:
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );      
-   } 	
+   }    
    
    void command( const uint_fast8_t d0, const uint_fast8_t d1 ){
       uint8_t data[] = { 
@@ -110,7 +110,7 @@ private:
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );    
-   } 	
+   }    
    
    void command( const uint_fast8_t d0, const uint_fast8_t d1, const uint_fast8_t d2 ){
       uint8_t data[] = { 
@@ -126,7 +126,7 @@ private:
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );     
-   } 	
+   }    
    
    void pixels( 
       uint_fast8_t x, 

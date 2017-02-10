@@ -64,7 +64,7 @@ protected:
    virtual void goto_xy_implementation( uint_fast16_t x, uint_fast16_t y ){}
 
    /// The default implementation of flush does nothing.
-	virtual void flush(){}
+   virtual void flush(){}
 
 public:
 

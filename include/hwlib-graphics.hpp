@@ -439,9 +439,9 @@ private:
       goto_xy( 0, 0 );
    }
 
-	void flush() override {
-		w.flush();
-	}
+   void flush() override {
+      w.flush();
+   }
 
 public:
    /// construct an console from a window and a font
@@ -682,10 +682,10 @@ public:
 
          // left and right
          line(  
-		        start - location( radius, 0 ), 
-		        start + location( radius, 0 ), 
-		        fg 
-	       ).draw( w );
+              start - location( radius, 0 ), 
+              start + location( radius, 0 ), 
+              fg 
+          ).draw( w );
       } 
     
       while( x < y ){

@@ -38,7 +38,7 @@ private:
    pin_out & dc;
    pin_out & sdin;
    pin_out & sclk;
-	
+   
    void send_byte( unsigned char d ){
       for( uint_fast8_t i = 0; i < 8; i++ ){
          sdin.set( d & 0x80 );
@@ -53,14 +53,14 @@ private:
       sce.set( 0 );
       send_byte( d );
       sce.set( 1 );
-   } 	
+   }    
 
    void data( unsigned char d ){
       dc.set( 1 );
       sce.set( 0 );
       send_byte( d );
       sce.set( 1 );
-   } 	
+   }    
    
    void pixels( 
       unsigned char x, 
@@ -96,16 +96,16 @@ public:
       wait_ms( 1 );
       res.set( 1 ); 
       wait_ms( 1 );
-	  
-	      // initialization according to
-	      // https://www.sparkfun.com/products/10168 - nee, andere
+     
+         // initialization according to
+         // https://www.sparkfun.com/products/10168 - nee, andere
       command( 0x21 );  // select exteded instructions
       command( 0xC8 );  // Vop = 110000b
       command( 0x06 );  // TCx = 00b
       command( 0x13 );  // BSx = 100b
       command( 0x20 );  // select basic instructions, horizontal addressing
-      command( 0x0C );	// normal mode   
-   }	
+      command( 0x0C );  // normal mode   
+   }   
    
 private:   
 

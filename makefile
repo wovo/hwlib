@@ -10,7 +10,7 @@
 # 
 #############################################################################
 
-.PHONY: clean build run error test
+.PHONY: clean build run error test notab
 
 run: error
 
@@ -29,6 +29,11 @@ build:
 	cd demo && bmptk-make build
 	cd test && bmptk-make build
 	@echo "**** build completed succesfully"   
+   
+notab:
+	cd demo && bmptk-make notab
+	cd test && bmptk-make notab
+	@echo "**** no tabs found"     
    
 test:
 	cd test && bmptk-make build && bmptk-make run

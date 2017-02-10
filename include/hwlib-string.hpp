@@ -45,17 +45,17 @@ template<>
 class string< 0 > {
 private:   
    
-	// maximum length of the string
-	const size_t allocated_length;
+   // maximum length of the string
+   const size_t allocated_length;
    
    // maximum length of the string
-	size_t current_length;
+   size_t current_length;
 
-	// pointer to the array that stores the characters
-	char * const content;
+   // pointer to the array that stores the characters
+   char * const content;
 
    // dummy char used for out-of-bounds accesses
-	static char dummy; 
+   static char dummy; 
     
     static const char * beyond( const char * p ){
        while( *p != '\0' ){
@@ -64,34 +64,34 @@ private:
        return p;
     }
     
-	// iterate over a char source
-	class iterate {
+   // iterate over a char source
+   class iterate {
     public:
     
-		iterate(char ch) :
+      iterate( char ch ) :
            c( ch ), start( &c ), last( &this->c + 1) 
         {}
         
-		iterate( const char *p ) :
+      iterate( const char *p ) :
            c( 0 ), start( p ), last( beyond( p )) {
-		}
+      }
 
-		iterate( string<0> f ) :
+      iterate( string<0> f ) :
            iterate( f.c_str() )
-        {}   
+      {}   
 
-		const char * begin() const {
-			return start;
-		}
+      const char * begin() const {
+         return start;
+      }
         
-		const char * end() const {
-			return last;
-		}
+      const char * end() const {
+         return last;
+      }
 
-	private:
-		const char c;
-		const char * const start, * const last;
-	};
+   private:
+      const char c;
+      const char * const start, * const last;
+   };
    
 protected:
 
@@ -113,22 +113,22 @@ protected:
    
 public:
    
-	// pointer to the 0-terminated content
+   // pointer to the 0-terminated content
    const char * c_str() const {
       return content;
    }
 
-	/// the maximum number of characters that can be stored
-	size_t get_allocated_length() const {
-		return allocated_length;
-	}   
-   
+   /// the maximum number of characters that can be stored
+   size_t max_size() const {
+      return allocated_length;
+   }   
+    
    /// the number of characters that are currently stored
-   size_t get_current_length() const {
+   size_t length() const {
       return current_length;
    }  
     
-   /// clear 
+   /// sets to ""
    void clear(){
       current_length = 0;
       content[ 0 ] = '\0';
@@ -184,12 +184,10 @@ public:
       return( *p == '\0' );
    }    
    
-   /// compare to something   
-   template< typename T >
-   friend bool operator==( const T & lhs, const string< 0 > & rhs ){
-      return rhs == lhs;
-   }       
-   
+   // to resolve ambiguity
+//   friend bool operator==( const string< 0 > & lhs, const string< 0 > & rhs ){
+//      return lhs.operator==( rhs );
+//   }
    
     /// output to any target that supports operator<< for a char *
    template< typename T >
@@ -203,6 +201,20 @@ public:
    // compare
    
 };
+
+/*
+/// reverse-compare to something   
+template< typename T >
+bool operator==( const T & lhs, const string< 0 > & rhs ){
+   return rhs == lhs;
+}   
+
+// to resolve ambiguity
+template<>
+bool operator==( const string< 0 > & lhs, const string< 0 > & rhs ){
+   return lhs.operator==( rhs );
+}
+*/
 
 
 //============================================================================
@@ -227,7 +239,7 @@ public:
       string< 0 >( template_allocated_length, content )
    {}      
    
-   /// create fixed-maximum-size string, wityh an initial value
+   /// create fixed-maximum-size string, with an initial value
    template< typename T > 
    string( const T & x ):
       string< 0 >( template_allocated_length, content, x )

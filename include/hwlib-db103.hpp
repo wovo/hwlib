@@ -151,7 +151,7 @@ public:
    pin_in( uint32_t port, uint32_t pin ): 
       port{ port },
       pin{ pin },
-      mask{ 0x01 << pin }
+      mask{ 0x01U << pin }
    {
       configure_as_gpio( port, pin );
       *gpioreg( port, 0x8000 ) &= ~ mask;
@@ -179,7 +179,7 @@ public:
    pin_out( uint32_t port, uint32_t pin ): 
       port{ port },
       pin{ pin },
-      mask{ 0x01 << pin }
+      mask{ 0x01U << pin }
    {
       configure_as_gpio( port, pin );
       *gpioreg( port, 0x8000 ) |= mask ;   
@@ -210,7 +210,7 @@ public:
    pin_in_out( uint32_t port, uint32_t pin ): 
       port{ port },
       pin{ pin }, 
-      mask{ 0x1 << pin }
+      mask{ 0x1U << pin }
    {
       configure_as_gpio( port, pin );
    }
@@ -252,7 +252,7 @@ public:
    pin_oc( uint32_t port, uint32_t pin ): 
       port{ port },
       pin{ pin }, 
-      mask{ 0x1 << pin }
+      mask{ 0x1U << pin }
    {
       configure_as_gpio( port, pin );
       *gpioreg( port, 0x8000 ) &= ~ mask;

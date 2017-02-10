@@ -2,7 +2,7 @@
 #
 # makefile.link
 #
-# common settings and uplink for DB103 projects
+# common settings and uplink for DB103 (LPC1114) projects
 #
 # (c) Wouter van Ooijen (www.voti.nl) 2017
 #
@@ -12,10 +12,12 @@
 # 
 #############################################################################
 
-# settings for Arduino Due projects
+# settings for DB103 (LPC1114) projects
 TARGET            := db103
 SERIAL_PORT       ?= COM4
 CONSOLE_BAUDRATE  := 2400
 
-# defer to the Makefile.shared
-include           $(RELATIVE)/Makefile.shared
+# defer to the next-level makefile
+RELATIVE          ?= .
+RELATIVE          := $(RELATIVE)/..
+include           $(RELATIVE)/Makefile.link

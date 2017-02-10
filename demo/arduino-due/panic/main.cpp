@@ -14,7 +14,7 @@
 
 //! [[Doxygen panic example]]
 namespace hwlib {
-    
+   
    void HWLIB_NORETURN panic( const char * file, const uint_fast16_t line ){
 
       // wait for the console connection to be ready
@@ -35,7 +35,8 @@ namespace hwlib {
 }
 //! [[Doxygen panic example]]
 
-int main( void ){	
+int main( void ){
+    
    // kill the watchdog
    WDT->WDT_MR = WDT_MR_WDDIS;
    

@@ -1,11 +1,11 @@
-meer examples
-   hello
-check uno en db103
+meer examples lpc1114
+check uno 
+db103 uart?
 uart gebruikt??
 rtos??
 images licences!!
 check all documentation
-check two-file project
-make (catch) tests
-run tests without CMD pause
 meer tests voor hwlib::string
+check for tabs in sources
+bmptk...
+can that subdirs thing be put into bmptk?

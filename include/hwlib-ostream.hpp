@@ -608,13 +608,13 @@ namespace hwlib {
       /// output operator for signed char (prints as integer)   
       friend ostream & operator<< ( ostream & stream, signed char c ){
          stream.putc( c );
-   	   return stream;
+         return stream;
       }
    
       /// output operator for unsigned char (prints as integer)   
       friend ostream & operator<< ( ostream & stream, unsigned char c ){
          stream.putc( c );
-	      return stream;
+         return stream;
       }
       
    }; // class ostream  
@@ -641,9 +641,18 @@ namespace hwlib {
    /// a bit-banged UART char output
    //
    /// This function implements a bit-banged output UART pin
-   /// using the BMPTK_BAUDRATE.
-   void HWLIB_WEAK uart_putc_bit_banged_pin( char c, pin_out & pin ){
+   /// using the BMPTK_BAUDRATE.   
+   void HWLIB_WEAK uart_putc_bit_banged_pin( char c, pin_out & pin );
    
+   /// a bit-banged UART char input
+   //
+   /// This function implements a bit-banged input UART pin
+   /// using the BMPTK_BAUDRATE.      
+   char HWLIB_WEAK uart_getc_bit_banged_pin( pin_in & pin );
+   
+   #ifdef HWLIB_ONCE
+   
+   void HWLIB_WEAK uart_putc_bit_banged_pin( char c, pin_out & pin ){
    #ifdef BMPTK_TARGET
       const auto bit_cel = ( ( 1000L * 1000L ) / BMPTK_BAUDRATE );
    
@@ -667,12 +676,8 @@ namespace hwlib {
    #else
    #endif   
    
-   }      
+   }       
    
-   /// a bit-banged UART char input
-   //
-   /// This function implements a bit-banged input UART pin
-   /// using the BMPTK_BAUDRATE.   
    char HWLIB_WEAK uart_getc_bit_banged_pin( pin_in & pin ){
       char c = 0;        
    
@@ -701,7 +706,9 @@ namespace hwlib {
    #else
    #endif   
       return c;
-   }      
+   }     
+
+   #endif // #ifdef HWLIB_ONCE 
    
    /// console character output function
    //
@@ -737,23 +744,32 @@ namespace hwlib {
    
    /// \endcond    
    
-/// embedded output console
-//
-/// This is the embedded work-alike for std::cout.
-/// The default implementation uses uart_putc
-/// to write the characters.
-/// This definition is weak, which allows 
-/// an application to provide its own definition.
-cout_using_uart_putc HWLIB_WEAK  cout;   
+   
+   /// embedded output console
+   //
+   /// This is the embedded work-alike for std::cout.
+   /// The default implementation uses uart_putc
+   /// to write the characters.
+   /// This definition is weak, which allows 
+   /// an application to provide its own definition.
+   extern cout_using_uart_putc HWLIB_WEAK  cout;   
+ 
 
-/// embedded input console
-//
-/// This is the embedded work-alike for std::cin.
-/// The default implementation uses uart_getc
-/// to read the characters.
-/// This definition is weak, which allows 
-/// an application to provide its own definition.
-cin_using_uart_getc HWLIB_WEAK  cin;  
+   /// embedded input console
+   //
+   /// This is the embedded work-alike for std::cin.
+   /// The default implementation uses uart_getc
+   /// to read the characters.
+   /// This definition is weak, which allows 
+   /// an application to provide its own definition.
+   extern cin_using_uart_getc HWLIB_WEAK  cin;    
+
+   #ifdef HWLIB_ONCE    
+   
+   cout_using_uart_putc HWLIB_WEAK  cout;   
+   cin_using_uart_getc HWLIB_WEAK  cin; 
+ 
+   #endif // #ifdef HWLIB_ONCE
 
 }; // namespace hwlib
 

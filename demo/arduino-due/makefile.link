@@ -17,7 +17,7 @@ TARGET            ?= arduino_due
 SERIAL_PORT       ?= COM2
 CONSOLE_BAUDRATE  ?= 2400
 
-# defer to the next-level makefile
+# defer to the next-level makefile.link
 RELATIVE          ?= .
 RELATIVE          := $(RELATIVE)/..
 include           $(RELATIVE)/Makefile.link

@@ -13,7 +13,7 @@
 //! [[Doxygen pcf8574a example]]
 #include "hwlib.hpp"
 
-int main( void ){	
+int main( void ){
 
    auto scl = hwlib::target::pin_oc{ 0, 4 };
    auto sda = hwlib::target::pin_oc{ 0, 5 };

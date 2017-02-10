@@ -26,7 +26,47 @@ namespace hwlib {
 //
 /// This function blinks the pin: ms milliseconds on, and
 /// ms milliseconds off. It never returns.
-void HWLIB_WEAK HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t  ms = 200 ){
+void HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t  ms = 200 );
+
+/// kitt function
+//
+/// This function shows a kitt display on the pins of a port.
+/// Each LED is on for m milliseconds. It never returns.
+void HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t ms = 100 );
+
+/// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
+void HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms = 100 );
+
+/// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
+void HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms = 100 );
+
+/// random lines demo
+//
+/// This functions repeats the following actions:
+/// - clears the window
+/// - draws a border
+/// - draws 30 random lines,
+/// - waits half a second.
+void HWLIB_NORETURN graphics_random_lines( 
+   window & w, 
+   uint_fast16_t n_lines = 30
+);
+
+/// random circles demo
+//
+/// This functions repeats the following actions:
+/// - clears the window
+/// - draws n_circles (default is 30) random circles 
+///      (which might be partially out-of-screen),
+/// - waits half a second.
+void HWLIB_WEAK HWLIB_NORETURN graphics_random_circles( 
+   window & w, 
+   uint_fast16_t n_circles = 30 
+);
+
+#ifdef HWLIB_ONCE 
+
+void HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t  ms ){
    for(;;){
       pin.set( 1 );
       wait_ms( ms );      
@@ -35,11 +75,7 @@ void HWLIB_WEAK HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t  ms = 200 ){
    }      
 }
 
-/// kitt function
-//
-/// This function shows a kitt display on the pins of a port.
-/// Each LED is on for m milliseconds. It never returns.
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t  ms = 100 ){
+void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t ms ){
    port.direction_set_output();
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
@@ -53,8 +89,7 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t  ms = 100
    }      
 }
 
-/// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms = 100 ){
+void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms ){
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
          port.set( 0x01 << i );      
@@ -67,8 +102,7 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms = 100 ){
    }      
 }
 
-/// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms = 100 ){
+void HWLIB_WEAK HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms ){
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
          port.set( 0x01 << i );      
@@ -101,16 +135,9 @@ uint_fast32_t HWLIB_WEAK random_in_range(
 
 #endif
 
-/// random lines demo
-//
-/// This functions repeats the following actions:
-/// - clears the window
-/// - draws a border
-/// - draws 30 random lines,
-/// - waits half a second.
-void HWLIB_WEAK HWLIB_NORETURN graphics_random_lines( 
+void HWLIB_NORETURN graphics_random_lines( 
    window & w, 
-   uint_fast16_t n_lines = 30 
+   uint_fast16_t n_lines 
 ){
    for(;;){
       w.clear();
@@ -146,16 +173,9 @@ void HWLIB_WEAK HWLIB_NORETURN graphics_random_lines(
    }  
 }
 
-/// random circles demo
-//
-/// This functions repeats the following actions:
-/// - clears the window
-/// - draws n_circles (default is 30) random circles 
-///      (which might be partially out-of-screen),
-/// - waits half a second.
-void HWLIB_WEAK HWLIB_NORETURN graphics_random_circles( 
+void HWLIB_NORETURN graphics_random_circles( 
    window & w, 
-   uint_fast16_t n_circles = 30 
+   uint_fast16_t n_circles 
 ){
    for(;;){
       w.clear();
@@ -173,6 +193,8 @@ void HWLIB_WEAK HWLIB_NORETURN graphics_random_circles(
       }
    }  
 }
+
+#endif // #ifdef HWLIB_ONCE
 
 }; // namespace hwlib
 
