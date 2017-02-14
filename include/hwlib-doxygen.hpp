@@ -14,7 +14,7 @@
 /// @file
 
 // This file contains doxygen stuff that doesn't belong in any specific
-// header file. This file is not included by hwlib-all.hpp.
+// header file. Hence this file is not included by hwlib-all.hpp.
 
 /// hwlib library
 //
@@ -27,7 +27,7 @@ namespace hwlib {}
 ///
 /// \author Wouter van Ooijen (wouter@voti.nl)
 /// \version 1.1 (last modified 2017-02-03)
-/// \copyright boost license (see below for exceptions)
+/// \copyright boost license (but see below for exceptions)
 ///
 /// Hwlib is a C++ OO library for close-to-the-hardware programming.
 /// It is used in an number of courses at the Hogeschool Utrecht.
@@ -106,18 +106,17 @@ namespace hwlib {}
 /// All hwlib files are provided under the boost license, except:
 ///    - some pictures used in the documentation are under a 
 ///      Creative Commons license that allows unaltered reproduction
-///    - an arduino-due include file is under asl
+///    - an arduino-due include file is from Atmel (Microchip) under asl
 ///
 /// These exceptions have no impact on the status of an application
 /// that includes hwlib in its build.
-/// 
 ///
 // ==========================================================================
-
+//
 /// \page todo  To do list
 ///
 /// Known issue
-///    currently none
+///   - currently none
 ///
 /// Nice to haves
 ///   - rectangle (filled), circle (filled), image (external converter)
@@ -168,7 +167,7 @@ namespace hwlib {}
 ///   - switch due to full speed??
 ///   - geweer hardware aanpassen (private repository??)
 ///
-
+// ==========================================================================
 
 
 

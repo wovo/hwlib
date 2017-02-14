@@ -10,10 +10,14 @@ To use hwlib from within bmptk:
    
 To use hwlib without bmptk:
    - add the hwlib/include to your search
-   - (if you wantto edit hwlib files) add the hwlib files to your dependencies
+   - (if you wantto edit hwlib files) 
+     add the hwlib files to your dependencies
    - add hwlib.cpp to your sources
    - include the appropriate top-level target file in your code,
       for instance hwlib-due.hpp
+
+The following is (only) relevant if you want to work on hwlib and use its
+makefile structure.      
       
 Each project directory has a makefile that builds that project. 
 It sets the symbol RELATIVE, and includes the makefile.link 
@@ -27,11 +31,13 @@ builds its subdirectories. To do this, it also uses bmptk, so it uses
 'bmptk-make -f makefile.link <target>' to include bmptk.inc, using the
 above mechanism.
 
-In the hwlib root the file makefile.find_local provides the location of the
-external dependencies (bmptk, Catch). By default it does this by including
-makefile.local, but when a bmptk.custom is present that one is used instead.
-This makes it possible to customize the locations of the external dependencies
-without changing an existing file.
+In the hwlib root the file makefile.find_local provides the location of 
+the external dependencies (bmptk, Catch). By default it does this by 
+including makefile.local, but when a bmptk.custom is present that one 
+is used instead. This makes it possible to customize the locations 
+of the external dependencies without changing an existing file.
+
+-----------------------------------------------------------------------------
       
 (c) Wouter van Ooijen (wouter@voti.nl) 2017
 
