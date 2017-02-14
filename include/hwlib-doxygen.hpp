@@ -136,6 +136,8 @@ namespace hwlib {}
 ///   - rename lcd to something that includes oled
 ///   - cleanup oled => ssd1306, provide init code, expose command interface
 ///   - pin decorators - did they exist at one point??
+///   - also check line length (in tab checker)
+///   - there is no on-line manual :(
 ///
 /// Must test
 ///   - HD44780 other sizes

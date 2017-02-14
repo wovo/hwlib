@@ -55,5 +55,5 @@ push:
    
 push-as-work: 
 	git add -A
-	git commit -a -m 'work'
+	git commit -a -m 'small changes'
 	git push				

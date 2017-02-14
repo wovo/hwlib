@@ -1,5 +1,7 @@
-Hwlib is a C++ classic-OO-style library for close-to-the-hardware programming.
-It is used in a number of courses at the Hogeschool Utrecht, HBO-ICT.
+Hwlib is a C++ classic-OO-style library for close-to-the-hardware 
+programming. It is used in a number of Computer Sience courses 
+at the Hogeschool Utrecht, HBO-ICT.
+
 
 Run Doxygen in the root to create the documentation.
 
@@ -11,10 +13,12 @@ To use hwlib from within bmptk:
 To use hwlib without bmptk:
    - add the hwlib/include to your search
    - (if you wantto edit hwlib files) 
-     add the hwlib files to your dependencies
+       add the hwlib files to your dependencies
    - add hwlib.cpp to your sources
    - include the appropriate top-level target file in your code,
-      for instance hwlib-due.hpp
+       for instance hwlib-due.hpp
+      
+-----------------------------------------------------------------------------      
 
 The following is (only) relevant if you want to work on hwlib and use its
 makefile structure.      
@@ -37,6 +41,10 @@ including makefile.local, but when a bmptk.custom is present that one
 is used instead. This makes it possible to customize the locations 
 of the external dependencies without changing an existing file.
 
+Each directory that contains project sub-directories has a file 
+update_codelite_workspace.bat. When executed, it creates a CodeLite 
+workspace that contains the projects.
+
 -----------------------------------------------------------------------------
       
 (c) Wouter van Ooijen (wouter@voti.nl) 2017
@@ -45,5 +53,6 @@ Distributed under the Boost Software License, Version 1.0.
 (See accompanying file LICENSE_1_0.txt or copy at 
 http://www.boost.org/LICENSE_1_0.txt)     
 
-note: include/hwlib-arduino-due-system-sam3xa.inc is (c) atmel, under asf license.      
+note: include/hwlib-arduino-due-system-sam3xa.inc is (c) atmel, 
+under asf license.      
       
