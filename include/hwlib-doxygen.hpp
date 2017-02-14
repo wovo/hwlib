@@ -27,7 +27,7 @@ namespace hwlib {}
 ///
 /// \author Wouter van Ooijen (wouter@voti.nl)
 /// \version 1.1 (last modified 2017-02-03)
-/// \copyright boost license (some files public domain)
+/// \copyright boost license (see below for exceptions)
 ///
 /// Hwlib is a C++ OO library for close-to-the-hardware programming.
 /// It is used in an number of courses at the Hogeschool Utrecht.
@@ -43,16 +43,14 @@ namespace hwlib {}
 ///    - Arduino Due (ATSAM3X8E chip)
 ///    - DB103 (LPC1114 chip)
 ///    - Arduino Uno (ATMEGA328P chip)
-///    - Raspberry Pi (under Linux, using direct pin access; 
-///      must run as root).
 ///
 /// The library is used by including either the header for the target
-/// (hwlib-due.hpp, hwlib-db103.hpp, hwlib-uno.hpp or hwlib-pi.hpp),
+/// (hwlib-arduino-due.hpp, hwlib-db103.hpp, hwlib-arduino-uno.hpp),
 /// or (preferrably) by including hwlib.hpp, which will include the
 /// correct target header based on the macro that is set by bmptk 
 /// (BMPTK_TARGET_ARDUIN_DUE etc.) on the compiler command line.
 ///
-/// \snippet "demos\arduino-due\blink\main.cpp" [Doxygen blink example]
+/// \snippet "demo\arduino-due\blink\main.cpp" [Doxygen blink example]
 /// 
 /// The following naming convention is used:
 ///    - functions that are called set() and get() (or have set or get as
@@ -102,8 +100,16 @@ namespace hwlib {}
 /// or not appropriate for use on small micro-controllers:
 ///    - dynamic memory (new, delete, STL containers)
 ///    - exception handling (throw, try ... catch)
-///    - templates (except static_cast<>)
+///    - templates (except static_cast<>, and string<N>)
 ///    - RTTI, dynamic_cast
+///
+/// All hwlib files are provided under the boost license, except:
+///    - some pictures used in the documentation are under a 
+///      Creative Commons license that allows unaltered reproduction
+///    - an arduino-due include file is under asl
+///
+/// These exceptions have no impact on the status of an application
+/// that includes hwlib in its build.
 /// 
 ///
 // ==========================================================================
@@ -111,40 +117,26 @@ namespace hwlib {}
 /// \page todo  To do list
 ///
 /// Known issue
+///    currently none
 ///
 /// Nice to haves
-///   - character console on graphics
 ///   - rectangle (filled), circle (filled), image (external converter)
 ///   - graphics 2"4 LCD
-///   - targets: Pi, Liliypad85
-///   - ADS1115
+///   - targets: Pi, Liliypad85, ESP8266, ST32, MCP430
 ///   - LCD/button shield
-///   - due adc
 ///   - use and provide ranges (instead of x, y for loops)
-///   - time-based wait (or at least a now() function)
-///   - listener pattern 'dummy' pins?
-///   - pcf8591
-///   - block-write for graphics
-///   - faster I2C by exposing the elements, use in oled?
 ///
 /// Quality & consistency issues 
-///   - uint_fast8_t all over
-///   - main() not (void)
 ///   - file-local objects are not documented? (check ostream)
-///   - author & change date everywhere?
 ///   - db103 align pin classes
 ///   - more examples (graphics, ...)
 ///   - lcd5510 should use SPI??
 ///   - i2c example of address-only write
-///   - directories opschonen
-///   - make full build, clean
 ///   - test for input, output, oc, analog pins of a chip
 ///   - rewrite text for uno (due?) IO pins
-///   - foto for setups, eg. hc595 (pins!!)
-///   - run does not recompile on changed main.cpp??
-///   - test that all headers can compile *individually*
 ///   - rename lcd to something that includes oled
 ///   - cleanup oled => ssd1306, provide init code, expose command interface
+///   - pin decorators - did they exist at one point??
 ///
 /// Must test
 ///   - HD44780 other sizes
@@ -158,8 +150,24 @@ namespace hwlib {}
 /// The list of issues, plans, bugs, etc:
 ///   - add an I2C temp sensor for Leo of iets anders
 ///   - I2C read, pcf8574a, demo: copy 1 to 2
-///   - one_pin trick => defines.hpp
 ///   - use an abstraction instead of copied code in the extenders one_pin => pin_out_through_buffer
+///
+///   - meer examples lpc1114 - need hardware
+///   - check uno 
+///   - db103 uart?
+///   - uart gebruikt??
+///   - rtos??
+///   - images licences!!
+///   - check all documentation
+///   - meer tests voor hwlib::string
+///   - bmptk...
+///   - can that subdirs thing be put into bmptk?
+///   - bmptk blink examples
+///   - linux
+///   - esp8266 - eerste in bmptk
+///   - switch due to full speed??
+///   - geweer hardware aanpassen (private repository??)
+///
 
 
 

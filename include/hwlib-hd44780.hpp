@@ -15,6 +15,7 @@
 #define HWLIB_HD44780_H
 
 #include "hwlib-pin.hpp"
+#include "hwlib-port.hpp"
 #include "hwlib-console.hpp"
 
 namespace hwlib {

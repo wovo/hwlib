@@ -12,7 +12,7 @@
 
 #include "hwlib.hpp"
 
-int main( void ){	
+int main( void ){
     
 // cin not implemented yet for LPC1114    
    

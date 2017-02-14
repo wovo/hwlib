@@ -48,7 +48,7 @@
 /// References:
 ///    - <A HREF="https://www.arduino.cc/en/uploads/Main/arduino-uno-schematic.pdf">
 ///       Arduino Due circuit reference diagram</A> (pdf)
-///    - <A HREF="http://www.atmel.com/images/atmel-11057-32-bit-cortex-m3-microcontroller-sam3x-sam3a_datasheet.pdf">
+///    - <A HREF="http://www.atmel.com/ru/ru/Images/Atmel-11057-32-bit-Cortex-M3-Microcontroller-SAM3X-SAM3A_Datasheet.pdf">
 ///       ATSAM38XE datasheet</A> (pdf)
 ///
 namespace due {

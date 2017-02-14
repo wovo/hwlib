@@ -11,6 +11,7 @@
 #############################################################################
 
 SUBDIRS += blink
+SUBDIRS += hello
 SUBDIRS += panic
 
 BUILDDIRS = $(SUBDIRS:%=build-%)

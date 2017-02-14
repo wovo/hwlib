@@ -16,7 +16,7 @@
 #ifndef HWLIB_PIN_H
 #define HWLIB_PIN_H
 
-#include "hwlib-pins.hpp"
+#include "hwlib-pin.hpp"
 
 namespace hwlib {
 

@@ -13,15 +13,15 @@
 # default relative path
 RELATIVE          ?= .
 
-# include hwlib
+# get the paths 
 HWLIB             := $(RELATIVE)
+include           $(HWLIB)/makefile.find_local
+
+# add hwlib itself
 include           $(HWLIB)/makefile.inc
 
-# add Catch, assuming it is next to hwlib
-CATCH             := $(RELATIVE)/../Catch
+# add Catch
 SEARCH            += $(CATCH)/include
 
 # defer to the bmptk makefile.inc
-# assuming that hwlib and bmptk are 'next to each other'
-BMPTK             ?= $(RELATIVE)/../bmptk
 include           $(BMPTK)/makefile.inc

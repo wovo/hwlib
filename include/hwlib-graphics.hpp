@@ -18,6 +18,9 @@
 
 #include <stdint.h>
 
+#include "hwlib-ostream.hpp"
+#include "hwlib-console.hpp"
+
 namespace hwlib {
 
 /// a pixel coordinate

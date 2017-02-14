@@ -33,7 +33,7 @@ namespace hwlib {
 ///
 /// The following fragment is an example of an application-defined
 /// panic function:
-/// \snippet "demos\arduino-due\panic\main.cpp" [Doxygen panic example]
+/// \snippet "demo\arduino-due\panic\main.cpp" [Doxygen panic example]
 ///
 void HWLIB_NORETURN panic( const char * file, const uint_fast16_t line );
 

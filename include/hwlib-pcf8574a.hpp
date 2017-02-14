@@ -19,6 +19,7 @@
 #include "hwlib-pin.hpp"
 #include "hwlib-port.hpp"
 #include "hwlib-wait.hpp"
+#include "hwlib-i2c.hpp"
 
 namespace hwlib {
    
@@ -49,7 +50,7 @@ namespace hwlib {
 /// Because the output pins are open-collector, the LEDs
 /// are connected to power (instead of to the ground), hence
 /// the use of hwlib::port_out_invert().
-/// \snippet "demos\db103\pcf8574a\main.cpp" [Doxygen pcf8574a example]
+/// \snippet "demo\db103\pcf8574a\main.cpp" [Doxygen pcf8574a example]
 ///
 /// The pcf8574 (without the -a) is the same chip, but with a different
 /// I2C bus address.

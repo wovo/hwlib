@@ -16,6 +16,10 @@
 // this file contains Doxygen lines
 /// @file
 
+#include <cstdlib>
+
+#include "hwlib-graphics.hpp"
+
 #ifndef HWLIB_FONT_DEFAULT_16X16_H
 #define HWLIB_FONT_DEFAULT_16X16_H
 

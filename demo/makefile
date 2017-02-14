@@ -13,6 +13,7 @@
 SUBDIRS += arduino-due
 SUBDIRS += arduino-uno
 SUBDIRS += db103
+SUBDIRS += native
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

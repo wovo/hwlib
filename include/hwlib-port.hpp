@@ -18,6 +18,8 @@
 
 #include <stdint.h>
 
+#include "hwlib-common.hpp"
+
 namespace hwlib {
    
     

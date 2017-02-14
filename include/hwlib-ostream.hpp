@@ -19,6 +19,7 @@
 #include <cstdlib>
 
 #include "hwlib-wait.hpp"
+#include "hwlib-pin.hpp"
 
 namespace hwlib {
 
@@ -642,13 +643,13 @@ namespace hwlib {
    //
    /// This function implements a bit-banged output UART pin
    /// using the BMPTK_BAUDRATE.   
-   void HWLIB_WEAK uart_putc_bit_banged_pin( char c, pin_out & pin );
+   void uart_putc_bit_banged_pin( char c, pin_out & pin );
    
    /// a bit-banged UART char input
    //
    /// This function implements a bit-banged input UART pin
    /// using the BMPTK_BAUDRATE.      
-   char HWLIB_WEAK uart_getc_bit_banged_pin( pin_in & pin );
+   char uart_getc_bit_banged_pin( pin_in & pin );
    
    #ifdef HWLIB_ONCE
    
@@ -752,7 +753,7 @@ namespace hwlib {
    /// to write the characters.
    /// This definition is weak, which allows 
    /// an application to provide its own definition.
-   extern cout_using_uart_putc HWLIB_WEAK  cout;   
+   extern cout_using_uart_putc cout;   
  
 
    /// embedded input console
@@ -762,7 +763,7 @@ namespace hwlib {
    /// to read the characters.
    /// This definition is weak, which allows 
    /// an application to provide its own definition.
-   extern cin_using_uart_getc HWLIB_WEAK  cin;    
+   extern cin_using_uart_getc cin;    
 
    #ifdef HWLIB_ONCE    
    

@@ -19,6 +19,7 @@
 #include "hwlib-pin.hpp"
 #include "hwlib-port.hpp"
 #include "hwlib-wait.hpp"
+#include "hwlib-graphics.hpp"
 
 namespace hwlib {
 
@@ -26,19 +27,19 @@ namespace hwlib {
 //
 /// This function blinks the pin: ms milliseconds on, and
 /// ms milliseconds off. It never returns.
-void HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t  ms = 200 );
+void blink( pin_out & pin, uint_fast16_t  ms = 200 );
 
 /// kitt function
 //
 /// This function shows a kitt display on the pins of a port.
 /// Each LED is on for m milliseconds. It never returns.
-void HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t ms = 100 );
+void kitt( port_in_out & port, uint_fast16_t ms = 100 );
 
 /// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
-void HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms = 100 );
+void kitt( port_out & port, uint_fast16_t ms = 100 );
 
 /// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
-void HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms = 100 );
+void kitt( port_oc & port, uint_fast16_t ms = 100 );
 
 /// random lines demo
 //
@@ -47,7 +48,7 @@ void HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms = 100 );
 /// - draws a border
 /// - draws 30 random lines,
 /// - waits half a second.
-void HWLIB_NORETURN graphics_random_lines( 
+void graphics_random_lines( 
    window & w, 
    uint_fast16_t n_lines = 30
 );
@@ -59,7 +60,7 @@ void HWLIB_NORETURN graphics_random_lines(
 /// - draws n_circles (default is 30) random circles 
 ///      (which might be partially out-of-screen),
 /// - waits half a second.
-void HWLIB_WEAK HWLIB_NORETURN graphics_random_circles( 
+void graphics_random_circles( 
    window & w, 
    uint_fast16_t n_circles = 30 
 );
@@ -75,7 +76,7 @@ void HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t  ms ){
    }      
 }
 
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t ms ){
+void HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t ms ){
    port.direction_set_output();
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
@@ -89,7 +90,7 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_in_out & port, uint_fast16_t ms ){
    }      
 }
 
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms ){
+void HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms ){
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
          port.set( 0x01 << i );      
@@ -102,7 +103,7 @@ void HWLIB_WEAK HWLIB_NORETURN kitt( port_out & port, uint_fast16_t ms ){
    }      
 }
 
-void HWLIB_WEAK HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms ){
+void HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms ){
    for(;;){
       for( uint_fast8_t  i = 0; i < port.number_of_pins(); ++i ){
          port.set( 0x01 << i );      

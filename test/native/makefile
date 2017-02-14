@@ -11,7 +11,8 @@
 #############################################################################
 
 SUBDIRS += string
-SUBDIRS += two-sources
+SUBDIRS += two
+SUBDIRS += separate
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

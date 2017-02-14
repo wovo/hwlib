@@ -18,6 +18,9 @@
 
 #include <stdint.h>
 
+#include "hwlib-pin.hpp"
+#include "hwlib-wait.hpp"
+
 namespace hwlib {
    
 /// i2c bus master interface

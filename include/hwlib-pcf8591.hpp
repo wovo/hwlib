@@ -19,6 +19,9 @@
 #include "hwlib-pin.hpp"
 #include "hwlib-port.hpp"
 #include "hwlib-wait.hpp"
+#include "hwlib-i2c.hpp"
+#include "hwlib-adc.hpp"
+#include "hwlib-dac.hpp"
 
 namespace hwlib {
    
@@ -38,7 +41,7 @@ namespace hwlib {
 /// The next code repeatedly prints the values read
 /// by the 4 (single-ended) A/D converters.
 ///
-/// \snippet "demos\db103\pcf8591-adc\main.cpp" [Doxygen pcf8591-adc example]
+/// \snippet "demo\db103\pcf8591-adc\main.cpp" [Doxygen pcf8591-adc example]
 ///
 /// references:
 ///    - <A HREF="http://www.nxp.com/documents/data_sheet/PCF8591.pdf">

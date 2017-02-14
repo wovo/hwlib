@@ -10,8 +10,7 @@
 # 
 #############################################################################
 
-SUBDIRS += blink
-SUBDIRS += panic
+SUBDIRS += hello
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

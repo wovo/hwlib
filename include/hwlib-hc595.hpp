@@ -16,6 +16,10 @@
 
 #include <stdint.h>
 
+#include "hwlib-pin.hpp"
+#include "hwlib-port.hpp"
+#include "hwlib-spi.hpp"
+
 namespace hwlib {
    
 /// hc595 8-bit output shift register 
@@ -47,7 +51,7 @@ namespace hwlib {
 ///
 /// The next code shows a kitt display 
 /// on 8 LEDs connected to the HC595 output pins:
-/// \snippet "demos\db103\hc595\main.cpp" [Doxygen hc595 example]
+/// \snippet "demo\db103\hc595\main.cpp" [Doxygen hc595 example]
 ///
 /// The 74HCT595 is a similar chip, but intended (only) for 5V power,
 /// and for use with the old TTL signal levels 

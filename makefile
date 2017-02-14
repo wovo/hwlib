@@ -42,6 +42,7 @@ test:
 clean:   
 	$(REMOVE) -rf html
 	cd demo && bmptk-make clean   
+	cd test && bmptk-make clean   
 	@echo "**** cleanup completed succesfully"  
    
 # git commit -a -m 'work'   
@@ -52,7 +53,7 @@ push:
 	git commit -a
 	git push		
    
-push-no-clean: 
+push-as-work: 
 	git add -A
 	git commit -a -m 'work'
 	git push				

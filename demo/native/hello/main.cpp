@@ -13,6 +13,6 @@
 #include "hwlib.hpp"
 #include <iostream>
 
-int main( void ){	
+int main( void ){
    std::cout << "Hello world\n";
 }

@@ -18,6 +18,8 @@
 #ifndef HWLIB_STRING_H
 #define HWLIB_STRING_H
 
+#include <stddef.h>
+
 namespace hwlib {
 
 // forward declaration of the class template   
@@ -29,7 +31,7 @@ template< size_t maximum_length > class string;
 //  
 //============================================================================
 
-/// fixed-maximum-length string
+/// abstract fixed-maximum-length string
 //  
 /// This is a string class template with a fixed maximum length. 
 /// The maximum length is the template parameter.
@@ -224,6 +226,8 @@ bool operator==( const string< 0 > & lhs, const string< 0 > & rhs ){
 //  
 //============================================================================
 
+
+/// abstract fixed-maximum-length string
 template< size_t template_allocated_length >
 class string: public string< 0 > {
 private:

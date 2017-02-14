@@ -10,8 +10,11 @@
 # 
 #############################################################################
 
+SUBDIRS += blink
 SUBDIRS += hello
+SUBDIRS += hc595
 SUBDIRS += pcf8574a
+SUBDIRS += pcf8591-adc
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)
