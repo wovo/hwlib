@@ -1,10 +1,6 @@
 This directory contains images for the (doxygen) documentation.
 
-(c) Wouter van Ooijen (wouter@voti.nl) 2017
-
-Distributed under the Boost Software License, Version 1.0.
-(See accompanying file LICENSE_1_0.txt or copy at 
-http://www.boost.org/LICENSE_1_0.txt)     
+The atributions for the third-party images are in the Doxygen documentation.   
 
       
       

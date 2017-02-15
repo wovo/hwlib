@@ -16,6 +16,8 @@ SUBDIRS += hello
 SUBDIRS += panic
 SUBDIRS += circles
 SUBDIRS += oled_timing
+SUBDIRS += pcf8591-adc
+SUBDIRS += pcf8591-dac
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

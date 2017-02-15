@@ -209,6 +209,44 @@ namespace hwlib {}
 
 // ==========================================================================
 //
+/// \page acknowledgements Acknowledgements
+///
+/// This documentation is provided under the same (boost) license
+/// as the library, except for some of the pictures:
+///
+///--------------------------------------------------------------------------
+///
+/// \image html toolset.png
+/// Creative Commons Attribution 3.0
+///
+///--------------------------------------------------------------------------
+///
+/// \image html uno-pinout.png
+/// Creative Commons, details in the image itself
+///
+///--------------------------------------------------------------------------
+///
+/// \image html due-pinout.png
+/// Creative Commons, details in the image itself
+/// 
+///--------------------------------------------------------------------------
+///
+/// \image html mini-micro-pinout.png
+/// Creative Commons, details in the image itself
+/// 
+///--------------------------------------------------------------------------
+///
+/// \image html nano-pinout.png
+/// Creative Commons, details in the image itself
+/// 
+///--------------------------------------------------------------------------
+///
+/// A source for IC pinouts: 
+/// https://commons.wikimedia.org/wiki/Category:IC_pinout_diagrams
+
+
+// ==========================================================================
+//
 /// \page todo  To do list
 ///
 /// Known problems:

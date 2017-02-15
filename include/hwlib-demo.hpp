@@ -69,9 +69,16 @@ void graphics_random_circles(
    uint_fast16_t n_circles = 30 
 );
 
+/// \brief
+/// dac triangle waveform demo
+/// \details
+/// This functions outputs a triangle waveform on the DAC outpout,
+/// with step_ms milliseconds between each step.
+void dac_triangle( dac & d, uint_fast16_t step_ms = 10 );
+
 #ifdef HWLIB_ONCE 
 
-void HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t  ms ){
+void HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t ms ){
    for(;;){
       pin.set( 1 );
       wait_ms( ms );      
@@ -198,6 +205,19 @@ void HWLIB_NORETURN graphics_random_circles(
       }
    }  
 }
+
+HWLIB_NORETURN void dac_triangle( dac & d, uint_fast16_t step_ms ){
+   for(;;){
+      for( dac::dac_value_type i = 0; i <= d.dac_max_value; ++i ){
+          d.set( i );
+          wait_ms( step_ms );
+      }
+      for( dac::dac_value_type i = d.dac_max_value; i >= 0; --i ){
+          d.set( i );
+          wait_ms( step_ms );
+      }
+   }
+}   
 
 #endif // #ifdef HWLIB_ONCE
 

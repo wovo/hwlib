@@ -30,6 +30,9 @@ public:
    /// the number of bits in the result returned by get()
    const uint_fast8_t dac_n_bits;
    
+   /// the maximum value that can be returned by get()
+   const uint_fast8_t dac_max_value;
+   
    /// the type of the result returned by get()
    typedef uint_fast32_t dac_value_type; 
     
@@ -41,7 +44,10 @@ public:
    virtual void set( dac_value_type x ) = 0;
    
    /// specify the number of bits
-   dac( uint_fast8_t n_bits ): dac_n_bits{ n_bits }{
+   dac( uint_fast8_t n_bits ): \
+      dac_n_bits{ n_bits },
+      dac_max_value( static_cast< dac_value_type >( ( 1 << n_bits ) - 1 ))
+   {
       if( dac_n_bits > static_cast<int>( 8 * sizeof( dac_value_type ))){
          // the number of bits won't fit in the return type of get()
          HWLIB_PANIC_WITH_LOCATION;

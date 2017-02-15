@@ -49,7 +49,7 @@
 /// can use it to load the Arduino bootloader and use the Nano as you
 /// would use an Uno.
 ///
-/// \image html nano-pinout.jpg
+/// \image html nano-pinout.png
 ///
 /// The Pro Mini is little more than the micro-controler chip and a few
 /// necessary components (crystal, capacitors). 
