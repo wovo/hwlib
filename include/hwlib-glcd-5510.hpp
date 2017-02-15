@@ -113,7 +113,11 @@ private:
 
    unsigned char pixel_buffer[ 504 ];
 
-   void write_implementation( location pos, color col ) override {
+   void write_implementation( 
+      location pos, 
+      color col, 
+      buffering buf
+   ) override {
       uint_fast8_t a = pos.x + ( pos.y / 8 ) * 84;
       uint_fast8_t m = 1 << ( pos.y % 8 );
    
@@ -123,12 +127,14 @@ private:
          pixel_buffer[ a ] &= ~m;
       }
    
-      pixels( pos.x, pos.y / 8, pixel_buffer[ a ] );         
+      if( buf == buffering::unbuffered ){
+         pixels( pos.x, pos.y / 8, pixel_buffer[ a ] );         
+      }
    }
    
 public:   
    
-   void clear() override {
+   void clear( buffering buf ) override {
       unsigned char d = (( background == white ) ? 0 : 0xFF );
       command( 0x80 | 0 );   
       command( 0x40 | 0 );  

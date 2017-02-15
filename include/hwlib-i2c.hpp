@@ -252,7 +252,8 @@ public:
          write_byte( data[ i ] );
       }               
       read_ack();
-      write_stop();      
+      write_stop();   
+      (void)hwlib::now_us();
    }
    
    /// \brief

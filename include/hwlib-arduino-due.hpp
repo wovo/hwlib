@@ -668,8 +668,8 @@ public:
    }
 };
 
-/// returns the time since the3 first call
-uint32_t HWLIB_WEAK now_us(){
+/// returns the time since the first call
+uint64_t HWLIB_WEAK now_us(){
    static bool init_done = false;
    if( ! init_done ){
       
@@ -684,8 +684,8 @@ uint32_t HWLIB_WEAK now_us(){
       init_done = true;      
    }
    
-   uint32_t last_low = 0;
-   uint64_t high = 0;
+   static uint32_t last_low = 0;
+   static uint64_t high = 0;
 
    // the timer ticks down, but we want an up counter
    uint32_t low = 0xFFFFFF - ( SysTick->VAL & 0xFFFFFF );
@@ -708,10 +708,6 @@ namespace hwlib {
 
 namespace target = ::due;
    
-void HWLIB_WEAK wait_ns( int_fast32_t n ){
-   wait_us( ( n + 999 ) / 1000 );
-}
-
 void HWLIB_WEAK wait_us( int_fast32_t n ){
 
    // use the 12 MHz internal RC clock
@@ -735,6 +731,10 @@ void HWLIB_WEAK wait_us( int_fast32_t n ){
       "   bgt 1b           \t\n" 
       :: [reg] "r" (n) : "r0"
    );
+}
+
+void HWLIB_WEAK wait_ns( int_fast32_t n ){
+   wait_us( ( n + 999 ) / 1000 );
 }
 
 void HWLIB_WEAK wait_ms( int_fast32_t n ){

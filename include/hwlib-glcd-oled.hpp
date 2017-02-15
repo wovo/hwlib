@@ -164,16 +164,17 @@ private:
          buffer[ 1 + a ] &= ~( 0x01 << ( pos.y % 8 )); 
       }   
    }      
-
-   void write_buffered_implementation( location pos, color col ) override {
-      uint_fast8_t a = pos.x + ( pos.y / 8 ) * size.x;
-      write_to_buffer( pos, col, a );
-   }   
    
-   void write_implementation( location pos, color col ) override {
+   void write_implementation( 
+      location pos, 
+      color col, 
+      buffering buf
+   ) override {
       uint_fast8_t a = pos.x + ( pos.y / 8 ) * size.x;
       write_to_buffer( pos, col, a );
-      pixels( pos.x, pos.y / 8, buffer[ 1 + a ] );      
+      if( buf == buffering::unbuffered ){
+         pixels( pos.x, pos.y / 8, buffer[ 1 + a ] );      
+      }
    }
    
 public:

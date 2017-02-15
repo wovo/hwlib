@@ -15,9 +15,11 @@ SUBDIRS += blink-direct-include
 SUBDIRS += hello
 SUBDIRS += panic
 SUBDIRS += circles
-SUBDIRS += oled_timing
+SUBDIRS += oled-timing
 SUBDIRS += pcf8591-adc
 SUBDIRS += pcf8591-dac
+SUBDIRS += oled-hello
+SUBDIRS += oled-timing
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

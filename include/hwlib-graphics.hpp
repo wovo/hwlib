@@ -55,6 +55,14 @@ public:
       };         
    }      
 
+   /// divide a location  by an integer
+   constexpr location operator/( const uint_fast16_t rhs ) const {
+      return location{ 
+          static_cast< uint_fast16_t >( x / rhs ),
+          static_cast< uint_fast16_t >( y / rhs )
+      };         
+   }      
+
 }; 
 
 /// print a location
@@ -292,18 +300,14 @@ private:
    /// This NVI function writes a the color col to the pixel at location loc.
    /// Loc is guaranteed to be within the window, and the color
    /// is guranteed to be not transparent.
-   virtual void write_implementation( location pos, color col ) = 0;
-   
-   /// \brief
-   /// write a pixel buffered - implementation
-   /// \details
-   /// This NVI function writes a the color col to the pixel buffer at location loc.
-   /// Loc is guaranteed to be within the window, and the color
-   /// is guranteed to be not transparent.
-   virtual void write_buffered_implementation( location pos, color col ){
-      write_implementation( pos, col );
-   }   
-      
+   ///
+   /// When buffering is specified ( buf == buffered ) the actual writing
+   /// can be delayed until the next flush() call.
+   virtual void write_implementation( 
+      location pos, 
+      color col, 
+      buffering buf = buffering::unbuffered 
+   ) = 0;      
    
 public:
    /// \brief
@@ -337,28 +341,19 @@ public:
    /// If either the color is transparent, or the location is outside the window 
    /// the call has no effect. When no color is specificied, the window's
    /// foreground color is used.
-   void write( location pos, color col ){
+   ///
+   /// When buffering is specified ( buf == buffered ) the actual writing
+   /// can be delayed until the next flush() call.   
+   void write( 
+      location pos, 
+      color col,
+      buffering buf = buffering::unbuffered   
+   ){
       if(  ( ! col.is_transparent )
         && ( pos.x >= 0 ) && ( pos.x < size.x ) 
         && ( pos.y >= 0 ) && ( pos.y < size.y ) 
       ){
-         write_implementation( pos, col );
-      }   
-   }
-   
-   /// \brief
-   /// write a pixel buffered
-   /// \details
-   /// This function writes a the color col to the pixel buffer at location loc.
-   /// If either the color is transparent, or the location is outside the window 
-   /// the call has no effect. When no color is specificied, the window's
-   /// foreground color is used.
-   void write_buffered( location pos, color col ){
-      if(  ( ! col.is_transparent )
-        && ( pos.x >= 0 ) && ( pos.x < size.x ) 
-        && ( pos.y >= 0 ) && ( pos.y < size.y ) 
-      ){
-         write_buffered_implementation( pos, col );
+         write_implementation( pos, col, buf );
       }   
    }
    
@@ -374,48 +369,31 @@ public:
    /// write a rectangle of pixels
    /// \details
    /// This function writes a rectangle of pixels, as specified by img,
-   /// at location pos.                 
-   void write( location pos, const image & img ){                 
+   /// at location pos.        
+   ///
+   /// When buffering is specified ( buf == buffered ) the actual writing
+   /// can be delayed until the next flush() call.   
+   void write( 
+      location pos, 
+      const image & img,
+      buffering buf = buffering::unbuffered
+   ){                 
       for( uint_fast16_t x = 0; x < img.size.x; ++x ){
          for( uint_fast16_t y = 0; y < img.size.y; ++y ){
             auto loc = hwlib::location( x, y );
-            write( pos + loc, img[ loc ] );
-         }
-      }
-   }
-
-   /// \brief
-   /// write a rectangle of pixels buffered
-   /// \details
-   /// This function writes a rectangle of pixels, as specified by img,
-   /// at location pos, to the pixel buffer.                      
-   void write_buffered( location pos, const image & img ){                 
-      for( uint_fast16_t x = 0; x < img.size.x; ++x ){
-         for( uint_fast16_t y = 0; y < img.size.y; ++y ){
-            auto loc = hwlib::location( x, y );
-            write_buffered( pos + loc, img[ loc ] );
+            write( pos + loc, img[ loc ], buf );
          }
       }
    }
 
    #ifndef DOXYGEN // hide from doxygen
-   void write( location pos ){
-      write( pos, foreground );
+   void write( 
+      location pos,
+      buffering buf = buffering::unbuffered
+   ){
+      write( pos, foreground, buf );
    }   
-   #endif
-   
-   /// \brief
-   /// clear the window buffered
-   /// \details
-   /// This function clears the write buffer by writing the background
-   /// color to all its pixels.
-   virtual void clear_buffered(){
-      for( uint_fast16_t x = 0; x < size.x; ++x ){
-         for( uint_fast16_t y = 0; y < size.y; ++y ){
-            write_buffered( location{ x, y }, background );    
-         }                 
-      }         
-   }   
+   #endif 
    
    /// \brief
    /// clear the window
@@ -424,9 +402,20 @@ public:
    /// color to all pixels.
    /// The default implementation writes to all pixels in sequence.
    /// A concrete window can probably provide a faster implementation.
-   virtual void clear(){
-      clear_buffered();
-      flush();      
+   ///
+   /// When buffering is specified ( buf == buffered ) the actual clearing
+   /// can be delayed until the next flush() call.    
+   virtual void clear(
+      buffering buf = buffering::unbuffered
+   ){
+      for( uint_fast16_t x = 0; x < size.x; ++x ){
+         for( uint_fast16_t y = 0; y < size.y; ++y ){
+            write( location{ x, y }, background, buffering::buffered );    
+         }                 
+      } 
+      if( buf == buffering::unbuffered ){
+         flush();      
+      }         
    }
    
 };
@@ -459,7 +448,7 @@ private:
    void putc_implementation( char c ) override {
       const image & im = f[ c ];
 
-      w.write_buffered( cursor, im );
+      w.write( cursor, im, buffering::buffered );
       cursor.x += im.size.x;
    }
 
@@ -491,13 +480,9 @@ private:
    window & w;
    location start;
    
-   void write_implementation( location pos, color col ) override {
-      w.write( start + pos, col );
+   void write_implementation( location pos, color col, buffering buf ) override {
+      w.write( start + pos, col, buf );
    }      
-   
-   void write_buffered_implementation( location pos, color col ) override {
-      w.write_buffered( start + pos, col );
-   }    
 
    void flush() override {
       w.flush();
@@ -530,13 +515,13 @@ class window_invert : public window {
 private:
    window & w;
    
-   void write_implementation( location pos, color col ) override {
-      w.write( pos, - col );
+   void write_implementation( 
+      location pos, 
+      color col, 
+      buffering buf
+   ) override {
+      w.write( pos, - col, buf );
    }      
-   
-   void write_buffered_implementation( location pos, color col ) override {
-      w.write( pos, - col );
-   } 
 
    void flush() override {
       w.flush();
@@ -569,19 +554,18 @@ public:
    /// create a drawable object by bsupplying its (initial) location
    drawable( location start ): start{ start }{}
 
-   /// interface to draw the object
-   //
-   /// You must supply the window.
-   virtual void draw( window & w ){
-      draw_buffered( w ); w.flush();
-   }      
-   
    /// \brief
    /// interface to draw the object buffered
    /// \details
-   /// You must supply the window, and you must flus() 
-   /// the window at some time to make sure that the object becomes visible.
-   virtual void draw_buffered( window & w );    
+   /// You must supply the window.
+   ///
+   /// If buffering is specified, the actuial drawing can be delayed
+   /// until flush() is aclled.
+   virtual void draw( 
+      window & w, 
+      buffering buf = buffering::unbuffered 
+   ) = 0;    
+
 };
 
 /// a line object                 
@@ -606,7 +590,10 @@ public:
       : drawable{ start }, end{ end }, fg{ fg }
    {}   
    
-   void draw( window & w ) override { 
+   void draw( 
+      window & w, 
+      buffering buf = buffering::unbuffered 
+   ) override { 
       uint_fast16_t x0 = start.x;
       uint_fast16_t y0 = start.y;
       uint_fast16_t x1 = end.x; 
@@ -654,7 +641,7 @@ public:
             yDraw = y;
          }
 
-         w.write( location{ xDraw, yDraw }, fg );
+         w.write( location{ xDraw, yDraw }, fg, buf );
 
          if( E > 0 ){
             E += TwoDyTwoDx; //E += 2*Dy - 2*Dx;
@@ -663,10 +650,6 @@ public:
             E += TwoDy; //E += 2*Dy;
          }
       }
-   }
-   
-   void draw_buffered( window & w ) override { 
-      draw( w ); 
    }
    
 }; // class line   
@@ -685,7 +668,10 @@ public:
       : drawable{ start }, radius{ radius }, fg{ fg }, bg{ bg }
    {}     
    
-   void draw( window & w ) override { 
+   void draw( 
+      window & w, 
+      buffering buf = buffering::unbuffered 
+   ) override { 
 
       // don't draw anything when the size would be 0 
       if( radius < 1 ){
@@ -701,25 +687,25 @@ public:
       int_fast16_t y = radius;
     
       // top and bottom
-      w.write( start + location( 0, + radius ), fg );
-      w.write( start + location( 0, - radius ), fg );
+      w.write( start + location( 0, + radius ), fg, buf );
+      w.write( start + location( 0, - radius ), fg, buf );
 
       // left and right 
-      w.write( start + location( + radius, 0 ), fg );
-      w.write( start + location( - radius, 0 ), fg );
+      w.write( start + location( + radius, 0 ), fg, buf );
+      w.write( start + location( - radius, 0 ), fg, buf );
          
       if( bg != transparent ){
    
          // top and bottom
-         w.write( start + location( 0, + radius ), fg );
-         w.write( start + location( 0, - radius ), fg );
+         w.write( start + location( 0, + radius ), fg, buf );
+         w.write( start + location( 0, - radius ), fg, buf );
 
          // left and right
          line(  
               start - location( radius, 0 ), 
               start + location( radius, 0 ), 
               fg 
-          ).draw( w );
+          ).draw( w, buf );
       } 
     
       while( x < y ){
@@ -734,26 +720,34 @@ public:
          ddFx += 2;
          fx += ddFx;   
                     
-         w.write( start + location( + x, + y ), fg );
-         w.write( start + location( - x, + y ), fg );
-         w.write( start + location( + x, - y ), fg );
-         w.write( start + location( - x, - y ), fg );
-         w.write( start + location( + y, + x ), fg );
-         w.write( start + location( - y, + x ), fg );
-         w.write( start + location( + y, - x ), fg );
-         w.write( start + location( - y, - x ), fg );
+         w.write( start + location( + x, + y ), fg, buf );
+         w.write( start + location( - x, + y ), fg, buf );
+         w.write( start + location( + x, - y ), fg, buf );
+         w.write( start + location( - x, - y ), fg, buf );
+         w.write( start + location( + y, + x ), fg, buf );
+         w.write( start + location( - y, + x ), fg, buf );
+         w.write( start + location( + y, - x ), fg, buf );
+         w.write( start + location( - y, - x ), fg, buf );
             
          if( bg != transparent  ){
-            line( start + location( -x,  y ), start + location(  x,  y ), bg ).draw( w );
-            line( start + location( -x, -y ), start + location(  x, -y ), bg ).draw( w );
-            line( start + location( -y,  x ), start + location(  y,  x ), bg ).draw( w );
-            line( start + location( -y, -x ), start + location(  y, -x ), bg ).draw( w );
+            line( 
+               start + location( -x,  y ), 
+               start + location(  x,  y ), 
+               bg ).draw( w, buf );
+            line( 
+               start + location( -x, -y ), 
+               start + location(  x, -y ), 
+               bg ).draw( w, buf );
+            line( 
+               start + location( -y,  x ), 
+               start + location(  y,  x ), 
+               bg ).draw( w, buf );
+            line( 
+               start + location( -y, -x ), 
+               start + location(  y, -x ), 
+               bg ).draw( w, buf );
          }
       }
-   }   
-   
-   void draw_buffered( window & w ) override { 
-      draw( w ); 
    }   
     
 }; // class circle

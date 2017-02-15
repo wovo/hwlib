@@ -96,16 +96,17 @@ namespace hwlib {}
 /// as the most recent refresh() oparation.
 /// 
 /// The easy way is to always use the unbuffered operations.
+/// Drawing a drawable is by default unbuffered.
 /// 
-/// <example unbuffered>
+/// \snippet "demo\arduino-due\oled-timing\main.cpp" [direct]
 ///
 /// Using unbuffered operations can produce a significant speedup
 /// because the actual output operation is postponed, and can 
 /// handle all changes in one go.
 ///
-/// <example buffered>
+/// \snippet "demo\arduino-due\oled-timing\main.cpp" [buffered]
 ///
-/// For the OLED the difference can be signifcant. 
+/// For the OLED the difference can be very large. 
 /// Writing one pixel requires up to three operations:
 ///    - optionally set X address (7-byte I2C transaction) 
 ///    - optionally set Y address (7-byte I2C transaction)
@@ -121,9 +122,9 @@ namespace hwlib {}
 /// byte (hence each transfer takes 1 byte less).
 ///
 /// Character output to a graphic window is always buffered. The
-/// flush manipulator writes the pixels to the screen.
+/// flush manipulator is required to write the pixels to the screen.
 ///
-/// <example graphics>
+/// \snippet "demo\arduino-due\oled-hello\main.cpp" [flush]
 ///
 
 
@@ -250,7 +251,8 @@ namespace hwlib {}
 /// \page todo  To do list
 ///
 /// Known problems:
-///   - currently none
+///   - a busy period > 0.7s without a now_us() call makes the Due miss timer overflows
+///     now a call in i2c avoid this, => this is not a real solution
 ///
 /// Quality & consistency:
 ///   - file-local objects are not documented? (check ostream)
@@ -289,7 +291,6 @@ namespace hwlib {}
 ///   - check all documentation
 ///   - meer tests voor hwlib::string
 ///   - bmptk...
-///   - can that subdirs thing be put into bmptk?
 ///   - bmptk blink examples
 ///   - linux
 ///   - esp8266 - eerste in bmptk
