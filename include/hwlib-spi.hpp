@@ -84,7 +84,7 @@ public:
    /// When data_in is a nullptr, the data that is read is not stored.
    virtual void write_and_read( 
       pin_out & sel, 
-      const uint_fast8_t n, 
+      const size_t n, 
       const uint8_t data_out[], 
       uint8_t data_in[] 
    ) = 0;
@@ -101,7 +101,7 @@ private:
    pin_in & miso;
    
    void wait_half_period(){
-      wait_us( 1 );      
+      wait_us( 5 );      
    }
    
 public:
@@ -138,7 +138,7 @@ public:
    /// argument can be a nullptr.
    void write_and_read( 
       pin_out & sel, 
-      const uint_fast8_t n, 
+      const size_t n, 
       const uint8_t data_out[], 
       uint8_t data_in[] 
    ) override {

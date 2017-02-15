@@ -101,6 +101,8 @@ public:
 
    /// write a single character
    void putc( char c ){
+      
+      //WLIB_TRACE << c << " " << x <<  " " << y << " " << goto_xy_state;
 
       switch( goto_xy_state ){
 

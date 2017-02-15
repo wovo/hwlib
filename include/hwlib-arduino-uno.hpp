@@ -428,7 +428,7 @@ public:
 };
 */
 
-}; // namespace due
+}; // namespace uno
 
 namespace hwlib {
 

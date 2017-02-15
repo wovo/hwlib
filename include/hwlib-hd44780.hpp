@@ -125,7 +125,7 @@ public:
       uint_fast8_t lines, 
       uint_fast8_t columns
     ):
-      console{ lines, columns },
+      console{ columns, lines },
       pin_e( e ), 
       pin_rs( rs ), 
       port_data( data )
@@ -211,7 +211,7 @@ private:
          }
       }
    }   
-   
+
    void putc_implementation( char chr ) override {
       // the NVI putc() handles the x and y variables
       
@@ -220,7 +220,7 @@ private:
          if( x == 8 ){
             goto_xy( 8, y );
          }
-      }
+      }   
       
       data( chr );
    }  

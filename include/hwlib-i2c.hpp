@@ -118,7 +118,7 @@ public:
    virtual void write( 
       uint_fast8_t a, 
       const uint8_t data[], 
-      uint_fast8_t n 
+      size_t n 
    ) = 0;
 
    /// \brief
@@ -130,7 +130,7 @@ public:
    virtual void read( 
       uint_fast8_t a, 
       uint8_t data[], 
-      uint_fast8_t n 
+      size_t n 
 ) = 0;
   
    
@@ -243,11 +243,11 @@ public:
    void write( 
       uint_fast8_t a, 
       const uint8_t data[], 
-      uint_fast8_t n 
+      size_t n 
    ) override {
       write_start();
       write_byte( a << 1 );
-      for( uint_fast8_t i = 0; i < n; i++ ){
+      for( size_t i = 0; i < n; i++ ){
          read_ack();
          write_byte( data[ i ] );
       }               
@@ -264,7 +264,7 @@ public:
    void read( 
       uint_fast8_t a, 
       uint8_t data[], 
-      uint_fast8_t n 
+      size_t n 
    ) override {
       write_start();
       write_byte( ( a << 1 ) | 0x01 );    

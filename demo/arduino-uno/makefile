@@ -12,6 +12,7 @@
 
 SUBDIRS += blink
 SUBDIRS += hello
+SUBDIRS += hd44780-shield
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

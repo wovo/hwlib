@@ -267,6 +267,7 @@ namespace hwlib {}
 ///   - pin decorators - did they exist at one point??
 ///   - also check line length (in tab checker)
 ///   - there is no on-line manual :(
+///   - columns,lines or other way round, or use position? (ostream, hd44780)
 ///
 /// Nice to haves:
 ///   - rectangle (filled), circle (filled), image (external converter)
@@ -277,6 +278,7 @@ namespace hwlib {}
 ///   - add an I2C temp sensor for Leo of iets anders
 ///   - I2C read, pcf8574a, demo: copy 1 to 2
 ///   - use an abstraction instead of copied code in the extenders one_pin => pin_out_through_buffer
+///   - uno A/D, test with LCD shield
 ///
 /// Must test:
 ///   - HD44780 other sizes
