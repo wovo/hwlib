@@ -10,7 +10,7 @@
 # 
 #############################################################################
 
-.PHONY: clean build run error test notab
+.PHONY: clean build run error test notab doxygen
 
 run: error
 
@@ -23,9 +23,11 @@ error:
 BMPTK  := ../bmptk
    
 REMOVE := $(BMPTK)/tools/bmptk-rm 
-   
-build:   
-	Doxygen
+
+doxygen:
+	doxygen doxyfiles/Doxyfile
+      
+build: doxygen  
 	cd demo && bmptk-make build
 	cd test && bmptk-make build
 	@echo "**** build completed succesfully"   

@@ -13,7 +13,8 @@ int main( void ){
 }
 ```
 
-Run Doxygen in the root to create the documentation.
+Run 'make doxygen' (or doxygen doxyfiles/Doxyfile )
+in the root to create the documentation.
 
 -----------------------------------------------------------------------------  
 

@@ -29,7 +29,7 @@ namespace hwlib {}
 /// \image html toolset.png
 ///
 /// \author Wouter van Ooijen (wouter@voti.nl)
-/// \version 1.1 (last modified 2017-02-03)
+/// \version 1.1 (last modified 2017-02-15)
 /// \copyright boost license (but see below for exceptions)
 ///
 /// -------------------------------------------------------------------------
