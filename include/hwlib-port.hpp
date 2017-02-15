@@ -29,24 +29,28 @@ namespace hwlib {
 //
 // ==========================================================================
 
+/// \brief
 /// input / output port interface
-//
+/// \details
 /// This is the interface of an input / output port.
 class port_in_out {
  public:
 
+   /// \brief
    /// get number of pins
-   //
+   /// \details
    /// This function returns the number of pins in the port.
    virtual uint_fast8_t number_of_pins() = 0;
    
+   /// \brief
    /// set the direction of the port to input.
-   //
+   /// \details
    /// Calling this function sets all pins of the port to input.
    virtual void direction_set_input() = 0;   
    
+   /// \brief
    /// read from the port
-   //
+   /// \details
    /// This function reads and returns the pins that are part of the port.
    /// The lowest bit of the result reflects the first pin of the port, etc.
    ///
@@ -56,8 +60,9 @@ class port_in_out {
       buffering buf = buffering::unbuffered 
    ) = 0;         
    
+   /// \brief
    /// refresh the port buffer
-   //
+   /// \details
    /// This function refreshed the contents of the read buffer that might
    /// be used by get_buffered() with a value read from the pins. 
    ///
@@ -65,13 +70,15 @@ class port_in_out {
    /// other operations.
    virtual void refresh(){ }
 
+   /// \brief
    /// set the direction of the port to output
-   //
+   /// \details
    /// Calling this function sets all pins of the port to output.
    virtual void direction_set_output() = 0;
 
+   /// \brief
    /// write to the port
-   //
+   /// \details
    /// This function writes to the pins that are part of the port.
    /// The lowest bit is written to the first pin of the port, etc.
    ///
@@ -82,8 +89,9 @@ class port_in_out {
       buffering buf = buffering::unbuffered 
    ) = 0;     
    
+   /// \brief
    /// flush the port buffer
-   //
+   /// \details
    /// This function flushes the port write buffer: if a buffered value
    /// has not yet been written it is written to the pin.
    /// When the value has been written, it might be written again.
@@ -101,8 +109,9 @@ class port_in_out {
 //
 // ==========================================================================
 
+/// \brief
 /// input port interface
-//
+/// \details
 /// This is the interface of an input-only port.
 class port_in {
  public:
@@ -127,8 +136,9 @@ class port_in {
 //
 // ==========================================================================
 
+/// \brief
 /// output port interface
-//
+/// \details
 /// This is the interface of an output-only port.
 class port_out {
  public:
@@ -154,8 +164,9 @@ class port_out {
 //
 // ==========================================================================
 
+/// \brief
 /// open-collector interface
-//
+/// \details
 /// This is the interface of an open-collector port.
 class port_oc {
  public:

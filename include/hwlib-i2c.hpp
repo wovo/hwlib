@@ -23,8 +23,9 @@
 
 namespace hwlib {
    
+/// \brief
 /// i2c bus master interface
-//
+/// \details
 /// This class abstracts the interface of a master to an I2C bus.
 ///
 /// In its simplest form, an I2C bus has one master and a number of slaves
@@ -108,8 +109,9 @@ namespace hwlib {
 class i2c_bus {
 public:
 
+   /// \brief
    /// i2c write transaction
-   //
+   /// \details
    /// This function write n bytes from data[] to the slave at address a.
    ///
    /// Note that n is a byte, hence the maximum number of bytes is 255.
@@ -117,10 +119,11 @@ public:
       uint_fast8_t a, 
       const uint8_t data[], 
       uint_fast8_t n 
-) = 0;
+   ) = 0;
 
+   /// \brief
    /// i2c read transaction
-   //
+   /// \details
    /// This function reads n bytes from the slave at address a to data[].
    ///
    /// Note that n is a byte, hence the maximum number of bytes is 255. 
@@ -133,8 +136,9 @@ public:
    
 }; // class i2c_bus  
 
+/// \brief
 /// bit-banged i2c bus implementation
-//
+/// \details
 /// This class implements a bit-banged master interface to an I2C bus.
 /// Limitations:
 ///    - only the 7-bit address format is supported
@@ -219,8 +223,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct a bit-banged I2C bus from the scl and sda pins
-   //
+   /// \details
    /// This constructor creates a bit-banged I2C bus master
    /// from the scl and sda pins.
    i2c_bus_bit_banged_scl_sda( pin_oc & scl, pin_oc & sda ):
@@ -230,8 +235,9 @@ public:
       sda.set( 1 );
    }
       
+   /// \brief
    /// write to a connect I2C slave device   
-   //
+   /// \details
    /// This function writes n bytes of data to the device with address a
    /// that is connected to the I2C bus.
    void write( 
@@ -249,8 +255,9 @@ public:
       write_stop();      
    }
    
+   /// \brief
    /// read from a connected I2C slave device
-   //
+   /// \details
    /// This function reads n bytes of data from the device with address a
    /// that is connected to the I2C bus.
    void read( 

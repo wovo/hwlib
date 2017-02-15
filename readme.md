@@ -2,8 +2,20 @@ Hwlib is a C++ classic-OO-style library for close-to-the-hardware
 programming. It is used in a number of Computer Sience courses 
 at the Hogeschool Utrecht, HBO-ICT.
 
+The typical blink-al-led application code using hwlib is:
+
+```C++
+#include "hwlib.hpp"
+
+int main( void ){   
+   auto led = hwlib::target::pin_out( 1, 5 );
+   hwlib::blink( led );
+}
+```
 
 Run Doxygen in the root to create the documentation.
+
+-----------------------------------------------------------------------------  
 
 To use hwlib from within bmptk:
    - define $HWLIB to be the path where you placed your copy of hwlib

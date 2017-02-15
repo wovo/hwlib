@@ -23,8 +23,9 @@
 
 namespace hwlib {
    
+/// \brief
 /// spi bus interface
-//
+/// \details
 /// This class abstracts the interface of a master to a SPI bus.   
 /// 
 /// The SPI (Serial Peripheral Interface) protocol 
@@ -74,8 +75,9 @@ namespace hwlib {
 class spi_bus {
 public:
 
+   /// \brief
    /// spi read-and-write transaction
-   //
+   /// \details
    /// This function simultaneously writes n bytes from data_out[] 
    /// to the slave activated by the sel pin, and reads n bytes into data_in[].
    /// When data_out is a nullptr, all-0 bytes are written.
@@ -89,8 +91,9 @@ public:
 
 }; // class spi_bus  
 
+/// \brief
 /// bit-banged SPI bus implementation
-//
+/// \details
 /// This class implements a bit-banged master interface to a SPI bus.
 class spi_bus_bit_banged_sclk_mosi_miso : public spi_bus {
 private:
@@ -103,8 +106,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct a bit-banged SPI bus from the sclk, miso and mosi pins
-   //
+   /// \details
    /// This constructor creates a bit-banged SPI bus master
    /// from the sclk, miso and mosi pins. 
    ///
@@ -124,8 +128,9 @@ public:
       sclk.set( 0 );
    }
    
+   /// \brief
    /// write and read to (and from) a spi chip
-   //
+   /// \details
    /// This function performs an n byte write-and-read operation on the
    /// SPI chip activated by the (active low) sel pin.
    ///

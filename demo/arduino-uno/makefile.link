@@ -13,8 +13,7 @@
 #############################################################################
 
 # common settings for Arduino Due projects
-TARGET            ?= arduino_due
-SERIAL_PORT       ?= COM2
+TARGET            ?= arduino_uno
 CONSOLE_BAUDRATE  ?= 2400
 
 # defer to the next-level makefile

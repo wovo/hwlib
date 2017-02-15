@@ -16,10 +16,13 @@
 // This file contains doxygen stuff that doesn't belong in any specific
 // header file. Hence this file is not included by hwlib-all.hpp.
 
+/// \brief
 /// hwlib library
-//
-/// This namespace contains the target-independent parts of the hwlib library.
+/// \details
+/// This namespace contains the target-independent 
+/// parts of the hwlib library.
 namespace hwlib {}
+
 
 /// \mainpage
 ///
@@ -29,30 +32,106 @@ namespace hwlib {}
 /// \version 1.1 (last modified 2017-02-03)
 /// \copyright boost license (but see below for exceptions)
 ///
+/// -------------------------------------------------------------------------
+/// 
 /// Hwlib is a C++ OO library for close-to-the-hardware programming.
 /// It is used in an number of courses at the Hogeschool Utrecht.
 /// The library is meant to be used with bmptk.
-/// The language use is the 2014 C++ standard. 
+/// The language used is the 2014 C++ standard. 
 ///
 /// Hardware pins and ports, and other hardware-related interfaces like
 /// A/D converters and character streams are represented by abstract
 /// interfaces (classes with virtual functions).
+///
+/// -------------------------------------------------------------------------
 /// 
+/// All hwlib files are provided under the boost license, except:
+///    - some pictures used in the documentation are under a 
+///      Creative Commons license that allows unaltered reproduction
+///    - an arduino-due include file is from Atmel (Microchip) under asl
+///
+/// These exceptions have no impact on the status of an application
+/// that includes hwlib in its build.
+///
+
+
+// ==========================================================================
+//
+/// \page use Use
+///
 /// Implementations of the hardware abstractions (like pins and delays)
 /// are provided for the supported targets:
 ///    - Arduino Due (ATSAM3X8E chip)
 ///    - DB103 (LPC1114 chip)
 ///    - Arduino Uno (ATMEGA328P chip)
 ///
-/// The library is used by including either the header for the target
-/// (hwlib-arduino-due.hpp, hwlib-db103.hpp, hwlib-arduino-uno.hpp),
-/// or (preferrably) by including hwlib.hpp, which will include the
-/// correct target header based on the macro that is set by bmptk 
-/// (BMPTK_TARGET_ARDUIN_DUE etc.) on the compiler command line.
+/// The easy way is to use the library with bmptk.
+/// Include hwlib.hpp, which will include the
+/// correct target header based on the TARGET that is set in the  
+/// bmptk makefile. Bmptk passes this setting to the hwlib.hpp file 
+/// via a macro definition on the compiler command line.
 ///
-/// \snippet "demo\arduino-due\blink\main.cpp" [Doxygen blink example]
+/// \snippet "demo\arduino-due\blink\main.cpp" [blink example]
+/// \snippet "demo\arduino-due\makefile.link" [makefile example]
 /// 
-/// The following naming convention is used:
+/// Another way to use the library is by directly including the header 
+/// for the target (hwlib-arduino-due.hpp, ...), and using some other
+/// build system.
+///
+/// \snippet "demo\arduino-due\blink-direct-include\main.cpp" [blink example]
+/// 
+/// 
+
+
+// ==========================================================================
+//
+/// \page buffering Buffering
+///
+/// For efficiency, some operations are provided in two ways: direct 
+/// and (potentially) buffered. A direct operation will have an
+/// immediate external effect (for output operations) or work on a 
+/// fresh sample of the external conditions (for input operations).
+/// A buffered operation might have its effect delayed up to the
+/// next flush operation (output), or work on input that is as old
+/// as the most recent refresh() oparation.
+/// 
+/// The easy way is to always use the unbuffered operations.
+/// 
+/// <example unbuffered>
+///
+/// Using unbuffered operations can produce a significant speedup
+/// because the actual output operation is postponed, and can 
+/// handle all changes in one go.
+///
+/// <example buffered>
+///
+/// For the OLED the difference can be signifcant. 
+/// Writing one pixel requires up to three operations:
+///    - optionally set X address (7-byte I2C transaction) 
+///    - optionally set Y address (7-byte I2C transaction)
+///    - write data byte (3-byte I2C transaction)
+/// For a direct operation this is done for each and every pixel.
+///
+/// The buffered graphics operations write to the in-memory pixel buffer,
+/// which is written out to the oled in one go by the flush operation.
+/// This is done in one I2C transaction, with some small overhead and
+/// 1024 data bytes. Hence a flush takes roughtly the time it takes to
+/// write 60 pixels. For the SPI interface the single pixel write
+/// overhead is a little bit smaller because a SPI transfer has no command
+/// byte (hence each transfer takes 1 byte less).
+///
+/// Character output to a graphic window is always buffered. The
+/// flush manipulator writes the pixels to the screen.
+///
+/// <example graphics>
+///
+
+
+// ==========================================================================
+//
+/// \page naming Naming conventions
+///
+/// The following naming conventions are used:
 ///    - functions that are called set() and get() (or have set or get as
 ///      part of their name) deal with entities or effects that are 
 ///      memoryless (behave like a variable): calling set() twice with
@@ -69,9 +148,22 @@ namespace hwlib {}
 ///         - character (and other) streams  
 ///         - channels (queue-like synchronization mechanism)
 ///
-/// Hwlib must be effective on micro-controllers with different word sizes.
-/// Hence plain int types are (almost) never used, 
-/// instead the likes of uint_fast8_t are used.
+
+
+// ==========================================================================
+//
+/// \page rationale Rationale
+///
+/// Hwlib makes it possible to program micro-controllers in classic Object
+/// Oriented style (using objects, inhertitance, virtuals, etc).
+/// It provides abstract interfaces to the basic low-level things found
+/// in a micro-controller like pins, ports and A/D interfaces, and 
+/// implementations of these things for a few targets. 
+/// 
+/// Hwlib is used in a number of C++ courses
+///    - as library for the examples
+///    - as library for homework
+///    - style example for hardware OO interfacing
 ///
 /// Hwlib is meant to be usable and understandable by users with (only) 
 /// a basic knowledge of C++, specifically:
@@ -103,33 +195,30 @@ namespace hwlib {}
 ///    - templates (except static_cast<>, and string<N>)
 ///    - RTTI, dynamic_cast
 ///
-/// All hwlib files are provided under the boost license, except:
-///    - some pictures used in the documentation are under a 
-///      Creative Commons license that allows unaltered reproduction
-///    - an arduino-due include file is from Atmel (Microchip) under asl
+/// Hwlib must be effective on micro-controllers with different word sizes.
+/// Hence plain int types are (almost) never used, 
+/// instead the likes of uint_fast8_t are used.
 ///
-/// These exceptions have no impact on the status of an application
-/// that includes hwlib in its build.
+/// Hwlib is *not* meant to be the most effective (fast, compact) library
+/// for close-to-the-hardware programming, because that requires concepts
+/// (templates, and a lot of SFINAE) that are not appropriate for 
+/// (relatively) new C++ programmers.
+/// My hwcpp library is an (ongoing) attempt to fill that niche.d
 ///
+
+
 // ==========================================================================
 //
 /// \page todo  To do list
 ///
-/// Known issue
+/// Known problems:
 ///   - currently none
 ///
-/// Nice to haves
-///   - rectangle (filled), circle (filled), image (external converter)
-///   - graphics 2"4 LCD
-///   - targets: Pi, Liliypad85, ESP8266, ST32, MCP430
-///   - LCD/button shield
-///   - use and provide ranges (instead of x, y for loops)
-///
-/// Quality & consistency issues 
+/// Quality & consistency:
 ///   - file-local objects are not documented? (check ostream)
 ///   - db103 align pin classes
 ///   - more examples (graphics, ...)
-///   - lcd5510 should use SPI??
+///   - lcd5510 should use SPI!
 ///   - i2c example of address-only write
 ///   - test for input, output, oc, analog pins of a chip
 ///   - rewrite text for uno (due?) IO pins
@@ -139,21 +228,21 @@ namespace hwlib {}
 ///   - also check line length (in tab checker)
 ///   - there is no on-line manual :(
 ///
-/// Must test
-///   - HD44780 other sizes
-///
-/// Doxygen issues
-///   - alphabetical index??
-///   - prevent ///   - in file listing?
-///   - ostream::showos 'functions' have no 'More..." ??
-///   - ostream members are listed as related??
-///
-/// The list of issues, plans, bugs, etc:
+/// Nice to haves:
+///   - rectangle (filled), circle (filled), image (external converter)
+///   - graphics 2"4 LCD
+///   - targets: Pi, Liliypad85, ESP8266, ST32, MCP430
+///   - LCD/button shield
+///   - use and provide ranges (instead of x, y for loops)
 ///   - add an I2C temp sensor for Leo of iets anders
 ///   - I2C read, pcf8574a, demo: copy 1 to 2
 ///   - use an abstraction instead of copied code in the extenders one_pin => pin_out_through_buffer
 ///
-///   - meer examples lpc1114 - need hardware
+/// Must test:
+///   - HD44780 other sizes
+///
+/// Misc:
+///   - meer examples lpc1114 - need the hardware!
 ///   - check uno 
 ///   - db103 uart?
 ///   - uart gebruikt??
@@ -168,9 +257,8 @@ namespace hwlib {}
 ///   - esp8266 - eerste in bmptk
 ///   - switch due to full speed??
 ///   - geweer hardware aanpassen (private repository??)
+///   - oled spi, hw spi
+///   - graphics buffering via buffering::buffered -> ook in text
+///   - delays moeten 16-bit parameter Zijn ivm AVR en MSP430?
+///   - uno hello baudrate klopt niet
 ///
-// ==========================================================================
-
-
-
-

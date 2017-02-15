@@ -21,8 +21,9 @@
 
 namespace hwlib {
    
+/// \brief
 /// Oled B/W graphics LCD
-//
+/// \details
 /// This class implements an interface to an 128 x 64 pixel
 /// monochrome (on/off) OLED display. These displays are available
 /// in various colcors (green, red, white, etc.).
@@ -152,7 +153,8 @@ private:
       cursor_x++;      
    }
    
-   // first byte is permanently set to DATA_MODE
+   // first byte is permanently set to DATA_MODE,
+   // pixel data starts at buffer[ 1 ]
    uint8_t buffer[ 1 + 128 * 64 / 8 ];
    
    void write_to_buffer( location pos, color col, uint_fast8_t a ){
@@ -176,8 +178,9 @@ private:
    
 public:
    
+   /// \brief
    /// create an OLED
-   //
+   /// \details
    /// This constructor creates an OLED from the I2C bus and its I2C address.   
    glcd_oled( i2c_bus & bus, const uint_fast8_t address = 0x3C ):
       window( location( 128, 64 ), black, white ),

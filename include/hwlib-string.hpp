@@ -31,8 +31,9 @@ template< size_t maximum_length > class string;
 //  
 //============================================================================
 
+/// \brief
 /// abstract fixed-maximum-length string
-//  
+/// \details  
 /// This is a string class template with a fixed maximum length. 
 /// The maximum length is the template parameter.
 /// All such strings inherit from the base class string<>.
@@ -187,9 +188,9 @@ public:
    }    
    
    // to resolve ambiguity
-//   friend bool operator==( const string< 0 > & lhs, const string< 0 > & rhs ){
-//      return lhs.operator==( rhs );
-//   }
+   //   friend bool operator==( const string< 0 > & lhs, const string< 0 > & rhs ){
+   //      return lhs.operator==( rhs );
+   //   }
    
     /// output to any target that supports operator<< for a char *
    template< typename T >

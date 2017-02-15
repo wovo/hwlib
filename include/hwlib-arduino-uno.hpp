@@ -16,12 +16,15 @@
 #ifndef HWLIB_UNO_H
 #define HWLIB_UNO_H
 
-#include "hwlib-all.hpp"
-#include "io.h"
 #include <stdint.h>
 
+#include "io.h"
+
+#include "hwlib-all.hpp"
+
+/// \brief
 /// hwlib implementation for the Arduino Uno
-//
+/// \details
 /// \image html uno-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing
@@ -71,8 +74,9 @@
 ///
 namespace uno {
 
+/// \brief
 /// Arduino Uno pin names
-//
+/// \details
 /// These are the pins of an Arduino Uno board.
 /// Digital pins d0..d13, analog input pins A0..A5, 
 /// SCL, SDA, TX (=D1), RX (=D0), 
@@ -182,8 +186,9 @@ private:
  
 public:
 
+   /// \brief
    /// Arduino Uno pin_in constructor from ATMega328P port/pin numbers
-   //
+   /// \details
    /// This call creates a pin_in from an ATMega328P port/pin
    /// number pair.
    ///
@@ -196,8 +201,9 @@ public:
       port_direction( port_number ) &= ~mask;
    }
    
+   /// \brief
    /// Arduino Uno pin_in constructor from an Uno pin name
-   //
+   /// \details
    /// This call creates a pin_in from an Arduino Uno pin name.
    ///
    /// This constructor sets the pin direction to input.
@@ -223,8 +229,9 @@ private:
    
 public:
 
+   /// \brief
    /// Arduino Uno pin_out constructor from ATMega328P port/pin numbers
-   //
+   /// \details
    /// This call creates a pin_out from an ATMega328P port/pin
    /// number pair.
    ///
@@ -237,8 +244,9 @@ public:
       port_direction( port_number ) |= mask;
    }
    
+   /// \brief
    /// Arduino Uno pin_out constructor from an Uno pin name
-   //
+   /// \details
    /// This call creates a pin_out from an Arduino Uno pin name.
    ///
    /// This constructor sets the pin direction to output.
@@ -270,8 +278,9 @@ private:
    
 public:
 
+   /// \brief
    /// Arduino Uno pin_in_out constructor
-   //
+   /// \details
    /// Constructor for a ATMega328P input/output pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -288,8 +297,9 @@ public:
       configure_as_gpio( port_number, pin_number );
    }
    
+   /// \brief
    /// Arduino Uno pin_in_out constructor from an Uno pin name
-   //
+   /// \details
    /// This call creates a pin_in_out from an Arduino Uno pin name.
    ///
    /// This constructor doesn't set the pin direction 
@@ -337,8 +347,9 @@ private:
    
 public:
 
+   /// \brief
    /// Arduino Uno pin_oc constructor
-   //
+   /// \details
    /// Constructor for a ATMega328P input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -353,8 +364,9 @@ public:
       configure_as_gpio( port_number, pin_number );
    }
    
+   /// \brief
    /// Arduino Uno pin_oc constructor from an Uno pin name
-   //
+   /// \details
    /// This call creates a pin_oc from an Arduino Uno pin name.
    ///
    /// This constructor sets the pin to high (high-impedance). 
@@ -426,7 +438,7 @@ void HWLIB_WEAK wait_ns( int_fast32_t n ){
    wait_us( n / 1000 );
 }
 
-void HWLIB_WEAK wait_us( int_fast32_t n ){ 
+void HWLIB_WEAK wait_16_us( int_fast16_t n ){ 
     // first integer parameter is passd in r24/r25
     __asm volatile(                  // clocks
        "1:  cp    r1, r24     \t\n"   // 1
@@ -438,6 +450,10 @@ void HWLIB_WEAK wait_us( int_fast32_t n ){
        "    rjmp  1b          \t\n"   // 2
        "3:                    \t\n"   // 16 total
    );     
+}
+
+void HWLIB_WEAK wait_us( int_fast32_t n ){ 
+    wait_16_us( n );     
 }
 
 void HWLIB_WEAK wait_ms( int_fast32_t n ){

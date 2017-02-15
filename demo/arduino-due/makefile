@@ -11,8 +11,11 @@
 #############################################################################
 
 SUBDIRS += blink
+SUBDIRS += blink-direct-include
 SUBDIRS += hello
 SUBDIRS += panic
+SUBDIRS += circles
+SUBDIRS += oled_timing
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

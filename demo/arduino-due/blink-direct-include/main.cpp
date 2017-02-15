@@ -11,7 +11,7 @@
 // ==========================================================================
 
 //! [[blink example]]
-#include "hwlib.hpp"
+#include "hwlib-arduino-due.hpp"
 
 int main( void ){
 

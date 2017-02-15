@@ -21,8 +21,9 @@
 
 namespace hwlib {
 
+/// \brief
 /// panic function for irrecoverable errors
-//
+/// \details
 /// This function is called by hwlib functions when an irrecoverable error
 /// is encountered (for instance an invalid pin or port number).
 ///

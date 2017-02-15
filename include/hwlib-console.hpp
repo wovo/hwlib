@@ -20,8 +20,9 @@
 
 namespace hwlib {
 
+/// \brief
 /// console interface
-//
+/// \details
 /// This class implements an interface to a character console.
 ///
 /// A console is a rectangular windows of (ASCII) characters.
@@ -47,15 +48,17 @@ private:
 
 protected:
 
+   /// \brief
    /// the actual writing of a character
-   //
+   /// \details
    /// When this function is called, the the current cursor is
    /// guaranteed to be within the console, and the character is
    /// not one of the special characters (\\n, \\r, \\c)
    virtual void putc_implementation( char c ) = 0;
 
+   /// \brief
    /// change the write location to x, y
-   //
+   /// \details
    /// This function is called when the write location is
    /// changed *except* when it is changed to the next x
    /// position by a call to putc_implementation.
@@ -153,8 +156,9 @@ public:
       }
    }
 
+   /// \brief
    /// clear the console
-   //
+   /// \details
    /// This function clears the console and puts the cursor at (0,0).
    /// The default implementation does this by writing spaces to all
    /// locations. A concrete implementation might provide
@@ -168,6 +172,7 @@ public:
       }
       goto_xy( 0, 0 );
    }
+   
 }; // class console
 
 }; // namespace hwlib

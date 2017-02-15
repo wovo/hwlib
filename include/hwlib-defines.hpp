@@ -16,8 +16,9 @@
 #ifndef HWLIB_DEFINES_H
 #define HWLIB_DEFINES_H
 
+/// \brief
 /// mark a function declaration as never returning
-//
+/// \details
 /// This is useful when other code relies a function not to return.
 /// It can also enable the compiler to generate slightly better code.
 ///
@@ -26,8 +27,9 @@
 #define HWLIB_NORETURN __attribute__((noreturn))
 
 
+/// \brief
 /// mark a function definition as weak
-//
+/// \details
 /// This allowed the function definition to be overruled by an 
 /// (often application-defined) replacement.
 ///
@@ -40,8 +42,9 @@
 #define HWLIB_WEAK __attribute__((weak))
 
 
+/// \brief
 /// mark a function definition as to be (always) inlined
-//
+/// \details
 /// Sometimes a function should always be inlined, for instance
 /// because it is called only once, or because inlining it
 /// will produce better code.
@@ -53,8 +56,9 @@
 /// because Doxygen can't handle __attribute__.
 #define HWLIB_INLINE __attribute__((always_inline))
 
+/// \brief
 /// mark a function definition as to be never inlined
-//
+/// \details
 /// Sometimes a function should not be inlined, for instance
 /// because inlining would affect it timing.
 ///
@@ -70,22 +74,25 @@
 #define HWLIB_HERE2( F, L ) ( "\n" F ":" HWLIB_STRINGYFY( L ) " " )
 /// \endcond    
    
+/// \brief
 /// [file-name:line-number] macro
-//
+/// \details
 /// The macro HWLIB_HERE tranlsates to a newline, the file-name, ":",
 /// and the line-number of the place where the HWLIB_HERE macro
 /// appears. This can be usefull for debug logging.
 #define HWLIB_HERE HWLIB_HERE2( __FILE__, __LINE__ )
    
+/// \brief
 /// trace macro
-//
+/// \details
 /// The TRACE macro can be used like hwlib::cout to print to,
 /// but what is printed will be prefixed with a newfile
 /// and the HWLIB_HERE string.
 #define HWLIB_TRACE ( ::hwlib::cout << "\n" << HWLIB_HERE << hwlib::flush )
 
+/// \brief
 /// panic-with-location macro 
-//
+/// \details
 /// This macro calls panic( __FILE__, __LINE__ ).
 #define HWLIB_PANIC_WITH_LOCATION ::hwlib::panic( __FILE__, __LINE__ )
 

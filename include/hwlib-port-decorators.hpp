@@ -22,8 +22,9 @@ namespace hwlib {
    
 // ==========================================================================
 //  
+/// \brief
 /// invert an input/input port
-//
+/// \details
 /// This decorator inverts the result 
 /// of read and write operations on an input port:
 /// - When a value would be returned by the original port, the
@@ -39,8 +40,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct an inverted input/output port
-   //
+   /// \details
    /// This constructor creates an inverted input/output port from an
    /// existing input/output port.
    port_in_out_invert( port_in_out & port ): 
@@ -84,8 +86,9 @@ public:
 
 // ==========================================================================
 //  
+/// \brief
 /// invert an input port
-//
+/// \details
 /// This decorator inverts the result 
 /// of read operations on an input port:
 /// When a value would be returned by the original port, the
@@ -99,8 +102,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct an inverted input port
-   //
+   /// \details
    /// This constructor creates an inverted input port from an
    /// existing input port.
    port_in_invert( port_in & port ): 
@@ -125,8 +129,9 @@ public:
 
 // ==========================================================================
 //  
+/// \brief
 /// invert an output port
-//
+/// \details
 /// This decorator inverts the effect 
 /// of write operations to an output port:
 /// When a value is written to this inverted output port, the
@@ -139,8 +144,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct an inverted output port
-   //
+   /// \details
    /// This constructor creates an inverted output port from an
    /// existing output port.
    port_out_invert( port_out &port ): 
@@ -166,8 +172,9 @@ public:
 
 // ==========================================================================
 //  
+/// \brief
 /// invert an open-collector port
-//
+/// \details
 /// This decorator inverts the result 
 /// of read and write operations on an input port:
 /// - When a value would be returned by the original port, the
@@ -182,8 +189,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct an inverted open-collector port
-   //
+   /// \details
    /// This constructor creates an inverted open-collector port from an
    /// existing open-collector port.
    port_oc_invert( port_oc & port ): 

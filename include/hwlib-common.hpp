@@ -18,8 +18,9 @@
 
 namespace hwlib {
 
+/// \brief
 /// indicates whether an operation can be buffered   
-//
+/// \details
 /// An unbuffered operation is, as it states, not buffered:
 /// it works on fresh information, and has immediate effect.
 ///
@@ -32,8 +33,9 @@ namespace hwlib {
 /// operation that is specified as unbuffered is always unbuffered.
 enum class buffering { 
 
+   /// \brief
    /// the operation is not buffered
-   //
+   /// \details
    /// For an input operation, the operation will work on or return
    /// information that is freshly obtained.
    ///
@@ -41,8 +43,9 @@ enum class buffering {
    /// effect of the operation is completed.
    unbuffered, 
    
+   /// \brief
    /// the operation can be buffered
-   //
+   /// \details
    /// For an input operation, the operation might work on or return
    /// information that is buffered (remembered from a previous moment).
    /// A refresh() operation might be required before the operation

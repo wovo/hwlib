@@ -19,8 +19,9 @@
 #include "hwlib-all.hpp"
 #include "sam.h"
 
+/// \brief
 /// hwlib implementation for the Arduino Due
-//
+/// \details
 /// \image html due-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing
@@ -53,8 +54,9 @@
 ///
 namespace due {
 
+/// \brief
 /// Arduino Due GPIO pin names
-//
+/// \details
 /// These are the pins of an Arduino Due board.
 /// Digital pins d0..d13, analog input pins A0..A5, 
 /// SCL, SDA, TX (=D1), RX (=D0), 
@@ -189,8 +191,9 @@ const HWLIB_WEAK pin_info_type & pin_info( pins name ){
 
 /// \endcond  
 
+/// \brief
 /// Arduino Due pin names
-//
+/// \details
 /// These are the ADC pins of an Arduino Due board.
 enum class ad_pins {
    a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11
@@ -294,8 +297,9 @@ private:
    
 public:
 
+   /// \brief
    /// Arduino Due pin_in constructor
-   //
+   /// \details
    /// Constructor for a ATSAM3X8E input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -309,8 +313,9 @@ public:
       port.PIO_ODR = mask;
    }
    
+   /// \brief
    /// Arduino Due pin_in constructor from a Due pin name
-   //
+   /// \details
    /// This call creates a pin_in from an Arduino Due pin name.
    ///
    /// This constructor sets the pin direction to input.
@@ -336,8 +341,9 @@ private:
    
 public:
 
+   /// \brief
    /// Arduino Due pin_out constructor
-   //
+   /// \details
    /// Constructor for a ATSAM3X8E input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -351,8 +357,9 @@ public:
       port.PIO_OER  = mask; 
    }
    
+   /// \brief
    /// Arduino Due pin_out constructor from a Due pin name
-   //
+   /// \details
    /// This call creates a pin_out from an Arduino Due pin name.
    ///
    /// This constructor sets the pin direction to output.
@@ -382,8 +389,9 @@ private:
    
 public:
 
+   /// \brief
    /// Arduino Due pin_out constructor
-   //
+   /// \details
    /// Constructor for a ATSAM3X8E input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -397,8 +405,9 @@ public:
       mask{ 0x1U << pin_number }
    {}
    
+   /// \brief
    /// Arduino Due pin_out constructor from a Due pin name
-   //
+   /// \details
    /// This call creates a pin_out from an Arduino Due pin name.
    ///
    /// This constructor doesn't set the pin direction 
@@ -444,8 +453,9 @@ private:
    
 public:
 
+   /// \brief
    /// Arduino Due pin_oc constructor
-   //
+   /// \details
    /// Constructor for a ATSAM3X8E input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -459,8 +469,9 @@ public:
       port.PIO_ODR = mask;
    }
    
+   /// \brief
    /// Arduino Due pin_oc constructor from a Due pin name
-   //
+   /// \details
    /// This call creates a pin_oc from an Arduino Due pin name.
    ///
    /// This constructor sets the pin to high (high-impedance). 
@@ -501,8 +512,9 @@ private:
    
 public:
 
+   /// \brief
    /// Constructor for a ATSAM3X8E AD channel number.
-   ///
+   /// \details/
    /// This constructor initializes the pin to be an ADC input. 
    pin_adc( uint32_t channel ): 
       adc( 12 ),
@@ -531,8 +543,9 @@ public:
    
      }
    
+   /// \brief
    /// Arduino Due pin_adc constructor from a Due pin name
-   //
+   /// \details
    /// This call creates a pin_adc from an Arduino Due pin name.
    ///
    /// This constructor initializes the pin to be an ADC input.
@@ -542,8 +555,9 @@ public:
       }
    {}  
    
+   /// \brief
    /// get an adc reading
-   ///
+   /// \details/
    /// This function performs and ADC conversion and returns the result.
    adc_value_type get() override {
        
@@ -579,8 +593,9 @@ private:
    
 public:
 
+   /// \brief
    /// Constructor for a ATSAM3X8E AD channel number.
-   ///
+   /// \details/
    /// This constructor initializes the pin to be an ADC input. 
    pin_adc( uint32_t channel ): 
       adc( 12 ),
@@ -617,8 +632,9 @@ public:
    
      }
    
+   /// \brief
    /// Arduino Due pin_adc constructor from a Due pin name
-   //
+   /// \details
    /// This call creates a pin_adc from an Arduino Due pin name.
    ///
    /// This constructor initializes the pin to be an ADC input.
@@ -628,8 +644,9 @@ public:
       }
    {}  
    
+   /// \brief
    /// get an adc reading
-   ///
+   /// \details/
    /// This function performs and ADC conversion and returns the result.
    /// For the SAM3X, a conversion is done for all pins that are configured
    /// as ADC inputs, but only the value for the pin itself is returned.

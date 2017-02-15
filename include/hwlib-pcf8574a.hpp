@@ -23,8 +23,9 @@
 
 namespace hwlib {
    
+/// \brief
 /// pcf8574a I2C I/O extender 
-//
+/// \details
 /// This class implements an interface to a pcf8574a I2C I/O extender chip.
 ///
 /// \image html pcf8574a-pinout.png
@@ -116,8 +117,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct an interface to a pcf8574a chip
-   //
+   /// \details
    /// This constructor creates an interface to a pcf8574a I2C
    /// I/O extender chip from the I2C bus it is connected to and 
    /// and the chip address.
@@ -149,8 +151,9 @@ public:
       return read_buffer;  
    }  
 
+   /// \brief
    /// the open-collector pins of the chip
-   //
+   /// \details
    /// The p0 ... p7 attributes represent the 8 open-collector 
    /// output pins of the chip. 
    /// A write to one of these pins will affect (only) 

@@ -20,8 +20,9 @@
 
 namespace hwlib {
    
+/// \brief
 /// Nokia 5510 B/W graphics LCD library
-//
+/// \details
 /// This class implements an interface to the type of LCD 
 /// that was used in older Nokia telephones.
 /// It is a 84 columns x 48 lines black-and-white LCD.
@@ -74,8 +75,9 @@ private:
 
 public:
    
+   /// \brief
    /// create a 5510 LCD
-   //
+   /// \details
    /// This constructor creates a 5510 LCD from its interface pins.
    glcd_5510( 
       pin_out & sce,

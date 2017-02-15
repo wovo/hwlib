@@ -23,14 +23,16 @@
 
 namespace hwlib {
 
+/// \brief
 /// blink function
-//
+/// \details
 /// This function blinks the pin: ms milliseconds on, and
 /// ms milliseconds off. It never returns.
 void blink( pin_out & pin, uint_fast16_t  ms = 200 );
 
+/// \brief
 /// kitt function
-//
+/// \details
 /// This function shows a kitt display on the pins of a port.
 /// Each LED is on for m milliseconds. It never returns.
 void kitt( port_in_out & port, uint_fast16_t ms = 100 );
@@ -41,8 +43,9 @@ void kitt( port_out & port, uint_fast16_t ms = 100 );
 /// @copydoc kitt( port_in_out & port, uint_fast16_t  ms = 100 )
 void kitt( port_oc & port, uint_fast16_t ms = 100 );
 
+/// \brief
 /// random lines demo
-//
+/// \details
 /// This functions repeats the following actions:
 /// - clears the window
 /// - draws a border
@@ -53,8 +56,9 @@ void graphics_random_lines(
    uint_fast16_t n_lines = 30
 );
 
+/// \brief
 /// random circles demo
-//
+/// \details
 /// This functions repeats the following actions:
 /// - clears the window
 /// - draws n_circles (default is 30) random circles 

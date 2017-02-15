@@ -20,19 +20,21 @@
 
 namespace hwlib {
    
+/// \brief   
 /// input/output pin interface
-//
+/// \details
 /// This class abstracts the interface for an input/output pin.
 class pin_in_out {
 public:
 
+   /// \brief
    /// set the direction of a pin to input.
-   //
+   /// \details
    /// Calling this function sets the pin identified by p to input.
    virtual void direction_set_input() = 0;
 
    /// read the pin
-   //
+   ///
    /// This function returns the level of the pin.
    /// When the pin level is high the value true is returned,
    /// when the pin level is low the value false is returned.
@@ -40,8 +42,9 @@ public:
       buffering buf = buffering::unbuffered 
    ) = 0;
 
+   /// \brief
    /// refresh the pin buffer
-   //
+   /// \details
    /// This function refreshes the contents of the read buffer that might
    /// be used by a buffered get().
    ///
@@ -50,12 +53,13 @@ public:
    virtual void refresh(){ }   
 
    /// set the direction of a pin to output
-   //
+   ///
    /// Calling this function sets the pin identified by p to output.
    virtual void direction_set_output() = 0;
-
+   
+   /// \brief
    /// write the pin
-   //
+   /// \details
    /// This function sets the level of the pin to
    /// the value v. A value of true makes the pin high, a value of
    /// false makes it low.
@@ -64,8 +68,9 @@ public:
       buffering buf = buffering::unbuffered 
    ) = 0;   
    
+   /// \brief   
    /// flush the pin buffer
-   //
+   /// \details
    /// This function flushes the pin write buffer: if the buffered value
    /// has not yet been written it is written to the pin.
    /// When the value has been written, it might be written again.
@@ -76,8 +81,9 @@ public:
    
 };   
 
+/// \brief
 /// input pin interface
-//
+/// \details
 /// This class abstracts the interface for an input-only pin.
 class pin_in {
 public:
@@ -92,8 +98,9 @@ public:
 
 };
 
+/// \brief
 /// output pin interface
-//
+/// \details
 /// This class abstracts the interface for an output-only pin.
 class pin_out {
 public:
@@ -109,15 +116,17 @@ public:
 
 };
 
+/// \brief
 /// open-collector input/output pin interface
-//
+/// \details
 /// This class abstracts the interface for 
 /// an open-collector input/output pin.
 class pin_oc {
 public:
 
+   /// \brief
    /// read the pin
-   //
+   /// \details
    /// This function returns the level of the pin.
    /// When the pin level is high the value true is returned,
    /// when the pin level is low the value false is returned.
@@ -135,8 +144,9 @@ public:
    /// @copydoc pin_in_out::refresh()   
    virtual void refresh(){ }  
    
+   /// \brief   
    /// write the pin
-   //
+   /// \details
    /// This function sets the level of the pin to
    /// the value v. A value of true makes the pin hihg-impedance
    /// (presumably pulled high by a pull-up resistor),

@@ -16,7 +16,7 @@
 #ifndef HWLIB_OSTREAM_H
 #define HWLIB_OSTREAM_H
 
-#include <cstdlib>
+#include <stdlib.h>
 
 #include "hwlib-wait.hpp"
 #include "hwlib-pin.hpp"
@@ -41,8 +41,9 @@ namespace hwlib {
       const uint_fast16_t x;
       /// \endcond  
       
+      /// \brief
       /// ostream output field width manipulator
-      //
+      /// \details
       /// Writing the setw(N) manipulator to an ostream sets the minimum 
       /// width of the field in which the next item is written to N:
       /// If the item is smaller than N, it will be padded
@@ -64,27 +65,31 @@ namespace hwlib {
       constexpr _setbase( uint_fast16_t x ) : x( x ){}
    };
    
+   /// \brief
    /// set ostream radix to 2
-   //
+   /// \details
    /// When this manipulator is written to an ostream the base for
    /// printing numbers is set to 2 (binary).
    constexpr _setbase bin( 2 );
    
+   /// \brief
    /// set ostream radix to 8
-   //
+   /// \details
    /// When this manipulator is written to an ostream the base for
    /// printing numbers is set to 8 (octal).
    constexpr _setbase oct( 8 );
    
+   /// \brief
    /// set ostream radix to 10
-   //
+   /// \details
    /// When this manipulator is written to an ostream the base for
    /// printing numbers is set to 10 (decimal).
    /// This is the inital situation.
    constexpr _setbase dec( 10 );
    
+   /// \brief
    /// set ostream radix to 16
-   //
+   /// \details
    /// When this manipulator is written to an ostream the base for
    /// printing numbers is set to 16 (hexadecimal).
    constexpr _setbase hex( 16 );
@@ -97,14 +102,16 @@ namespace hwlib {
       constexpr _showpos( bool x ) : x( x ){}
    }; 
  
+   /// \brief
    /// enable printing of a leading '+'
-   //
+   /// \details
    /// When this manipulator is written to an ostream the a leading
    /// '+' will be printed when a positive value is printed.  
    constexpr _showpos showpos( true );
   
+   /// \brief
    /// disable printing of a leading '+'
-   //
+   /// \details
    /// When this manipulator is written to an ostream the a leading
    /// '+' will be printed when a positive value is printed.  
    /// This is the initial situation.
@@ -118,15 +125,17 @@ namespace hwlib {
       constexpr _showbase( bool x ) : x( x ){}
    };
            
+   /// \brief
    /// enable printing of a leading radix indication
-   //
+   /// \details
    /// When this manipulator is written to an ostream a leading
    /// radix indication (0b, 0d, 0o, 0x) will be printed 
    /// when a integer value is printed.  
    constexpr _showbase showbase( true );
 
+   /// \brief
    /// enable printing of a leading radix indication
-   //
+   /// \details
    /// When this manipulator is written to an ostream no a leading
    /// radix indication will be printed when a integer value is printed.   
    /// This is the initial situation.
@@ -140,15 +149,17 @@ namespace hwlib {
       constexpr _boolalpha( bool x ) : x( x ){}
    };
    
+   /// \brief
    /// print a bool value as '0' or '1'
-   //
+   /// \details
    /// When this manipulator is written to an ostream subsequent boolean
    /// values will be written as '0' or '1'.  
    /// This is the initial situation.           
    constexpr _boolalpha boolalpha( true );
    
+   /// \brief
    /// print a bool value as 'false' or 'true'
-   //
+   /// \details
    /// When this manipulator is written to an ostream subsequent boolean
    /// values will be written as 'false' or 'true'.  
    /// This is the initial situation.           
@@ -160,8 +171,9 @@ namespace hwlib {
       const char x;
       /// \endcond  
   
+      /// \brief
       /// ostream filler character manipulator
-      //
+      /// \details
       /// Writing setfill(C) to an ostream sets filler character
       /// that is used to pad an item when it is smaller
       /// than the current field width.
@@ -174,8 +186,9 @@ namespace hwlib {
       constexpr _right(){}
    }; 
            
+   /// \brief
    /// align an item right in its field
-   //
+   /// \details
    /// When this manipulator is written to an ostream subsequent
    /// items that are smaller than the field width are aligned
    /// right (filled out at the left) in their field width.
@@ -186,8 +199,9 @@ namespace hwlib {
       constexpr _left(){}
    }; 
                  
+   /// \brief
    /// align an item left in its field
-   //
+   /// \details
    /// When this manipulator is written to an ostream subsequent
    /// items that are smaller than the field width are aligned
    /// left (filled out at the right) in their field width.                     
@@ -197,8 +211,9 @@ namespace hwlib {
       constexpr _flush( void ){}
    }; 
           
+   /// \brief
    /// flush an stream
-   //
+   /// \details
    /// Writing this manipulator to an ostream has the same
    /// effect as calling its flush() function.           
    constexpr _flush flush;
@@ -210,8 +225,9 @@ namespace hwlib {
    //
    // =======================================================================   
   
+   /// \brief
    /// formatted character output
-   //
+   /// \details
    /// This class is an std::ostream work-alike for small embedded systems.
    /// Most formatting features of std::ostream are supported.
    /// Floating point values are not supported.
@@ -305,8 +321,9 @@ namespace hwlib {
          show_base( false )
       {}
       
+      /// \brief
       /// char output function
-      //
+      /// \details
       /// This function is called by the other functions to output
       /// each character.
       virtual void putc( char c ) = 0;    
@@ -317,8 +334,9 @@ namespace hwlib {
          return *this; 
       }
       
+      /// \brief
       /// flush 
-      //
+      /// \details
       /// This function waits until all characters are realy written
       /// to whatever is their destination.
       /// The default implementation assumes that no buffering is done,
@@ -375,14 +393,12 @@ namespace hwlib {
       }
       /// \endcond 
       
+      /// \brief
       /// return the current showpos setting        
-      //
-      /// \related noshowpos
       bool showpos( void ) const { return show_pos; }
       
-      /// set the showpos setting, return the old showpos setting
-      //
-      /// \related noshowpos      
+      /// \brief
+      /// set the showpos setting, return the old showpos setting 
       bool showpos( bool x ) { 
          bool temp = show_pos;
          show_pos = x;
@@ -396,14 +412,12 @@ namespace hwlib {
       }
       /// \endcond 
       
-      /// return the current showbae setting        
-      //
-      /// \related noshowbase
+      /// \brief
+      /// return the current showbase setting        e
       bool showbase( void ) const { return show_base; }
       
-      /// set the showbase setting, return the old showbase setting
-      //
-      /// \related noshowbase      
+      /// \brief
+      /// set the showbase setting, return the old showbase setting     
       bool showbase( bool x ){ 
          bool temp = show_base;
          show_base = x; 
@@ -417,14 +431,12 @@ namespace hwlib {
       }      
       /// \endcond 
       
+      /// \brief
       /// return the current boolalpha setting        
-      //
-      /// \related noboolalpha
       bool boolalpha( void ) const { return bool_alpha; }
       
-      /// set the noboolalpha setting, return the old noboolalpha setting
-      //
-      /// \related noshowbase         
+      /// \brief
+      /// set the noboolalpha setting, return the old noboolalpha setting       
       bool boolalpha( bool x ) { 
          bool temp = bool_alpha;
          bool_alpha = x; 
@@ -438,14 +450,11 @@ namespace hwlib {
       }
       /// \endcond 
       
-      /// return the current fill char setting        
-      //
-      /// \related setfill       
+      /// \brief
+      /// return the current fill char setting             
       char fill( void ) const { return fill_char; }
       
       /// set the fill char setting, return the old fill char setting
-      //
-      /// \related setfill
       char fill( char x ){ 
          char temp = fill_char;
          fill_char = x; 
@@ -620,8 +629,9 @@ namespace hwlib {
       
    }; // class ostream  
    
+   /// \brief
    /// character input
-   //
+   /// \details
    /// This class is a minimal std::istream work-alike for small embedded systems.
    /// (only reading a single character is supported)
    /// 
@@ -639,14 +649,16 @@ namespace hwlib {
       }           
    };
    
+   /// \brief
    /// a bit-banged UART char output
-   //
+   /// \details
    /// This function implements a bit-banged output UART pin
    /// using the BMPTK_BAUDRATE.   
    void uart_putc_bit_banged_pin( char c, pin_out & pin );
    
+   /// \brief
    /// a bit-banged UART char input
-   //
+   /// \details
    /// This function implements a bit-banged input UART pin
    /// using the BMPTK_BAUDRATE.      
    char uart_getc_bit_banged_pin( pin_in & pin );
@@ -711,8 +723,9 @@ namespace hwlib {
 
    #endif // #ifdef HWLIB_ONCE 
    
+   /// \brief
    /// console character output function
-   //
+   /// \details
    /// This is the function used for console (ostream) output.
    /// The embedded targets provide an implementation that writes
    /// to the serial port. 
@@ -720,8 +733,9 @@ namespace hwlib {
    /// an application to provide its own definition.
    void uart_putc( char c );
    
+   /// \brief
    /// console character input function
-   //
+   /// \details
    /// This is the function used for console (istream) input.
    /// The embedded targets provide an implementation that reads
    /// from the serial port. 
@@ -745,9 +759,9 @@ namespace hwlib {
    
    /// \endcond    
    
-   
+   /// \brief
    /// embedded output console
-   //
+   /// \details
    /// This is the embedded work-alike for std::cout.
    /// The default implementation uses uart_putc
    /// to write the characters.
@@ -756,8 +770,9 @@ namespace hwlib {
    extern cout_using_uart_putc cout;   
  
 
+   /// \brief
    /// embedded input console
-   //
+   /// \details
    /// This is the embedded work-alike for std::cin.
    /// The default implementation uses uart_getc
    /// to read the characters.

@@ -25,8 +25,9 @@
 
 namespace hwlib {
    
+/// \brief
 /// pcf8591 I2C A/D and D/A converter 
-//
+/// \details
 /// This class implements an interface to a pcf8591 A/D & D/A converter chip.
 ///
 /// \image html pcf8591-pinout.png
@@ -117,8 +118,9 @@ private:
 
 public:
 
+   /// \brief
    /// construct an interface to a pcf8591 chip
-   //
+   /// \details
    /// This constructor creates an interface to a pcf8591 I2C
    /// A/D and D/A converter from the I2C bus it is connected to and 
    /// and the chip address.
@@ -130,8 +132,9 @@ public:
       configuration{ 0x40 }
    {}         
 
+   /// \brief
    /// the A/D converter channels of the chip
-   //
+   /// \details
    /// The adc0 ... adc3 attributes represent the 4 A/D 
    /// inputs of the chip. 
    //@{ 

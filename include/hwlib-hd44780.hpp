@@ -20,8 +20,9 @@
 
 namespace hwlib {
    
+/// \brief
 /// hd44780 character LCD interface 
-//
+/// \details
 /// This class implements an interface to an hd44780 character LCD.  
 ///
 /// \image html hd44780-picture.jpg
@@ -110,8 +111,9 @@ private:
            
 public:
 
+   /// \brief
    /// construct an interface to an hd44780 chip
-   //
+   /// \details
    /// This constructor creates an interface to 
    /// an hd44780 LCD controller from the RS and E pins, and the 4-bit port
    /// to the D4..D8 pins, and the number of lines and characters per line,
@@ -149,8 +151,9 @@ public:
       goto_xy( 0, 0 );    // 'cursor' home    
    }    
    
+   /// \brief
    /// write a command byte to the LCD
-   //
+   /// \details
    /// Use this function only for features that are not 
    /// provided by the console interface, like the definition
    /// of the user-defined characters.
@@ -158,8 +161,9 @@ public:
       write8( 0, cmd );
    }
 
+   /// \brief
    /// write a data byte to the LCD
-   //
+   /// \details
    /// Use this function only for features that are not 
    /// provided by the console interface, like the definition
    /// of the user-defined characters.

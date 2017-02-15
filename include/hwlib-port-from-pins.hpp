@@ -41,8 +41,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct a port_out from up to 8 pin_outs
-   //
+   /// \details
    /// This constructor creates a port_out from up to 8 pin_in pins.
    /// The first pin is the lowest pin in the port, etc.
    port_in_out_from_pins(
@@ -136,8 +137,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct a port_out from up to 8 pin_outs
-   //
+   /// \details
    /// This constructor creates a port_out from up to 8 pin_in pins.
    /// The first pin is the lowest pin in the port, etc.
    port_in_from_pins(
@@ -195,8 +197,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct a port_out from up to 8 pin_outs
-   //
+   /// \details
    /// This constructor creates a port_out from up to 8 pin_out pins.
    /// The first pin is the lowest pin in the port, etc.
    port_out_from_pins(

@@ -22,8 +22,9 @@
 
 namespace hwlib {
    
+/// \brief
 /// hc595 8-bit output shift register 
-//
+/// \details
 /// This class implements an interface to 
 /// an hc595 8-bit output shift register chip.  
 ///
@@ -100,8 +101,9 @@ private:
    
 public:
 
+   /// \brief
    /// construct an interface to an hc595 chip
-   //
+   /// \details
    /// This constructor creates an interface to 
    /// an hc595 8-bit output shift register chip
    /// from the SPI bus it is connected to and 
@@ -123,8 +125,9 @@ public:
       }   
    }  
 
+   /// \brief
    /// the output pins of the chip
-   //
+   /// \details
    /// The p0 ... p7 attributes represent the 8 
    /// output pins of the chip. 
    /// A write to one of these pins will affect (only) 

@@ -19,8 +19,9 @@
 #include "hwlib-all.hpp"
 #include "LPC11xx.h"
 
+/// \brief
 /// hwlib implementation for the DB103 board
-//
+/// \details
 /// \image html db103-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing
@@ -143,8 +144,9 @@ private:
    
 public:
 
+   /// \brief
    /// LPC1114 pin_in constructor
-   //
+   /// \details
    /// Constructor for an LPC11114 input pin.
    ///
    /// This constructor sets the pin direction to input.   
@@ -171,8 +173,9 @@ private:
    
 public:
 
+   /// \brief
    /// LPC1114 pin_out constructor
-   //
+   /// \details
    /// Constructor for an LPC11114 output pin.
    ///
    /// This constructor sets the pin direction to output.   
@@ -200,8 +203,9 @@ private:
    
 public:
 
+   /// \brief
    /// LPC1114 pin_out constructor
-   //
+   /// \details
    /// Constructor for an LPC1114 input pin.
    ///
    /// This constructor doesn't set the pin direction 
@@ -244,8 +248,9 @@ private:
    
 public:
 
+   /// \brief
    /// LPC1114 pin_oc constructor
-   //
+   /// \details
    /// Constructor for an LPC1114 input pin.
    ///
    /// This constructor sets the pin to high (high-impedance). 

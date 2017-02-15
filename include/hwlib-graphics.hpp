@@ -23,8 +23,9 @@
 
 namespace hwlib {
 
+/// \brief
 /// a pixel coordinate
-//
+/// \details
 /// This class abstracts a coordinate (pixel location) on a graphics screen,
 /// or the distance between two coordinates.
 class location final {
@@ -63,8 +64,10 @@ ostream & operator<<( ostream & lhs, location rhs ){
    return lhs << "[" << rhs.x << ":" << rhs.y << "]";
 }
 #endif
+
+/// \brief
 /// graphics color
-//
+/// \details
 /// This class abstracts a color as used in a graphics window.
 /// A color is represented by 3 RGB bytes an a transparency flag.
 class color final {
@@ -79,8 +82,10 @@ private:
    }   
       
 public:
+
+   /// \brief
    /// the transparency of the color
-   //
+   /// \details
    /// When a color is tranparent, the read green and blue atrributes
    /// are meaningless.
    bool is_transparent;
@@ -94,8 +99,9 @@ public:
    /// the BLUE attribute (part) of the color
    uint8_t blue;
    
+   /// \brief
    /// the 3-byte RGB representation of the color
-   //
+   /// \details
    /// This function returns the RGB reprsentation of the color.
    /// For a transparent color, the returned value will 
    /// not be meaningfull.
@@ -105,8 +111,9 @@ public:
            | ( static_cast< uint_fast32_t >( blue )  << 0  );
    }
    
+   /// \brief
    /// construct a color from its RGB components
-   //
+   /// \details
    /// The transparency flag can be specified, but better use
    /// the transparent constant.
    /// 
@@ -124,8 +131,9 @@ public:
       blue{  clip( blue,  transparent ) }
    {}   
    
+   /// \brief
    /// constructs a color from a three-byte integer value
-   //
+   /// \details
    /// For instance, color( 0xFF00FF ) is magenta.   
    constexpr color( uint_fast32_t rgb32 = 0 ):
       is_transparent( false ),  
@@ -185,8 +193,9 @@ constexpr color salmon      = color( 0xFA8072 );
 
 // ==========================================================================
    
+/// \brief
 /// an image
-//
+/// \details
 /// An image is a rectangular set of pixel values (colors).
 class image {
 private:
@@ -195,8 +204,9 @@ private:
 
 public:
 
+   /// \brief
    /// the size of the image
-   //
+   /// \details
    /// This is the size of the image: the number of pixels
    /// in the x and y direction.
    // wovo: should be const, but that conflicts with the 16x16 font
@@ -233,8 +243,9 @@ private:
 
 public:
 
+   /// \brief
    /// create the image_8x8 by supplying the pixels
-   //
+   /// \details
    /// The d0 argument contains the top row, bit 0 is the leftmost pixel.
    constexpr image_8x8(
       unsigned char d0, unsigned char d1,
@@ -250,14 +261,16 @@ public:
 
 // ==========================================================================
 
+/// \brief
 /// a font
-//
+/// \details
 /// A font provides an image for each supported character
 class font {
 public:
 
+   /// \brief
    /// get image for a character
-   //
+   /// \details
    /// This function returns the image for the specified character.
    virtual const image & operator[]( char c ) const = 0;
 };
@@ -266,21 +279,24 @@ public:
 // ==========================================================================
 
 
+/// \brief
 /// a graphics window
-//
+/// \details
 /// This class abstracts the interface to a graphic window.
 class window {
 private:
 
+   /// \brief
    /// write a pixel - implementation
-   //
+   /// \details
    /// This NVI function writes a the color col to the pixel at location loc.
    /// Loc is guaranteed to be within the window, and the color
    /// is guranteed to be not transparent.
    virtual void write_implementation( location pos, color col ) = 0;
    
+   /// \brief
    /// write a pixel buffered - implementation
-   //
+   /// \details
    /// This NVI function writes a the color col to the pixel buffer at location loc.
    /// Loc is guaranteed to be within the window, and the color
    /// is guranteed to be not transparent.
@@ -290,29 +306,33 @@ private:
       
    
 public:
+   /// \brief
    /// the size of the window
-   //
+   /// \details
    /// This is the size of the window: the number of pixels
    /// in the x and y direction.
    const location size;
    
+   /// \brief
    /// the foreground color of the window
-   //
+   /// \details
    /// This color could be used to draw graphics.
    color foreground;
    
-    /// the background color of the window
-   //
+   /// \brief
+   /// the background color of the window
+   /// \details
    /// This is the color use by the clear() function.
    color background;
    
-  /// construct a window by specifying its size and foreground and background colors.
+   /// construct a window by specifying its size and foreground and background colors.
    window( location size, color foreground, color background )
       : size{ size }, foreground{ foreground }, background{ background }
    {}
    
+   /// \brief
    /// write a pixel
-   //
+   /// \details
    /// This function writes a the color col to the pixel at location loc.
    /// If either the color is transparent, or the location is outside the window 
    /// the call has no effect. When no color is specificied, the window's
@@ -326,8 +346,9 @@ public:
       }   
    }
    
+   /// \brief
    /// write a pixel buffered
-   //
+   /// \details
    /// This function writes a the color col to the pixel buffer at location loc.
    /// If either the color is transparent, or the location is outside the window 
    /// the call has no effect. When no color is specificied, the window's
@@ -341,15 +362,17 @@ public:
       }   
    }
    
+   /// \brief
    /// flush the pixel buffer
-   //
+   /// \details
    /// This function fluhses the pixel buffer: it writes pixels that
    /// have not yet been written.
    /// Flushing might occur as a side-effect of other operations.
    virtual void flush(){ }
    
+   /// \brief
    /// write a rectangle of pixels
-   //
+   /// \details
    /// This function writes a rectangle of pixels, as specified by img,
    /// at location pos.                 
    void write( location pos, const image & img ){                 
@@ -361,8 +384,9 @@ public:
       }
    }
 
+   /// \brief
    /// write a rectangle of pixels buffered
-   //
+   /// \details
    /// This function writes a rectangle of pixels, as specified by img,
    /// at location pos, to the pixel buffer.                      
    void write_buffered( location pos, const image & img ){                 
@@ -380,8 +404,9 @@ public:
    }   
    #endif
    
+   /// \brief
    /// clear the window buffered
-   //
+   /// \details
    /// This function clears the write buffer by writing the background
    /// color to all its pixels.
    virtual void clear_buffered(){
@@ -392,8 +417,9 @@ public:
       }         
    }   
    
+   /// \brief
    /// clear the window
-   //
+   /// \details
    /// This function clears the windows by writing the background
    /// color to all pixels.
    /// The default implementation writes to all pixels in sequence.
@@ -456,8 +482,9 @@ public:
 
 // ==========================================================================
 
+/// \brief
 /// a window_part (subwindow of a larger window)
-//
+/// \details
 /// A window_part is a rectangular part of a larger window.
 class window_part : public window {
 private:
@@ -477,8 +504,9 @@ private:
    }      
    
 public:      
+   /// \brief
    /// create a window_part from a larger window, its origin and its size
-   //
+   /// \details
    /// This call constructs a subwindow from a window, the start 
    /// (top-left pixel) of the subwindow, and the size of the subwindow.
    /// The foreground and background color are copied from the larger
@@ -494,8 +522,9 @@ public:
 
 // ==========================================================================
 
+/// \brief
 /// window_invert (invert writes to a window)
-//
+/// \details
 /// A window_inverts writes inverted to its larger window.
 class window_invert : public window {
 private:
@@ -514,8 +543,9 @@ private:
    }      
    
 public:      
+   /// \brief
    /// create a window_invert from a window
-   //
+   /// \details
    /// This call constructs a window_invert from a window.
    /// The foreground and background color are copied from the larger
    /// window, but writes to the window_invert write the invert
@@ -546,8 +576,9 @@ public:
       draw_buffered( w ); w.flush();
    }      
    
+   /// \brief
    /// interface to draw the object buffered
-   //
+   /// \details
    /// You must supply the window, and you must flus() 
    /// the window at some time to make sure that the object becomes visible.
    virtual void draw_buffered( window & w );    
