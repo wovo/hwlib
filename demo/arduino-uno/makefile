@@ -10,6 +10,7 @@
 # 
 #############################################################################
 
+SUBDIRS += empty
 SUBDIRS += blink
 SUBDIRS += hello
 SUBDIRS += hd44780-shield

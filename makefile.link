@@ -1,7 +1,7 @@
 #============================================================================
 #
-# hwlib makefile that includes the dependencies and defers to bmptk
-
+# makefile that includes the dependencies and defers to bmptk
+#
 # (c) Wouter van Ooijen (wouter@voti.nl) 2017
 #
 # Distributed under the Boost Software License, Version 1.0.

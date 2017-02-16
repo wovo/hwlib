@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// blink a LED on DB103 (LPC1114)
+// empty project
 //
 // (c) Wouter van Ooijen (wouter@voti.nl) 2017
 //
@@ -10,9 +10,12 @@
 //
 // ==========================================================================
 
+
 #include "hwlib.hpp"
 
 int main( void ){
-   auto led = hwlib::target::pin_out( 1, 9 );
-   hwlib::blink( led );
+   // kill the watchdog (ATSAM3X8E specific)
+   WDT->WDT_MR = WDT_MR_WDDIS;
+   
 }
+

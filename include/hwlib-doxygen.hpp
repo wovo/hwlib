@@ -303,3 +303,9 @@ namespace hwlib {}
 ///   - delays moeten 16-bit parameter Zijn ivm AVR en MSP430?
 ///   - uno hello baudrate klopt niet
 ///
+///      lpc due uno
+/// empty 1224 120 176
+/// blink 1268! 420 680
+/// - why is blink uno large??
+///
+/// make tool to extract this kind of info?

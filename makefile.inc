@@ -1,6 +1,6 @@
 #============================================================================
 #
-# hwlib makefile-include for bmptk: 
+# makefile-include for bmptk: 
 # sets 
 # - the search path (the hwlib/include directory)
 # - the dependencies (all hwlib source files)

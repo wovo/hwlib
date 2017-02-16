@@ -10,6 +10,7 @@
 # 
 #############################################################################
 
+SUBDIRS += empty
 SUBDIRS += blink
 SUBDIRS += blink-direct-include
 SUBDIRS += hello
