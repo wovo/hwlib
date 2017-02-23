@@ -14,7 +14,7 @@
 #
 #============================================================================
 
-SEARCH            += $(HWLIB)/include
+SEARCH            += $(HWLIB)/library
 SOURCES           += hwlib.cpp
 
 HEADERS           += hwlib.hpp

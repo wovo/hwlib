@@ -18,6 +18,8 @@
 
 #include "hwlib-pin.hpp"
 #include "hwlib-port.hpp"
+#include "hwlib-adc.hpp"
+#include "hwlib-dac.hpp"
 #include "hwlib-wait.hpp"
 #include "hwlib-graphics.hpp"
 

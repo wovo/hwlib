@@ -11,6 +11,7 @@
 #############################################################################
 
 SUBDIRS += hello
+SUBDIRS += string
 
 BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)

@@ -182,7 +182,7 @@ private:
    void goto_xy_implementation( uint_fast16_t new_x, uint_fast16_t new_y ) override {
       // the NVI goto_xy() has already set the x and y variables
       
-      if( columns == 1 ){
+      if( lines == 1 ){
          if( x < 8 ){
             command( 0x80 + x );
          } else {
@@ -207,7 +207,7 @@ private:
                     ? 0x14 
                     : 0x00 )
                  + ( x )
-             );            
+             );              
          }
       }
    }   
@@ -216,9 +216,9 @@ private:
       // the NVI putc() handles the x and y variables
       
       // handle the gap for 1-line displays
-      if( columns == 1 ){
+      if( lines == 1 ){
          if( x == 8 ){
-            goto_xy( 8, y );
+            goto_xy( x, y );
          }
       }   
       

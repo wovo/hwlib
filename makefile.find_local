@@ -12,7 +12,9 @@
 
 ifneq ($(wildcard $(RELATIVE)/makefile.custom),)
    include $(RELATIVE)/makefile.custom
-else   
+else ifneq ($(wildcard $(RELATIVE)/../makefile.custom),)
+   include $(RELATIVE)/../makefile.custom
+else 
    include $(RELATIVE)/makefile.local
 endif
 
