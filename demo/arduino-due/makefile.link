@@ -22,4 +22,4 @@ CONSOLE_BAUDRATE  ?= 2400
 # defer to the next-level makefile.link
 RELATIVE          ?= .
 RELATIVE          := $(RELATIVE)/..
-include           $(RELATIVE)/Makefile.link
+include           $(RELATIVE)/makefile.link
