@@ -16,7 +16,11 @@
 TARGET            ?= arduino_uno
 CONSOLE_BAUDRATE  ?= 2400
 
+ifneq ($(OS),Windows_NT)
+   SERIAL_BAUDRATE ?= ttyUSB0
+endif
+
 # defer to the next-level makefile
 RELATIVE          ?= .
 RELATIVE          := $(RELATIVE)/..
-include           $(RELATIVE)/Makefile.link
+include           $(RELATIVE)/makefile.link

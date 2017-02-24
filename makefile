@@ -22,35 +22,40 @@ error:
    
 BMPTK  := ../bmptk
    
-REMOVE := $(BMPTK)/tools/bmptk-rm 
+ifeq ($(OS),Windows_NT)
+   REMOVE := $(BMPTK)/tools/bmptk-rm 
+   MAKE := bmptk-make
+else
+   REMOVE := rm -rf
+   MAKE := make
+endif
 
 doxygen:
-	doxygen doxyfiles/Doxyfile
+	doxygen doxyfiles/doxyfile
       
 build: doxygen  
-	cd demo && bmptk-make build
-	cd test && bmptk-make build
+	cd demo && $(MAKE) build
+	cd test && $(MAKE) build
 	@echo "**** build completed succesfully"   
    
 notab:
-	cd demo && bmptk-make notab
-	cd test && bmptk-make notab
+	cd demo && $(MAKE) notab
+	cd test && $(MAKE) notab
 	@echo "**** no tabs found"     
    
 test:
-	cd test && bmptk-make build && bmptk-make run
+	cd test && $(MAKE) build && $(MAKE) run
 	@echo "**** test completed succesfully"   
    
 clean:   
 	$(REMOVE) -rf html
-	cd demo && bmptk-make clean   
-	cd test && bmptk-make clean   
+	cd demo && $(MAKE) clean   
+	cd test && $(MAKE) clean   
 	@echo "**** cleanup completed succesfully"  
    
 # git commit -a -m 'work'   
 # git config core.ignorecase false
-push: 
-	bmptk-make clean
+push: clean
 	git add -A
 	git commit -a
 	git push		

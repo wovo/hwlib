@@ -20,6 +20,6 @@ HEADERS :=
 SEARCH  := 
 
 # set RELATIVE to the next higher directory 
-# and defer to the appropriate Makefile.* there
+# and defer to the appropriate makefile.* there
 RELATIVE := ..
 include $(RELATIVE)/makefile.link

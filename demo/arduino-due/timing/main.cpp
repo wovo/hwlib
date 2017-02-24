@@ -20,7 +20,7 @@ void time( const char *name, int n, T lambda ){
 
 }
 
-int main( void ){	
+int main( void ){
    // kill the watchdog
    WDT->WDT_MR = WDT_MR_WDDIS;
    

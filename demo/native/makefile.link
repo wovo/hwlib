@@ -18,4 +18,4 @@ TARGET            ?= native
 # defer to the next-level makefile
 RELATIVE          ?= .
 RELATIVE          := $(RELATIVE)/..
-include           $(RELATIVE)/Makefile.link
+include           $(RELATIVE)/makefile.link

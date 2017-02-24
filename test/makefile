@@ -16,25 +16,33 @@ BUILDDIRS = $(SUBDIRS:%=build-%)
 CLEANDIRS = $(SUBDIRS:%=clean-%)
 NOTABDIRS = $(SUBDIRS:%=notab-%)
 
+ifeq ($(OS),Windows_NT)
+   REMOVE := $(BMPTK)/tools/bmptk-rm 
+   MAKE := bmptk-make
+else
+   REMOVE := rm -rf
+   MAKE := make
+endif
+
 .phony: clean build run error notab (BUILDDIRS) $(CLEANDIRS) $(NOTABDIRS)
 
 # include the bmptk makefile, and clean this directory
 
 clean: $(CLEANDIRS)
-	bmptk-make -f makefile.link clean
+	$(MAKE) -f makefile.link clean
    
 # defer to the subdirectories
 
 $(CLEANDIRS): 
-	bmptk-make -C $(@:clean-%=%) clean
+	$(MAKE) -C $(@:clean-%=%) clean
    
 build: $(BUILDDIRS)
 $(BUILDDIRS):
-	bmptk-make -C $(@:build-%=%) build
+	$(MAKE) -C $(@:build-%=%) build
    
 notab: $(NOTABDIRS)
 $(NOTABDIRS):
-	bmptk-make -C $(@:notab-%=%) notab 
+	$(MAKE) -C $(@:notab-%=%) notab 
    
 # user error handling   
 
