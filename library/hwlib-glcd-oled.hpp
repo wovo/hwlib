@@ -155,7 +155,7 @@ private:
    
    // first byte is permanently set to DATA_MODE,
    // pixel data starts at buffer[ 1 ]
-   uint8_t buffer[ 1 + 128 * 64 / 8 ];
+   uint8_t buffer[ 1 + ( 128 * 64 / 8 ) ];
    
    void write_to_buffer( location pos, color col, uint_fast8_t a ){
       if( col == foreground ){ 
@@ -218,7 +218,7 @@ public:
       buffer[0] = DATA_MODE;      
    }
    
-   virtual void flush(){    
+   virtual void flush(){      
       command( COLUMNADDR,  0,  127 );
       command( PAGEADDR,    0,    7 );   
       bus.write( 
