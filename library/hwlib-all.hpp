@@ -42,7 +42,7 @@
 #include "hwlib-hd44780.hpp"
 #include "hwlib-glcd-5510.hpp"
 #include "hwlib-glcd-oled.hpp"
-//#include "hwlib-string.hpp"
+#include "hwlib-string.hpp"
 #include "hwlib-demo.hpp"
 
 #endif // HWLIB_ALL_H

@@ -20,43 +20,20 @@
 
 #include <stddef.h>
 #include <type_traits>
-#include <iostream>
+//#include <iostream>
 
 namespace hwlib {
 
 // forward declaration of the class template   
 template< size_t maximum_length > class string;
 
-/// a read-only range of characters within a string
-class string_range {
-private:
-
-   const char * start, * beyond;
-   
-public:   
-
-   string_range( const char * start, const char * beyond ):
-      start( start ), beyond( beyond )
-   {}   
-   
-   const char * begin() const {
-      return start;
+// return the end iterator from an asciz string
+constexpr const char * asciz_beyond( const char * p ){
+   while( *p != '\0' ){
+      ++p;
    }
-        
-   const char * end() const {
-      return beyond;
-   }   
-   
-   /// \brief   
-   /// output to any target that supports operator<< for a char *
-   template< typename T >
-   friend T & operator<< ( T & lhs, const string_range & rhs ){
-      for( char c : rhs ){
-         lhs << c;
-      }   
-      return lhs;
-   }      
-};
+   return p;
+}
 
   
 //============================================================================
@@ -130,14 +107,27 @@ private:
          : content + current_length;
    }
    
-   // constructor, called by string< N >'s constructors
+   // object constructor, called by string< N >'s constructors
    template< typename T > 
    constexpr string( size_t allocated_length, char * content, const T & x ):
       allocated_length{ allocated_length }, 
+      current_length{ 0 },
       content{ content }
    {
-       operator=( x );
+      for( char c : iterate( x ) ){
+         if( current_length < allocated_length ){
+            content[ current_length++ ] = c;
+         }
+      }
    }     
+   
+   // range constructor, called by range()
+   // not used directly, because the result must be a const
+   constexpr string( char * start, char * beyond ):
+      allocated_length( beyond - start ),
+      current_length( beyond - start ),
+      content( start )
+   {}      
    
    //=========================================================================
    //
@@ -146,45 +136,37 @@ private:
    //=========================================================================
    
    class iterate {
-   private:
-    
-      // return end iterator for an asciz string
-      static constexpr const char * asciz_beyond( const char * p ){
-         while( *p != '\0' ){
-            ++p;
-         }
-         return p;
-      }
        
    public:
     
       // iterate over a single char
-      iterate( char ch ) :
+      constexpr iterate( char ch ) :
          c( ch ), start( &c ), beyond( &this->c + 1) 
       {}
        
       // iterate over an asciz string       
-      iterate( const char *p ) :
+      constexpr iterate( const char *p ) :
          c( 0 ), start( p ), beyond( asciz_beyond( p )) {
       }
  
       // iterate over anything that has begin() and end() 
       template< typename T >
-      iterate( const T & s ) :
+      constexpr iterate( const T & s ) :
          c( 0 ), start( s.begin() ), beyond( s.end() )
       {}   
 
-      const char * begin() const {
+      constexpr const char * begin() const {
          return start;
       }
         
-      const char * end() const {
+      constexpr const char * end() const {
          return beyond;
       }
 
    private:
       const char c;
-      const char * const start, * const beyond;
+      const char * const start;
+      const char * const beyond;
    };
    
 public:
@@ -200,7 +182,21 @@ public:
    
    /// \brief   
    /// pointer to the 0-terminated content
-   const char * c_str() const {
+   /// \details
+   /// This function 0-terminates the string and returns a pointer
+   /// to it. 
+   ///
+   /// When the string is at its maximum size, its last character will be 
+   /// removed (making the string 1 shorter) 
+   /// to make room for the terminating 0-character.
+   ///
+   /// When the string contains a '\0' character, this is not handled 
+   /// specially, and the asciz string will appear to end at that character.
+   char * c_str(){
+      if( current_length == allocated_length ){
+         --current_length;         
+      }
+      content[ current_length ] = '\0';      
       return content;
    }
 
@@ -228,7 +224,9 @@ public:
    /// output to any target that supports operator<< for a char *
    template< typename T >
    friend T & operator<< ( T & lhs, const string< 0 > & rhs ){
-      lhs << rhs.c_str();
+      for( char c : rhs ){
+         lhs << c;
+      }   
       return lhs;
    }     
    
@@ -241,25 +239,23 @@ public:
 
    /// \brief   
    /// append the char if possible, otherwise ignore it  
-   void append( char c ){
+   string & append( char c ){
       if( current_length < allocated_length ){
          content[ current_length++ ] = c;
-         content[ current_length ] = '\0';
       }   
+      return *this;
    }
    
    /// \brief   
    /// append a char if possible, otherwise ignore it 
    string & operator+=( char c ){
-      append( c );
-      return *this;
+      return append( c );
    }
    
    /// \brief   
    /// append a char if possible, otherwise ignore it    
    string & operator<<( char c ){
-      append( c );
-      return *this;
+      return append( c );
    }
    
    /// \brief   
@@ -288,9 +284,8 @@ public:
    
    /// \brief   
    /// set to ""
-   string &  clear(){
+   string & clear(){
       current_length = 0;
-      content[ 0 ] = '\0';
       return *this;
    } 
    
@@ -298,8 +293,7 @@ public:
    /// assign something
    template< typename T >
    string & operator=( const T & rhs ){
-      clear(); 
-      return *this += rhs;
+      return clear() += rhs;
    }   
    
    
@@ -334,6 +328,53 @@ public:
    }   
    
    
+   //=========================================================================
+   //
+   // range
+   //
+   //=========================================================================
+
+   /// \brief
+   /// non-owning string (sub)range from two iterators 
+   /// \details
+   /// This function returns a const string object that appears to contains 
+   /// the characters range pointed to by the start parameter up to 
+   /// (but excluding) the character pointed to by the end parameter.
+   /// 
+   /// The object is a non-owning range: it doesn't make a copy.
+   /// Hence any change to the characters will be reflected in the range.
+   static constexpr const string< 0 > range( 
+      const char * start, 
+      const char * beyond 
+   ){
+      // Casting the const away is OK because the returned range object is
+      // returned as const, so the stored char pointers are const again.
+      // Blame C++ for not having a const constructor :(
+      return string( 
+         const_cast< char * >( start ), 
+         const_cast< char * >( beyond )
+      );
+   }      
+   
+   /// \brief
+   /// non-owning string (sub)range from an asciz string
+   /// \details
+   /// This function returns a const string object that appears to contains 
+   /// the characters in the asciz string pointed to by the start parameter.
+   /// 
+   /// The object is a non-owning range: it doesn't make a copy.
+   /// Hence any change to the characters will be reflected in the range.
+   static constexpr const string< 0 > range(
+      const char * start
+   ){
+      // see above
+      return string( 
+         const_cast< char * >( start ), 
+         const_cast< char * >( asciz_beyond( start ) )
+      );
+   }  
+
+
    //=========================================================================
    //
    // erase & replace
@@ -638,31 +679,31 @@ operator<=( const T & lhs, const string< 0 > & rhs ){
 /// concrete fixed-maximum-length string
 /// \details
 /// This is the concrete string class template. Use it to declare
-/// a variable of a known size. Use string< 0 > for references.
-template< size_t template_maximum_length >
+/// a variable of a known (maximum) size. 
+/// Use string< 0 > for references, parameters, ranges, etc.
+template< size_t maximum_length >
 class string: public string< 0 > {
 private:
 
    // the store for the characters
-   // must be +1 to store the /0 needed by c_str()
-   char content[ template_maximum_length + 1 ];
+   char content[ maximum_length ];
    
 public:
 
    /// \brief   
    /// create fixed-maximum-size string, initially empty
    string():
-      string< 0 >( template_maximum_length, content, "" )
+      string< 0 >( maximum_length, content, "" )
    {}      
    
    /// \brief      
    /// create fixed-maximum-size string, with an initial value
    template< typename T > 
    string( const T & x ):
-      string< 0 >( template_maximum_length, content, x )
+      string< 0 >( maximum_length, content, x )
    {}      
 
-   // why &*^%&* is this needed?
+   // avoid ambiguity
    string & operator=( const string & rhs ){
        string< 0 >::operator=( rhs );
        return *this;

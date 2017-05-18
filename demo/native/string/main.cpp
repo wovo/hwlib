@@ -14,12 +14,15 @@
 #include <iostream>
 
 int main( void ){
-   hwlib::string< 100 > t = "Hello brave new world!\n";
+   hwlib::string< 100 > t( "Hello brave new world!\n" );
    std::cout << t;
    
-   auto r = t.range_start_end( 2, 5 );
-   hwlib::string< 100 > rr = r;
-   std::cout << "[" << rr << "]\n";
+   constexpr auto x = hwlib::string<0>::range( "hello\n" );
+   std::cout << x;
    
-   std::cout << "[" << t.range_start_length( 3, 9 ) << "]\n";
+   //auto r = t.range_start_end( 2, 5 );
+   //hwlib::string< 100 > rr = r;
+   //std::cout << "[" << rr << "]\n";
+   
+   //std::cout << "[" << t.range_start_length( 3, 9 ) << "]\n";
 }
