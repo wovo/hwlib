@@ -306,6 +306,7 @@ public:
    /// not to the Arduino board pin names.
    ///
    /// This constructor sets the pin direction to input.
+   /// By default, the internal weak pull-up is enabled.
    pin_in( uint32_t port_number, uint32_t pin_number ): 
       port{ port_registers( port_number ) }, 
       mask{ 0x1U << pin_number }
@@ -319,12 +320,23 @@ public:
    /// This call creates a pin_in from an Arduino Due pin name.
    ///
    /// This constructor sets the pin direction to input.
+   /// By default, the internal weak pull-up is enabled.
    pin_in( pins name ): 
       pin_in{ 
          pin_info( name ).port, 
          pin_info( name ).pin 
       }
    {}   
+   
+   /// \brief disable the internal weak pullup
+   void pullup_disable(){
+      port.PIO_PUDR = mask;
+   }
+   
+   /// \brief enable the internal weak pullup
+   void pullup_disable(){
+      port.PIO_PUER = mask;
+   }
    
    bool get( 
       hwlib::buffering buf = hwlib::buffering::unbuffered 
