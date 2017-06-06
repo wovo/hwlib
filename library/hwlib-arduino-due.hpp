@@ -334,7 +334,7 @@ public:
    }
    
    /// \brief enable the internal weak pullup
-   void pullup_disable(){
+   void pullup_enable(){
       port.PIO_PUER = mask;
    }
    
