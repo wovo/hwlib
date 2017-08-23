@@ -78,6 +78,13 @@ void graphics_random_circles(
 /// with step_ms milliseconds between each step.
 void dac_triangle( dac & d, uint_fast16_t step_ms = 10 );
 
+uint_fast32_t HWLIB_WEAK rand();
+
+uint_fast32_t HWLIB_WEAK random_in_range( 
+   uint_fast32_t min, 
+   uint_fast32_t max 
+);
+
 #ifdef HWLIB_ONCE 
 
 void HWLIB_NORETURN blink( pin_out & pin, uint_fast16_t ms ){
@@ -132,7 +139,7 @@ void HWLIB_NORETURN kitt( port_oc & port, uint_fast16_t ms ){
 // hide from Doxygen
 #ifndef DOXYGEN
 
-uint_fast32_t HWLIB_WEAK rand(){
+uint_fast32_t HWLIB_WEAK rand(){ 
    static uint_fast32_t n = 0;
    n = n * 214013L + 2531011L; 
    return ( n >> 16) & 0x7fff; 
@@ -225,4 +232,4 @@ HWLIB_NORETURN void dac_triangle( dac & d, uint_fast16_t step_ms ){
 
 }; // namespace hwlib
 
-#endif // HWLIB_PIN_H
+#endif // HWLIB_DEMO

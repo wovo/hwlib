@@ -13,11 +13,12 @@
 // this file contains Doxygen lines
 /// @file
 
-#ifndef HWLIB_DUE_H
-#define HWLIB_DUE_H
+#ifndef HWLIB_ARDUINO_DUE_H
+#define HWLIB_ARDUINO_DUE_H
 
 #include "hwlib-all.hpp"
 #include "sam.h"
+#include "hwlib-arduino-due-system-sam3xa.inc"
 
 /// \brief
 /// hwlib implementation for the Arduino Due
@@ -680,13 +681,22 @@ public:
    }
 };
 
-/// returns the time since the first call
-uint64_t HWLIB_WEAK now_us(){
+/// the number of ticks per us
+uint_fast64_t HWLIB_WEAK ticks_per_us(){
+   return 84;
+}
+
+/// returns the number of ticks since some fixed starting point
+uint_fast64_t HWLIB_WEAK now_ticks(){
    static bool init_done = false;
    if( ! init_done ){
       
-      // use the 12 MHz internal RC clock
-      PMC->CKGR_MOR = 0x00370028;
+      // switch to the 84 MHz crystal/PLL clock
+      sam3xa::SystemInit();
+      
+          EFC0->EEFC_FMR = EEFC_FMR_FWS(4);
+          EFC1->EEFC_FMR = EEFC_FMR_FWS(4);      
+
       
       SysTick->CTRL  = 0;         // stop the timer
       SysTick->LOAD  = 0xFFFFFF;  // use its as a 24-bit timer
@@ -696,11 +706,11 @@ uint64_t HWLIB_WEAK now_us(){
       init_done = true;      
    }
    
-   static uint32_t last_low = 0;
-   static uint64_t high = 0;
+   static unsigned int last_low = 0;
+   static unsigned long long int high = 0;
 
    // the timer ticks down, but we want an up counter
-   uint32_t low = 0xFFFFFF - ( SysTick->VAL & 0xFFFFFF );
+   unsigned int low = 0xFFFFFF - ( SysTick->VAL & 0xFFFFFF );
    if( low < last_low ){
    
       // the timer rolled over, so increment the high part
@@ -709,8 +719,8 @@ uint64_t HWLIB_WEAK now_us(){
    last_low = low;
 
    // return the aggregated ticks value
-   // the counter runs at 12 MHz 
-   return ( low | high ) / 12; 
+   // the counter runs at 84 MHz 
+   return ( low | high ); 
 
 } 
 
@@ -720,45 +730,18 @@ namespace hwlib {
 
 namespace target = ::due;
    
-void HWLIB_WEAK wait_us( int_fast32_t n ){
-
-   // use the 12 MHz internal RC clock
-   PMC->CKGR_MOR = 0x00370028;
-   
-   // This code is for a clock frequency of 12 MHz:
-   // the loop uses exactly 12 cycles on an M3
-   // (1 cycle branch penalty due to branch target forwarding).
-   // Note: use subs, sub on an M3 is the wide instruction
-   // that doesn't set the status flags.
-   __asm volatile( 
-      "   mov r0, %[reg]   \t\n"
-      "   b   1f           \t\n"
-      "   .align 4         \t\n"
-      "1: subs r0, #1      \t\n" 
-      "   b   2f           \t\n"
-      "2: b   3f           \t\n"
-      "3: b   4f           \t\n"
-      "4: b   5f           \t\n"
-      "5: nop              \t\n"
-      "   bgt 1b           \t\n" 
-      :: [reg] "r" (n) : "r0"
-   );
-}
-
-void HWLIB_WEAK wait_ns( int_fast32_t n ){
-   wait_us( ( n + 999 ) / 1000 );
-}
-
-void HWLIB_WEAK wait_ms( int_fast32_t n ){
-   while( n > 0 ){
-      wait_us( 1000 );
-      --n;
-   }   
-}   
+void wait_ns( int_fast32_t n );
+void wait_us( int_fast32_t n );
+void wait_ms( int_fast32_t n ); 
 
 void HWLIB_WEAK uart_putc( char c ){
    static target::pin_out pin( 0, 9 );
    uart_putc_bit_banged_pin( c, pin );
+}
+
+bool HWLIB_WEAK uart_char_available(){
+   static target::pin_in pin( 0, 8 );
+   return ! pin.get();
 }
 
 char HWLIB_WEAK uart_getc( ){
@@ -766,10 +749,40 @@ char HWLIB_WEAK uart_getc( ){
    return uart_getc_bit_banged_pin( pin );
 }
 
-uint64_t HWLIB_WEAK now_us(){
-   return target::now_us();
+
+#ifdef HWLIB_ONCE
+
+uint64_t now_ticks(){
+   return target::now_ticks();
 }   
+
+uint64_t ticks_per_us(){
+   return target::ticks_per_us();
+}   
+
+uint64_t now_us(){
+   return now_ticks() / ticks_per_us();
+}   
+
+
+void wait_ns_busy( int_fast32_t n ){
+   wait_us_busy( ( n + 999 ) / 1000 );
+}
+
+void wait_us_busy( int_fast32_t n ){
+   auto end = now_us() + n;
+   while( now_us() < end ){}
+}
+
+void wait_ms_busy( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us( 1000 );
+      --n;
+   }   
+}  
+
+#endif
 
 }; //namespace hwlib   
 
-#endif // HWLIB_DUE_H
+#endif // #ifdef HWLIB_ARDUINMO_DUE_H

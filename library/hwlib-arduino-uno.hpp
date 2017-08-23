@@ -438,8 +438,9 @@ void HWLIB_WEAK wait_ns( int_fast32_t n ){
    wait_us( n / 1000 );
 }
 
-void HWLIB_WEAK wait_16_us( int_fast16_t n ){ 
-    // first integer parameter is passd in r24/r25
+
+void HWLIB_WEAK wait_us_asm( int n ){ 
+    // first int parameter is passd in r24/r25
     __asm volatile(                  // clocks
        "1:  cp    r1, r24     \t\n"   // 1
        "    cpc   r1, r25     \t\n"   // 1
@@ -449,11 +450,19 @@ void HWLIB_WEAK wait_16_us( int_fast16_t n ){
        "2:  sbiw  r24, 0x01   \t\n"   // 2
        "    rjmp  1b          \t\n"   // 2
        "3:                    \t\n"   // 16 total
-   );     
+   ); 
+    
 }
 
 void HWLIB_WEAK wait_us( int_fast32_t n ){ 
-    wait_16_us( n );     
+   while( n > 0 ){
+      if( n < 10000 ){
+          wait_us_asm( n );
+          return;
+      }
+      wait_us_asm( 1000 );
+      n -= 1000;
+   }
 }
 
 void HWLIB_WEAK wait_ms( int_fast32_t n ){

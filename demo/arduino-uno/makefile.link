@@ -12,7 +12,7 @@
 # 
 #############################################################################
 
-# common settings for Arduino Due projects
+# common settings for Arduino Uno projects
 TARGET            ?= arduino_uno
 CONSOLE_BAUDRATE  ?= 2400
 

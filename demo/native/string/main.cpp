@@ -15,6 +15,7 @@
 
 int main( void ){
    hwlib::string< 100 > t( "Hello brave new world!\n" );
+   t[ 3 ] = t[ 4 ];
    std::cout << t;
    
    constexpr auto x = hwlib::string<0>::range( "hello\n" );

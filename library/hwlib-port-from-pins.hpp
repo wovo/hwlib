@@ -85,7 +85,7 @@ public:
       buffering buf = buffering::unbuffered 
    ) override {
       uint_fast8_t result = 0;
-      for( uint_fast8_t i = _number_of_pins -1; i >=0; --i ){
+      for( int_fast8_t i = _number_of_pins -1; i >=0; --i ){
          result = result << 1;
          if( pins[ i ]->get( buf ) ){
             result |= 0x01;            
@@ -168,13 +168,13 @@ public:
    uint_fast8_t get( 
       buffering buf = buffering::unbuffered 
    ) override {
-      uint_fast8_t result = 0;
-      for( uint_fast8_t i = _number_of_pins -1; i >=0; --i ){
+      uint_fast8_t result = 0;  
+      for( int_fast8_t i = _number_of_pins -1; i >=0; --i ){
          result = result << 1;
          if( pins[ i ]->get( buf ) ){
             result |= 0x01;            
          }
-       }         
+       }          
        return result;
    }
 
@@ -234,6 +234,75 @@ public:
          x = x >> 1;
       }         
    }
+
+};
+
+// ==========================================================================
+//  
+/// output port from output pins
+//
+/// This class implements an output-only port made from port up to 8 pins.
+// ==========================================================================
+
+class port_oc_from_pins : public port_oc {
+private:
+   
+   uint_fast8_t _number_of_pins;  
+
+   // 8 must match the number of parameters of the constructor
+   pin_oc * pins[ 8 ];   
+   
+public:
+
+   /// construct a port_oc from up to 8 pin_oc
+   //
+   /// This constructor creates a port_oc from up to 8 pin_oc pins.
+   /// The first pin is the lowest pin in the port, etc.
+   port_oc_from_pins(
+      pin_oc & p0 = pin_oc_dummy,
+      pin_oc & p1 = pin_oc_dummy,
+      pin_oc & p2 = pin_oc_dummy,
+      pin_oc & p3 = pin_oc_dummy,
+      pin_oc & p4 = pin_oc_dummy,
+      pin_oc & p5 = pin_oc_dummy,
+      pin_oc & p6 = pin_oc_dummy,
+      pin_oc & p7 = pin_oc_dummy
+   ):
+      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7 }
+   {
+      for( _number_of_pins = 0; _number_of_pins < 8; ++_number_of_pins ){
+         if( pins[ _number_of_pins ] == & pin_oc_dummy ){
+             break;
+         }            
+      }
+   }            
+
+   uint_fast8_t number_of_pins() override {
+      return _number_of_pins;               
+   }   
+   
+   uint_fast8_t get(
+      buffering buf = buffering::unbuffered 
+   ) override {
+      uint_fast8_t result = 0;
+      for( int_fast8_t i = _number_of_pins -1; i >=0; --i ){
+         result = result << 1;
+         if( pins[ i ]->get() ){
+            result |= 0x01;            
+         }
+       }         
+       return result;
+   }
+   
+   void set( 
+      uint_fast8_t x,
+      buffering buf = buffering::unbuffered  
+   ) override {
+      for( uint_fast8_t i = 0; i < _number_of_pins; i++ ){
+         pins[ i ]->set( ( x & 0x01 ) != 0, buf );
+         x = x >> 1;
+      }         
+   }   
 
 };
 

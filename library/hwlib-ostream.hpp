@@ -639,6 +639,9 @@ namespace hwlib {
    /// (and, when appropriate, flush()).   
    class istream {     
    public:        
+      /// reports whether a character is available
+      virtual bool char_available(){ return true; }
+   
       /// read and return a single character
       virtual char getc() = 0;
         
@@ -665,27 +668,30 @@ namespace hwlib {
    
    #ifdef HWLIB_ONCE
    
+
    void HWLIB_WEAK uart_putc_bit_banged_pin( char c, pin_out & pin ){
    #ifdef BMPTK_TARGET
       const auto bit_cel = ( ( 1000L * 1000L ) / BMPTK_BAUDRATE );
    
       pin.set( 1 );
-      wait_us( bit_cel );
+      // use busy waiting, otherwise logging from within the RTOS
+	  // will cause serious problems
+      wait_us_busy( bit_cel );
    
       // start bit
       pin.set( 0 );
-      wait_us( bit_cel );
+      wait_us_busy( bit_cel );
    
       // 8 data bits
       for( uint_fast8_t i = 0; i < 8; ++i ){
          pin.set( ( c & 0x01 ) != 0x00 );
          c = c >> 1;
-         wait_us( bit_cel );
+         wait_us_busy( bit_cel );
       }   
    
       // 2 stop bits
       pin.set( 1 );
-      wait_us( 2 * bit_cel );
+      wait_us_busy( 2 * bit_cel );
    #else
    #endif   
    
@@ -698,7 +704,7 @@ namespace hwlib {
       const auto bit_cel = ( ( 1000L * 1000L ) / BMPTK_BAUDRATE );
       
       // wait for start of startbit
-      while( pin.get() ){}
+      while( pin.get() ){ wait_ns( 1 ); }
       
       // wait until halfway the first data bit
       auto t = now_us();
@@ -743,15 +749,31 @@ namespace hwlib {
    /// an application to provide its own definition.
    char uart_getc();
    
+   /// \brief
+   /// console character available check
+   /// \details
+   /// This is the function used to check if the console (istream) input
+   /// has a character available.
+   /// The embedded targets provide an implementation that checks
+   /// the serial port. 
+   /// This definition is weak, which allows 
+   /// an application to provide its own definition.
+   bool uart_char_available();
+   
    /// \cond INTERNAL 
    
    class cout_using_uart_putc : public ostream {
+   public:    
       void putc( char c ) override {
          uart_putc( c );
       }
    };
    
    class cin_using_uart_getc : public istream {
+   public:    
+      bool char_available() override {
+         return uart_char_available();      
+      }   
       char getc() override {
          return uart_getc();
       }
