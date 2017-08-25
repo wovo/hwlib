@@ -764,22 +764,10 @@ uint64_t now_us(){
    return now_ticks() / ticks_per_us();
 }   
 
-
-void wait_ns_busy( int_fast32_t n ){
-   wait_us_busy( ( n + 999 ) / 1000 );
-}
-
 void wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){}
 }
-
-void wait_ms_busy( int_fast32_t n ){
-   while( n > 0 ){
-      wait_us( 1000 );
-      --n;
-   }   
-}  
 
 #endif
 
