@@ -424,7 +424,10 @@ public:
                data, 
                sizeof( data ) / sizeof( uint8_t ) 
             );
-         }                 
+         }   
+		 // yield the CPU when this is run in a multi-threading context
+		 // with an I2C implementation that doesn't wait
+         wait_us( 0 );		 
       }         
    }     
    
