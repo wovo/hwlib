@@ -129,11 +129,13 @@ public:
 
 class port_in_from_pins : public port_in {
 private:
+
+   constexpr int max_pins = 16;
    
    uint_fast8_t _number_of_pins;  
 
    // 8 must match the number of parameters of the constructor
-   pin_in * pins[ 8 ];   
+   pin_in * pins[ max_pins ];   
    
 public:
 
@@ -150,11 +152,19 @@ public:
       pin_in & p4 = pin_in_dummy,
       pin_in & p5 = pin_in_dummy,
       pin_in & p6 = pin_in_dummy,
-      pin_in & p7 = pin_in_dummy
+      pin_in & p7 = pin_in_dummy,
+	  pin_in & p8 = pin_in_dummy,
+      pin_in & p9 = pin_in_dummy,
+      pin_in & p10 = pin_in_dummy,
+      pin_in & p11 = pin_in_dummy,
+      pin_in & p12 = pin_in_dummy,
+      pin_in & p13 = pin_in_dummy,
+      pin_in & p14 = pin_in_dummy,
+      pin_in & p15 = pin_in_dummy							 
    ):
-      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7 }
+      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15 }
    {
-      for( _number_of_pins = 0; _number_of_pins < 8; ++_number_of_pins ){
+      for( _number_of_pins = 0; _number_of_pins < max_pins; ++_number_of_pins ){
          if( pins[ _number_of_pins ] == & pin_in_dummy ){
              break;
          }            
@@ -189,11 +199,13 @@ public:
 
 class port_out_from_pins : public port_out {
 private:
+
+   constexpr int max_pins = 16;
    
    uint_fast8_t _number_of_pins;  
 
    // 8 must match the number of parameters of the constructor
-   pin_out * pins[ 8 ];   
+   pin_out * pins[ max_pins ];   
    
 public:
 
@@ -210,11 +222,19 @@ public:
       pin_out & p4 = pin_out_dummy,
       pin_out & p5 = pin_out_dummy,
       pin_out & p6 = pin_out_dummy,
-      pin_out & p7 = pin_out_dummy
+      pin_out & p7 = pin_out_dummy,
+      pin_out & p8 = pin_out_dummy,
+      pin_out & p9 = pin_out_dummy,
+      pin_out & p10 = pin_out_dummy,
+      pin_out & p11 = pin_out_dummy,
+      pin_out & p12 = pin_out_dummy,
+      pin_out & p13 = pin_out_dummy,
+      pin_out & p14 = pin_out_dummy,
+      pin_out & p15 = pin_out_dummy	
    ):
-      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7 }
+      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15}
    {
-      for( _number_of_pins = 0; _number_of_pins < 8; ++_number_of_pins ){
+      for( _number_of_pins = 0; _number_of_pins < max_pins; ++_number_of_pins ){
          if( pins[ _number_of_pins ] == & pin_out_dummy ){
              break;
          }            
