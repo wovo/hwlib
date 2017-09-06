@@ -130,7 +130,7 @@ public:
 class port_in_from_pins : public port_in {
 private:
 
-   constexpr int max_pins = 16;
+   static constexpr int max_pins = 16;
    
    uint_fast8_t _number_of_pins;  
 
@@ -200,7 +200,7 @@ public:
 class port_out_from_pins : public port_out {
 private:
 
-   constexpr int max_pins = 16;
+   static constexpr int max_pins = 16;
    
    uint_fast8_t _number_of_pins;  
 
