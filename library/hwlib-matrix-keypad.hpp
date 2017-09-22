@@ -127,7 +127,7 @@ public:
     /// return whether a character is available
     //
     /// This function checks whether a next character is available.
-    /// When it returns true, an (immediately) folling getc() call
+    /// When it returns true, an (immediately) following getc() call
     /// will not block. 
     bool char_available() override {
        if( ( last_timestamp + 50'000ULL ) > now_us() ){
