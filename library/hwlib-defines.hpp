@@ -39,7 +39,14 @@
 ///
 /// This must be done by a macro 
 /// because Doxygen can't handle __attribute__.
-#define HWLIB_WEAK __attribute__((weak))
+///
+/// MinGW doesn't handle this cvorrectly, hence redefining a weak symbol
+/// (as used by the rtos) won't work with MinGW.
+#ifdef __MINGW32__
+   #define HWLIB_WEAK
+#else
+   #define HWLIB_WEAK __attribute__((weak))
+#endif
 
 
 /// \brief

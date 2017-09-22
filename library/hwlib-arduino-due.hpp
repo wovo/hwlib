@@ -26,9 +26,9 @@
 /// \image html due-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing
-/// and (sotware) UART output for the Arduino Due (ATSAM3X8E chip).
+/// and (software) UART output for the Arduino Due (ATSAM3X8E chip).
 /// The first wait call configures the chip to run at 12 MHz, 
-/// from its internal (calibrated) RC oscillator.
+/// from its internal (calibrated) RC oscillator. [update!]
 ///
 /// The port and pin parameters to the constructors of the pin classes
 /// can either use to the ATSAM3X8E ports and pins, or the Arduino names.
@@ -131,10 +131,10 @@ const HWLIB_WEAK pin_info_type & pin_info( pins name ){
       { 3,  4 },  // d36
       { 3,  5 },  // d37
       { 3,  6 },  // d38
-      { 3,  7 },  // d39
-      { 3,  8 },  // d40
+      { 2,  7 },  // d39
+      { 2,  8 },  // d40
 
-      { 3,  9 },  // d41
+      { 2,  9 },  // d41
       { 0, 19 },  // d42
       { 0, 20 },  // d43
       { 2, 19 },  // d44
@@ -532,12 +532,12 @@ class d2_36kHz : public hwlib::pin_out {
       // enable the clock to port B
       PMC->PMC_PCER0 = 1 << ID_PIOB;
 	
-	   // disable PIO Control on PB25 and set up for Peripheral B TIOA0
-	   PIOB->PIO_PDR = PIO_PB25; 
-	   PIOB->PIO_ABSR |= PIO_PB25; 
+      // disable PIO Control on PB25 and set up for Peripheral B TIOA0
+	  PIOB->PIO_PDR = PIO_PB25; 
+	  PIOB->PIO_ABSR |= PIO_PB25; 
 	
-	   // enable output on B25
-	   PIOB->PIO_OER = PIO_PB25; 
+	  // enable output on B25
+	  PIOB->PIO_OER = PIO_PB25; 
    
       // enable the clock to the TC0 (peripheral # 27)
       PMC->PMC_PCER0 = 1 << ID_TC0;
@@ -762,9 +762,8 @@ uint_fast64_t HWLIB_WEAK now_ticks(){
       // switch to the 84 MHz crystal/PLL clock
       sam3xa::SystemInit();
       
-          EFC0->EEFC_FMR = EEFC_FMR_FWS(4);
-          EFC1->EEFC_FMR = EEFC_FMR_FWS(4);      
-
+      EFC0->EEFC_FMR = EEFC_FMR_FWS(4);
+      EFC1->EEFC_FMR = EEFC_FMR_FWS(4);      
       
       SysTick->CTRL  = 0;         // stop the timer
       SysTick->LOAD  = 0xFFFFFF;  // use its as a 24-bit timer
@@ -792,6 +791,71 @@ uint_fast64_t HWLIB_WEAK now_ticks(){
 
 } 
 
+void uart_init();
+bool uart_char_available();
+char uart_getc();
+void uart_putc( char c );
+
+#ifdef HWLIB_ONCE
+
+Uart * hw_uart = UART;
+
+void uart_init(){
+   static bool init_done = false;
+   if( init_done ){
+      return;
+   }
+   init_done = true;
+
+    // enable the clock to port A
+    PMC->PMC_PCER0 = 1 << ID_PIOA;
+	
+    // disable PIO Control on PA9 and set up for Peripheral A
+	PIOA->PIO_PDR   = PIO_PA8; 
+	PIOA->PIO_ABSR &= ~PIO_PA8; 
+	PIOA->PIO_PDR   = PIO_PA9; 
+	PIOA->PIO_ABSR &= ~PIO_PA9; 
+
+	// enable the clock to the UART
+    PMC->PMC_PCER0 = ( 0x01 << ID_UART );
+
+    // Reset and disable receiver and transmitter.
+    hw_uart->UART_CR = UART_CR_RSTRX | UART_CR_RSTTX | UART_CR_RXDIS | UART_CR_TXDIS;
+
+    // Set the baudrate to 115200.
+    //hw_uart->UART_BRGR = 45; // MASTER_CLK_FREQ / (16 * 45) = 116666 (close enough).
+    //uart->UART_BRGR = 546; // For ~9600 baud.
+    hw_uart->UART_BRGR = 4368 / 2; // For ~9600 baud.
+
+    // No parity, normal channel mode.
+    hw_uart->UART_MR = UART_MR_PAR_NO;
+
+    // Disable all interrupts.	  
+    hw_uart->UART_IDR = 0xFFFFFFFF;   
+
+    // Enable the receiver and thes trasmitter.
+    hw_uart->UART_CR = UART_CR_RXEN | UART_CR_TXEN;      
+}
+
+bool uart_char_available(){
+   uart_init();	
+   return ( hw_uart->UART_SR & 1 ) != 0;
+}
+
+char uart_getc(){
+   // uart_init() is not needed because uart_char_available does that
+   while( ! uart_char_available() ){}
+   return hw_uart->UART_RHR; 
+}
+
+void uart_putc( char c ){
+   uart_init();	
+   while( ( hw_uart->UART_SR & 2 ) == 0 ){}
+   hw_uart->UART_THR = c;
+}
+
+#endif
+
 }; // namespace due
 
 namespace hwlib {
@@ -801,6 +865,23 @@ namespace target = ::due;
 void wait_ns( int_fast32_t n );
 void wait_us( int_fast32_t n );
 void wait_ms( int_fast32_t n ); 
+
+#define HWLIB_USE_HW_UART 
+#ifdef HWLIB_USE_HW_UART
+
+void HWLIB_WEAK uart_putc( char c ){
+   due::uart_putc( c );
+}
+
+bool HWLIB_WEAK uart_char_available(){
+   return due::uart_char_available();
+}
+
+char HWLIB_WEAK uart_getc( ){
+   return due::uart_getc();
+}
+
+#else
 
 void HWLIB_WEAK uart_putc( char c ){
    static target::pin_out pin( 0, 9 );
@@ -817,7 +898,7 @@ char HWLIB_WEAK uart_getc( ){
    return uart_getc_bit_banged_pin( pin );
 }
 
-
+#endif
 #ifdef HWLIB_ONCE
 
 uint64_t now_ticks(){

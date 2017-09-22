@@ -574,13 +574,13 @@ private:
    location end;
    color fg;
    
-   static void swap( uint_fast16_t & a, uint_fast16_t & b ){
+   static void swap( int_fast16_t & a, int_fast16_t & b ){
       auto t = a; 
       a = b;
       b = t;
    }
 
-   static uint_fast16_t abs( uint_fast16_t x ){
+   static int_fast16_t abs( int_fast16_t x ){
       return x >= 0 ? x : -x;
    }
 
@@ -594,18 +594,18 @@ public:
       window & w, 
       buffering buf = buffering::unbuffered 
    ) override { 
-      uint_fast16_t x0 = start.x;
-      uint_fast16_t y0 = start.y;
-      uint_fast16_t x1 = end.x; 
-      uint_fast16_t y1 = end.y;
+      int_fast16_t x0 = start.x;
+      int_fast16_t y0 = start.y;
+      int_fast16_t x1 = end.x; 
+      int_fast16_t y1 = end.y;
                    
       // http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
       // http://homepages.enterprise.net/murphy/thickline/index.html
      
-      uint_fast16_t Dx = x1 - x0; 
-      uint_fast16_t Dy = y1 - y0;
+      int_fast16_t Dx = x1 - x0; 
+      int_fast16_t Dy = y1 - y0;
    
-      uint_fast16_t steep = (abs(Dy) >= abs(Dx));
+      int_fast16_t steep = (abs(Dy) >= abs(Dx));
    
       if( steep ){
          swap( x0, y0 );
@@ -616,22 +616,22 @@ public:
          Dy = y1 - y0;
       }
    
-      uint_fast16_t xstep = 1;
+      int_fast16_t xstep = 1;
       if( Dx < 0 ){
          xstep = -1;
          Dx = -Dx;
       }
    
-      uint_fast16_t ystep = 1;
+      int_fast16_t ystep = 1;
       if( Dy < 0 ){
          ystep = -1;    
          Dy = -Dy; 
       }
-      uint_fast16_t TwoDy = 2*Dy; 
-      uint_fast16_t TwoDyTwoDx = TwoDy - 2*Dx; // 2*Dy - 2*Dx
-      uint_fast16_t E = TwoDy - Dx; //2*Dy - Dx
-      uint_fast16_t y = y0;
-      uint_fast16_t xDraw, yDraw, x;  
+      int_fast16_t TwoDy = 2*Dy; 
+      int_fast16_t TwoDyTwoDx = TwoDy - 2*Dx; // 2*Dy - 2*Dx
+      int_fast16_t E = TwoDy - Dx; //2*Dy - Dx
+      int_fast16_t y = y0;
+      int_fast16_t xDraw, yDraw, x;  
       for( x = x0; x != x1; x += xstep ){    
          if (steep) {     
             xDraw = y;
@@ -641,7 +641,7 @@ public:
             yDraw = y;
          }
 
-         w.write( location{ xDraw, yDraw }, fg, buf );
+         w.write( location( xDraw, yDraw ), fg, buf );
 
          if( E > 0 ){
             E += TwoDyTwoDx; //E += 2*Dy - 2*Dx;

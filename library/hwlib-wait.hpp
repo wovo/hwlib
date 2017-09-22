@@ -146,11 +146,8 @@ void HWLIB_WEAK wait_ms_busy( int_fast32_t n ){
    }   
 }  
 
-
 #endif
 
 }; // namespace hwlib
-
-
 
 #endif // HWLIB_WAIT_H

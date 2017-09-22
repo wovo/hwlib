@@ -642,8 +642,25 @@ namespace hwlib {
       /// reports whether a character is available
       virtual bool char_available(){ return true; }
    
-      /// read and return a single character
+	  /// \brief
+	  /// read and return a single character or '\0'
+	  /// \details
+	  /// This function reads and returns a single character. 
+	  /// When no chaeracter is available it waits for one.
       virtual char getc() = 0;
+	  
+	  /// \brief
+	  /// read and return a single character or '\0'
+	  /// \details
+	  /// This function reads and returns a single character when one is available,
+	  /// otherwise it returns '\0'.
+	  virtual char getc_nowait(){
+         if( char_available() ){		  
+		    return getc();
+	     } else {
+            return '\0';
+         }			
+	  }
         
       /// input operator for char
       friend istream & operator>>( istream & stream, char & x ){

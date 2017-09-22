@@ -17,13 +17,18 @@
 #define HWLIB_NATIVE_H
 
 #include "hwlib-all.hpp"
+#include <Windows.h>
 
 namespace hwlib {
 
 #ifdef HWLIB_ONCE 
 
 uint64_t now_ticks(){
-   return 1;
+   // https://stackoverflow.com/questions/1695288/getting-the-current-time-in-milliseconds-from-the-system-clock-in-windows	 
+   FILETIME ft_now;
+   GetSystemTimeAsFileTime( &ft_now );
+   auto ll_now = (LONGLONG)ft_now.dwLowDateTime + ((LONGLONG)(ft_now.dwHighDateTime) << 32LL);   
+   return ll_now / 10;
 }   
 
 uint64_t ticks_per_us(){
@@ -68,6 +73,8 @@ char uart_getc(){
 bool HWLIB_WEAK uart_char_available(){
    return 0;
 }
+
+
 
 #endif // #ifdef HBLIB_ONCE
 
