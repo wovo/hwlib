@@ -38,6 +38,9 @@ public:
    
    /// construct a location from its x and y values
    constexpr location( uint_fast16_t x, uint_fast16_t y ): x{ x }, y{ y }{}
+   
+   /// default constructor
+   constexpr location():x{0}, y{0}{}
 
    /// add two locations
    constexpr location operator+( const location rhs ) const {
