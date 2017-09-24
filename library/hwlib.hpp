@@ -29,6 +29,10 @@
    #include "hwlib-native.hpp"
 #endif
 
+#ifdef BMPTK_TARGET_pyd
+   #include "hwlib-native.hpp"
+#endif
+
 #ifndef BMPTK_TARGET
    #include "hwlib-all.hpp"
 #endif
