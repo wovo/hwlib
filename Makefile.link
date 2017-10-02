@@ -15,13 +15,13 @@ RELATIVE          ?= .
 
 # get the paths 
 HWLIB             := $(RELATIVE)
-include           $(HWLIB)/makefile.find_local
+include           $(HWLIB)/Makefile.find_local
 
 # add hwlib itself
-include           $(HWLIB)/makefile.inc
+include           $(HWLIB)/Makefile.inc
 
 # add Catch
 SEARCH            += $(CATCH)/include
 
-# defer to the bmptk makefile.inc
-include           $(BMPTK)/makefile.inc
+# defer to the bmptk Makefile.inc
+include           $(BMPTK)/Makefile.inc

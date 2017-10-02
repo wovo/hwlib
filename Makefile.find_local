@@ -10,11 +10,11 @@
 #
 #============================================================================
 
-ifneq ($(wildcard $(RELATIVE)/makefile.custom),)
-   include $(RELATIVE)/makefile.custom
-else ifneq ($(wildcard $(RELATIVE)/../makefile.custom),)
-   include $(RELATIVE)/../makefile.custom
+ifneq ($(wildcard $(RELATIVE)/Makefile.custom),)
+   include $(RELATIVE)/Makefile.custom
+else ifneq ($(wildcard $(RELATIVE)/../Makefile.custom),)
+   include $(RELATIVE)/../Makefile.custom
 else 
-   include $(RELATIVE)/makefile.local
+   include $(RELATIVE)/Makefile.local
 endif
 
