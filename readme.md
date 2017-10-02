@@ -104,6 +104,8 @@ Nice to haves:
   - I2C read, pcf8574a, demo: copy 1 to 2
   - use an abstraction instead of copied code in the extenders one_pin => pin_out_through_buffer
   - uno A/D, test with LCD shield
+  - i2c hd44780 LCD
+  - more pin/portr cross type decorators
 
 Misc:
   - meer examples lpc1114 - need the hardware!

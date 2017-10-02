@@ -257,6 +257,66 @@ public:
 
 };
 
+class port_out_from_pins_oc : public port_out {
+private:
+
+   static constexpr int max_pins = 16;
+   
+   uint_fast8_t _number_of_pins;  
+
+   // 8 must match the number of parameters of the constructor
+   pin_oc * pins[ max_pins ];   
+   
+public:
+
+   /// \brief
+   /// construct a port_out from up to 8 pin_outs
+   /// \details
+   /// This constructor creates a port_out from up to 8 pin_out pins.
+   /// The first pin is the lowest pin in the port, etc.
+   port_out_from_pins_oc(
+      pin_oc & p0 = pin_oc_dummy,
+      pin_oc & p1 = pin_oc_dummy,
+      pin_oc & p2 = pin_oc_dummy,
+      pin_oc & p3 = pin_oc_dummy,
+      pin_oc & p4 = pin_oc_dummy,
+      pin_oc & p5 = pin_oc_dummy,
+      pin_oc & p6 = pin_oc_dummy,
+      pin_oc & p7 = pin_oc_dummy,
+      pin_oc & p8 = pin_oc_dummy,
+      pin_oc & p9 = pin_oc_dummy,
+      pin_oc & p10 = pin_oc_dummy,
+      pin_oc & p11 = pin_oc_dummy,
+      pin_oc & p12 = pin_oc_dummy,
+      pin_oc & p13 = pin_oc_dummy,
+      pin_oc & p14 = pin_oc_dummy,
+      pin_oc & p15 = pin_oc_dummy	
+   ):
+      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15}
+   {
+      for( _number_of_pins = 0; _number_of_pins < max_pins; ++_number_of_pins ){
+         if( pins[ _number_of_pins ] == & pin_oc_dummy ){
+             break;
+         }            
+      }
+   }            
+
+   uint_fast8_t number_of_pins() override {
+      return _number_of_pins;               
+   }   
+   
+   void set( 
+      uint_fast8_t x,
+      buffering buf = buffering::unbuffered 
+   ) override {
+      for( uint_fast8_t i = 0; i < _number_of_pins; i++ ){
+         pins[ i ]->set( ( x & 0x01 ) != 0 );
+         x = x >> 1;
+      }         
+   }
+
+};
+
 // ==========================================================================
 //  
 /// output port from output pins

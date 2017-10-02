@@ -825,7 +825,7 @@ void uart_init(){
     // Set the baudrate to 115200.
     //hw_uart->UART_BRGR = 45; // MASTER_CLK_FREQ / (16 * 45) = 116666 (close enough).
     //uart->UART_BRGR = 546; // For ~9600 baud.
-    hw_uart->UART_BRGR = 4368 / 2; // For ~9600 baud.
+    hw_uart->UART_BRGR = 5241600 / BMPTK_BAUDRATE; 
 
     // No parity, normal channel mode.
     hw_uart->UART_MR = UART_MR_PAR_NO;
