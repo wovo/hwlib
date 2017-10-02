@@ -138,7 +138,7 @@ public:
       unsigned char d = (( background == white ) ? 0 : 0xFF );
       command( 0x80 | 0 );   
       command( 0x40 | 0 );  
-      for( uint_fast8_t i = 0; i < 504; i++ ){
+      for( uint_fast16_t i = 0; i < 504; i++ ){
          pixel_buffer[ i ] = d;
          data( d );
       }         
