@@ -39,7 +39,7 @@ uint64_t now_ticks(){
 uint64_t now_ticks(){
    timespec t;
    clock_gettime(CLOCK_MONOTONIC_RAW, &t);
-   return t.tv_sec * 1000 + t.tv_nsec / 1000'000;
+   return (t.tv_sec * 500'000 + t.tv_nsec / 2000);
 }
 #endif
 
