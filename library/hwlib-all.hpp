@@ -18,6 +18,7 @@
 #define HWLIB_ALL_H
 
 #include "hwlib-defines.hpp"
+#include "hwlib-panic.hpp"
 #include "hwlib-common.hpp"
 #include "hwlib-pin.hpp"
 #include "hwlib-pin-dummies.hpp"
@@ -33,7 +34,6 @@
 #include "hwlib-font-default-16x16.hpp"
 #include "hwlib-wait.hpp"
 #include "hwlib-ostream.hpp"
-#include "hwlib-panic.hpp"
 #include "hwlib-i2c.hpp"
 #include "hwlib-pcf8574a.hpp"
 #include "hwlib-pcf8591.hpp"

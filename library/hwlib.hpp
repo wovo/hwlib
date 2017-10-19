@@ -25,6 +25,10 @@
    #include "hwlib-arduino-uno.hpp"
 #endif
 
+#ifdef BMPTK_TARGET_stm32f103c8
+   #include "hwlib-stm32f103c8.hpp"
+#endif
+
 #ifdef BMPTK_TARGET_native
    #include "hwlib-native.hpp"
 #endif

@@ -38,8 +38,9 @@ namespace hwlib {
 ///
 void HWLIB_NORETURN panic( const char * file, const uint_fast16_t line );
 
-/// convenience panic macro 
-//
+/// \brief
+/// panic-with-location macro 
+/// \details
 /// This macro calls panic( __FILE__, __LINE__ ).
 #define HWLIB_PANIC_WITH_LOCATION ::hwlib::panic( __FILE__, __LINE__ )
 
