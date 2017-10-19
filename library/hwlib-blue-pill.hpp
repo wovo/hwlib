@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// File      : hwlib-due.hpp
+// File      : hwlib-blue-pill.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
 // Copyright : wouter@voti.nl 2017
 //
@@ -13,20 +13,19 @@
 // this file contains Doxygen lines
 /// @file
 
-#ifndef HWLIB_ARDUINO_DUE_H
-#define HWLIB_ARDUINO_DUE_H
+#ifndef HWLIB_BLUE_PILL_H
+#define HWLIB_BLUE_PILL_H
 
 #include "hwlib-all.hpp"
-#include "sam.h"
-#include "hwlib-arduino-due-system-sam3xa.inc"
+#include "stm32f103x6.h"
 
 /// \brief
-/// hwlib implementation for the Arduino Due
+/// hwlib implementation for the stm32f103c8 
 /// \details
 /// \image html due-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing
-/// and (software) UART output for the Arduino Due (ATSAM3X8E chip).
+/// and (software) UART output for the stm32f103c8 (blue/red pill boards).
 /// The first wait call configures the chip to run at 12 MHz, 
 /// from its internal (calibrated) RC oscillator. [update!]
 ///
@@ -277,8 +276,8 @@ Pio & __attribute__((weak)) port_registers( uint32_t port ){
    PMC->PMC_PCER0 = ( 0x3F << 11 );  
 
    switch( port ){
-      case 0  : return GPIOA;
-      case 1  : return GPIOB;
+      case 0  : return *PIOA;
+      case 1  : return *PIOB;
       case 2  : return *PIOC;
       case 3  : return *PIOD;
       default : break;
@@ -922,4 +921,4 @@ void wait_us_busy( int_fast32_t n ){
 
 }; //namespace hwlib   
 
-#endif // #ifdef HWLIB_ARDUINMO_DUE_H
+#endif // #ifdef HWLIB_BLUE_PILL_H

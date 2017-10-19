@@ -97,10 +97,4 @@
 /// and the HWLIB_HERE string.
 #define HWLIB_TRACE ( ::hwlib::cout << "\n" << HWLIB_HERE << hwlib::flush )
 
-/// \brief
-/// panic-with-location macro 
-/// \details
-/// This macro calls panic( __FILE__, __LINE__ ).
-#define HWLIB_PANIC_WITH_LOCATION ::hwlib::panic( __FILE__, __LINE__ )
-
 #endif // HWLIB_DEFINES_H
