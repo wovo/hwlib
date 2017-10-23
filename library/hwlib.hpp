@@ -29,6 +29,10 @@
    #include "hwlib-stm32f103c8.hpp"
 #endif
 
+#ifdef BMPTK_TARGET_blue_pill
+   #include "hwlib-blue-pill.hpp"
+#endif
+
 #ifdef BMPTK_TARGET_native
    #include "hwlib-native.hpp"
 #endif
