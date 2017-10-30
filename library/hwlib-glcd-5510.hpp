@@ -127,6 +127,118 @@ private:
          pixel_buffer[ a ] &= ~m;
       }
    
+      pixels( pos.x, pos.y / 8, pixel_buffer[ a ] );         
+   }
+   
+public:   
+   
+   void clear( buffering buf ) override {
+      unsigned char d = (( background == white ) ? 0 : 0xFF );
+      command( 0x80 | 0 );   
+      command( 0x40 | 0 );  
+      for( uint_fast16_t i = 0; i < 504; i++ ){
+         pixel_buffer[ i ] = d;
+         data( d );
+      }         
+   }
+   
+}; // class glcd_5510
+   
+class glcd_5510_buffered : public window {
+private:
+   pin_out & sce;
+   pin_out & res;
+   pin_out & dc;
+   pin_out & sdin;
+   pin_out & sclk;
+   
+   void send_byte( unsigned char d ){
+      for( uint_fast8_t i = 0; i < 8; i++ ){
+         sdin.set( d & 0x80 );
+         sclk.set( 1 );
+         d = d << 1;
+         sclk.set( 0 );
+      }
+   }    
+   
+   void command( unsigned char d ){
+      dc.set( 0 );
+      sce.set( 0 );
+      send_byte( d );
+      sce.set( 1 );
+   }    
+
+   void data( unsigned char d ){
+      dc.set( 1 );
+      sce.set( 0 );
+      send_byte( d );
+      sce.set( 1 );
+   }    
+   
+   void pixels( 
+      unsigned char x, 
+      unsigned char y, 
+      unsigned char d 
+   ){
+      command( 0x80 | x );   
+      command( 0x40 | y );  
+      data( d );
+   }
+
+public:
+   
+   /// \brief
+   /// create a 5510 LCD
+   /// \details
+   /// This constructor creates a 5510 LCD from its interface pins.
+   glcd_5510_buffered( 
+      pin_out & sce,
+      pin_out & res,
+      pin_out & dc,
+      pin_out & sdin,
+      pin_out & sclk   
+   )
+      : window{ location{ 84, 48 }, black, white },
+      sce( sce ), res( res ), dc( dc ), sdin( sdin ), sclk( sclk )
+   {
+   
+      sclk.set( 0 );
+      wait_ms( 1 );
+      sce.set( 1 );
+      wait_ms( 1 );
+      res.set( 0 );
+      wait_ms( 1 );
+      res.set( 1 ); 
+      wait_ms( 1 );
+     
+         // initialization according to
+         // https://www.sparkfun.com/products/10168 - nee, andere
+      command( 0x21 );  // select exteded instructions
+      command( 0xC8 );  // Vop = 110000b
+      command( 0x06 );  // TCx = 00b
+      command( 0x13 );  // BSx = 100b
+      command( 0x20 );  // select basic instructions, horizontal addressing
+      command( 0x0C );  // normal mode   
+   }   
+   
+private:   
+
+   unsigned char pixel_buffer[ 504 ];
+
+   void write_implementation( 
+      location pos, 
+      color col, 
+      buffering buf
+   ) override {
+      uint_fast8_t a = pos.x + ( pos.y / 8 ) * 84;
+      uint_fast8_t m = 1 << ( pos.y % 8 );
+   
+      if( col == black ){
+         pixel_buffer[ a ] |= m;
+      } else {     
+         pixel_buffer[ a ] &= ~m;
+      }
+   
       if( buf == buffering::unbuffered ){
          pixels( pos.x, pos.y / 8, pixel_buffer[ a ] );         
       }
@@ -140,7 +252,14 @@ public:
       command( 0x40 | 0 );  
       for( uint_fast16_t i = 0; i < 504; i++ ){
          pixel_buffer[ i ] = d;
-         data( d );
+      }         
+   }
+   
+   void flush() override {
+      command( 0x80 | 0 );   
+      command( 0x40 | 0 );  
+      for( uint_fast16_t i = 0; i < 504; i++ ){
+         data( pixel_buffer[ i ] );
       }         
    }
    

@@ -49,5 +49,7 @@ HEADERS           += hwlib-demo.hpp
 
 HEADERS           += hwlib-arduino-due.hpp
 HEADERS           += hwlib-arduino-uno.hpp
+HEADERS           += hwlib-blue-pill.hpp
+HEADERS           += hwlib-stm32f103c8.hpp
 HEADERS           += hwlib-db103.hpp
 HEADERS           += hwlib-native.hpp

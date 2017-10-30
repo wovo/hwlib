@@ -73,9 +73,9 @@ enum class pins {
    dac0, dac1, canrx, cantx,
    scl, sda, scl1, sda1,
    tx, rx, led, 
-   sck, miso, mosi, cs0, cs1
+   sck, miso, mosi, cs0, cs1,
 /// \cond INTERNAL    
-   ,SIZE_THIS_IS_NOT_A_PIN
+   SIZE_THIS_IS_NOT_A_PIN
 /// \endcond   
 };
 

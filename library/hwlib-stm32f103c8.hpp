@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// File      : hwlib-stm32f108.hpp
+// File      : hwlib-stm32f103c8.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
 // Copyright : wouter@voti.nl 2017
 //
@@ -39,7 +39,92 @@
 ///       STM32Fl03x8 datasheet</A> (pdf)
 ///
 namespace stm32f103c8 {
-	
+    
+/// \brief
+/// GPIO pin names
+enum class pins {
+   a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15,
+   b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15,
+   c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15,
+   led,
+/// \cond INTERNAL    
+   SIZE_THIS_IS_NOT_A_PIN
+/// \endcond   
+};  
+
+struct pin_info_type { 
+   uint8_t port; 
+   uint8_t pin; 
+};  
+
+const HWLIB_WEAK pin_info_type & pin_info( pins name ){
+   
+   static const pin_info_type pin_info_array[ (int) pins::SIZE_THIS_IS_NOT_A_PIN ] = {
+      { 0,  0 },  // a0
+      { 0,  1 },  // a1
+      { 0,  2 },  // a2
+      { 0,  3 },  // a3
+      { 0,  4 },  // a4
+      { 0,  5 },  // a5
+      { 0,  6 },  // a6
+      { 0,  7 },  // a7
+      
+      { 0,  8 },  // a8
+      { 0,  9 },  // a9
+      { 0, 10 },  // a10
+      { 0, 11 },  // a11
+      { 0, 12 },  // a12
+      { 0, 13 },  // a13
+      { 0, 14 },  // a14
+      { 0, 15 },  // a15
+
+      { 1,  0 },  // b0
+      { 1,  1 },  // b1
+      { 1,  2 },  // b2
+      { 1,  3 },  // b3
+      { 1,  4 },  // b4
+      { 1,  5 },  // b5
+      { 1,  6 },  // b6
+      { 1,  7 },  // b7
+      
+      { 1,  8 },  // b8
+      { 1,  9 },  // b9
+      { 1, 10 },  // b10
+      { 1, 11 },  // b11
+      { 1, 12 },  // b12
+      { 1, 13 },  // b13
+      { 1, 14 },  // b14
+      { 1, 15 },  // b15
+      
+      { 2,  0 },  // c0
+      { 2,  1 },  // c1
+      { 2,  2 },  // c2
+      { 2,  3 },  // c3
+      { 2,  4 },  // c4
+      { 2,  5 },  // c5
+      { 2,  6 },  // c6
+      { 2,  7 },  // c7
+      
+      { 2,  8 },  // c8
+      { 2,  9 },  // c9
+      { 2, 10 },  // c10
+      { 2, 11 },  // c11
+      { 2, 12 },  // c12
+      { 2, 13 },  // c13
+      { 2, 14 },  // c14
+      { 2, 15 },  // c15
+      
+      { 2, 13 }   // led
+      
+   };      
+      
+   uint_fast8_t n = static_cast< uint_fast8_t>( name );
+   if( n >= static_cast< uint_fast8_t>( pins::SIZE_THIS_IS_NOT_A_PIN )){
+      HWLIB_PANIC_WITH_LOCATION;
+   }
+   return pin_info_array[ n ];
+}
+   
 /// \cond INTERNAL 
 
 GPIO_TypeDef & __attribute__((weak)) port_registers( uint32_t port ){
@@ -62,17 +147,44 @@ GPIO_TypeDef & __attribute__((weak)) port_registers( uint32_t port ){
    HWLIB_PANIC_WITH_LOCATION; 
 }
 
-/// \endcond 
-
-/// pin_in implementation for a ATSAM3X8E
-class pin_in : public hwlib::pin_in {
-private:
+class pin_base {
+public:
    volatile GPIO_TypeDef & port;
-   volatile uint32_t     & config;
+   volatile uint32_t     & config_word;
    uint32_t     pin;
    uint32_t     config_offset;
-   uint32_t     mask;
+   uint32_t     mask;   
    
+   void config( uint32_t conf ){
+      config_word &= ~( 0xF << config_offset );
+      config_word |= conf << config_offset;   
+   }
+   
+   pin_base( uint32_t port_number, uint32_t pin_number, uint32_t conf ): 
+      port{ port_registers( port_number ) }, 
+      config_word{ ( pin_number < 8 ) ? port.CRL : port.CRH },
+      pin{ pin_number },
+      config_offset{ 4 * ( pin_number % 8 ) }, 
+      mask{ 0x1U << pin_number }
+   {
+      config( conf );     
+   }
+   
+   bool base_get(){
+      return (( port.IDR & mask ) != 0 );   
+   }   
+   
+   void base_set( bool v ){
+      port.BSRR |= ( v ? mask : ( mask << 16 ));
+   }
+};
+
+
+/// \endcond 
+
+
+/// pin_in implementation for a ATSAM3X8E
+class pin_in : public hwlib::pin_in, private pin_base {
 public:
 
    /// \brief
@@ -83,32 +195,25 @@ public:
    /// This constructor sets the pin direction to input.
    /// By default, the internal weak pull-up is enabled.
    pin_in( uint32_t port_number, uint32_t pin_number ): 
-      port{ port_registers( port_number ) }, 
-	  config{ ( pin_number < 8 ) ? port.CRL : port.CRH },
-	  pin{ pin_number },
-	  config_offset{ 4 * ( pin_number % 8 ) }, 
-      mask{ 0x1U << pin_number }
-   {
-	  config &= ~( 0xF << config_offset );
-	  config |= 0x8 << config_offset;  
-   } 
+      pin_base{ port_number, pin_number, 0x08 }
+   {} 
+   
+   pin_in( pins name ): 
+      pin_in{ 
+         pin_info( name ).port, 
+         pin_info( name ).pin 
+      }
+   {}     
    
    bool get( 
       hwlib::buffering buf = hwlib::buffering::unbuffered 
    ) override {
-      return (( port.IDR & mask ) != 0 );   
+      return base_get();  
    }
 };
 
 /// pin_out implementation for an stm32f103c8
-class pin_out : public hwlib::pin_out {
-private:
-   volatile GPIO_TypeDef & port;
-   volatile uint32_t     & config;
-   uint32_t     pin;
-   uint32_t     config_offset;
-   uint32_t     mask;
-   
+class pin_out : public hwlib::pin_out, private pin_base {
 public:
 
    /// \brief
@@ -117,34 +222,31 @@ public:
    /// Constructor for an stm32f103c8 output pin.
    ///
    /// This constructor sets the pin direction to output.
+   ///
+   /// This constructor doesn't set the pin value 
+   /// to high or low, the set function must
+   /// be called to do so.   
    pin_out( uint32_t port_number, uint32_t pin_number ):    
-      port{ port_registers( port_number ) }, 
-	  config{ ( pin_number < 8 ) ? port.CRL : port.CRH },
-	  pin{ pin_number },
-	  config_offset{ 4 * ( pin_number % 8 ) }, 
-      mask{ 0x1U << pin_number }
-   {
-	  config &= ~( 0xF << config_offset );
-	  config |= 0x3 << config_offset;  
-   } 
+      pin_base{ port_number, pin_number, 0x03 }
+   {} 
+   
+   pin_out( pins name ): 
+      pin_out{ 
+         pin_info( name ).port, 
+         pin_info( name ).pin 
+      }
+   {}    
    
    void set( 
       bool v,
       hwlib::buffering buf = hwlib::buffering::unbuffered  
    ) override {
-      port.BSRR |= ( v ? mask : ( mask << 16 ));
+      base_set( v );
    }
 };
 
 /// pin_in_out implementation for an stm32f103c8
-class pin_in_out : public hwlib::pin_in_out {
-private:
-   volatile GPIO_TypeDef & port;
-   volatile uint32_t     & config;
-   uint32_t     pin;
-   uint32_t     config_offset;
-   uint32_t     mask;
-   
+class pin_in_out : public hwlib::pin_in_out, private pin_base {  
 public:
 
    /// \brief
@@ -155,48 +257,45 @@ public:
    /// This constructor doesn't set the pin direction 
    /// to input or output, a direction_set function must
    /// be called to do so.
+   ///
+   /// This constructor doesn't set the pin value 
+   /// to high or low, the set function must
+   /// be called to do so.
    pin_in_out( uint32_t port_number, uint32_t pin_number ):    
-      port{ port_registers( port_number ) }, 
-	  config{ ( pin_number < 8 ) ? port.CRL : port.CRH },
-	  pin{ pin_number },
-	  config_offset{ 4 * ( pin_number % 8 ) }, 
-      mask{ 0x1U << pin_number }
-   {
-	  config &= ~( 0xF << config_offset );
-	  config |= 0x8 << config_offset;  
-   } 
+      pin_base{ port_number, pin_number, 0x08 }
+   {} 
+   
+   pin_in_out( pins name ): 
+      pin_in_out{ 
+         pin_info( name ).port, 
+         pin_info( name ).pin 
+      }
+   {}    
    
    void direction_set_input() override {
-      //port.PIO_ODR = mask;
+      config( 0x08 );  
    }
    
    bool get(
       hwlib::buffering buf = hwlib::buffering::unbuffered 
    ) override {
-      return (( port.IDR & mask ) != 0 );   
+      return base_get();     
    }   
    
    void direction_set_output() override {
-      //port.PIO_OER  = mask;    
+      config( 0x03 );   
    }
    
    void set( 
       bool v,
       hwlib::buffering buf = hwlib::buffering::unbuffered  
    ) override {
-      port.BSRR |= ( v ? mask : ( mask << 16 ));
+      base_set( v );
    }
 };   
 
 /// pin_oc implementation for an stm32f103c8
-class pin_oc : public hwlib::pin_oc {
-private:
-   volatile GPIO_TypeDef & port;
-   volatile uint32_t     & config;
-   uint32_t     pin;
-   uint32_t     config_offset;
-   uint32_t     mask;
-   
+class pin_oc : public hwlib::pin_oc, private pin_base {
 public:
 
    /// \brief
@@ -204,97 +303,88 @@ public:
    /// \details
    /// Constructor for an stm32f103c8 open-collector pin.
    ///
-   /// This constructor sets the pin to high (high-impedance). 
+   /// This constructor doesn't set the pin value 
+   /// to high or low, the set function must
+   /// be called to do so.
    pin_oc( uint32_t port_number, uint32_t pin_number ):    
-      port{ port_registers( port_number ) }, 
-	  config{ ( pin_number < 8 ) ? port.CRL : port.CRH },
-	  pin{ pin_number },
-	  config_offset{ 4 * ( pin_number % 8 ) }, 
-      mask{ 0x1U << pin_number }
-   {
-	  config &= ~( 0xF << config_offset );
-	  config |= 0x3 << config_offset;  
-   } 
+      pin_base{ port_number, pin_number, 0x07 }
+   {} 
+   
+   pin_oc( pins name ): 
+      pin_oc{ 
+         pin_info( name ).port, 
+         pin_info( name ).pin 
+      }
+   {}    
    
    bool get(
       hwlib::buffering buf = hwlib::buffering::unbuffered 
    ) override {
-      return (( port.IDR & mask ) != 0 );   
+      return base_get();   
    }   
    
    void set( 
       bool v,
       hwlib::buffering buf = hwlib::buffering::unbuffered  
    ) override {
-      port.BSRR |= ( v ? mask : ( mask << 16 ));	   
+      base_set( v );
    }
 
 };
 
 /// the number of ticks per us
 uint_fast64_t HWLIB_WEAK ticks_per_us(){
-   return 8;
+   return 8; //72;
 }
 
 /// returns the number of ticks since some fixed starting point
 uint_fast64_t HWLIB_WEAK now_ticks(){
-	
+    
    static bool init_done = false;
    if( ! init_done ){
+/*      
+      // switch to the 72 MHz crystal/PLL clock, from stm32x.cpp,
+      // some values taken from
+      // https://github.com/rogerclarkmelbourne/STM32duino-bootloader
       
-      // switch to the 72 MHz crystal/PLL clock
-	  // extracted from system_stm32f10x.c
+      // Flash 2 wait state 
+      FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
+      FLASH->ACR |= (uint32_t)FLASH_ACR_LATENCY_2;    
+
+      // Enable Prefetch Buffer 
+      FLASH->ACR |= FLASH_ACR_PRFTBE;      
 	  
-      //  PLL configuration: PLLCLK = HSI/2 * 16 = 64 MHz 
-      RCC->CFGR &= (uint32_t)((uint32_t)~( RCC_CFGR_PLLSRC | RCC_CFGR_PLLMULL ) );
-      RCC->CFGR |= (uint32_t)( RCC_CFGR_PLLSRC_HSI_Div2 | RCC_CFGR_PLLMULL16 );
-    
-      // Wait till HSE is ready
-      uint32_t HSEStatus;
-      {
-         HSEStatus = RCC->CR & RCC_CR_HSERDY;
-      } while( HSEStatus == 0 );
-
- 
-   //  PLL configuration: PLLCLK = HSE * 9 = 72 MHz 
-   RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE |
-                                        RCC_CFGR_PLLMULL));
-   RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | RCC_CFGR_PLLMULL9);
-   
-   // Enable Prefetch Buffer 
-   FLASH->ACR |= FLASH_ACR_PRFTBE;
-
-   // Flash 2 wait state 
-   FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-   FLASH->ACR |= (uint32_t)FLASH_ACR_LATENCY_2;    
-
-   // HCLK = SYSCLK 
-   RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
+	  // enable HSE and wait for it
+	  RCC->CR |= RCC_CR_HSEON;
+      while((RCC->CR & RCC_CR_HSERDY ) == 0 ){}
+          
       
-   // PCLK2 = HCLK 
-   RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1;
-    
-   // PCLK1 = HCLK 
-   RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2;
+      //  PLL configuration: PLLCLK = HSE * 9 = 72 MHz 
+      RCC->CFGR &= (uint32_t)((uint32_t)~( 
+	     RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMULL ));
+      RCC->CFGR |= (uint32_t)( RCC_CFGR_PLLSRC | RCC_CFGR_PLLMULL9 );
+       
+      // Enable PLL and wait for it
+      RCC->CR |= RCC_CR_PLLON;
+      while((RCC->CR & RCC_CR_PLLRDY) == 0){}     
 
-   // Enable PLL 
-   RCC->CR |= RCC_CR_PLLON;
+      // HCLK = SYSCLK 
+      RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
+          
+      // PCLK2 = HCLK 
+      RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE2_DIV1;
+        
+      // PCLK1 = HCLK / 2
+      RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE1_DIV2;
 
-   // Wait till PLL is ready 
-   while((RCC->CR & RCC_CR_PLLRDY) == 0){}
-    
-   // Select PLL as system clock source
-   RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-   RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;    
+      // Select PLL as system clock source
+      RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+      RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;    
 
-   // Wait till PLL is used as system clock source
-   while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08){}
-  }
-
-      
-      //EFC0->EEFC_FMR = EEFC_FMR_FWS(4);
-      //EFC1->EEFC_FMR = EEFC_FMR_FWS(4);      
-      
+      // Wait till PLL is used as system clock source
+      while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != (uint32_t)0x08){}
+*/
+      // start the systick timer      
       SysTick->CTRL  = 0;         // stop the timer
       SysTick->LOAD  = 0xFFFFFF;  // use its as a 24-bit timer
       SysTick->VAL   = 0;         // clear the timer
@@ -319,7 +409,6 @@ uint_fast64_t HWLIB_WEAK now_ticks(){
    // the counter runs at 84 MHz 
    return ( low | high ); 
 
-return 0;
 } 
 
 void uart_init();
@@ -342,14 +431,14 @@ void uart_init(){
 
     // enable the clock to port A
     PMC->PMC_PCER0 = 1 << ID_PIOA;
-	
+    
     // disable PIO Control on PA9 and set up for Peripheral A
-	PIOA->PIO_PDR   = PIO_PA8; 
-	PIOA->PIO_ABSR &= ~PIO_PA8; 
-	PIOA->PIO_PDR   = PIO_PA9; 
-	PIOA->PIO_ABSR &= ~PIO_PA9; 
+    PIOA->PIO_PDR   = PIO_PA8; 
+    PIOA->PIO_ABSR &= ~PIO_PA8; 
+    PIOA->PIO_PDR   = PIO_PA9; 
+    PIOA->PIO_ABSR &= ~PIO_PA9; 
 
-	// enable the clock to the UART
+    // enable the clock to the UART
     PMC->PMC_PCER0 = ( 0x01 << ID_UART );
 
     // Reset and disable receiver and transmitter.
@@ -363,17 +452,17 @@ void uart_init(){
     // No parity, normal channel mode.
     hw_uart->UART_MR = UART_MR_PAR_NO;
 
-    // Disable all interrupts.	  
+    // Disable all interrupts.    
     hw_uart->UART_IDR = 0xFFFFFFFF;   
 
     // Enable the receiver and thes trasmitter.
     hw_uart->UART_CR = UART_CR_RXEN | UART_CR_TXEN;      
-*/	
+*/  
 }
 
 /*
 bool uart_char_available(){
-   uart_init();	
+   uart_init(); 
    return ( hw_uart->UART_SR & 1 ) != 0;
 }
 
@@ -384,7 +473,7 @@ char uart_getc(){
 }
 
 void uart_putc( char c ){
-   uart_init();	
+   uart_init(); 
    while( ( hw_uart->UART_SR & 2 ) == 0 ){}
    hw_uart->UART_THR = c;
 }
