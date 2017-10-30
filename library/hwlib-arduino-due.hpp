@@ -277,8 +277,8 @@ Pio & __attribute__((weak)) port_registers( uint32_t port ){
    PMC->PMC_PCER0 = ( 0x3F << 11 );  
 
    switch( port ){
-      case 0  : return GPIOA;
-      case 1  : return GPIOB;
+      case 0  : return *PIOA;
+      case 1  : return *PIOB;
       case 2  : return *PIOC;
       case 3  : return *PIOD;
       default : break;
