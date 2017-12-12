@@ -17,6 +17,7 @@
 #define HWLIB_ARDUINO_DUE_H
 
 #include "hwlib-all.hpp"
+#define register
 #include "sam.h"
 #include "hwlib-arduino-due-system-sam3xa.inc"
 

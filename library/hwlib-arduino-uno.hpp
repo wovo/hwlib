@@ -178,7 +178,7 @@ void HWLIB_WEAK configure_as_gpio( uint_fast8_t port, uint_fast8_t pin ){
 
 /// \endcond
    
-/// pin_in implementation for a ATMega328P
+/// pin_in implementation for an ATMega328P
 class pin_in : public hwlib::pin_in {
 private:
    volatile uint8_t & port;
@@ -434,10 +434,11 @@ namespace hwlib {
 
 namespace target = ::uno;
    
+#ifdef HWLIB_ONCE
+   
 void HWLIB_WEAK wait_ns( int_fast32_t n ){
    wait_us( n / 1000 );
 }
-
 
 void HWLIB_WEAK wait_us_asm( int n ){ 
     // first int parameter is passd in r24/r25
@@ -476,6 +477,8 @@ void HWLIB_WEAK uart_putc( char c ){
    static target::pin_out pin( 3, 1 );
    uart_putc_bit_banged_pin( c, pin );
 }
+
+#endif
 
 }; //namespace hwlib   
 

@@ -15,6 +15,8 @@
 // this file contains Doxygen lines
 /// @file
 
+#define HWLIB_STRING_H
+
 #ifndef HWLIB_STRING_H
 #define HWLIB_STRING_H
 
