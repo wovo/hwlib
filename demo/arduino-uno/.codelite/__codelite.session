@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Session Name="C:\ti-software\hwlib\demo\arduino-uno\__codelite.workspace">
+<Session Name="C:\Program Files (x86)\Arduino\libraries\hwlib\demo\arduino-uno\__codelite.workspace">
   <int Value="0" Name="m_selectedTab"/>
-  <wxString Value="C:\ti-software\hwlib\demo\arduino-uno\__codelite.workspace" Name="m_workspaceName"/>
-  <TabInfoArray Name="TabInfoArray">
-    <TabInfo>
-      <wxString Value="C:\ti-software\hwlib\demo\arduino-uno\blink\main.cpp" Name="FileName"/>
-      <int Value="12" Name="FirstVisibleLine"/>
-      <int Value="12" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-  </TabInfoArray>
+  <wxString Value="C:\Program Files (x86)\Arduino\libraries\hwlib\demo\arduino-uno\__codelite.workspace" Name="m_workspaceName"/>
+  <TabInfoArray Name="TabInfoArray"/>
   <SerializedObject Name="m_breakpoints">
     <long Value="0" Name="Count"/>
   </SerializedObject>

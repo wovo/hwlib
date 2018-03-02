@@ -23,5 +23,8 @@ include           $(HWLIB)/makefile.inc
 # add Catch
 SEARCH            += $(CATCH)/include
 
+# set BMPTK to the bmptk subdirectory
+BMPTK              ?= $(HWCPP)/../bmptk
+
 # defer to the bmptk makefile.inc
 include           $(BMPTK)/makefile.inc
