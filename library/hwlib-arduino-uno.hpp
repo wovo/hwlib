@@ -447,28 +447,29 @@ void HWLIB_WEAK wait_us_asm( int n ){
        "    cpc   r1, r25     \t\n"   // 1
        "    brge  3f          \t\n"   // 1
        "    rcall 3f          \t\n"   // 7
-       "    rjmp  2f          \t\n"  // 2
+       "    rjmp  2f          \t\n"   // 2
        "2:  sbiw  r24, 0x01   \t\n"   // 2
        "    rjmp  1b          \t\n"   // 2
        "3:                    \t\n"   // 16 total
+       : : "r" ( n )                  // uses (reads) n
    ); 
     
 }
 
 void HWLIB_WEAK wait_us( int_fast32_t n ){ 
    while( n > 0 ){
-      if( n < 10000 ){
+      if( n < 10'000 ){
           wait_us_asm( n );
           return;
       }
-      wait_us_asm( 1000 );
-      n -= 1000;
+      wait_us_asm( 1'000 );
+      n -= 1'000;
    }
 }
 
 void HWLIB_WEAK wait_ms( int_fast32_t n ){
    while( n > 0 ){
-      wait_us( 1000 );
+      wait_us( 1'000 );
       --n;
    }   
 }   
