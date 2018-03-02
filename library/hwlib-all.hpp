@@ -17,33 +17,33 @@
 #ifndef HWLIB_ALL_H
 #define HWLIB_ALL_H
 
-#include "hwlib-defines.hpp"
-#include "hwlib-panic.hpp"
-#include "hwlib-common.hpp"
-#include "hwlib-pin.hpp"
-#include "hwlib-pin-dummies.hpp"
-#include "hwlib-pin-decorators.hpp"
-#include "hwlib-port.hpp"
-#include "hwlib-port-from-pins.hpp"
-#include "hwlib-port-decorators.hpp"
-#include "hwlib-adc.hpp"
-#include "hwlib-dac.hpp"
-#include "hwlib-console.hpp"
-#include "hwlib-graphics.hpp"
-#include "hwlib-font-default-8x8.hpp"
-#include "hwlib-font-default-16x16.hpp"
-#include "hwlib-wait.hpp"
-#include "hwlib-ostream.hpp"
-#include "hwlib-i2c.hpp"
-#include "hwlib-pcf8574a.hpp"
-#include "hwlib-pcf8591.hpp"
-#include "hwlib-spi.hpp"
-#include "hwlib-hc595.hpp"
-#include "hwlib-hd44780.hpp"
-#include "hwlib-glcd-5510.hpp"
-#include "hwlib-glcd-oled.hpp"
-#include "hwlib-matrix-keypad.hpp"
-#include "hwlib-string.hpp"
-#include "hwlib-demo.hpp"
+HWCPP_INCLUDE( hwlib-defines.hpp )
+HWCPP_INCLUDE( hwlib-panic.hpp )
+HWCPP_INCLUDE( hwlib-common.hpp )
+HWCPP_INCLUDE( hwlib-pin.hpp )
+HWCPP_INCLUDE( hwlib-pin-dummies.hpp )
+HWCPP_INCLUDE( hwlib-pin-decorators.hpp )
+HWCPP_INCLUDE( hwlib-port.hpp )
+HWCPP_INCLUDE( hwlib-port-from-pins.hpp )
+HWCPP_INCLUDE( hwlib-port-decorators.hpp )
+HWCPP_INCLUDE( hwlib-adc.hpp )
+HWCPP_INCLUDE( hwlib-dac.hpp )
+HWCPP_INCLUDE( hwlib-console.hpp )
+HWCPP_INCLUDE( hwlib-graphics.hpp )
+HWCPP_INCLUDE( hwlib-font-default-8x8.hpp )
+HWCPP_INCLUDE( hwlib-font-default-16x16.hpp )
+HWCPP_INCLUDE( hwlib-wait.hpp )
+HWCPP_INCLUDE( hwlib-ostream.hpp )
+HWCPP_INCLUDE( hwlib-i2c.hpp )
+HWCPP_INCLUDE( hwlib-pcf8574a.hpp )
+HWCPP_INCLUDE( hwlib-pcf8591.hpp )
+HWCPP_INCLUDE( hwlib-spi.hpp )
+HWCPP_INCLUDE( hwlib-hc595.hpp )
+HWCPP_INCLUDE( hwlib-hd44780.hpp )
+HWCPP_INCLUDE( hwlib-glcd-5510.hpp )
+HWCPP_INCLUDE( hwlib-glcd-oled.hpp )
+HWCPP_INCLUDE( hwlib-matrix-keypad.hpp )
+HWCPP_INCLUDE( hwlib-string.hpp )
+HWCPP_INCLUDE( hwlib-demo.hpp )
 
 #endif // HWLIB_ALL_H

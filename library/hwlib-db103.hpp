@@ -16,7 +16,7 @@
 #ifndef HWLIB_DB103_H
 #define HWLIB_DB103_H
 
-#include "hwlib-all.hpp"
+HWCPP_INCLUDE( hwlib-all.hpp )
 #include "LPC11xx.h"
 
 /// \brief

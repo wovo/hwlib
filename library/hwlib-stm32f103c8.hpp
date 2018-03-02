@@ -16,7 +16,7 @@
 #ifndef HWLIB_STM32F103C8_H
 #define HWLIB_STM32F103C8_H
 
-#include "hwlib-all.hpp"
+HWCPP_INCLUDE( hwlib-all.hpp )
 #include "stm32f103x6.h"
 
 /// \brief

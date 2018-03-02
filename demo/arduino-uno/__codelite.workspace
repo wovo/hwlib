@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="example code" Database="">
+  <Project Name="blink" Path="blink/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="blink" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix> 
+  <Project Name="empty" Path="empty/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="empty" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix> 
+  <Project Name="hello" Path="hello/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="hello" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix> 
+  <Project Name="lcd-16x1" Path="lcd-16x1/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="lcd-16x1" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix> 
+  <Project Name="lcd-20x4" Path="lcd-20x4/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="lcd-20x4" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix> 
+  <Project Name="lcd-keypad-shield" Path="lcd-keypad-shield/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="lcd-keypad-shield" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix> 
+</CodeLite_Workspace>

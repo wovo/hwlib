@@ -13,36 +13,39 @@
 #ifndef HWLIB_H
 #define HWLIB_H
 
+#define HWCPP_QUOTE( FILE ) #FILE
+#define HWCPP_INCLUDE( FILE ) HWCPP_QUOTE( library/FILE )
+
 #ifdef BMPTK_TARGET_arduino_due
-   #include "hwlib-arduino-due.hpp"
+   HWCPP_INCLUDE( hwlib-arduino-due.hpp )
 #endif
 
 #ifdef BMPTK_TARGET_db103
-   #include "hwlib-db103.hpp"
+   HWCPP_INCLUDE( hwlib-db103.hpp )
 #endif
 
 #ifdef BMPTK_TARGET_arduino_uno
-   #include "hwlib-arduino-uno.hpp"
+   HWCPP_INCLUDE( hwlib-arduino-uno.hpp )
 #endif
 
 #ifdef BMPTK_TARGET_stm32f103c8
-   #include "hwlib-stm32f103c8.hpp"
+   HWCPP_INCLUDE( hwlib-stm32f103c8.hpp )
 #endif
 
 #ifdef BMPTK_TARGET_blue_pill
-   #include "hwlib-blue-pill.hpp"
+   HWCPP_INCLUDE( hwlib-blue-pill.hpp )
 #endif
 
 #ifdef BMPTK_TARGET_native
-   #include "hwlib-native.hpp"
+   HWCPP_INCLUDE( hwlib-native.hpp )
 #endif
 
 #ifdef BMPTK_TARGET_pyd
-   #include "hwlib-native.hpp"
+   HWCPP_INCLUDE( hwlib-native.hpp )
 #endif
 
 #ifndef BMPTK_TARGET
-   #include "hwlib-all.hpp"
+   HWCPP_INCLUDE( hwlib-all.hpp )
 #endif
 
 #endif // HWLIB_ALL_H

@@ -18,9 +18,9 @@
 
 #include <stdint.h>
 
-#include "io.h"
+#include "avr/io.h"
 
-#include "hwlib-all.hpp"
+HWCPP_INCLUDE( hwlib-all.hpp )
 
 /// \brief
 /// hwlib implementation for the Arduino Uno
