@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// The (vey few) code parts that must be compiled (instead of included)
+// The (very few) code parts that must be compiled (instead of included)
 // are in the header files, enabled only when #HWLIB_ONCE is defined.
 
 #define HWLIB_ONCE

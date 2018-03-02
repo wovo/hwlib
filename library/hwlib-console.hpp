@@ -16,7 +16,7 @@
 #ifndef HWLIB_CONSOLE_H
 #define HWLIB_CONSOLE_H
 
-#include <hwlib-ostream.hpp>
+#include HWLIB_INCLUDE( hwlib-ostream.hpp )
 
 namespace hwlib {
 

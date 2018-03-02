@@ -16,7 +16,7 @@
 #ifndef HWLIB_GLCD_5510_H
 #define HWLIB_GLCD_5510_H
 
-HWCPP_INCLUDE( hwlib-graphics.hpp )
+#include HWLIB_INCLUDE( hwlib-graphics.hpp )
 
 namespace hwlib {
    

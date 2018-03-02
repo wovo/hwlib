@@ -16,8 +16,8 @@
 #ifndef HWLIB_GLCD_OLED_H
 #define HWLIB_GLCD_OLED_H
 
-#include <hwlib-graphics.hpp>
-#include <hwlib-i2c.hpp>
+#include HWLIB_INCLUDE( hwlib-graphics.hpp )
+#include HWLIB_INCLUDE( hwlib-i2c.hpp )
 
 namespace hwlib {
    
