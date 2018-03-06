@@ -37,15 +37,15 @@
 #endif
 
 #ifdef BMPTK_TARGET_native
-   HWLIB_INCLUDE( hwlib-native.hpp )
+   #include HWLIB_INCLUDE( hwlib-native.hpp )
 #endif
 
 #ifdef BMPTK_TARGET_pyd
-   HWLIB_INCLUDE( hwlib-native.hpp )
+   #include HWLIB_INCLUDE( hwlib-native.hpp )
 #endif
 
 #ifndef BMPTK_TARGET
-   HWLIB_INCLUDE( hwlib-all.hpp )
+   #include HWLIB_INCLUDE( hwlib-all.hpp )
 #endif
 
 #endif // HWLIB_ALL_H
