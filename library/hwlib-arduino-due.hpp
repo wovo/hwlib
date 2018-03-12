@@ -16,10 +16,10 @@
 #ifndef HWLIB_ARDUINO_DUE_H
 #define HWLIB_ARDUINO_DUE_H
 
-HWCPP_INCLUDE( hwlib-all.hpp )
+#include HWLIB_INCLUDE( hwlib-all.hpp )
 #define register
 #include "sam.h"
-HWCPP_INCLUDE( hwlib-arduino-due-system-sam3xa.inc )
+#include HWLIB_INCLUDE( hwlib-arduino-due-system-sam3xa.inc )
 
 /// \brief
 /// hwlib implementation for the Arduino Due
@@ -900,6 +900,7 @@ char HWLIB_WEAK uart_getc( ){
 }
 
 #endif
+
 #ifdef HWLIB_ONCE
 
 uint64_t now_ticks(){
@@ -918,6 +919,17 @@ void wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){}
 }
+
+void HWLIB_WEAK wait_us( int_fast32_t n ){ 
+   wait_us_busy( n );
+}
+
+void HWLIB_WEAK wait_ms( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us( 1'000 );
+      --n;
+   }   
+}  
 
 #endif
 

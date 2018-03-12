@@ -27,7 +27,7 @@ uint64_t now_ticks(){
    // https://stackoverflow.com/questions/1695288/getting-the-current-time-in-milliseconds-from-the-system-clock-in-windows	 
    FILETIME ft_now;
    GetSystemTimeAsFileTime( &ft_now );
-   auto ll_now = (LONGLONG)ft_now.dwLowDateTime + ((LONGLONG)(ft_now.dwHighDateTime) << 32LL);   
+   uint64_t ll_now = (LONGLONG)ft_now.dwLowDateTime + ((LONGLONG)(ft_now.dwHighDateTime) << 32LL);   
    return ll_now / 10;
 }   
 
@@ -43,6 +43,25 @@ void wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){}
 }
+
+void wait_ns( int_fast32_t n ){ 
+   wait_us_busy( 1 + n / 1'000 );
+}
+
+void wait_us( int_fast32_t n ){ 
+   wait_us_busy( n );
+}
+
+void wait_ms( int_fast32_t n ){
+   wait_us( 1'000 * n );
+// why doesn't this work (asny more)??
+/*
+   while( n > 0 ){
+      wait_us( 1'000 );
+      --n;
+   }
+*/
+}  
 
 /*
 
