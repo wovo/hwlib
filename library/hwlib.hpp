@@ -32,6 +32,10 @@
    #include HWLIB_INCLUDE( hwlib-stm32f103c8.hpp )
 #endif
 
+#ifdef BMPTK_TARGET_frdm_kl27z
+   #include HWLIB_INCLUDE( hwlib-frdm-kl27z.hpp )
+#endif
+
 #ifdef BMPTK_TARGET_blue_pill
    #include HWLIB_INCLUDE( hwlib-blue-pill.hpp )
 #endif
