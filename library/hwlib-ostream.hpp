@@ -617,14 +617,16 @@ namespace hwlib {
    
       /// output operator for signed char (prints as integer)   
       friend ostream & operator<< ( ostream & stream, signed char c ){
-         stream.putc( c );
-         return stream;
+         return stream << static_cast< int >( c ); 
+         //stream.putc( c );
+         //return stream;
       }
    
       /// output operator for unsigned char (prints as integer)   
       friend ostream & operator<< ( ostream & stream, unsigned char c ){
-         stream.putc( c );
-         return stream;
+         return stream << static_cast< int >( c ); 
+         //stream.putc( c );
+         //return stream;
       }
       
    }; // class ostream  
