@@ -17,6 +17,7 @@
 #define HWLIB_SPI_H
 
 #include <stdint.h>
+#include <array>
 
 #include "hwlib-pin.hpp"
 #include "hwlib-wait.hpp"
@@ -88,6 +89,15 @@ public:
       const uint8_t data_out[], 
       uint8_t data_in[] 
    ) = 0;
+
+   template< size_t n >
+   void write_and_read( 
+      pin_out & sel, 
+      const std::array< uint8_t, n > & data_out, 
+      std::array< uint8_t, n > & data_in
+   ) {
+      write_and_read( sel, n, data_out.begin(), data_in.begin() );
+   }
 
 }; // class spi_bus  
 

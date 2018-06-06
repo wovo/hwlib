@@ -95,6 +95,8 @@
 /// The TRACE macro can be used like hwlib::cout to print to,
 /// but what is printed will be prefixed with a newfile
 /// and the HWLIB_HERE string.
-#define HWLIB_TRACE ( ::hwlib::cout << "\n" << HWLIB_HERE << hwlib::flush )
+#define HWLIB_TRACE (                                 \
+   ::hwlib::cout << "\n" <<                           \
+   ::hwlib::dec << HWLIB_HERE << hwlib::flush )       \
 
 #endif // HWLIB_DEFINES_H
