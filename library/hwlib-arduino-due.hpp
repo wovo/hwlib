@@ -931,6 +931,14 @@ void HWLIB_WEAK wait_ms( int_fast32_t n ){
    }   
 }  
 
+void HWLIB_WEAK wait_ns_busy( int_fast32_t n ){
+   wait_us_busy( ( n + 999 ) / 1000 );
+}
+
+void HWLIB_WEAK wait_ns( int_fast32_t n ){
+   wait_ns_busy( n );
+}
+
 #endif
 
 }; //namespace hwlib   

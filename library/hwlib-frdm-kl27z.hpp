@@ -182,9 +182,8 @@ public:
 
 };
 
-/// the number of ticks per us
 uint_fast64_t HWLIB_WEAK ticks_per_us(){
-   return 84;
+   return 8;
 }
 
 /// returns the number of ticks since some fixed starting point
@@ -213,7 +212,6 @@ uint_fast64_t HWLIB_WEAK now_ticks(){
    last_low = low;
 
    // return the aggregated ticks value
-   // the counter runs at 84 MHz 
    return ( low | high ); 
 
 } 
@@ -287,7 +285,7 @@ void uart_putc( char c ){
 
 #endif // nono
 
-}; // namespace due
+};
 
 namespace hwlib {
 
