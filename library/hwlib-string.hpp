@@ -22,7 +22,6 @@
 
 #include <stddef.h>
 #include <type_traits>
-//#include <iostream>
 
 namespace hwlib {
 
@@ -182,26 +181,6 @@ public:
    /// special value for beyond-end or not-found
    static const size_t nsize = 1;
    
-   /// \brief   
-   /// pointer to the 0-terminated content
-   /// \details
-   /// This function 0-terminates the string and returns a pointer
-   /// to it. 
-   ///
-   /// When the string is at its maximum size, its last character will be 
-   /// removed (making the string 1 shorter) 
-   /// to make room for the terminating 0-character.
-   ///
-   /// When the string contains a '\0' character, this is not handled 
-   /// specially, and the asciz string will appear to end at that character.
-   char * c_str(){
-      if( current_length == allocated_length ){
-         --current_length;         
-      }
-      content[ current_length ] = '\0';      
-      return content;
-   }
-
    /// \brief   
    /// the maximum number of characters that can be stored
    constexpr size_t max_size() const {
@@ -528,11 +507,14 @@ public:
    bool operator==( const T & rhs ) const {         
       const char * p = content;       
       for( const char c : iterate( rhs ) ){       
+          if( p == end() ){
+             return false;
+          }
           if( c != *p++ ){
-              return false;
+             return false;
           }
       }
-      return *p == '\0';
+      return p == end();
    }    
 
    /// \brief   
@@ -548,7 +530,7 @@ public:
    bool operator>( const T & rhs ) const {
       const char * p = content;       
       for( const char c : iterate( rhs ) ){
-          if( *p == '\0' ){
+          if( p == end() ){
              return false;             
           }   
           if( *p++ <= c ){
@@ -564,7 +546,7 @@ public:
    bool operator>=( const T & rhs ) const {
       const char * p = content;       
       for( const char c : iterate( rhs ) ){
-          if( *p == '\0' ){
+          if( p == end() ){
              return false;             
           }   
           if( *p++ < c ){
@@ -580,7 +562,7 @@ public:
    bool operator<( const T & rhs ) const {
       const char * p = content;       
       for( const char c : iterate( rhs ) ){
-          if( *p == '\0' ){
+          if( p == end() ){
              return true;             
           }   
           if( *p++ >= c ){
@@ -596,7 +578,7 @@ public:
    bool operator<=( const T & rhs ) const {
       const char * p = content;       
       for( const char c : iterate( rhs ) ){
-          if( *p == '\0' ){
+          if( p == end() ){
              return true;             
           }   
           if( *p++ > c ){
