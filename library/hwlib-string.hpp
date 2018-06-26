@@ -532,7 +532,7 @@ public:
               return false;
           }
       }
-      return *p == '\0';
+      return *p == *end();
    }    
 
    /// \brief   
