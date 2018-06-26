@@ -525,14 +525,14 @@ public:
    /// \brief   
    /// compare for equality
    template< typename T >
-   bool operator==( const T & rhs ) const {         
+   bool operator==( const T & rhs ) const {
       const char * p = content;       
       for( const char c : iterate( rhs ) ){       
           if( c != *p++ ){
               return false;
           }
       }
-      return *p == *end();
+      return p == end();
    }    
 
    /// \brief   
