@@ -760,7 +760,7 @@ class hwspi : public hwlib::spi_bus {
         }
 
         write_and_read(hwlib::pin_out, const size_t n, const uint8_t data_out[], uint8_t data_in[]){
-            for(uint_fast32_t i = 0; i < n, i++){
+            for(uint_fast32_t i = 0; i < n; i++){
                 spi_write(data_out[i]);
                 data_in[i] = spi_read();
             }
