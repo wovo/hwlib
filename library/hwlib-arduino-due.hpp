@@ -696,7 +696,7 @@ class hwspi : public hwlib::spi_bus {
             return SPI0->SPI_RDR & 0xFFFF ;            
         }
 
-        void pin_Configure(const uint32_t dwMask){
+        void configure_pin(const uint32_t dwMask){
             uint32_t dwSR;
 
             /* Disable interrupts on the pin(s) */
@@ -724,25 +724,25 @@ class hwspi : public hwlib::spi_bus {
             switch(chipselect){
                 case 1:
                     // CS1 is pin 4 on the due
-                    pin_Configure(PIO_PA29A_SPI0_NPCS1);
+                    configure_pin(PIO_PA29A_SPI0_NPCS1);
                     break;
                 case 2:
                     // not available on arduino due pcb
-                    pin_Configure(PIO_PA30A_SPI0_NPCS2);
+                    configure_pin(PIO_PA30A_SPI0_NPCS2);
                     break;
                 case 3:
                     // not available on arduino due pcb
-                    pin_Configure(PIO_PA31A_SPI0_NPCS3);
+                    configure_pin(PIO_PA31A_SPI0_NPCS3);
                     break;
-                case default:
+                default:
                     // CS0 is pin 10 on the due.
-                    pin_Configure(PIO_PA28A_SPI0_NPCS0);
+                    configure_pin(PIO_PA28A_SPI0_NPCS0);
                     break;                    
             }
 
-            pin_Configure(PIO_PA25A_SPI0_MISO);
-            pin_Configure(PIO_PA26A_SPI0_MOSI);
-            pin_Configure(PIO_PA27A_SPI0_SPCK);
+            configure_pin(PIO_PA25A_SPI0_MISO);
+            configure_pin(PIO_PA26A_SPI0_MOSI);
+            configure_pin(PIO_PA27A_SPI0_SPCK);
 
             // enable pheripheral clock
             PMC->PMC_PCER0 = 1 << ID_SPI0;
@@ -759,13 +759,18 @@ class hwspi : public hwlib::spi_bus {
             SPI0->SPI_CR = SPI_CR_SPIEN;                     
         }
 
-        write_and_read(hwlib::pin_out, const size_t n, const uint8_t data_out[], uint8_t data_in[]){
+        void write_and_read( 
+            hwlib::pin_out & sel, 
+            const size_t n, 
+            const uint8_t data_out[], 
+            uint8_t data_in[] 
+        ) override{
             for(uint_fast32_t i = 0; i < n; i++){
                 spi_write(data_out[i]);
                 data_in[i] = spi_read();
             }
         }
-}
+};
 
 /// pin_adc implementation for a ATSAM3X8E
 class pin_adc : public hwlib::adc {
