@@ -699,7 +699,6 @@ class hwspi : public hwlib::spi_bus {
         void configure_pin(const uint32_t dwMask){
             uint32_t dwSR;
 
-            /* Disable interrupts on the pin(s) */
             PIOA->PIO_IDR = dwMask;
             dwSR = PIOA->PIO_ABSR;
             PIOA->PIO_ABSR &= (~dwMask & dwSR);
@@ -712,6 +711,19 @@ class hwspi : public hwlib::spi_bus {
         }
 
     public:
+        /// \brief
+        /// hardware spi constructor
+        /// \param chipselect the used cs\n
+        /// cs pins are:\n
+        /// NPCS0 = PA28 Peripheral A = d10\n
+        /// NPCS1 = PA29 Peripheral A = d4\n
+        /// NPCS2 = PA30 Peripheral A = nc\n
+        /// NPCS3 = PA31 Peripheral A = nc\n
+        /// \param spimode the desired spi mode
+        /// \param spi_divider the spi divider to calculate the spi speed\n
+        /// 84 mhz / 21 = 4mhz\n
+        /// \param loopback to enable or disable the loopback in hardware\n
+        /// this connects the mosi to the miso if enabled\n    
         hwspi(uint8_t chipselect = 0, uint8_t spimode = SPI_MODE0, uint8_t spi_divider = 21, bool loopback = 0):
             chipselect(chipselect)
         {
@@ -740,6 +752,7 @@ class hwspi : public hwlib::spi_bus {
                     break;                    
             }
 
+            // configure miso, mosi and clk pins
             configure_pin(PIO_PA25A_SPI0_MISO);
             configure_pin(PIO_PA26A_SPI0_MOSI);
             configure_pin(PIO_PA27A_SPI0_SPCK);
@@ -759,6 +772,10 @@ class hwspi : public hwlib::spi_bus {
             SPI0->SPI_CR = SPI_CR_SPIEN;                     
         }
 
+        /// \brief
+        /// write and reads from the hardware spi bus
+        /// \warning
+        /// Does not use sel but uses selected hardware cs pin
         void write_and_read( 
             hwlib::pin_out & sel, 
             const size_t n, 
