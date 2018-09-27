@@ -21,16 +21,6 @@
 #include "sam.h"
 #include HWLIB_INCLUDE( hwlib-arduino-due-system-sam3xa.inc )
 
-// Spi Modes
-/** SPI_MODE0 */
-#define SPI_MODE0 0x02
-/** SPI_MODE1 */
-#define SPI_MODE1 0x00
-/** SPI_MODE2 */
-#define SPI_MODE2 0x03
-/** SPI_MODE3 */
-#define SPI_MODE3 0x01
-
 /// \brief
 /// hwlib implementation for the Arduino Due
 /// \details
@@ -678,6 +668,16 @@ public:
 #endif
 
 class hwspi : public hwlib::spi_bus {
+    public:
+        /// \brief
+        /// the spi modes
+        enum SPI_MODE : uint8_t{
+            SPI_MODE0 = 0x02,
+            SPI_MODE1 = 0x00, 
+            SPI_MODE2 = 0x03,
+            SPI_MODE3 = 0x01
+        };
+
     private:
         uint8_t chipselect:2;
 
@@ -724,7 +724,7 @@ class hwspi : public hwlib::spi_bus {
         /// 84 mhz / 21 = 4mhz\n
         /// \param loopback to enable or disable the loopback in hardware\n
         /// this connects the mosi to the miso if enabled\n    
-        hwspi(uint8_t chipselect = 0, uint8_t spimode = SPI_MODE0, uint8_t spi_divider = 21, bool loopback = 0):
+        hwspi(uint8_t chipselect = 0, SPI_MODE spimode = SPI_MODE0, uint8_t spi_divider = 21, bool loopback = 0):
             chipselect(chipselect)
         {
             // disable write protection spi
