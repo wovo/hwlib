@@ -416,7 +416,8 @@ public:
       while( pos < current_length ){
          if( find_at( s, pos ) ){
             return pos;
-         }     
+         }
+         pos++;
       }     
       return nsize;
    }      
@@ -438,7 +439,8 @@ public:
       while( pos < i ){
          if( find_at( s, i ) ){
             return i;
-         }     
+         }
+         i--;
       }     
       return nsize;
    }   
