@@ -10,46 +10,47 @@
 //
 // ==========================================================================
 
+// An application defines the appropriate HWLIB_TARGET_* marco and 
+// include this hwlib.hpp file.
+// The bmptk build system will define the HWLIB_TARGET_* macro
+// base on the TARGET specified in the makefile.
+
 #ifndef HWLIB_H
 #define HWLIB_H
 
 #define HWLIB_QUOTE( FILE ) #FILE
 #define HWLIB_INCLUDE( FILE ) HWLIB_QUOTE( FILE )
 
-#ifdef BMPTK_TARGET_arduino_due
-   #include HWLIB_INCLUDE( hwlib-arduino-due.hpp )
+#ifdef HWLIB_TARGET_db103
+   #include HWLIB_INCLUDE( targets/hwlib-db103.hpp )
 #endif
 
-#ifdef BMPTK_TARGET_db103
-   #include HWLIB_INCLUDE( hwlib-db103.hpp )
+#ifdef HWLIB_TARGET_arduino_uno
+   #include HWLIB_INCLUDE( targets/hwlib-arduino-uno.hpp )
 #endif
 
-#ifdef BMPTK_TARGET_arduino_uno
-   #include HWLIB_INCLUDE( hwlib-arduino-uno.hpp )
+#ifdef HWLIB_TARGET_arduino_due
+   #include HWLIB_INCLUDE( targets/hwlib-arduino-due.hpp )
 #endif
 
-#ifdef BMPTK_TARGET_stm32f103c8
-   #include HWLIB_INCLUDE( hwlib-stm32f103c8.hpp )
+#ifdef HWLIB_TARGET_blue_pill
+   #include HWLIB_INCLUDE( targets/hwlib-blue-pill.hpp )
 #endif
 
-#ifdef BMPTK_TARGET_frdm_kl27z
-   #include HWLIB_INCLUDE( hwlib-frdm-kl27z.hpp )
+#ifdef HWLIB_TARGET_stm32f103c8
+   #include HWLIB_INCLUDE( targets/hwlib-stm32f103c8.hpp )
 #endif
 
-#ifdef BMPTK_TARGET_blue_pill
-   #include HWLIB_INCLUDE( hwlib-blue-pill.hpp )
+#ifdef HWLIB_TARGET_native
+   #include HWLIB_INCLUDE( targets/hwlib-native.hpp )
 #endif
 
-#ifdef BMPTK_TARGET_native
-   #include HWLIB_INCLUDE( hwlib-native.hpp )
+#ifdef HWLIB_TARGET_pyd
+   #include HWLIB_INCLUDE( targets/hwlib-native.hpp )
 #endif
 
-#ifdef BMPTK_TARGET_pyd
-   #include HWLIB_INCLUDE( hwlib-native.hpp )
-#endif
-
-#ifndef BMPTK_TARGET
-   #include HWLIB_INCLUDE( hwlib-all.hpp )
+#ifndef HWLIB_TARGET
+   #include HWLIB_INCLUDE( targets/hwlib-none.hpp )
 #endif
 
 #endif // HWLIB_ALL_H

@@ -1,66 +1,22 @@
 Hwlib is a C++ classic-OO-style library for close-to-the-hardware 
-programming. It is used in a number of Computer Sience courses 
+programming. It is used in a number of Computer Science courses 
 at the Hogeschool Utrecht, HBO-ICT.
 
-The typical blink-al-led application code using hwlib is:
+The typical blink-a-led application code using hwlib 
+(assuming the target board has a default led) is:
 
 ```C++
 #include "hwlib.hpp"
 
 int main( void ){   
-   auto led = hwlib::target::pin_out( 1, 5 );
+   auto led = hwlib::target::led;
    hwlib::blink( led );
 }
 ```
 
-Run 'make doxygen' (or doxygen doxyfiles/Doxyfile )
-in the root to create the documentation.
+See index.html (which redirects to html/index.html) for the documentation.
 
------------------------------------------------------------------------------  
-
-To use the library from with bmptk:
-   - define $HWLIB to be the path where you placed your copy of hwlib
-   - include $(HWLIB)/Makefile.include in your makefile
-   - include "hwlib.hpp" in your code
-   
-To use the library without bmptk:
-   - add the hwlib/include to your search
-   - (if you want to edit hwlib files) 
-       add the hwlib files to your dependencies
-   - add hwlib.cpp to your sources
-   - include the appropriate top-level target file in your code,
-       for instance hwlib-arduino-due.hpp
-      
 -----------------------------------------------------------------------------      
-
-The following is (only) relevant if you want to work on the library 
-itself and use its makefile structure. It is assumed that you use bmptk.     
-      
-Each project directory has a makefile that builds that project. 
-It sets the symbol RELATIVE, and includes the makefile.link 
-of its parent directory, which updates RELATIVE to RELATIVE\.. and 
-includes the makefile.link in the next-higher parent directory, etc,
-up to the root of the library, where the makefile.link defers to the
-makefile.inc of bmptk to do the real work.
-
-Most non-project directories contain a makefile that (recursively)
-builds its subdirectories. To do this, it also uses bmptk, so it uses
-'bmptk-make -f makefile.link <target>' to include bmptk.inc, using the
-above mechanism.
-
-In the root of the library the file makefile.find_local 
-provides the location of 
-the external dependencies (bmptk, Catch). By default it does this by 
-including makefile.local, but when a bmptk.custom is present 
-one level higher, or in that directory (in that order) that one 
-is used instead. This makes it possible to customize the locations 
-of the external dependencies without changing an existing file.
-
-Each directory that contains project sub-directories has a file 
-update_codelite_workspace.bat. When executed, it creates a CodeLite 
-workspace that contains the projects.
-
------------------------------------------------------------------------------
       
 (c) Wouter van Ooijen (wouter@voti.nl) 2017
 
@@ -69,15 +25,83 @@ Distributed under the Boost Software License, Version 1.0.
 http://www.boost.org/LICENSE_1_0.txt)     
 
 note: include/hwlib-arduino-due-system-sam3xa.inc is (c) atmel, 
-under asf license.      
+under asf license.
+
+-----------------------------------------------------------------------------  
+
+bmptk build (makefile) structure
+
+The following is (only) relevant if you want to work on the library 
+itself and use its bmptk-bases makefile structure. 
+
+To build and run a single project, run *bmptk-make run* in its directory.
+
+Each project is in a separate directory and has its own bmptk makefile
+that builds that project. 
+This project makefile specifies project-specific properties, 
+sets the symbol RELATIVE, and includes the makefile.link 
+in the next higher directory, which can specify things
+that are common to the projects in its subdirectories, 
+updates RELATIVE to RELATIVE\.., and includes the
+makefile.link in the next higher directory, up to the one in the main
+directory of the library, which includes a makefile.custom (if present)
+or else the makefile.local. It also adds some global specifications,
+and finally includes the bmptk makefile.inc.
+
+To build everything in a directory and below, run *bmptk-make build*.
+
+Each directory that contains subdirectories that contain projects has 
+a makefile that responds to this command by re-issuing it in all its
+subdirectories. To do this, it also uses bmptk, so it uses
+'bmptk-make -f makefile.link <target>' to include bmptk.inc, using the
+above mechanism.
+
+De makefile.inc is included by the bmptk makefile.inc to update the bmptk
+SEARCH, HEADERS and SOURCES with the itmes from the hwlib library.
+
+Each directory that contains project sub-directories has a file 
+update_codelite_workspace.bat. When executed, it creates a CodeLite 
+workspace that contains the projects.
+
+To use the library with bmptk:
+   - define HWLIB to be the path where you placed your copy of hwlib
+   - include $(HWLIB)/Makefile.include in your makefile
+   - include "hwlib.hpp" in your code
+   
+To use the library without bmptk:
+   - add the hwlib/library directory to your search
+   - (if you want to edit hwlib files) 
+       add the hwlib files to your dependencies
+   - define the appropriate target as -DHWLIB_TARGET_* (see hwlib.hpp)	   
+       in your compiler parameters
+   - add hwlib.cpp to your sources
+   - include hwlib.hpp in your application source(s)      
 
 -----------------------------------------------------------------------------
 
 To do list
 
-Known problems:
-  - a busy period > 0.7s without a now_us() call makes the Due miss timer overflows
-    now a call in i2c avoid this, => this is not a real solution
+2019 refurbishment
+- build structure => doxygen
+- no separate includes in the hwlib include files
+- remove buffering => examples & style!
+- what does a target provide => split mega328 from uno
+- can ONCE imply NO_DOXYGEN?
+- hwlib equal -> can't be included earlier??
+- less root directories & files please
+- demo/due/chris oled spi
+- uno common files doesn't work => depends on bmptk!! (doesn't work for arduino?)
+- add external dependencies notes in doxygen (bmptk, linker, atmega lib stuff)
+- 'nowait' I2C
+- more efficient OLED - dirty bits
+- db103 uart - needs wait_us_busy => look at wait services
+- 5510 retry
+- hc595 must flush
+- pin_oc_invert has no p0 etc?
+- mcp23008, 23016
+- HD44780
+- die grafische LCD
+- matrix keypad
 
 Quality & consistency:
   - file-local objects are not documented? (check ostream)
@@ -105,7 +129,7 @@ Nice to haves:
   - use an abstraction instead of copied code in the extenders one_pin => pin_out_through_buffer
   - uno A/D, test with LCD shield
   - i2c hd44780 LCD
-  - more pin/portr cross type decorators
+  - more pin/port cross type decorators
 
 Misc:
   - meer examples lpc1114 - need the hardware!

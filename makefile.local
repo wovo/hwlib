@@ -25,4 +25,4 @@
 BMPTK             ?= $(RELATIVE)/../bmptk
 
 # where to find Catch
-CATCH             := $(RELATIVE)/../Catch
+CATCH             := $(RELATIVE)/../Catch2

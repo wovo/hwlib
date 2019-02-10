@@ -10,7 +10,10 @@
 # 
 #############################################################################
 
-.PHONY: clean build run error test notab doxygen
+# This makefile is for library *maintenance* only.
+# For *use* of the library, check the documentation.
+
+.PHONY: clean build run error test notab doxygen all
 
 run: error
 
@@ -29,6 +32,8 @@ else
    REMOVE := rm -rf
    MAKE := make
 endif
+
+all: notab doxygen test demo
 
 doxygen:
 	doxygen doxyfiles/doxyfile
@@ -52,15 +57,4 @@ clean:
 	cd demo && $(MAKE) clean   
 	cd test && $(MAKE) clean   
 	@echo "**** cleanup completed succesfully"  
-   
-# git commit -a -m 'work'   
-# git config core.ignorecase false
-push: clean
-	git add -A
-	git commit -a
-	git push		
-   
-push-as-work: 
-	git add -A
-	git commit -a -m 'small changes'
-	git push				
+   			

@@ -14,7 +14,6 @@ __codelite.workspace
 *.lst
 *.exe
 *.pdf
-*.html
 _dummy.jpg
 bmptk_*_stack.c
 _push.bat
