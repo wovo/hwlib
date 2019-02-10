@@ -102,6 +102,7 @@ To do list
 - HD44780
 - die grafische LCD
 - matrix keypad
+- pull requests en issues afwerken
 
 Quality & consistency:
   - file-local objects are not documented? (check ostream)
