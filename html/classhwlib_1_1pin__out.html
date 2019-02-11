@@ -116,13 +116,15 @@ Inheritance diagram for hwlib::pin_out:</div>
  <div class="center">
   <img src="classhwlib_1_1pin__out.png" usemap="#hwlib::pin_5Fout_map" alt=""/>
   <map id="hwlib::pin_5Fout_map" name="hwlib::pin_5Fout_map">
-<area href="classdb103_1_1pin__out.html" title="pin_out implementation for the LPC1114" alt="db103::pin_out" shape="rect" coords="0,56,141,80"/>
-<area href="classdue_1_1d2__36k_hz.html" alt="due::d2_36kHz" shape="rect" coords="151,56,292,80"/>
-<area href="classdue_1_1pin__out.html" title="pin_out implementation for a ATSAM3X8E" alt="due::pin_out" shape="rect" coords="302,56,443,80"/>
-<area href="classfrdm__kl27z_1_1pin__out.html" alt="frdm_kl27z::pin_out" shape="rect" coords="453,56,594,80"/>
-<area href="classhwlib_1_1pin__out__from__oc.html" alt="hwlib::pin_out_from_oc" shape="rect" coords="604,56,745,80"/>
-<area href="classstm32f103c8_1_1pin__out.html" title="pin_out implementation for an stm32f103c8" alt="stm32f103c8::pin_out" shape="rect" coords="755,56,896,80"/>
-<area href="classuno_1_1pin__out.html" title="pin_out implementation for a ATMega328P" alt="uno::pin_out" shape="rect" coords="906,56,1047,80"/>
+<area href="classdb103_1_1pin__out.html" title="pin_out implementation for the LPC1114" alt="db103::pin_out" shape="rect" coords="169,56,328,80"/>
+<area href="classdue_1_1d2__36k_hz.html" alt="due::d2_36kHz" shape="rect" coords="169,112,328,136"/>
+<area href="classdue_1_1pin__out.html" title="pin_out implementation for a ATSAM3X8E" alt="due::pin_out" shape="rect" coords="169,168,328,192"/>
+<area href="classhwlib_1_1all.html" alt="hwlib::all" shape="rect" coords="169,224,328,248"/>
+<area href="classhwlib_1_1pin__invert__from__out.html" alt="hwlib::pin_invert_from_out" shape="rect" coords="169,280,328,304"/>
+<area href="classhwlib_1_1pin__out__from__oc.html" alt="hwlib::pin_out_from_oc" shape="rect" coords="169,336,328,360"/>
+<area href="classstm32f030x6_1_1pin__out.html" title="pin_out implementation for an stm32f103c8" alt="stm32f030x6::pin_out" shape="rect" coords="169,392,328,416"/>
+<area href="classstm32f103c8_1_1pin__out.html" title="pin_out implementation for an stm32f103c8" alt="stm32f103c8::pin_out" shape="rect" coords="169,448,328,472"/>
+<area href="classuno_1_1pin__out.html" title="pin_out implementation for a ATMega328P" alt="uno::pin_out" shape="rect" coords="169,504,328,528"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -167,6 +169,8 @@ Public Member Functions</h2></td></tr>
 <p>This function flushes the pin write buffer: if the buffered value has not yet been written it is written to the pin. When the value has been written, it might be written again.</p>
 <p>The pin write buffer might also be fluhsed as a side-effect of other operations. </p>
 
+<p>Reimplemented in <a class="el" href="classhwlib_1_1all.html#a73f2cac7f63aa3c6ecb77686fae90618">hwlib::all</a>, and <a class="el" href="classhwlib_1_1pin__invert__from__out.html#ac2e91188ebaf8b3618d4b7bd584ee353">hwlib::pin_invert_from_out</a>.</p>
+
 </div>
 </div>
 <a id="a8d260a70e503dcfb81987c408e170300"></a>
@@ -196,7 +200,7 @@ Public Member Functions</h2></td></tr>
 <p>write the pin </p>
 <p>This function sets the level of the pin to the value v. A value of true makes the pin high, a value of false makes it low. </p>
 
-<p>Implemented in <a class="el" href="classdue_1_1d2__36k_hz.html#a21694f90fcb5b29d0839f98e473bfedb">due::d2_36kHz</a>, <a class="el" href="classdue_1_1pin__out.html#aa9127ae6a6d0c5f607569d9f67c5fa2b">due::pin_out</a>, <a class="el" href="classuno_1_1pin__out.html#aea26c0fbfa89dada15c148292e5110f9">uno::pin_out</a>, <a class="el" href="classdb103_1_1pin__out.html#adb5167058deb8fbd3e4c1bbdb456a6e3">db103::pin_out</a>, and <a class="el" href="classhwlib_1_1pin__out__from__oc.html#a65be8a9a19c20e272c82021ebfb44d2a">hwlib::pin_out_from_oc</a>.</p>
+<p>Implemented in <a class="el" href="classdue_1_1d2__36k_hz.html#a21694f90fcb5b29d0839f98e473bfedb">due::d2_36kHz</a>, <a class="el" href="classdue_1_1pin__out.html#aa9127ae6a6d0c5f607569d9f67c5fa2b">due::pin_out</a>, <a class="el" href="classuno_1_1pin__out.html#aea26c0fbfa89dada15c148292e5110f9">uno::pin_out</a>, <a class="el" href="classdb103_1_1pin__out.html#adb5167058deb8fbd3e4c1bbdb456a6e3">db103::pin_out</a>, <a class="el" href="classhwlib_1_1all.html#ab3e080d312269d030b8e075628bb5d1b">hwlib::all</a>, <a class="el" href="classhwlib_1_1pin__invert__from__out.html#a4bb39cc451e4f343e94a87a059a23107">hwlib::pin_invert_from_out</a>, and <a class="el" href="classhwlib_1_1pin__out__from__oc.html#a65be8a9a19c20e272c82021ebfb44d2a">hwlib::pin_out_from_oc</a>.</p>
 
 </div>
 </div>
@@ -209,7 +213,7 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehwlib.html">hwlib</a></li><li class="navelem"><a class="el" href="classhwlib_1_1pin__out.html">pin_out</a></li>
-    <li class="footer">Generated on Sun Feb 10 2019 15:00:14 for hwlib by
+    <li class="footer">Generated on Mon Feb 11 2019 09:25:51 for hwlib by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

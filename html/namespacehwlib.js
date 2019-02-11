@@ -1,6 +1,7 @@
 var namespacehwlib =
 [
     [ "adc", "classhwlib_1_1adc.html", "classhwlib_1_1adc" ],
+    [ "all", "classhwlib_1_1all.html", "classhwlib_1_1all" ],
     [ "circle", "classhwlib_1_1circle.html", "classhwlib_1_1circle" ],
     [ "color", "classhwlib_1_1color.html", "classhwlib_1_1color" ],
     [ "console", "classhwlib_1_1console.html", "classhwlib_1_1console" ],
@@ -9,9 +10,8 @@ var namespacehwlib =
     [ "font", "classhwlib_1_1font.html", "classhwlib_1_1font" ],
     [ "font_default_16x16", "classhwlib_1_1font__default__16x16.html", "classhwlib_1_1font__default__16x16" ],
     [ "font_default_8x8", "classhwlib_1_1font__default__8x8.html", "classhwlib_1_1font__default__8x8" ],
-    [ "glcd_5510", "classhwlib_1_1glcd__5510.html", "classhwlib_1_1glcd__5510" ],
-    [ "glcd_5510_buffered", "classhwlib_1_1glcd__5510__buffered.html", "classhwlib_1_1glcd__5510__buffered" ],
     [ "glcd_oled", "classhwlib_1_1glcd__oled.html", "classhwlib_1_1glcd__oled" ],
+    [ "glcd_oled_buffered", "classhwlib_1_1glcd__oled__buffered.html", "classhwlib_1_1glcd__oled__buffered" ],
     [ "hc595", "classhwlib_1_1hc595.html", "classhwlib_1_1hc595" ],
     [ "hd44780", "classhwlib_1_1hd44780.html", "classhwlib_1_1hd44780" ],
     [ "i2c_bus", "classhwlib_1_1i2c__bus.html", "classhwlib_1_1i2c__bus" ],
@@ -28,6 +28,7 @@ var namespacehwlib =
     [ "pcf8591", "classhwlib_1_1pcf8591.html", "classhwlib_1_1pcf8591" ],
     [ "pin_in", "classhwlib_1_1pin__in.html", "classhwlib_1_1pin__in" ],
     [ "pin_in_out", "classhwlib_1_1pin__in__out.html", "classhwlib_1_1pin__in__out" ],
+    [ "pin_invert_from_out", "classhwlib_1_1pin__invert__from__out.html", "classhwlib_1_1pin__invert__from__out" ],
     [ "pin_oc", "classhwlib_1_1pin__oc.html", "classhwlib_1_1pin__oc" ],
     [ "pin_out", "classhwlib_1_1pin__out.html", "classhwlib_1_1pin__out" ],
     [ "pin_out_from_oc", "classhwlib_1_1pin__out__from__oc.html", "classhwlib_1_1pin__out__from__oc" ],

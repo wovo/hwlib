@@ -133,7 +133,7 @@ class port_out {
    /// @copydoc port_in_out::number_of_pins()
    virtual uint_fast8_t number_of_pins() = 0;
    
-   /// @copydoc port_in_out::set()
+   /// @copydoc port_in_out::set( uint_fast8_t x )
    virtual void write( uint_fast8_t x ) = 0;     
    
    /// @copydoc port_in_out::flush()

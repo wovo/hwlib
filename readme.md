@@ -3,7 +3,7 @@ programming. It is used in a number of Computer Science courses
 at the Hogeschool Utrecht, HBO-ICT.
 
 The typical blink-a-led application code using hwlib 
-(assuming the target board has a default led) is:
+(assuming a target board like the Arduino Uno that has a default led) is:
 
 ```C++
 #include "hwlib.hpp"

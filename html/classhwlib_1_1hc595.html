@@ -131,6 +131,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a89c7b21cb99d61c91f764a0fdb7ceb9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a0ffa22115aaedf2ee49b583d9601e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1hc595.html#a4a0ffa22115aaedf2ee49b583d9601e8">write</a> (uint_fast8_t x) override</td></tr>
 <tr class="separator:a4a0ffa22115aaedf2ee49b583d9601e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89801264883c79926fd9f0983662e50a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1hc595.html#a89801264883c79926fd9f0983662e50a">flush</a> () override</td></tr>
+<tr class="memdesc:a89801264883c79926fd9f0983662e50a"><td class="mdescLeft">&#160;</td><td class="mdescRight">flush the port buffer  <a href="#a89801264883c79926fd9f0983662e50a">More...</a><br /></td></tr>
+<tr class="separator:a89801264883c79926fd9f0983662e50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -178,7 +181,7 @@ one_pin&#160;</td><td class="memItemRight" valign="bottom"><b>p7</b> { *this, 7 
 <li>use STCP as SS</li>
 </ul>
 <p>Note that STCP is not a real chip-select: the chip will always respond to the data that is clocked by storing it in the shift register. But only the chip that got the select signal will (on the rising edge of the SS) transfer the data from the shift register to the storage register, hence affecting the outputs.</p>
-<p>The next code shows a kitt display on 8 LEDs connected to the HC595 output pins: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &quot;hwlib.hpp&quot;</span></div><div class="line"></div><div class="line"><span class="keywordtype">int</span> main( <span class="keywordtype">void</span> ){</div><div class="line"></div><div class="line">   <span class="keyword">auto</span> sclk = hwlib::target::pin_out{ 1, 2 };</div><div class="line">   <span class="keyword">auto</span> mosi = hwlib::target::pin_out{ 1, 0 };</div><div class="line">   <span class="keyword">auto</span> cs   = hwlib::target::pin_out{ 1, 1 };</div><div class="line">   </div><div class="line">   <span class="keyword">auto</span> spi_bus = <a class="code" href="classhwlib_1_1spi__bus__bit__banged__sclk__mosi__miso.html">hwlib::spi_bus_bit_banged_sclk_mosi_miso</a>{ </div><div class="line">      sclk, mosi, <a class="code" href="namespacehwlib.html#a4faeee139e56e2231bad052489b7dc78">hwlib::pin_in_dummy</a> };</div><div class="line">   </div><div class="line">   <span class="keyword">auto</span> chip = <a class="code" href="classhwlib_1_1hc595.html">hwlib::hc595</a>{ spi_bus, cs };</div><div class="line"> </div><div class="line">   <a class="code" href="namespacehwlib.html#aaabcbce6ceaee099d8b63d7ced145cea">hwlib::kitt</a>( chip, 50 );</div><div class="line">}  </div></div><!-- fragment --><p> The 74HCT595 is a similar chip, but intended (only) for 5V power, and for use with the old TTL signal levels (HC chips are for the CMOS signal levels that are more common now).</p>
+<p>The next code shows a kitt display on 8 LEDs connected to the HC595 output pins: </p><div class="fragment"></div><!-- fragment --><p> The 74HCT595 is a similar chip, but intended (only) for 5V power, and for use with the old TTL signal levels (HC chips are for the CMOS signal levels that are more common now).</p>
 <p>references:</p><ul>
 <li><a href="https://www.nxp.com/documents/data_sheet/74HC_HCT595.pdf">74HC595/74HCT595 data sheet</a> (nxp, pdf) </li>
 </ul>
@@ -223,6 +226,38 @@ one_pin&#160;</td><td class="memItemRight" valign="bottom"><b>p7</b> { *this, 7 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a89801264883c79926fd9f0983662e50a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89801264883c79926fd9f0983662e50a">&#9670;&nbsp;</a></span>flush()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hwlib::hc595::flush </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>flush the port buffer </p>
+<p>This function flushes the port write buffer: if a buffered value has not yet been written it is written to the pin. When the value has been written, it might be written again.</p>
+<p>The pin write buffer might also be flushed as a side-effect of other operations. </p>
+
+<p>Reimplemented from <a class="el" href="classhwlib_1_1port__out.html#a86cb7d12b2002256309dfaeed14598ff">hwlib::port_out</a>.</p>
+
+</div>
+</div>
 <a id="a89c7b21cb99d61c91f764a0fdb7ceb9b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89c7b21cb99d61c91f764a0fdb7ceb9b">&#9670;&nbsp;</a></span>number_of_pins()</h2>
 
@@ -310,7 +345,7 @@ one_pin&#160;</td><td class="memItemRight" valign="bottom"><b>p7</b> { *this, 7 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehwlib.html">hwlib</a></li><li class="navelem"><a class="el" href="classhwlib_1_1hc595.html">hc595</a></li>
-    <li class="footer">Generated on Sun Feb 10 2019 15:00:14 for hwlib by
+    <li class="footer">Generated on Mon Feb 11 2019 09:25:51 for hwlib by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

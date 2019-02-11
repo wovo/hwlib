@@ -52,6 +52,7 @@ enum class pins {
 /// \endcond   
 };  
 
+/// \cond INTERNAL    
 struct pin_info_type { 
    uint8_t port; 
    uint8_t pin; 
@@ -124,9 +125,9 @@ const HWLIB_WEAK pin_info_type & pin_info( pins name ){
    }
    return pin_info_array[ n ];
 }
+/// \endcond   
    
 /// \cond INTERNAL 
-
 GPIO_TypeDef & __attribute__((weak)) port_registers( uint32_t port ){
    
    // a bit of a cludge to put this here:
@@ -178,10 +179,7 @@ public:
       port.BSRR |= ( v ? mask : ( mask << 16 ));
    }
 };
-
-
 /// \endcond 
-
 
 /// pin_in implementation for a ATSAM3X8E
 class pin_in : public hwlib::pin_in, private pin_base {

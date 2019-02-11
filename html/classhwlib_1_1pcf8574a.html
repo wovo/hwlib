@@ -133,6 +133,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a60ba477799b6ba236442148b7d59687c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a282f9980ca53927659af39248d3e5bfb"><td class="memItemLeft" align="right" valign="top">uint_fast8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1pcf8574a.html#a282f9980ca53927659af39248d3e5bfb">read</a> () override</td></tr>
 <tr class="separator:a282f9980ca53927659af39248d3e5bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6874177acba99dd9b7a53d1679ab9f18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1pcf8574a.html#a6874177acba99dd9b7a53d1679ab9f18">flush</a> () override</td></tr>
+<tr class="memdesc:a6874177acba99dd9b7a53d1679ab9f18"><td class="mdescLeft">&#160;</td><td class="mdescRight">flush the port buffer  <a href="#a6874177acba99dd9b7a53d1679ab9f18">More...</a><br /></td></tr>
+<tr class="separator:a6874177acba99dd9b7a53d1679ab9f18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2dbb52f3f10990e3879597fbafe9de9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1pcf8574a.html#aa2dbb52f3f10990e3879597fbafe9de9">refresh</a> () override</td></tr>
+<tr class="memdesc:aa2dbb52f3f10990e3879597fbafe9de9"><td class="mdescLeft">&#160;</td><td class="mdescRight">refresh the port buffer  <a href="#aa2dbb52f3f10990e3879597fbafe9de9">More...</a><br /></td></tr>
+<tr class="separator:aa2dbb52f3f10990e3879597fbafe9de9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -176,7 +182,7 @@ one_pin&#160;</td><td class="memItemRight" valign="bottom"><b>p7</b> { *this, 7 
 <div class="image">
 <img src="pcf8574a-diagram.png" alt="pcf8574a-diagram.png"/>
 </div>
-<p>The next code shows a kitt display on 8 LEDs connected to the PCF8574A output pins. Because the output pins are open-collector, the LEDs are connected to power (instead of to the ground), hence the use of <a class="el" href="classhwlib_1_1port__out__invert.html" title="invert an output port">hwlib::port_out_invert()</a>. </p><div class="fragment"><div class="line"><span class="preprocessor">#include &quot;hwlib.hpp&quot;</span></div><div class="line"></div><div class="line"><span class="keywordtype">int</span> main( <span class="keywordtype">void</span> ){</div><div class="line"></div><div class="line">   <span class="keyword">auto</span> scl = hwlib::target::pin_oc{ 0, 4 };</div><div class="line">   <span class="keyword">auto</span> sda = hwlib::target::pin_oc{ 0, 5 };</div><div class="line">   </div><div class="line">   <span class="keyword">auto</span> i2c_bus = <a class="code" href="classhwlib_1_1i2c__bus__bit__banged__scl__sda.html">hwlib::i2c_bus_bit_banged_scl_sda</a>{ scl,sda };</div><div class="line">   </div><div class="line">   <span class="keyword">auto</span> chip = <a class="code" href="classhwlib_1_1pcf8574a.html">hwlib::pcf8574a</a>{ i2c_bus, 0 };</div><div class="line">   </div><div class="line">   <span class="keyword">auto</span> leds = <a class="code" href="classhwlib_1_1port__oc__invert.html">hwlib::port_oc_invert</a>( chip );</div><div class="line"> </div><div class="line">   <a class="code" href="namespacehwlib.html#aaabcbce6ceaee099d8b63d7ced145cea">hwlib::kitt</a>( leds, 50 );</div><div class="line">}  </div></div><!-- fragment --><p> The pcf8574 (without the -a) is the same chip, but with a different I2C bus address.</p>
+<p>The next code shows a kitt display on 8 LEDs connected to the PCF8574A output pins. Because the output pins are open-collector, the LEDs are connected to power (instead of to the ground), hence the use of <a class="el" href="classhwlib_1_1port__out__invert.html" title="invert an output port">hwlib::port_out_invert()</a>. </p><div class="fragment"></div><!-- fragment --><p> The pcf8574 (without the -a) is the same chip, but with a different I2C bus address.</p>
 <div class="image">
 <img src="pcf8574a-addresses.png" alt="pcf8574a-addresses.png"/>
 </div>
@@ -224,6 +230,38 @@ one_pin&#160;</td><td class="memItemRight" valign="bottom"><b>p7</b> { *this, 7 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6874177acba99dd9b7a53d1679ab9f18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6874177acba99dd9b7a53d1679ab9f18">&#9670;&nbsp;</a></span>flush()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hwlib::pcf8574a::flush </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>flush the port buffer </p>
+<p>This function flushes the port write buffer: if a buffered value has not yet been written it is written to the pin. When the value has been written, it might be written again.</p>
+<p>The pin write buffer might also be flushed as a side-effect of other operations. </p>
+
+<p>Reimplemented from <a class="el" href="classhwlib_1_1port__oc.html#a28a26dee02e55b7a63ab521beef68176">hwlib::port_oc</a>.</p>
+
+</div>
+</div>
 <a id="a1bb2266c127d93fd1d7c0b3f9193817d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1bb2266c127d93fd1d7c0b3f9193817d">&#9670;&nbsp;</a></span>number_of_pins()</h2>
 
@@ -280,6 +318,37 @@ one_pin&#160;</td><td class="memItemRight" valign="bottom"><b>p7</b> { *this, 7 
 <p></p>
 
 <p>Implements <a class="el" href="classhwlib_1_1port__oc.html#ad68bfba35bd0cc71da1fc3ce5d6ecd8b">hwlib::port_oc</a>.</p>
+
+</div>
+</div>
+<a id="aa2dbb52f3f10990e3879597fbafe9de9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2dbb52f3f10990e3879597fbafe9de9">&#9670;&nbsp;</a></span>refresh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hwlib::pcf8574a::refresh </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>refresh the port buffer </p>
+<p>This function refreshed the contents of the read buffer that might be used by get_buffered() with a value read from the pins.</p>
+<p>The read buffer might also be refreshed as a side-effect of other operations. </p>
+
+<p>Reimplemented from <a class="el" href="classhwlib_1_1port__oc.html#a40527c0cf5d8f1cdb4ff1ca752286b1e">hwlib::port_oc</a>.</p>
 
 </div>
 </div>
@@ -340,7 +409,7 @@ one_pin&#160;</td><td class="memItemRight" valign="bottom"><b>p7</b> { *this, 7 
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehwlib.html">hwlib</a></li><li class="navelem"><a class="el" href="classhwlib_1_1pcf8574a.html">pcf8574a</a></li>
-    <li class="footer">Generated on Sun Feb 10 2019 15:00:14 for hwlib by
+    <li class="footer">Generated on Mon Feb 11 2019 09:25:51 for hwlib by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

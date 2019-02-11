@@ -61,10 +61,10 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-".html",
-"classhwlib_1_1pin__out.html",
-"functions_m.html",
-"hwlib-native_8hpp.html"
+"acknowledgements.html",
+"classhwlib_1_1port__in.html#a3498fc0158e1e460a00d671df629fe22",
+"functions_func_p.html",
+"hwlib-i2c_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -117,11 +117,11 @@ Inheritance diagram for hwlib::window:</div>
  <div class="center">
   <img src="classhwlib_1_1window.png" usemap="#hwlib::window_map" alt=""/>
   <map id="hwlib::window_map" name="hwlib::window_map">
-<area href="classhwlib_1_1glcd__5510.html" title="Nokia 5510 B/W graphics LCD library." alt="hwlib::glcd_5510" shape="rect" coords="0,56,161,80"/>
-<area href="classhwlib_1_1glcd__5510__buffered.html" alt="hwlib::glcd_5510_buffered" shape="rect" coords="171,56,332,80"/>
-<area href="classhwlib_1_1glcd__oled.html" title="Oled B/W graphics LCD." alt="hwlib::glcd_oled" shape="rect" coords="342,56,503,80"/>
-<area href="classhwlib_1_1window__invert.html" title="window_invert (invert writes to a window)" alt="hwlib::window_invert" shape="rect" coords="513,56,674,80"/>
-<area href="classhwlib_1_1window__part.html" title="a window_part (subwindow of a larger window)" alt="hwlib::window_part" shape="rect" coords="684,56,845,80"/>
+<area href="classhwlib_1_1glcd__oled.html" title="Oled B/W graphics LCD." alt="hwlib::glcd_oled" shape="rect" coords="0,56,157,80"/>
+<area href="classhwlib_1_1glcd__oled.html" title="Oled B/W graphics LCD." alt="hwlib::glcd_oled" shape="rect" coords="167,56,324,80"/>
+<area href="classhwlib_1_1glcd__oled__buffered.html" title="Oled B/W graphics LCD, buffered." alt="hwlib::glcd_oled_buffered" shape="rect" coords="334,56,491,80"/>
+<area href="classhwlib_1_1window__invert.html" title="window_invert (invert writes to a window)" alt="hwlib::window_invert" shape="rect" coords="501,56,658,80"/>
+<area href="classhwlib_1_1window__part.html" title="a window_part (subwindow of a larger window)" alt="hwlib::window_part" shape="rect" coords="668,56,825,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -187,7 +187,7 @@ Public Attributes</h2></td></tr>
 <p>This function clears the windows by writing the background color to all pixels. The default implementation writes to all pixels in sequence. A concrete window can probably provide a faster implementation.</p>
 <p>When buffering is specified ( buf == buffered ) the actual clearing can be delayed until the next <a class="el" href="classhwlib_1_1window.html#a2b654a98872d174173e1df24a444c949" title="flush the pixel buffer">flush()</a> call. </p>
 
-<p>Reimplemented in <a class="el" href="classhwlib_1_1glcd__5510__buffered.html#a3522375b2a277af26795c8a3390eb696">hwlib::glcd_5510_buffered</a>, <a class="el" href="classhwlib_1_1glcd__oled.html#a4d3734f822d7f814be2630538cc49911">hwlib::glcd_oled</a>, and <a class="el" href="classhwlib_1_1glcd__5510.html#a533b2663e151bee909543d0038b2cb4d">hwlib::glcd_5510</a>.</p>
+<p>Reimplemented in <a class="el" href="classhwlib_1_1glcd__oled__buffered.html#a1df3ca6d163e33b2edf1242acf47342a">hwlib::glcd_oled_buffered</a>, and <a class="el" href="classhwlib_1_1glcd__oled.html#a4d3734f822d7f814be2630538cc49911">hwlib::glcd_oled</a>.</p>
 
 </div>
 </div>
@@ -218,7 +218,7 @@ Public Attributes</h2></td></tr>
 <p>flush the pixel buffer </p>
 <p>This function fluhses the pixel buffer: it writes pixels that have not yet been written. Flushing might occur as a side-effect of other operations. </p>
 
-<p>Reimplemented in <a class="el" href="classhwlib_1_1glcd__5510__buffered.html#ac77ad9de42ac702fbe8a5c34f0cfe354">hwlib::glcd_5510_buffered</a>, and <a class="el" href="classhwlib_1_1glcd__oled.html#a360af149dd73a9a1f059bf9447919ce9">hwlib::glcd_oled</a>.</p>
+<p>Reimplemented in <a class="el" href="classhwlib_1_1glcd__oled__buffered.html#a68ed87e12c7f7ed0abe621b14af9d604">hwlib::glcd_oled_buffered</a>, <a class="el" href="classhwlib_1_1glcd__oled.html#a58e191e5350f349facee130513a08b75">hwlib::glcd_oled</a>, and <a class="el" href="classhwlib_1_1glcd__oled.html#a360af149dd73a9a1f059bf9447919ce9">hwlib::glcd_oled</a>.</p>
 
 </div>
 </div>
@@ -363,7 +363,7 @@ Public Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehwlib.html">hwlib</a></li><li class="navelem"><a class="el" href="classhwlib_1_1window.html">window</a></li>
-    <li class="footer">Generated on Sun Feb 10 2019 15:00:14 for hwlib by
+    <li class="footer">Generated on Mon Feb 11 2019 09:25:52 for hwlib by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>
