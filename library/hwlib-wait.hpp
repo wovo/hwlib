@@ -118,9 +118,8 @@ uint_fast64_t ticks_per_us();
 #ifdef HWLIB_ONCE
 
 // The default wait_xx functions call the wait_xx_busy functions.
-// An RTOS can override these defaults.`
+// An RTOS can override these defaults to hook into all waiting
 
-/* - disabled for emBO
 void HWLIB_WEAK wait_ns( int_fast32_t n ){
    wait_ns_busy( n );
 }
@@ -133,20 +132,18 @@ void HWLIB_WEAK wait_ms( int_fast32_t n ){
    wait_ms_busy( n );
 }
 
-// The wait_xx_busy functions can be implemented by the targets,
-// but only the wait_us_busy() function *must* be implemented.
+// the wait_us_busy() function must be implemented by the target
 
-void HWLIB_WEAK wait_ns_busy( int_fast32_t n ){
+void wait_ns_busy( int_fast32_t n ){
    wait_us_busy( ( n + 999 ) / 1000 );
 }
 
-void HWLIB_WEAK wait_ms_busy( int_fast32_t n ){
+void wait_ms_busy( int_fast32_t n ){
    while( n > 0 ){
       wait_us_busy( 1000 );
       --n;
    }   
 }  
-*/
 
 #endif
 

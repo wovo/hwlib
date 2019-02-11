@@ -834,7 +834,7 @@ void uart_init(){
     // Disable all interrupts.	  
     hw_uart->UART_IDR = 0xFFFFFFFF;   
 
-    // Enable the receiver and thes trasmitter.
+    // Enable the receiver and the trasmitter.
     hw_uart->UART_CR = UART_CR_RXEN | UART_CR_TXEN;      
 }
 
@@ -918,25 +918,6 @@ uint64_t now_us(){
 void wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){}
-}
-
-void HWLIB_WEAK wait_us( int_fast32_t n ){ 
-   wait_us_busy( n );
-}
-
-void HWLIB_WEAK wait_ms( int_fast32_t n ){
-   while( n > 0 ){
-      wait_us( 1'000 );
-      --n;
-   }   
-}  
-
-void HWLIB_WEAK wait_ns_busy( int_fast32_t n ){
-   wait_us_busy( ( n + 999 ) / 1000 );
-}
-
-void HWLIB_WEAK wait_ns( int_fast32_t n ){
-   wait_ns_busy( n );
 }
 
 #endif

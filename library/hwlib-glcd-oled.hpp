@@ -360,10 +360,11 @@ private:
       } else {
          buffer[ a ] &= ~( 0x01 << ( pos.y % 8 )); 
       }   
-      
-      if( buf == buffering::unbuffered ){
-          pixels( pos.x, pos.y / 8, buffer[ a ] );      
-      }
+  
+// this unbuffered version should never write directly!    
+//      if( buf == buffering::unbuffered ){
+//          pixels( pos.x, pos.y / 8, buffer[ a ] );      
+//      }
    }
    
 public:

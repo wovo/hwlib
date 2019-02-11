@@ -40,6 +40,10 @@
    #include HWLIB_INCLUDE( hwlib-blue-pill.hpp )
 #endif
 
+#ifdef BMPTK_TARGET_scouting_lock
+   #include HWLIB_INCLUDE( hwlib-scouting-lock.hpp )
+#endif
+
 #ifdef BMPTK_TARGET_native
    #include HWLIB_INCLUDE( hwlib-native.hpp )
 #endif

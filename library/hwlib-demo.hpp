@@ -210,6 +210,7 @@ void HWLIB_NORETURN graphics_random_circles(
             w.foreground 
          );
          circle.draw( w );
+         w.flush();
          hwlib::wait_ms( 500 );
       }
    }  
