@@ -1,0 +1,324 @@
+// ==========================================================================
+//
+// File      : hwlib-spi.hpp
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
+// Copyright : wouter@voti.nl 2017, 2018
+//
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// ==========================================================================
+
+// included only via hwlib.hpp, hence no multipl-include guard is needed
+
+// this file contains Doxygen lines
+/// @file
+
+namespace hwlib {
+   
+/// \brief
+/// spi bus interface
+/// \details
+/// This class abstracts the interface of a master to a SPI bus.   
+/// 
+/// The SPI (Serial Peripheral Interface) protocol 
+/// is based on shift registers. 
+/// The master (in most cases the micro-controller) generates
+/// clock pulses (SCLK), and on each pulse one bit of data is transferred
+/// from the shift register inside the master to the shift register inside
+/// the slave, AND one bit is transferred in the other direction.
+/// After N clock pulses, all N data bits in the master and the slave 
+/// are exchanged.
+/// The MOSI line transfers data from master to slave (Master Out Slave In),
+/// the MISO (Master In Slave Out) line transfers data 
+/// from the slave to the master.
+///
+/// \image html spi-master-slave.png
+///
+/// The SS (Slave Select) line is used to signal the start and end of a 
+/// SPOI transfer. In most cases, the select line is active low.
+///
+/// \image html spi-select-1.png
+///
+/// A SPI bus can have multiple slaves. 
+/// All slaves (and the master) share the MOSI, MISO and SLCK lines. 
+/// Each slave has a separate SS line, that is used to activate
+/// a single slave for a transfer.
+///
+/// \image html spi-select-2.png
+///
+/// The SPI bus is a de-facto standard: there is no official document
+/// that defines it, but various manufacturers agree on how it should work
+/// and (more or less!) implement it the same. But there are differences
+/// that might give problems: 
+///    - the polarity (active low or active high) of the SS line
+///    - the initial level of the clock 
+///    - the polarity of the clock 
+///       (the clock edge on which the master and slave transfer data)
+///    - the (maximum) clock frequency
+///
+/// As always, consult the datasheet of the chip for the details.
+/// 
+/// references:
+/// - <a href="https://embeddedmicro.com/tutorials/mojo/serial-peripheral-interface-spi">
+///    SPI explanation</A> (Embedded Micro Forum)
+/// - <a href="https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus">
+///    Serial Peripheral Bus</A> (wikipedia)
+///  
+class spi_bus {
+private:
+
+   /// \brief
+   /// spi transaction object
+   /// \details
+   /// This is the read-and-write operation 
+   /// that a concrete spi_bus must implement.
+   /// It simultaneaously reads and writes n bytes of data.
+   ///
+   /// The implementation must handle the situation that 
+   /// one or both of data_out or data_in are nullptr.
+   virtual void write_and_read( 
+      const size_t n, 
+      const uint8_t data_out[], 
+      uint8_t data_in[] 
+   ) = 0;   
+   
+   // read_and_write is used through the functions in transaction
+   friend class spi_transaction;
+   
+public:   
+
+   /// \brief
+   /// spi transaction object
+   /// \details
+   /// A SPI transaction object is created (adn destructed) 
+   /// for each SPI transaction.
+   /// When a SPI transaction object is is constructed, 
+   //  the sel pin is activated. 
+   /// When the object is destructed, the sel pin is deselected.
+   ///
+   /// While the transaction object exists, its functions
+   /// can be used to transfer data to and from the peripheral. 
+   class spi_transaction {
+   private:
+   
+      spi_bus & bus;
+      
+      pin_out & sel;
+      
+      spi_transaction( spi_bus & bus, pin_out & sel ):
+         bus( bus ), sel( sel )
+      {
+         sel.write( 0 );
+      }
+      
+      friend class spi_bus;
+      
+   public:    
+   
+      /// \brief
+      /// destructor: deselect the sel pin
+      ~spi_transaction(){
+         sel.write( 1 );          
+      }
+
+      /// \brief
+      /// read and write data (raw arrays)
+      /// \details      
+      /// This function simultaneously writes n bytes 
+      /// from data_out to the peripheral 
+      /// and reads n bytes from the peripheral into data_in.
+      ///
+      /// This function uses an unsafe (raw array) interface.
+      /// Prefer to use a function that uses std::array<> instead.
+      ///
+      /// When data_out is nullptr, 0 bits are written.
+      /// When data_in is nullptr, the bits that are read are ignored.
+      void HWLIB_INLINE write_and_read( 
+         const size_t n, 
+         const uint8_t data_out[], 
+         uint8_t data_in[] 
+      ){
+         bus.write_and_read( n, data_out, data_in );
+      }
+   
+      /// \brief
+      /// read and write data (std::array<>'s)
+      /// \details      
+      /// This function simultaneously writes the data from 
+      /// data_out to the peripheral 
+      /// and reads from the peripheral into data_in.
+      template< size_t n >
+      void HWLIB_INLINE write_and_read( 
+         const std::array< uint8_t, n > & data_out, 
+         std::array< uint8_t, n > & data_in
+      ){
+         bus.write_and_read( n, data_out.begin(), data_in.begin() );
+      }   
+      
+      /// \brief
+      /// write data (raw array)
+      /// \details      
+      /// This function writes n bytes 
+      /// from data_out to the peripheral.
+      ///
+      /// This function uses an unsafe (raw array) interface.
+      /// Prefer to use a function that uses std::array<> instead.
+      void HWLIB_INLINE write( 
+         const size_t n, 
+         const uint8_t data_out[]
+      ){
+         bus.write_and_read( n, data_out, nullptr );
+      }
+
+      /// \brief
+      /// write data (std:array<>)
+      /// \details      
+      /// This function writes the data 
+      /// from data_out to the peripheral.      
+      template< size_t n > 
+      void HWLIB_INLINE write( 
+         const std::array< uint8_t, n > & data_out
+      ){
+         bus.write_and_read( n, data_out.begin(), nullptr );
+      }   
+      
+      /// \brief
+      /// write data (uint8_t)
+      /// \details      
+      /// This function writes a single byte of
+      /// data to the peripheral.
+      void HWLIB_INLINE write( 
+         const uint8_t d
+      ){
+         bus.write_and_read( 1, & d, nullptr );
+      }
+      
+      /// \brief
+      /// read data (raw array)
+      /// \details      
+      /// This function reads n bytes from the peripheral into data_in.
+      ///	  
+      /// This function uses an unsafe (raw array) interface.
+      /// Prefer to use a function that uses std::array<> instead.
+      void HWLIB_INLINE read( 
+         const size_t n, 
+         uint8_t data_in[] 
+      ){
+         bus.write_and_read( n, nullptr, data_in );
+      }      
+      
+      /// \brief
+      /// read data (std::array<>)
+      /// \details      
+      /// This function reads n bytes from the peripheral into data_in.
+      template< size_t n >
+      void HWLIB_INLINE read( 
+         std::array< uint8_t, n > & data_in
+      ){
+         bus.write_and_read( n, nullptr, data_in.begin() );
+      }   
+      
+      /// \brief
+      /// read a single byte
+      /// \details      
+      /// This function reads and returns a single byte.
+      uint8_t HWLIB_INLINE read_byte(){
+         uint8_t d;          
+         bus.write_and_read( 1, nullptr, & d );
+         return d;
+      }       
+   
+   }; // class spi_transaction   
+   
+   /// \brief
+   /// spi read-and-write transaction 
+   /// \details
+   /// This function creates and returns a SPI transaction object
+   /// for the spi bus and the indicated sel pin. 
+   spi_transaction transaction( pin_out & sel ){
+      return spi_transaction( *this, sel );
+   }
+
+}; // class spi_bus  
+
+
+/// \brief
+/// bit-banged SPI bus implementation
+/// \details
+/// This class implements a bit-banged master interface to a SPI bus.
+class spi_bus_bit_banged_sclk_mosi_miso : public spi_bus {
+private:
+
+   pin_out & sclk, & mosi;
+
+   pin_in & miso;
+   
+   // very crude;
+   // delay should be a constructor parameter
+   void HWLIB_INLINE wait_half_period(){
+      wait_us( 1 );      
+   }
+   
+   void write_and_read( 
+      const size_t n, 
+      const uint8_t data_out[], 
+      uint8_t data_in[] 
+   ) override {
+
+      for( uint_fast8_t i = 0; i < n; ++i ){
+          
+         uint_fast8_t d = 
+            ( data_out == nullptr )
+            ? 0 
+            : *data_out++;
+             
+         for( uint_fast8_t j = 0; j < 8; ++j ){
+            mosi.write( ( d & 0x80 ) != 0 );
+            wait_half_period();
+            sclk.write( 1 );
+            wait_half_period();
+            d = d << 1;
+            if( miso.read() ){
+               d |= 0x01;
+            }
+            sclk.write( 0 );              
+         }
+          
+         if( data_in != nullptr ){
+            *data_in++ = d;
+         }
+      }      
+      wait_half_period();
+   }      
+   
+public:
+
+   /// \brief
+   /// construct a bit-banged SPI bus from the sclk, miso and mosi pins
+   /// \details
+   /// This constructor creates a simple bit-banged SPI bus master
+   /// from the sclk, miso and mosi pins. 
+   ///
+   /// The chip select pins for the individual chips supplied to the 
+   /// write_and_read() functions.
+   ///
+   /// When the SPI bus is used for either only writing or only reading,
+   /// the unused pin argument can be specified as pin_out_dummy or
+   /// pin_in_dummy.
+   spi_bus_bit_banged_sclk_mosi_miso( 
+      pin_out & sclk, 
+      pin_out & mosi, 
+      pin_in & miso 
+   ):
+      sclk( sclk ), 
+      mosi( mosi ), 
+      miso( miso )
+   {
+      sclk.write( 0 );
+   }
+   
+}; // class spi_bus_bit_banged_sclk_mosi_miso    
+   
+}; // namespace hwlib
