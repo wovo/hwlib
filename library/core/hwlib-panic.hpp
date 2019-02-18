@@ -10,16 +10,16 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
 
 namespace hwlib {
 
-/// \brief
+
 /// panic function for irrecoverable runtime errors
-/// \details
+/// 
 /// This function is called by hwlib functions when an irrecoverable error
 /// is encountered (for instance an invalid pin or port number).
 ///
@@ -37,15 +37,16 @@ void HWLIB_NORETURN panic(
    const uint_fast16_t line 
 );
 
-/// \brief
+
 /// panic-with-location macro 
-/// \details
+/// 
 /// This macro calls panic( __FILE__, __LINE__ ).
 #define HWLIB_PANIC_WITH_LOCATION ::hwlib::panic( __FILE__, __LINE__ )
 
 #ifdef HWLIB_ONCE 
 
-// The weak attribute allows an application to specify its own panic function
+// The weak attribute allows an application 
+// to specify its own panic function
 void HWLIB_NORETURN HWLIB_WEAK panic( 
    const char * file, 
    const uint_fast16_t line 

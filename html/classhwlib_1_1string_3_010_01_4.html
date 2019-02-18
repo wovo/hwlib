@@ -226,9 +226,6 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a166d0dda566d906936182dadce85527c"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classhwlib_1_1string_3_010_01_4.html#a166d0dda566d906936182dadce85527c">operator&lt;=</a> (const T &amp;rhs) const</td></tr>
 <tr class="memdesc:a166d0dda566d906936182dadce85527c"><td class="mdescLeft">&#160;</td><td class="mdescRight">compare for smaller than or equal <br /></td></tr>
 <tr class="separator:a166d0dda566d906936182dadce85527c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1878a22c918223912a8a4fec588c2d4"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1string_3_010_01_4.html#ae1878a22c918223912a8a4fec588c2d4">c_str</a> ()</td></tr>
-<tr class="memdesc:ae1878a22c918223912a8a4fec588c2d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to the 0-terminated content  <a href="#ae1878a22c918223912a8a4fec588c2d4">More...</a><br /></td></tr>
-<tr class="separator:ae1878a22c918223912a8a4fec588c2d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39c982671091d380af2396c82ffe4ba8"><td class="memItemLeft" align="right" valign="top"><a id="a39c982671091d380af2396c82ffe4ba8"></a>
 constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1string_3_010_01_4.html#a39c982671091d380af2396c82ffe4ba8">max_size</a> () const</td></tr>
 <tr class="memdesc:a39c982671091d380af2396c82ffe4ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">the maximum number of characters that can be stored <br /></td></tr>
@@ -394,37 +391,7 @@ s.clear() &lt;&lt; "[" &lt;&lt; text &lt;&lt; "]";
 </pre><p>(The .<a class="el" href="classhwlib_1_1string_3_010_01_4.html#a381e79cb2570b7ab864dd2de6f090f55" title="set to &quot;&quot;">clear()</a> is not strictly needed because the default constructor creates an empty string, but it improves readability). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae1878a22c918223912a8a4fec588c2d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1878a22c918223912a8a4fec588c2d4">&#9670;&nbsp;</a></span>c_str() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* <a class="el" href="classhwlib_1_1string.html">hwlib::string</a>&lt; 0 &gt;::c_str </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>pointer to the 0-terminated content </p>
-<p>This function 0-terminates the string and returns a pointer to it.</p>
-<p>When the string is at its maximum size, its last character will be removed (making the string 1 shorter) to make room for the terminating 0-character.</p>
-<p>When the string contains a '\0' character, this is not handled specially, and the asciz string will appear to end at that character. </p>
-
-</div>
-</div>
-<a id="ae1878a22c918223912a8a4fec588c2d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1878a22c918223912a8a4fec588c2d4">&#9670;&nbsp;</a></span>c_str() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1878a22c918223912a8a4fec588c2d4">&#9670;&nbsp;</a></span>c_str()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -654,37 +621,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a44d7c5cbf86c8a18d25a5934fc56991b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44d7c5cbf86c8a18d25a5934fc56991b">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">char&amp; <a class="el" href="classhwlib_1_1string.html">hwlib::string</a>&lt; 0 &gt;::operator[] </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>return n'th character reference </p>
-<p>Return a reference to the n'th character if the index is valid, otherwise return the dummy character. </p>
-
-</div>
-</div>
 <a id="ae01e5a1ee9eb7a55c1f6cae730261d0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae01e5a1ee9eb7a55c1f6cae730261d0c">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae01e5a1ee9eb7a55c1f6cae730261d0c">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -709,6 +647,35 @@ template&lt;typename T &gt; </div>
 
 <p>return n'th character value </p>
 <p>Return the value of the n'th character if the index is valid, otherwise return the dummy character value. </p>
+
+</div>
+</div>
+<a id="a44d7c5cbf86c8a18d25a5934fc56991b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44d7c5cbf86c8a18d25a5934fc56991b">&#9670;&nbsp;</a></span>operator[]() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char&amp; <a class="el" href="classhwlib_1_1string.html">hwlib::string</a>&lt; 0 &gt;::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>return n'th character reference </p>
+<p>Return a reference to the n'th character if the index is valid, otherwise return the dummy character. </p>
 
 </div>
 </div>
@@ -1035,7 +1002,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehwlib.html">hwlib</a></li><li class="navelem"><a class="el" href="classhwlib_1_1string_3_010_01_4.html">string&lt; 0 &gt;</a></li>
-    <li class="footer">Generated on Sun Feb 10 2019 15:00:14 for hwlib by
+    <li class="footer">Generated on Sat Feb 16 2019 11:36:53 for hwlib by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

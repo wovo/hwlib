@@ -17,6 +17,7 @@
 #define HWLIB_NATIVE_H
 
 #include HWLIB_INCLUDE( ../hwlib-all.hpp )
+#include <iostream>
 #include <Windows.h>
 
 namespace hwlib {
@@ -83,14 +84,16 @@ uint_fast64_t now_us(){
  
 */
 
-void uart_putc( char c ){}
+void uart_putc( char c ){
+   std::cout << c << std::flush;
+}
 
 char uart_getc(){
-   return '?';   
+   return std::getchar();   
 }
 
 bool HWLIB_WEAK uart_char_available(){
-   return 0;
+   return 1;
 }
 
 

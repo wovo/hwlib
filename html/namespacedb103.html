@@ -135,6 +135,12 @@ This namespace contains the hwlib implementation of the pins, timing</div></div>
 <p> and (sotware) UART output for the DB103 board (LPC1111FN28/102 chip). The chip runs at its default speed of 12 MHz, from its internal RC oscillator.</p>
 <p>The port and pin parameters to the constructors of the pin classes refer to the LPC1114 ports and pins, as shown on the DB103 PCB.</p>
 <p>The chip runs at 3.3 Volt and that is the level on its IO pins.</p>
+<p>This implementation doesn't (yet) offer:</p><ul>
+<li>hardware UART</li>
+<li>clock-based timing</li>
+<li>full CPU speed (48 MHz)</li>
+<li>hardware SPI</li>
+</ul>
 <p>References:</p><ul>
 <li><a href="http://www.nxp.com/documents/user_manual/UM10398.pdf">LPC1114 user manual</a> (pdf) </li>
 </ul>
@@ -144,7 +150,7 @@ This namespace contains the hwlib implementation of the pins, timing</div></div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacedb103.html">db103</a></li>
-    <li class="footer">Generated on Sun Feb 10 2019 15:00:13 for hwlib by
+    <li class="footer">Generated on Sat Feb 16 2019 11:36:52 for hwlib by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

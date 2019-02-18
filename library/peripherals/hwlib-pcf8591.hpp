@@ -72,9 +72,12 @@ private:
          channel{ channel }
       {}
       
-      adc_value_type get() override {
+      adc_value_type read() override {
          return chip.get( channel );
       }   
+      
+      void refresh(){
+      }
    };
    
    class _one_dac : public dac {

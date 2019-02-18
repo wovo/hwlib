@@ -1,8 +1,10 @@
 var classhwlib_1_1pcf8574a =
 [
     [ "pcf8574a", "classhwlib_1_1pcf8574a.html#ad69e6e6ee0157778ef355989d297acd0", null ],
+    [ "flush", "classhwlib_1_1pcf8574a.html#a6874177acba99dd9b7a53d1679ab9f18", null ],
     [ "number_of_pins", "classhwlib_1_1pcf8574a.html#a1bb2266c127d93fd1d7c0b3f9193817d", null ],
     [ "read", "classhwlib_1_1pcf8574a.html#a282f9980ca53927659af39248d3e5bfb", null ],
+    [ "refresh", "classhwlib_1_1pcf8574a.html#aa2dbb52f3f10990e3879597fbafe9de9", null ],
     [ "write", "classhwlib_1_1pcf8574a.html#a60ba477799b6ba236442148b7d59687c", null ],
     [ "p0", "classhwlib_1_1pcf8574a.html#a3824ca4c8ff662663dba2abf10a4a946", null ],
     [ "p1", "classhwlib_1_1pcf8574a.html#a1adc6413e58a9b827fa996402b18eff7", null ],

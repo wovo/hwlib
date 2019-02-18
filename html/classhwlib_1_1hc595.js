@@ -1,6 +1,7 @@
 var classhwlib_1_1hc595 =
 [
     [ "hc595", "classhwlib_1_1hc595.html#a293236ae5bd14fa376d8b540324f07c0", null ],
+    [ "flush", "classhwlib_1_1hc595.html#a89801264883c79926fd9f0983662e50a", null ],
     [ "number_of_pins", "classhwlib_1_1hc595.html#a89c7b21cb99d61c91f764a0fdb7ceb9b", null ],
     [ "write", "classhwlib_1_1hc595.html#a4a0ffa22115aaedf2ee49b583d9601e8", null ],
     [ "p0", "classhwlib_1_1hc595.html#a5e124516aa762629f95c7ab63e0b3d18", null ],

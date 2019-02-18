@@ -41,100 +41,135 @@ namespace hwlib {
 ///
 /// \image html oled.jpg
 ///
-class glcd_oled : public window {
-private:
-   i2c_bus & bus;
-   
-   // the 7-bit i2c address of the controller
-   uint8_t address;
+
+/// SSD1306 chip commands
+enum class ssd1306_commands : uint8_t {
+   set_contrast                          = 0x81,
+   display_all_on_resume                 = 0xa4,
+   display_all_on                        = 0xa5,
+   normal_display                        = 0xa6,
+   invert_display                        = 0xa7,
+   display_off                           = 0xae,
+   display_on                            = 0xaf,
+   set_display_offset                    = 0xd3,
+   set_compins                           = 0xda,
+   set_vcom_detect                       = 0xdb,
+   set_display_clock_div                 = 0xd5,
+   set_precharge                         = 0xd9,
+   set_multiplex                         = 0xa8,
+   set_low_column                        = 0x00,
+   set_high_column                       = 0x10,
+   set_start_line                        = 0x40,
+   memory_mode                           = 0x20,
+   column_addr                           = 0x21,
+   page_addr                             = 0x22,
+   com_scan_inc                          = 0xc0,
+   com_scan_dec                          = 0xc8,
+   seg_remap                             = 0xa0,
+   charge_pump                           = 0x8d,
+   external_vcc                          = 0x01,
+   switch_cap_vcc                        = 0x02,
+   activate_scroll                       = 0x2f,
+   deactivate_scroll                     = 0x2e,
+   set_vertical_scroll_area              = 0xa3,
+   right_horizontal_scroll               = 0x26,
+   left_horizontal_scroll                = 0x27,
+   vertical_and_right_horizontal_scroll  = 0x29,
+   vertical_and_left_horizontal_scroll   = 0x2A   
+};   
+
+/// SSD1306 chip initialization
+constexpr const uint8_t ssd1306_initialization[] = {
+   0x80,  (uint8_t) ssd1306_commands::display_off,                  
+   0x80,  (uint8_t) ssd1306_commands::set_display_clock_div,  0x80,
+   0x80,  (uint8_t) ssd1306_commands::set_multiplex,          0x3f,   
+   0x80,  (uint8_t) ssd1306_commands::set_display_offset,     0x00,   
+   0x80,  (uint8_t) ssd1306_commands::set_start_line        | 0x00,  
+   0x80,  (uint8_t) ssd1306_commands::charge_pump,            0x14,   
+   0x80,  (uint8_t) ssd1306_commands::memory_mode,            0x00,   
+   0x80,  (uint8_t) ssd1306_commands::seg_remap             | 0x01,
+   0x80,  (uint8_t) ssd1306_commands::com_scan_dec,
+   0x80,  (uint8_t) ssd1306_commands::set_compins,            0x12,   
+   0x80,  (uint8_t) ssd1306_commands::set_contrast,           0xcf,   
+   0x80,  (uint8_t) ssd1306_commands::set_precharge,          0xf1,  
+   0x80,  (uint8_t) ssd1306_commands::set_vcom_detect,        0x40,   
+   0x80,  (uint8_t) ssd1306_commands::display_all_on_resume,          
+   0x80,  (uint8_t) ssd1306_commands::normal_display,                
+   0x80,  (uint8_t) ssd1306_commands::display_on                     
+};
+
+class ssd1306_i2c {
+protected:
+
+   i2c_channel & channel;
    
    // current cursor setting in the controller;
    // used to avoid explicit cursor updates when such are not needed
    uint8_t cursor_x, cursor_y;
+    
+public:	
+    
+   ssd1306_i2c( i2c_channel & channel ):
+      channel( channel ),
+      cursor_x( 255 ), cursor_y( 255 )
+   {
+      // wait for the coontroller to be ready for the initialization       
+      wait_ms( 20 );
+   }      
    
-   // SSD1306 commands
-   static constexpr const uint8_t SETCONTRAST                           = 0x81;
-   static constexpr const uint8_t DISPLAYALLON_RESUME                   = 0xA4;
-   static constexpr const uint8_t DISPLAYALLON                          = 0xA5;
-   static constexpr const uint8_t NORMALDISPLAY                         = 0xA6;
-   static constexpr const uint8_t INVERTDISPLAY                         = 0xA7;
-   static constexpr const uint8_t DISPLAYOFF                            = 0xAE;
-   static constexpr const uint8_t DISPLAYON                             = 0xAF;
-   static constexpr const uint8_t SETDISPLAYOFFSET                      = 0xD3;
-   static constexpr const uint8_t SETCOMPINS                            = 0xDA;
-   static constexpr const uint8_t SETVCOMDETECT                         = 0xDB;
-   static constexpr const uint8_t SETDISPLAYCLOCKDIV                    = 0xD5;
-   static constexpr const uint8_t SETPRECHARGE                          = 0xD9;
-   static constexpr const uint8_t SETMULTIPLEX                          = 0xA8;
-   static constexpr const uint8_t SETLOWCOLUMN                          = 0x00;
-   static constexpr const uint8_t SETHIGHCOLUMN                         = 0x10;
-   static constexpr const uint8_t SETSTARTLINE                          = 0x40;
-   static constexpr const uint8_t MEMORYMODE                            = 0x20;
-   static constexpr const uint8_t COLUMNADDR                            = 0x21;
-   static constexpr const uint8_t PAGEADDR                              = 0x22;
-   static constexpr const uint8_t COMSCANINC                            = 0xC0;
-   static constexpr const uint8_t COMSCANDEC                            = 0xC8;
-   static constexpr const uint8_t SEGREMAP                              = 0xA0;
-   static constexpr const uint8_t CHARGEPUMP                            = 0x8D;
-   static constexpr const uint8_t EXTERNALVCC                           = 0x01;
-   static constexpr const uint8_t SWITCHCAPVCC                          = 0x02;
-   static constexpr const uint8_t ACTIVATE_SCROLL                       = 0x2F;
-   static constexpr const uint8_t DEACTIVATE_SCROLL                     = 0x2E;
-   static constexpr const uint8_t SET_VERTICAL_SCROLL_AREA              = 0xA3;
-   static constexpr const uint8_t RIGHT_HORIZONTAL_SCROLL               = 0x26;
-   static constexpr const uint8_t LEFT_HORIZONTAL_SCROLL                = 0x27;
-   static constexpr const uint8_t VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL  = 0x29;
-   static constexpr const uint8_t VERTICAL_AND_LEFT_HORIZONTAL_SCROLL   = 0x2A;   
-   
-   void command( uint8_t d ){
-      uint8_t data[] = { 0x80, d };
-      bus.write( 
-         address, 
+   void command( ssd1306_commands c ){
+      uint8_t data[] = { 0x80, (uint8_t) c };
+      channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );      
    } 
    
-   void command( uint8_t d0, uint8_t d1 ){
-      uint8_t data[] = { 0x80, d0, 0x80, d1 };
-      bus.write( 
-         address, 
+   void command( ssd1306_commands c, uint8_t d0 ){
+      uint8_t data[] = { 0x80, (uint8_t) c, 0x80, d0 };
+      channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );    
    } 	
    
-   void command( uint8_t d0, uint8_t d1, uint8_t d2 ){
-      uint8_t data[] = { 0x80, d0, 0x80, d1, 0x80, d2 };
-      bus.write( 
-         address, 
+   void command( ssd1306_commands c , uint8_t d0, uint8_t d1 ){
+      uint8_t data[] = { 0x80, (uint8_t) c, 0x80, d0, 0x80, d1 };
+      channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );     
    } 	
    
+   // unbuffered write
    void pixels( 
       uint8_t x, 
       uint8_t y, 
       uint8_t d 
    ){
       if(( x != cursor_x ) || ( y != cursor_y )){
-         command( COLUMNADDR,  x,  127 );
-         command( PAGEADDR,    y,    7 );
+         command( ssd1306_commands::column_addr,  x,  127 );
+         command( ssd1306_commands::page_addr,    y,    7 );
          cursor_x = x;
          cursor_y = y;
       }   
       uint8_t data[] = { 0x40, d };
-      bus.write( 
-         address, 
+      channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       ); 
       cursor_x++;      
    }
-   
-   uint8_t buffer[ 128 * 64 / 8 ];
-   
+      
+}; // class ssd1306_i2c
+
+class glcd_oled_i2c_128x64_buffered : public ssd1306_i2c, public window {
+private:
+
+   static auto constexpr wsize = location( 128, 64 );
+
+   uint8_t buffer[ wsize.x * wsize.y / 8 ];
+      
    void write_implementation( 
       location pos, 
       color col
@@ -146,63 +181,28 @@ private:
       } else {
          buffer[ a ] &= ~( 0x01 << ( pos.y % 8 )); 
       }   
-   }
-   
+   }   
+     
 public:
    
-   glcd_oled( i2c_bus & bus, uint_fast8_t address = 0x3C ):
-      window( location( 128, 64 ), black, white ),
-      bus( bus ),
-      address( address ),
-      cursor_x( 255 ), cursor_y( 255 )
+   glcd_oled_i2c_128x64_buffered( i2c_channel & channel ):
+      ssd1306_i2c( channel ),
+      window( wsize, black, white )
    {
-      static constexpr const uint8_t init_sequence[] = {
-         0x80,  DISPLAYOFF,                   
-         0x80,  SETDISPLAYCLOCKDIV,   0x80,   
-         0x80,  SETMULTIPLEX,         0x3F,   
-         0x80,  SETDISPLAYOFFSET,     0x00,   
-         0x80,  SETSTARTLINE        | 0x00,  
-         0x80,  CHARGEPUMP,           0x14,   
-         0x80,  MEMORYMODE,           0x00,   
-         0x80,  SEGREMAP            | 0x01,
-         0x80,  COMSCANDEC,
-         0x80,  SETCOMPINS,           0x12,   
-         0x80,  SETCONTRAST,          0xCF,   
-         0x80,  SETPRECHARGE,         0xF1,  
-         0x80,  SETVCOMDETECT,        0x40,   
-         0x80,  DISPLAYALLON_RESUME,          
-         0x80,  NORMALDISPLAY,                
-         0x80,  DISPLAYON                     
-      };
-      wait_ms( 20 );
-      bus.write( 
-         address, 
-         init_sequence, 
-         sizeof( init_sequence ) / sizeof( uint8_t ) 
+      channel.write( 
+         ssd1306_initialization, 
+         sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
       );     
    }
    
-   virtual void clear(){   
-      for( int y = 0; y < 64 / 8; y++ ){
-         for( int x = 0; x < 128; x++ ){
-            buffer[ x + 128 * y ] = 0x00;
-         }                 
-      }         
-   }   
-   
-   /// write the pixel buffer to the oled
-   //
-   /// All write (and clear) calls change only the in-memory pixel
-   /// buffer. This call writes this pixel buffer to the oled.
-   void flush(){
-      command( COLUMNADDR,  0,  127 );
-      command( PAGEADDR,    0,    7 );   
-      for( int y = 0; y < 64 / 8; y++ ){
+   void flush() override {
+      command( ssd1306_commands::column_addr,  0,  127 );
+      command( ssd1306_commands::page_addr,    0,    7 );   
+      if(0) for( int y = 0; y < 64 / 8; y++ ){
          for( int x = 0; x < 128; x++ ){
             uint8_t d = buffer[ x + 128 * y ];
             uint8_t data[] = { 0x40, d };
-            bus.write( 
-               address, 
+            channel.write( 
                data, 
                sizeof( data ) / sizeof( uint8_t ) 
             );
@@ -213,10 +213,18 @@ public:
 		 //    - prevent polling timing from missing an overflow
 		 //    - keep other threads in a in a multi-threading context alive
          wait_us( 0 );		 
-      }         
+      }  
+      //for( int y = 0; y < 64 / 8; y++ ){
+         auto t = channel.transactions.write();
+         uint8_t cmd[] = { 0x40 };
+         t.write( cmd, 1 );
+         t.write( buffer, sizeof( buffer ) / sizeof( uint8_t )  );
+      //}   
    }     
    
-}; // class glcd_oled
+}; // class glcd_oled_i2c_128x64_buffered
+
+using glcd_oled = glcd_oled_i2c_128x64_buffered;
    
 }; // namespace hwlib
 

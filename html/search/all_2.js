@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['c_5fstr',['c_str',['../classhwlib_1_1string_3_010_01_4.html#ae1878a22c918223912a8a4fec588c2d4',1,'hwlib::string&lt; 0 &gt;::c_str()'],['../classhwlib_1_1string_3_010_01_4.html#ae1878a22c918223912a8a4fec588c2d4',1,'hwlib::string&lt; 0 &gt;::c_str()']]],
+  ['c_5fstr',['c_str',['../classhwlib_1_1string_3_010_01_4.html#ae1878a22c918223912a8a4fec588c2d4',1,'hwlib::string&lt; 0 &gt;']]],
   ['channel',['channel',['../structdue_1_1ad__pin__info__type.html#ae23ba2025e81198f877ccaaa5927a368',1,'due::ad_pin_info_type']]],
   ['char_5favailable',['char_available',['../classhwlib_1_1istream.html#a77c1ce784f42922cd4758f2d8a6c59b3',1,'hwlib::istream::char_available()'],['../classhwlib_1_1keypad.html#a9bef86eba2e6ac84c014a1577f44cd9c',1,'hwlib::keypad::char_available()']]],
   ['cin',['cin',['../namespacehwlib.html#ad736b5e00021a29fc5543ec7b36dfe14',1,'hwlib']]],
