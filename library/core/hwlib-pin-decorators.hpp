@@ -16,7 +16,7 @@
 /// @file
 
 namespace hwlib {
-	
+
 class pin_out_from_oc : public pin_out {
    pin_oc & slave;
    
@@ -25,8 +25,8 @@ public:
    
    void write( bool x ){
       slave.write( x );
-   }	  
-};	
+   }
+};
 
 class pin_invert_from_out : public pin_out {
    pin_out & slave;
@@ -36,12 +36,12 @@ public:
    
    void write( bool x ){
       slave.write( !x );
-   }	
+   }
 
    void flush() override {
       slave.flush();            
    }
-};	
+};
 
 class all : public pin_out {
 private:
