@@ -3,6 +3,7 @@ var searchData=
   ['pcf8574a',['pcf8574a',['../classhwlib_1_1pcf8574a.html',1,'hwlib']]],
   ['pcf8591',['pcf8591',['../classhwlib_1_1pcf8591.html',1,'hwlib']]],
   ['pin_5fadc',['pin_adc',['../classdue_1_1pin__adc.html',1,'due::pin_adc'],['../classdb103_1_1pin__adc.html',1,'db103::pin_adc']]],
+<<<<<<< HEAD
   ['pin_5fin',['pin_in',['../classdue_1_1pin__in.html',1,'due::pin_in'],['../classuno_1_1pin__in.html',1,'uno::pin_in'],['../classdb103_1_1pin__in.html',1,'db103::pin_in'],['../classstm32f103c8_1_1pin__in.html',1,'stm32f103c8::pin_in'],['../classhwlib_1_1pin__in.html',1,'hwlib::pin_in']]],
   ['pin_5fin_5fdummy_5ft',['pin_in_dummy_t',['../classhwlib_1_1pin__in__dummy__t.html',1,'hwlib']]],
   ['pin_5fin_5fout',['pin_in_out',['../classdue_1_1pin__in__out.html',1,'due::pin_in_out'],['../classuno_1_1pin__in__out.html',1,'uno::pin_in_out'],['../classdb103_1_1pin__in__out.html',1,'db103::pin_in_out'],['../classstm32f103c8_1_1pin__in__out.html',1,'stm32f103c8::pin_in_out'],['../classhwlib_1_1pin__in__out.html',1,'hwlib::pin_in_out']]],
@@ -24,6 +25,14 @@ var searchData=
   ['pin_5fout',['pin_out',['../classuno_1_1pin__out.html',1,'uno::pin_out'],['../classdue_1_1pin__out.html',1,'due::pin_out'],['../classstm32f103c8_1_1pin__out.html',1,'stm32f103c8::pin_out'],['../classdb103_1_1pin__out.html',1,'db103::pin_out'],['../classhwlib_1_1pin__out.html',1,'hwlib::pin_out']]],
   ['pin_5fout_5fdummy_5ft',['pin_out_dummy_t',['../classhwlib_1_1pin__out__dummy__t.html',1,'hwlib']]],
   ['pin_5fout_5ffrom_5fin_5fout',['pin_out_from_in_out',['../classhwlib_1_1pin__out__from__in__out.html',1,'hwlib']]],
+=======
+  ['pin_5fin',['pin_in',['../classstm32f030x6_1_1pin__in.html',1,'stm32f030x6::pin_in'],['../classdue_1_1pin__in.html',1,'due::pin_in'],['../classuno_1_1pin__in.html',1,'uno::pin_in'],['../classdb103_1_1pin__in.html',1,'db103::pin_in'],['../classstm32f103c8_1_1pin__in.html',1,'stm32f103c8::pin_in'],['../classhwlib_1_1pin__in.html',1,'hwlib::pin_in']]],
+  ['pin_5fin_5fout',['pin_in_out',['../classdue_1_1pin__in__out.html',1,'due::pin_in_out'],['../classuno_1_1pin__in__out.html',1,'uno::pin_in_out'],['../classdb103_1_1pin__in__out.html',1,'db103::pin_in_out'],['../classstm32f103c8_1_1pin__in__out.html',1,'stm32f103c8::pin_in_out'],['../classstm32f030x6_1_1pin__in__out.html',1,'stm32f030x6::pin_in_out'],['../classhwlib_1_1pin__in__out.html',1,'hwlib::pin_in_out']]],
+  ['pin_5finfo_5ftype',['pin_info_type',['../structstm32f030x6_1_1pin__info__type.html',1,'stm32f030x6']]],
+  ['pin_5finvert_5ffrom_5fout',['pin_invert_from_out',['../classhwlib_1_1pin__invert__from__out.html',1,'hwlib']]],
+  ['pin_5foc',['pin_oc',['../classuno_1_1pin__oc.html',1,'uno::pin_oc'],['../classdue_1_1pin__oc.html',1,'due::pin_oc'],['../classhwlib_1_1pin__oc.html',1,'hwlib::pin_oc'],['../classstm32f030x6_1_1pin__oc.html',1,'stm32f030x6::pin_oc'],['../classstm32f103c8_1_1pin__oc.html',1,'stm32f103c8::pin_oc'],['../classdb103_1_1pin__oc.html',1,'db103::pin_oc']]],
+  ['pin_5fout',['pin_out',['../classstm32f030x6_1_1pin__out.html',1,'stm32f030x6::pin_out'],['../classdue_1_1pin__out.html',1,'due::pin_out'],['../classuno_1_1pin__out.html',1,'uno::pin_out'],['../classdb103_1_1pin__out.html',1,'db103::pin_out'],['../classhwlib_1_1pin__out.html',1,'hwlib::pin_out'],['../classstm32f103c8_1_1pin__out.html',1,'stm32f103c8::pin_out']]],
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
   ['pin_5fout_5ffrom_5foc',['pin_out_from_oc',['../classhwlib_1_1pin__out__from__oc.html',1,'hwlib']]],
   ['pin_5fout_5ffrom_5fout',['pin_out_from_out',['../classhwlib_1_1pin__out__from__out.html',1,'hwlib']]],
   ['pin_5fout_5fstore',['pin_out_store',['../classhwlib_1_1pin__out__store.html',1,'hwlib']]],

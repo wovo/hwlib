@@ -10,6 +10,7 @@ var searchData=
   ['spi_5fbus_5fbit_5fbanged_5fsclk_5fmosi_5fmiso',['spi_bus_bit_banged_sclk_mosi_miso',['../classhwlib_1_1spi__bus__bit__banged__sclk__mosi__miso.html',1,'hwlib::spi_bus_bit_banged_sclk_mosi_miso'],['../classhwlib_1_1spi__bus__bit__banged__sclk__mosi__miso.html#aec1da306136cb0bb367dd47470f551da',1,'hwlib::spi_bus_bit_banged_sclk_mosi_miso::spi_bus_bit_banged_sclk_mosi_miso()']]],
   ['spi_5ftransaction',['spi_transaction',['../classhwlib_1_1spi__bus_1_1spi__transaction.html',1,'hwlib::spi_bus']]],
   ['start',['start',['../classhwlib_1_1drawable.html#a6c31bc9303840a4317d3c95250c357ce',1,'hwlib::drawable']]],
+  ['stm32f030x6',['stm32f030x6',['../namespacestm32f030x6.html',1,'']]],
   ['stm32f103c8',['stm32f103c8',['../namespacestm32f103c8.html',1,'']]],
   ['string',['string',['../classhwlib_1_1string.html',1,'hwlib::string&lt; maximum_length &gt;'],['../classhwlib_1_1string.html#ab1b5c2e4f2d5bc4519af16d625173123',1,'hwlib::string::string()'],['../classhwlib_1_1string.html#ac50acc0cd5b85bb7e95cc4f062fe2a3a',1,'hwlib::string::string(const T &amp;x)'],['../classhwlib_1_1string.html#ab1b5c2e4f2d5bc4519af16d625173123',1,'hwlib::string::string()'],['../classhwlib_1_1string.html#ac50acc0cd5b85bb7e95cc4f062fe2a3a',1,'hwlib::string::string(const T &amp;x)']]],
   ['string_3c_200_20_3e',['string&lt; 0 &gt;',['../classhwlib_1_1string_3_010_01_4.html',1,'hwlib']]],

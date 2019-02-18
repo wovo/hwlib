@@ -1,6 +1,5 @@
 var hwlib_stm32f103c8_8hpp =
 [
-    [ "pin_info_type", "structstm32f103c8_1_1pin__info__type.html", "structstm32f103c8_1_1pin__info__type" ],
     [ "pin_in", "classstm32f103c8_1_1pin__in.html", "classstm32f103c8_1_1pin__in" ],
     [ "pin_out", "classstm32f103c8_1_1pin__out.html", "classstm32f103c8_1_1pin__out" ],
     [ "pin_in_out", "classstm32f103c8_1_1pin__in__out.html", "classstm32f103c8_1_1pin__in__out" ],
@@ -58,7 +57,6 @@ var hwlib_stm32f103c8_8hpp =
       [ "led", "hwlib-stm32f103c8_8hpp.html#a69d642506db309a7e64295d35ec21ff6a0b98f7bc56c6af56799347f69c1cc770", null ]
     ] ],
     [ "now_ticks", "hwlib-stm32f103c8_8hpp.html#a3cee8ad2019972eede2f90456d5eb9e0", null ],
-    [ "pin_info", "hwlib-stm32f103c8_8hpp.html#a751f80bc6991c3c05b1e23eab311991f", null ],
     [ "ticks_per_us", "hwlib-stm32f103c8_8hpp.html#a7690d875e87715532777680634201060", null ],
     [ "uart_char_available", "hwlib-stm32f103c8_8hpp.html#ab6a4d37dccd20d9ddd6ef943fffeb114", null ],
     [ "uart_char_available", "hwlib-stm32f103c8_8hpp.html#aaf31868f62815d2e405ad90469ae50a5", null ],

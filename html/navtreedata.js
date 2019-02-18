@@ -62,10 +62,16 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "acknowledgements.html",
+<<<<<<< HEAD
 "classhwlib_1_1pin__in__out__dummy__t.html#ab799d24ac3180d3d7e97512410ef9994",
 "classhwlib_1_1string_3_010_01_4.html#a85324c170661610402fc1ae38d19b743",
 "hwlib-arduino-uno_8hpp.html#a0a859f3512bcc3027a090ae07befd5b2a22770fbdd1177351a869401a0e1427bc",
 "hwlib-test_8hpp.html"
+=======
+"classhwlib_1_1port__in.html#a3498fc0158e1e460a00d671df629fe22",
+"functions_func_p.html",
+"hwlib-i2c_8hpp.html"
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

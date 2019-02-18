@@ -41,6 +41,10 @@
    #include HWLIB_INCLUDE( targets/hwlib-stm32f103c8.hpp )
 #endif
 
+#ifdef BMPTK_TARGET_scouting_lock
+   #include HWLIB_INCLUDE( hwlib-scouting-lock.hpp )
+#endif
+
 #ifdef HWLIB_TARGET_native
    #include HWLIB_INCLUDE( targets/hwlib-native.hpp )
 #endif

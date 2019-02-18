@@ -45,6 +45,7 @@ void wait_us_busy( int_fast32_t n ){
    while( now_us() < end ){}
 }
 
+<<<<<<< HEAD
 void wait_ns( int_fast32_t n ){ 
    wait_us_busy( 1 + n / 1'000 );
 }
@@ -87,6 +88,9 @@ uint_fast64_t now_us(){
 void uart_putc( char c ){
    std::cout << c << std::flush;
 }
+=======
+void uart_putc( char c ){}
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
 
 char uart_getc(){
    return std::getchar();   
@@ -95,8 +99,6 @@ char uart_getc(){
 bool HWLIB_WEAK uart_char_available(){
    return 1;
 }
-
-
 
 #endif // #ifdef HBLIB_ONCE
 
