@@ -10,16 +10,17 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
 
+// This file has only macro's, so including them all in this namespace
+// is only symbolic.
 namespace hwlib {
 
-/// \brief
 /// mark a function declaration as never returning
-/// \details
+/// 
 /// This is useful when other code relies a function not to return.
 /// It can also enable the compiler to generate slightly better code.
 ///
@@ -28,9 +29,8 @@ namespace hwlib {
 #define HWLIB_NORETURN __attribute__((noreturn))
 
 
-/// \brief
 /// mark a function definition as weak
-/// \details
+/// 
 /// This allowed the function definition to be overruled by an 
 /// (often application-defined) replacement.
 ///
@@ -50,9 +50,8 @@ namespace hwlib {
 #endif
 
 
-/// \brief
 /// mark a function definition as to be (always) inlined
-/// \details
+/// 
 /// Sometimes a function should always be inlined, for instance
 /// because it is called only once, or because inlining it
 /// will produce better code.
@@ -64,9 +63,9 @@ namespace hwlib {
 /// because Doxygen can't handle __attribute__.
 #define HWLIB_INLINE __attribute__((always_inline))
 
-/// \brief
+
 /// mark a function definition as to be never inlined
-/// \details
+/// 
 /// Sometimes a function should not be inlined, for instance
 /// because inlining would affect it timing.
 ///
@@ -82,18 +81,18 @@ namespace hwlib {
 #define HWLIB_HERE2( F, L ) ( "\n" F ":" HWLIB_STRINGYFY( L ) " " )
 /// \endcond    
    
-/// \brief
+
 /// [file-name:line-number] macro
-/// \details
+/// 
 /// The macro HWLIB_HERE translates to a newline, the file-name, ":",
 /// and the line-number of the place where the HWLIB_HERE macro
 /// appears. This can be usefull for debug logging.
 /// It is used by HLWIB_TRACE.
 #define HWLIB_HERE HWLIB_HERE2( __FILE__, __LINE__ )
    
-/// \brief
+
 /// trace macro
-/// \details
+/// 
 /// The HWLIB_TRACE macro can be used like hwlib::cout to print to,
 /// but what is printed will be prefixed with a newfile
 /// and the HWLIB_HERE string.
@@ -101,14 +100,15 @@ namespace hwlib {
    ::hwlib::cout << "\n" <<                           \
    ::hwlib::dec << HWLIB_HERE << hwlib::flush )       \
 
-/// \brief
+
 /// equality test macro
-/// \details
+/// 
 /// The HWLIB_TEST_EQUAL checks whether the two parameters compare equal.
 /// If not, it outputs a messages that tries to identify the problem.
 /// This is meant for use in test scripts. 
 // _equal is defined elsewhere, because it needs hwlib::cout.
 #define HWLIB_TEST_EQUAL( a, b ) \
    hwlib::_equal( __FILE__, __LINE__, #a, #b, a, b );   
+   
    
 }; // namespace hwlib   

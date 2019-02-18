@@ -26,7 +26,10 @@ HEADERS           += core/hwlib-common.hpp
 
 HEADERS           += core/hwlib-pin.hpp
 HEADERS           += core/hwlib-pin-dummies.hpp
-HEADERS           += core/hwlib-pin-decorators.hpp
+HEADERS           += core/hwlib-pin-stores.hpp
+HEADERS           += core/hwlib-pin-from.hpp
+HEADERS           += core/hwlib-pin-invert.hpp
+HEADERS           += core/hwlib-pin-all.hpp
 HEADERS           += core/hwlib-port.hpp
 HEADERS           += core/hwlib-port-from-pins.hpp
 HEADERS           += core/hwlib-port-decorators.hpp
@@ -52,7 +55,7 @@ HEADERS           += peripherals/hwlib-glcd-oled.hpp
 
 HEADERS           += core/hwlib-string.hpp
 HEADERS           += core/hwlib-demo.hpp
-HEADERS           += core/hwlib-equal.hpp
+HEADERS           += core/hwlib-test.hpp
 
 HEADERS           += targets/hwlib-arduino-due.hpp
 HEADERS           += targets/hwlib-arduino-uno.hpp

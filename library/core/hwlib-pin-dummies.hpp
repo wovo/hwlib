@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
@@ -18,52 +18,57 @@
 namespace hwlib {
     
 /// a dummy (do-nothing) pin_in_out class
-class _pin_in_out_dummy_class : public pin_in_out {
+class pin_in_out_dummy_t : public pin_in_out {
 public:
    void write( bool v ) override {}
    bool read() override { return 0; }
    void direction_set_input() override {}
-   void direction_set_output() override{}
+   void direction_set_output() override {}
+   void flush() override {}
+   void refresh() override {}
 };  
 
 /// a dummy (do-nothing) pin_in class
-class _pin_in_dummy_class : public pin_in {
+class pin_in_dummy_t : public pin_in {
 public:
    bool read() override { return 0; }
+   void refresh() override {}
 };   
 
 /// a dummy (do-nothing) pin_out class
-class _pin_out_dummy_class : public pin_out {
+class pin_out_dummy_t : public pin_out {
 public:
    void write( bool v ) override {}
+   void flush() override {}
 };   
 
-/// a d/ a dummy (do-nothing) pin_oc class
-class _pin_oc_dummy_class : public pin_oc {
+/// a dummy (do-nothing) pin_oc class
+class pin_oc_dummy_t : public pin_oc {
 public:
    void write( bool v ) override {}
    bool read() override { return 0; }
-   
+   void flush() override {}
+   void refresh() override {}   
 };   
 
-/// a dummy (do-nothing) pin_in_out 
-extern _pin_in_out_dummy_class  pin_in_out_dummy;
+/// a dummy (do-nothing) pin_in_out object
+extern pin_in_out_dummy_t  pin_in_out_dummy;
 
-/// a dummy (do-nothing) pin_in 
-extern _pin_in_dummy_class      pin_in_dummy;
+/// a dummy (do-nothing) pin_in object
+extern pin_in_dummy_t      pin_in_dummy;
 
-/// a dummy (do-nothing) pin_out
-extern _pin_out_dummy_class     pin_out_dummy;
+/// a dummy (do-nothing) pin_out object
+extern pin_out_dummy_t     pin_out_dummy;
 
-/// a d/ a dummy (do-nothing) pin_oc
-extern _pin_oc_dummy_class      pin_oc_dummy;
+/// a dummy (do-nothing) pin_oc object
+extern pin_oc_dummy_t      pin_oc_dummy;
 
 #ifdef HWLIB_ONCE
 
-_pin_in_out_dummy_class  pin_in_out_dummy;
-_pin_in_dummy_class      pin_in_dummy;
-_pin_out_dummy_class     pin_out_dummy;
-_pin_oc_dummy_class      pin_oc_dummy;
+pin_in_out_dummy_t  pin_in_out_dummy;
+pin_in_dummy_t      pin_in_dummy;
+pin_out_dummy_t     pin_out_dummy;
+pin_oc_dummy_t      pin_oc_dummy;
 
 #endif // HWLIB_ONCE
 

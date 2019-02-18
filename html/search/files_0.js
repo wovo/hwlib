@@ -11,7 +11,6 @@ var searchData=
   ['hwlib_2ddefines_2ehpp',['hwlib-defines.hpp',['../hwlib-defines_8hpp.html',1,'']]],
   ['hwlib_2ddemo_2ehpp',['hwlib-demo.hpp',['../hwlib-demo_8hpp.html',1,'']]],
   ['hwlib_2ddoxygen_2ehpp',['hwlib-doxygen.hpp',['../hwlib-doxygen_8hpp.html',1,'']]],
-  ['hwlib_2dequal_2ehpp',['hwlib-equal.hpp',['../hwlib-equal_8hpp.html',1,'']]],
   ['hwlib_2dfont_2ddefault_2d16x16_2ehpp',['hwlib-font-default-16x16.hpp',['../hwlib-font-default-16x16_8hpp.html',1,'']]],
   ['hwlib_2dfont_2ddefault_2d8x8_2ehpp',['hwlib-font-default-8x8.hpp',['../hwlib-font-default-8x8_8hpp.html',1,'']]],
   ['hwlib_2dglcd_2d5510_2ehpp',['hwlib-glcd-5510.hpp',['../hwlib-glcd-5510_8hpp.html',1,'']]],
@@ -27,8 +26,11 @@ var searchData=
   ['hwlib_2dpanic_2ehpp',['hwlib-panic.hpp',['../hwlib-panic_8hpp.html',1,'']]],
   ['hwlib_2dpcf8574a_2ehpp',['hwlib-pcf8574a.hpp',['../hwlib-pcf8574a_8hpp.html',1,'']]],
   ['hwlib_2dpcf8591_2ehpp',['hwlib-pcf8591.hpp',['../hwlib-pcf8591_8hpp.html',1,'']]],
-  ['hwlib_2dpin_2ddecorators_2ehpp',['hwlib-pin-decorators.hpp',['../hwlib-pin-decorators_8hpp.html',1,'']]],
+  ['hwlib_2dpin_2dall_2ehpp',['hwlib-pin-all.hpp',['../hwlib-pin-all_8hpp.html',1,'']]],
   ['hwlib_2dpin_2ddummies_2ehpp',['hwlib-pin-dummies.hpp',['../hwlib-pin-dummies_8hpp.html',1,'']]],
+  ['hwlib_2dpin_2dfrom_2ehpp',['hwlib-pin-from.hpp',['../hwlib-pin-from_8hpp.html',1,'']]],
+  ['hwlib_2dpin_2dinvert_2ehpp',['hwlib-pin-invert.hpp',['../hwlib-pin-invert_8hpp.html',1,'']]],
+  ['hwlib_2dpin_2dstores_2ehpp',['hwlib-pin-stores.hpp',['../hwlib-pin-stores_8hpp.html',1,'']]],
   ['hwlib_2dpin_2ehpp',['hwlib-pin.hpp',['../hwlib-pin_8hpp.html',1,'']]],
   ['hwlib_2dport_2ddecorators_2ehpp',['hwlib-port-decorators.hpp',['../hwlib-port-decorators_8hpp.html',1,'']]],
   ['hwlib_2dport_2dfrom_2dpins_2ehpp',['hwlib-port-from-pins.hpp',['../hwlib-port-from-pins_8hpp.html',1,'']]],
@@ -39,5 +41,7 @@ var searchData=
   ['hwlib_2dstm32f103c8_2ehpp',['hwlib-stm32f103c8.hpp',['../hwlib-stm32f103c8_8hpp.html',1,'']]],
   ['hwlib_2dstring_2doriginal_2ehpp',['hwlib-string-original.hpp',['../hwlib-string-original_8hpp.html',1,'']]],
   ['hwlib_2dstring_2ehpp',['hwlib-string.hpp',['../hwlib-string_8hpp.html',1,'']]],
+  ['hwlib_2dtest_2ehpp',['hwlib-test.hpp',['../hwlib-test_8hpp.html',1,'']]],
+  ['hwlib_2dtestl_2ehpp',['hwlib-testl.hpp',['../hwlib-testl_8hpp.html',1,'']]],
   ['hwlib_2dwait_2ehpp',['hwlib-wait.hpp',['../hwlib-wait_8hpp.html',1,'']]]
 ];

@@ -1,7 +1,11 @@
 var namespacehwlib =
 [
     [ "adc", "classhwlib_1_1adc.html", "classhwlib_1_1adc" ],
+<<<<<<< HEAD
+    [ "all_from_pin_out", "classhwlib_1_1all__from__pin__out.html", "classhwlib_1_1all__from__pin__out" ],
+=======
     [ "all", "classhwlib_1_1all.html", "classhwlib_1_1all" ],
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
     [ "circle", "classhwlib_1_1circle.html", "classhwlib_1_1circle" ],
     [ "color", "classhwlib_1_1color.html", "classhwlib_1_1color" ],
     [ "console", "classhwlib_1_1console.html", "classhwlib_1_1console" ],
@@ -27,11 +31,31 @@ var namespacehwlib =
     [ "pcf8574a", "classhwlib_1_1pcf8574a.html", "classhwlib_1_1pcf8574a" ],
     [ "pcf8591", "classhwlib_1_1pcf8591.html", "classhwlib_1_1pcf8591" ],
     [ "pin_in", "classhwlib_1_1pin__in.html", "classhwlib_1_1pin__in" ],
+    [ "pin_in_dummy_t", "classhwlib_1_1pin__in__dummy__t.html", "classhwlib_1_1pin__in__dummy__t" ],
     [ "pin_in_out", "classhwlib_1_1pin__in__out.html", "classhwlib_1_1pin__in__out" ],
+<<<<<<< HEAD
+    [ "pin_in_out_dummy_t", "classhwlib_1_1pin__in__out__dummy__t.html", "classhwlib_1_1pin__in__out__dummy__t" ],
+    [ "pin_in_out_from_in_out", "classhwlib_1_1pin__in__out__from__in__out.html", "classhwlib_1_1pin__in__out__from__in__out" ],
+    [ "pin_in_out_from_oc", "classhwlib_1_1pin__in__out__from__oc.html", "classhwlib_1_1pin__in__out__from__oc" ],
+    [ "pin_in_out_store", "classhwlib_1_1pin__in__out__store.html", "classhwlib_1_1pin__in__out__store" ],
+    [ "pin_in_store", "classhwlib_1_1pin__in__store.html", "classhwlib_1_1pin__in__store" ],
+    [ "pin_invert_from_in", "classhwlib_1_1pin__invert__from__in.html", "classhwlib_1_1pin__invert__from__in" ],
+    [ "pin_invert_from_in_out", "classhwlib_1_1pin__invert__from__in__out.html", "classhwlib_1_1pin__invert__from__in__out" ],
+    [ "pin_invert_from_oc", "classhwlib_1_1pin__invert__from__oc.html", "classhwlib_1_1pin__invert__from__oc" ],
+=======
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
     [ "pin_invert_from_out", "classhwlib_1_1pin__invert__from__out.html", "classhwlib_1_1pin__invert__from__out" ],
     [ "pin_oc", "classhwlib_1_1pin__oc.html", "classhwlib_1_1pin__oc" ],
+    [ "pin_oc_dummy_t", "classhwlib_1_1pin__oc__dummy__t.html", "classhwlib_1_1pin__oc__dummy__t" ],
+    [ "pin_oc_from_in_out", "classhwlib_1_1pin__oc__from__in__out.html", "classhwlib_1_1pin__oc__from__in__out" ],
+    [ "pin_oc_from_oc", "classhwlib_1_1pin__oc__from__oc.html", "classhwlib_1_1pin__oc__from__oc" ],
+    [ "pin_oc_store", "classhwlib_1_1pin__oc__store.html", "classhwlib_1_1pin__oc__store" ],
     [ "pin_out", "classhwlib_1_1pin__out.html", "classhwlib_1_1pin__out" ],
+    [ "pin_out_dummy_t", "classhwlib_1_1pin__out__dummy__t.html", "classhwlib_1_1pin__out__dummy__t" ],
+    [ "pin_out_from_in_out", "classhwlib_1_1pin__out__from__in__out.html", "classhwlib_1_1pin__out__from__in__out" ],
     [ "pin_out_from_oc", "classhwlib_1_1pin__out__from__oc.html", "classhwlib_1_1pin__out__from__oc" ],
+    [ "pin_out_from_out", "classhwlib_1_1pin__out__from__out.html", "classhwlib_1_1pin__out__from__out" ],
+    [ "pin_out_store", "classhwlib_1_1pin__out__store.html", "classhwlib_1_1pin__out__store" ],
     [ "port_in", "classhwlib_1_1port__in.html", "classhwlib_1_1port__in" ],
     [ "port_in_from_pins", "classhwlib_1_1port__in__from__pins.html", "classhwlib_1_1port__in__from__pins" ],
     [ "port_in_invert", "classhwlib_1_1port__in__invert.html", "classhwlib_1_1port__in__invert" ],

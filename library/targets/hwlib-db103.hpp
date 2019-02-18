@@ -168,6 +168,9 @@ public:
    bool read() override {
       return *gpioreg( port, 0x3FFC ) & mask;
    }
+   
+   void refresh() override{
+   }
 };   
 
 /// pin_out implementation for the LPC1114
@@ -195,6 +198,9 @@ public:
    void write( bool v ) override {
       *gpioreg( port, 0x04 << pin ) = v ? -1 : 0;
    }
+   
+   void flush() override{
+   }   
 };
 
 /// pin_in_out implementation for the LPC1114
@@ -235,6 +241,12 @@ public:
    void write( bool v ) override {
       *gpioreg( port, 0x04 << pin ) = v ? -1 : 0;
    }
+   
+   void refresh() override{
+   }
+   
+   void flush() override{
+   }   
 };   
 
 /// pin_oc implementation for the LPC1114
@@ -278,6 +290,12 @@ public:
          
       }
    }
+
+   void refresh() override{
+   }
+   
+   void flush() override{
+   }   
 };   
 
 /// adc implementation for an LPC1114
@@ -292,7 +310,7 @@ public:
       : adc{ 10 }, channel{ configure_as_adc( port, pin ) }
    {}         
       
-   adc_value_type get() override {
+   adc_value_type read() override {
       
       // configure the A/D for the pin
       LPC_ADC->CR = ( 0x01 << channel ) | ( 12 << 8 );
@@ -307,6 +325,9 @@ public:
      
       // return the A/D result
       return 3 | (( LPC_ADC->GDR >> 6 ) & 0x3FF);   
+   }
+   
+   void refresh() override {
    }
 };
 

@@ -18,14 +18,20 @@ var files_dup =
     [ "hwlib-defines.hpp", "hwlib-defines_8hpp.html", "hwlib-defines_8hpp" ],
     [ "hwlib-demo.hpp", "hwlib-demo_8hpp.html", "hwlib-demo_8hpp" ],
     [ "hwlib-doxygen.hpp", "hwlib-doxygen_8hpp.html", null ],
-    [ "hwlib-equal.hpp", "hwlib-equal_8hpp.html", "hwlib-equal_8hpp" ],
     [ "hwlib-font-default-16x16.hpp", "hwlib-font-default-16x16_8hpp.html", [
       [ "font_default_16x16", "classhwlib_1_1font__default__16x16.html", "classhwlib_1_1font__default__16x16" ]
     ] ],
     [ "hwlib-font-default-8x8.hpp", "hwlib-font-default-8x8_8hpp.html", [
       [ "font_default_8x8", "classhwlib_1_1font__default__8x8.html", "classhwlib_1_1font__default__8x8" ]
     ] ],
+<<<<<<< HEAD
+    [ "hwlib-glcd-5510.hpp", "hwlib-glcd-5510_8hpp.html", [
+      [ "glcd_5510", "classhwlib_1_1glcd__5510.html", "classhwlib_1_1glcd__5510" ],
+      [ "glcd_5510_buffered", "classhwlib_1_1glcd__5510__buffered.html", "classhwlib_1_1glcd__5510__buffered" ]
+    ] ],
+=======
     [ "hwlib-glcd-5510.hpp", "hwlib-glcd-5510_8hpp.html", null ],
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
     [ "hwlib-glcd-oled.hpp", "hwlib-glcd-oled_8hpp.html", [
       [ "glcd_oled", "classhwlib_1_1glcd__oled.html", "classhwlib_1_1glcd__oled" ],
       [ "glcd_oled_buffered", "classhwlib_1_1glcd__oled__buffered.html", "classhwlib_1_1glcd__oled__buffered" ]
@@ -58,12 +64,24 @@ var files_dup =
     [ "hwlib-pcf8591.hpp", "hwlib-pcf8591_8hpp.html", [
       [ "pcf8591", "classhwlib_1_1pcf8591.html", "classhwlib_1_1pcf8591" ]
     ] ],
+<<<<<<< HEAD
+    [ "hwlib-pin-all.hpp", "hwlib-pin-all_8hpp.html", "hwlib-pin-all_8hpp" ],
+=======
     [ "hwlib-pin-decorators.hpp", "hwlib-pin-decorators_8hpp.html", [
       [ "pin_out_from_oc", "classhwlib_1_1pin__out__from__oc.html", "classhwlib_1_1pin__out__from__oc" ],
       [ "pin_invert_from_out", "classhwlib_1_1pin__invert__from__out.html", "classhwlib_1_1pin__invert__from__out" ],
       [ "all", "classhwlib_1_1all.html", "classhwlib_1_1all" ]
     ] ],
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
     [ "hwlib-pin-dummies.hpp", "hwlib-pin-dummies_8hpp.html", "hwlib-pin-dummies_8hpp" ],
+    [ "hwlib-pin-from.hpp", "hwlib-pin-from_8hpp.html", "hwlib-pin-from_8hpp" ],
+    [ "hwlib-pin-invert.hpp", "hwlib-pin-invert_8hpp.html", "hwlib-pin-invert_8hpp" ],
+    [ "hwlib-pin-stores.hpp", "hwlib-pin-stores_8hpp.html", [
+      [ "pin_in_out_store", "classhwlib_1_1pin__in__out__store.html", "classhwlib_1_1pin__in__out__store" ],
+      [ "pin_in_store", "classhwlib_1_1pin__in__store.html", "classhwlib_1_1pin__in__store" ],
+      [ "pin_out_store", "classhwlib_1_1pin__out__store.html", "classhwlib_1_1pin__out__store" ],
+      [ "pin_oc_store", "classhwlib_1_1pin__oc__store.html", "classhwlib_1_1pin__oc__store" ]
+    ] ],
     [ "hwlib-pin.hpp", "hwlib-pin_8hpp.html", [
       [ "pin_in_out", "classhwlib_1_1pin__in__out.html", "classhwlib_1_1pin__in__out" ],
       [ "pin_in", "classhwlib_1_1pin__in.html", "classhwlib_1_1pin__in" ],
@@ -99,6 +117,8 @@ var files_dup =
     [ "hwlib-stm32f103c8.hpp", "hwlib-stm32f103c8_8hpp.html", "hwlib-stm32f103c8_8hpp" ],
     [ "hwlib-string-original.hpp", "hwlib-string-original_8hpp.html", "hwlib-string-original_8hpp" ],
     [ "hwlib-string.hpp", "hwlib-string_8hpp.html", "hwlib-string_8hpp" ],
+    [ "hwlib-test.hpp", "hwlib-test_8hpp.html", "hwlib-test_8hpp" ],
+    [ "hwlib-testl.hpp", "hwlib-testl_8hpp.html", "hwlib-testl_8hpp" ],
     [ "hwlib-wait.hpp", "hwlib-wait_8hpp.html", "hwlib-wait_8hpp" ],
     [ "hwlib.hpp", "hwlib_8hpp_source.html", null ]
 ];

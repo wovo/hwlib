@@ -32,7 +32,10 @@
 
 #include HWLIB_INCLUDE( core/hwlib-pin.hpp )
 #include HWLIB_INCLUDE( core/hwlib-pin-dummies.hpp )
-#include HWLIB_INCLUDE( core/hwlib-pin-decorators.hpp )
+#include HWLIB_INCLUDE( core/hwlib-pin-stores.hpp )
+#include HWLIB_INCLUDE( core/hwlib-pin-from.hpp )
+#include HWLIB_INCLUDE( core/hwlib-pin-invert.hpp )
+#include HWLIB_INCLUDE( core/hwlib-pin-all.hpp )
 #include HWLIB_INCLUDE( core/hwlib-port.hpp )
 #include HWLIB_INCLUDE( core/hwlib-port-from-pins.hpp )
 #include HWLIB_INCLUDE( core/hwlib-port-decorators.hpp )
@@ -59,6 +62,6 @@
 
 #include HWLIB_INCLUDE( core/hwlib-string.hpp )
 #include HWLIB_INCLUDE( core/hwlib-demo.hpp )
-#include HWLIB_INCLUDE( core/hwlib-equal.hpp )
+#include HWLIB_INCLUDE( core/hwlib-test.hpp )
 
 #endif // HWLIB_ALL_H

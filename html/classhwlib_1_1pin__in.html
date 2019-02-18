@@ -116,17 +116,28 @@ Inheritance diagram for hwlib::pin_in:</div>
  <div class="center">
   <img src="classhwlib_1_1pin__in.png" usemap="#hwlib::pin_5Fin_map" alt=""/>
   <map id="hwlib::pin_5Fin_map" name="hwlib::pin_5Fin_map">
+<<<<<<< HEAD
+<area href="classdb103_1_1pin__in.html" title="pin_in implementation for the LPC1114" alt="db103::pin_in" shape="rect" coords="0,56,152,80"/>
+<area href="classdue_1_1pin__in.html" title="pin_in implementation for a ATSAM3X8E" alt="due::pin_in" shape="rect" coords="162,56,314,80"/>
+<area href="classhwlib_1_1pin__in__dummy__t.html" title="a dummy (do-nothing) pin_in class" alt="hwlib::pin_in_dummy_t" shape="rect" coords="324,56,476,80"/>
+<area href="classhwlib_1_1pin__in__store.html" title="a pin_in_out that stores its state and operation counts" alt="hwlib::pin_in_store" shape="rect" coords="486,56,638,80"/>
+<area href="classhwlib_1_1pin__invert__from__in.html" alt="hwlib::pin_invert_from_in" shape="rect" coords="648,56,800,80"/>
+<area href="classstm32f103c8_1_1pin__in.html" title="pin_in implementation for a ATSAM3X8E" alt="stm32f103c8::pin_in" shape="rect" coords="810,56,962,80"/>
+<area href="classuno_1_1pin__in.html" title="pin_in implementation for an ATMega328P" alt="uno::pin_in" shape="rect" coords="972,56,1124,80"/>
+=======
 <area href="classdb103_1_1pin__in.html" title="pin_in implementation for the LPC1114" alt="db103::pin_in" shape="rect" coords="0,56,123,80"/>
 <area href="classdue_1_1pin__in.html" title="pin_in implementation for a ATSAM3X8E" alt="due::pin_in" shape="rect" coords="133,56,256,80"/>
 <area href="classstm32f030x6_1_1pin__in.html" title="pin_in implementation for a ATSAM3X8E" alt="stm32f030x6::pin_in" shape="rect" coords="266,56,389,80"/>
 <area href="classstm32f103c8_1_1pin__in.html" title="pin_in implementation for a ATSAM3X8E" alt="stm32f103c8::pin_in" shape="rect" coords="399,56,522,80"/>
 <area href="classuno_1_1pin__in.html" title="pin_in implementation for an ATMega328P" alt="uno::pin_in" shape="rect" coords="532,56,655,80"/>
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad071bd2e17bb4af51390f6cbb728a194"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1pin__in.html#ad071bd2e17bb4af51390f6cbb728a194">read</a> ()=0</td></tr>
+<tr class="memdesc:ad071bd2e17bb4af51390f6cbb728a194"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the pin  <a href="#ad071bd2e17bb4af51390f6cbb728a194">More...</a><br /></td></tr>
 <tr class="separator:ad071bd2e17bb4af51390f6cbb728a194"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fb1bfb1ec962bb6d31a5e865f0d0acb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1pin__in.html#a3fb1bfb1ec962bb6d31a5e865f0d0acb">refresh</a> ()</td></tr>
 <tr class="memdesc:a3fb1bfb1ec962bb6d31a5e865f0d0acb"><td class="mdescLeft">&#160;</td><td class="mdescRight">refresh the pin buffer  <a href="#a3fb1bfb1ec962bb6d31a5e865f0d0acb">More...</a><br /></td></tr>
@@ -159,11 +170,10 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p></p>
-<p>read the pin</p>
+<p>read the pin </p>
 <p>This function returns the level of the pin. When the pin level is high the value true is returned, when the pin level is low the value false is returned. </p>
 
-<p>Implemented in <a class="el" href="classdue_1_1pin__in.html#aa032c49b961b38e4afaeb4a811311449">due::pin_in</a>, <a class="el" href="classuno_1_1pin__in.html#ab96d2ea83c1f1b43f3901313def35367">uno::pin_in</a>, and <a class="el" href="classdb103_1_1pin__in.html#aa45255f1a10bf9496f165e591d5cb329">db103::pin_in</a>.</p>
+<p>Implemented in <a class="el" href="classdue_1_1pin__in.html#aa032c49b961b38e4afaeb4a811311449">due::pin_in</a>, <a class="el" href="classuno_1_1pin__in.html#ab96d2ea83c1f1b43f3901313def35367">uno::pin_in</a>, <a class="el" href="classdb103_1_1pin__in.html#aa45255f1a10bf9496f165e591d5cb329">db103::pin_in</a>, <a class="el" href="classhwlib_1_1pin__in__store.html#a561cf1c65fd14dbfba4c352ef4a186fa">hwlib::pin_in_store</a>, <a class="el" href="classhwlib_1_1pin__invert__from__in.html#a8ae31ba3c93ac4dd75b0829fefa905e6">hwlib::pin_invert_from_in</a>, and <a class="el" href="classhwlib_1_1pin__in__dummy__t.html#a669c06692e3742532f8887771ae8feb1">hwlib::pin_in_dummy_t</a>.</p>
 
 </div>
 </div>
@@ -191,8 +201,10 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>refresh the pin buffer </p>
-<p>This function refreshes the contents of the read buffer that might be used by a buffered <a class="el" href="classhwlib_1_1pin__in.html#ad071bd2e17bb4af51390f6cbb728a194">read()</a>.</p>
+<p>This function refreshes the contents of the read buffer that might be used by a buffered <a class="el" href="classhwlib_1_1pin__in.html#ad071bd2e17bb4af51390f6cbb728a194" title="read the pin">read()</a>.</p>
 <p>That buffer might also be refreshed as a side-effect of other operations. </p>
+
+<p>Reimplemented in <a class="el" href="classdb103_1_1pin__in.html#a7581d464f903d09f945b595b3c0f9163">db103::pin_in</a>, <a class="el" href="classhwlib_1_1pin__in__store.html#a74fdba836b96f7a08327e96b8921e58c">hwlib::pin_in_store</a>, <a class="el" href="classhwlib_1_1pin__invert__from__in.html#af9d211beef233cb851daea296f6c77c5">hwlib::pin_invert_from_in</a>, and <a class="el" href="classhwlib_1_1pin__in__dummy__t.html#ab890235f6b613aac58d6aef96d3460a3">hwlib::pin_in_dummy_t</a>.</p>
 
 </div>
 </div>
@@ -205,7 +217,11 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacehwlib.html">hwlib</a></li><li class="navelem"><a class="el" href="classhwlib_1_1pin__in.html">pin_in</a></li>
+<<<<<<< HEAD
+    <li class="footer">Generated on Sat Feb 16 2019 11:36:53 for hwlib by
+=======
     <li class="footer">Generated on Mon Feb 11 2019 09:25:51 for hwlib by
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

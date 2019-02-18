@@ -126,11 +126,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ab58ed3517fb138173421fed3e7466b05"><td class="mdescLeft">&#160;</td><td class="mdescRight">LPC1114 <a class="el" href="classdb103_1_1pin__in.html" title="pin_in implementation for the LPC1114">pin_in</a> constructor.  <a href="#ab58ed3517fb138173421fed3e7466b05">More...</a><br /></td></tr>
 <tr class="separator:ab58ed3517fb138173421fed3e7466b05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa45255f1a10bf9496f165e591d5cb329"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdb103_1_1pin__in.html#aa45255f1a10bf9496f165e591d5cb329">read</a> () override</td></tr>
+<tr class="memdesc:aa45255f1a10bf9496f165e591d5cb329"><td class="mdescLeft">&#160;</td><td class="mdescRight">read the pin  <a href="#aa45255f1a10bf9496f165e591d5cb329">More...</a><br /></td></tr>
 <tr class="separator:aa45255f1a10bf9496f165e591d5cb329"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classhwlib_1_1pin__in"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhwlib_1_1pin__in')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhwlib_1_1pin__in.html">hwlib::pin_in</a></td></tr>
-<tr class="memitem:a3fb1bfb1ec962bb6d31a5e865f0d0acb inherit pub_methods_classhwlib_1_1pin__in"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhwlib_1_1pin__in.html#a3fb1bfb1ec962bb6d31a5e865f0d0acb">refresh</a> ()</td></tr>
-<tr class="memdesc:a3fb1bfb1ec962bb6d31a5e865f0d0acb inherit pub_methods_classhwlib_1_1pin__in"><td class="mdescLeft">&#160;</td><td class="mdescRight">refresh the pin buffer  <a href="classhwlib_1_1pin__in.html#a3fb1bfb1ec962bb6d31a5e865f0d0acb">More...</a><br /></td></tr>
-<tr class="separator:a3fb1bfb1ec962bb6d31a5e865f0d0acb inherit pub_methods_classhwlib_1_1pin__in"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7581d464f903d09f945b595b3c0f9163"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdb103_1_1pin__in.html#a7581d464f903d09f945b595b3c0f9163">refresh</a> () override</td></tr>
+<tr class="memdesc:a7581d464f903d09f945b595b3c0f9163"><td class="mdescLeft">&#160;</td><td class="mdescRight">refresh the pin buffer  <a href="#a7581d464f903d09f945b595b3c0f9163">More...</a><br /></td></tr>
+<tr class="separator:a7581d464f903d09f945b595b3c0f9163"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classdb103_1_1pin__in.html" title="pin_in implementation for the LPC1114">pin_in</a> implementation for the LPC1114 </p>
@@ -199,11 +199,41 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p></p>
-<p>read the pin</p>
+<p>read the pin </p>
 <p>This function returns the level of the pin. When the pin level is high the value true is returned, when the pin level is low the value false is returned. </p>
 
 <p>Implements <a class="el" href="classhwlib_1_1pin__in.html#ad071bd2e17bb4af51390f6cbb728a194">hwlib::pin_in</a>.</p>
+
+</div>
+</div>
+<a id="a7581d464f903d09f945b595b3c0f9163"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7581d464f903d09f945b595b3c0f9163">&#9670;&nbsp;</a></span>refresh()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void db103::pin_in::refresh </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>refresh the pin buffer </p>
+<p>This function refreshes the contents of the read buffer that might be used by a buffered <a class="el" href="classdb103_1_1pin__in.html#aa45255f1a10bf9496f165e591d5cb329" title="read the pin">read()</a>.</p>
+<p>That buffer might also be refreshed as a side-effect of other operations. </p>
+
+<p>Reimplemented from <a class="el" href="classhwlib_1_1pin__in.html#a3fb1bfb1ec962bb6d31a5e865f0d0acb">hwlib::pin_in</a>.</p>
 
 </div>
 </div>
@@ -216,7 +246,11 @@ Public Member Functions</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacedb103.html">db103</a></li><li class="navelem"><a class="el" href="classdb103_1_1pin__in.html">pin_in</a></li>
+<<<<<<< HEAD
+    <li class="footer">Generated on Sat Feb 16 2019 11:36:52 for hwlib by
+=======
     <li class="footer">Generated on Mon Feb 11 2019 09:25:50 for hwlib by
+>>>>>>> 988db6fa2eaf481e36194d7a8978883edd42cbd3
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

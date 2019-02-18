@@ -13,7 +13,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file

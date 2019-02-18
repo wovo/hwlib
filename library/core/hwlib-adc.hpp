@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
@@ -36,7 +36,7 @@ public:
    /// This function performs an A/D conversion and returns the result.
    /// The lower n_bits of the result are the conversion result,
    /// the remaining higher bits are 0.
-   virtual adc_value_type get() = 0;
+   virtual adc_value_type read() = 0;
    
    /// specify the number of bits
    adc( uint_fast8_t n_bits ): adc_n_bits{ n_bits }{
@@ -45,7 +45,16 @@ public:
          HWLIB_PANIC_WITH_LOCATION;
       }
    }
-
+   
+   /// \brief
+   /// refresh the adc value
+   /// \details
+   /// This function refreshes the contents of the read buffer that might
+   /// be used by a buffered read().
+   ///
+   /// That buffer might also be refreshed as a side-effect of other
+   /// operations.  
+   virtual void refresh() = 0;
 };
 
 }; // namespace hwlib
