@@ -13,8 +13,6 @@ targets:     target micro-controllers and boards
       
       
 todo
-- rename to _*_class for invert, all, from
-- dac moet ook flush, write
 - document pins & decorators
 - test pins & decorators : add test pin
 - I2C transaction class -> more efficient oled use - hoe druk je uit dat je zo'n transaction rerf terug kan krjgen?

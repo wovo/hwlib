@@ -17,9 +17,8 @@
 
 namespace hwlib {
 
-/// \brief
 /// D/A output interface
-/// \details
+///
 /// This class abstracts the interface to a DAC (Digital to Analog Converter).
 class dac {
 public:
@@ -33,12 +32,20 @@ public:
    /// the type of the result returned by get()
    typedef uint_fast32_t dac_value_type; 
     
-   /// \brief
    /// write a value to the D/A output 
-   /// \details
-   /// This writes a digital value to the D/A converter, which causes
+   /// 
+   /// This writes a digital value to the D/A converter, which prepares
    /// the corresponding analog value to appear on the output pin.
+   /// The actual effect on the output pin can be postponed upto the 
+   /// next flush() call.
    virtual void write( dac_value_type x ) = 0;
+
+   /// flush the buffer
+   /// 
+   /// This function flushes the last value written using write():
+   /// calling this function makes sure that the (last) value written
+   /// appears on the pin.
+   virtual void flush() = 0;
    
    /// specify the number of bits
    dac( uint_fast8_t n_bits ): \

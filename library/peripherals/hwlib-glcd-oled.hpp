@@ -78,24 +78,30 @@ enum class ssd1306_commands : uint8_t {
    vertical_and_left_horizontal_scroll   = 0x2A   
 };   
 
+/// value to send over i2c before a command
+constexpr uint8_t ssd1306_cmd_prefix  = 0x80;
+
+/// value to send over i2c before a command
+constexpr uint8_t ssd1306_data_prefix = 0x40;
+
 /// SSD1306 chip initialization
 constexpr const uint8_t ssd1306_initialization[] = {
-   0x80,  (uint8_t) ssd1306_commands::display_off,                  
-   0x80,  (uint8_t) ssd1306_commands::set_display_clock_div,  0x80,
-   0x80,  (uint8_t) ssd1306_commands::set_multiplex,          0x3f,   
-   0x80,  (uint8_t) ssd1306_commands::set_display_offset,     0x00,   
-   0x80,  (uint8_t) ssd1306_commands::set_start_line        | 0x00,  
-   0x80,  (uint8_t) ssd1306_commands::charge_pump,            0x14,   
-   0x80,  (uint8_t) ssd1306_commands::memory_mode,            0x00,   
-   0x80,  (uint8_t) ssd1306_commands::seg_remap             | 0x01,
-   0x80,  (uint8_t) ssd1306_commands::com_scan_dec,
-   0x80,  (uint8_t) ssd1306_commands::set_compins,            0x12,   
-   0x80,  (uint8_t) ssd1306_commands::set_contrast,           0xcf,   
-   0x80,  (uint8_t) ssd1306_commands::set_precharge,          0xf1,  
-   0x80,  (uint8_t) ssd1306_commands::set_vcom_detect,        0x40,   
-   0x80,  (uint8_t) ssd1306_commands::display_all_on_resume,          
-   0x80,  (uint8_t) ssd1306_commands::normal_display,                
-   0x80,  (uint8_t) ssd1306_commands::display_on                     
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::display_off,                  
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::set_display_clock_div, 0x80,
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::set_multiplex,         0x3f,   
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::set_display_offset,    0x00,   
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::set_start_line       | 0x00,  
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::charge_pump,           0x14,   
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::memory_mode,           0x00,   
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::seg_remap            | 0x01,
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::com_scan_dec,
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::set_compins,           0x12,   
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::set_contrast,          0xcf,   
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::set_precharge,         0xf1,  
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::set_vcom_detect,       0x40,   
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::display_all_on_resume,          
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::normal_display,                
+   ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::display_on                     
 };
 
 class ssd1306_i2c {
@@ -118,7 +124,7 @@ public:
    }      
    
    void command( ssd1306_commands c ){
-      uint8_t data[] = { 0x80, (uint8_t) c };
+      uint8_t data[] = { ssd1306_cmd_prefix, (uint8_t) c };
       channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
@@ -126,7 +132,7 @@ public:
    } 
    
    void command( ssd1306_commands c, uint8_t d0 ){
-      uint8_t data[] = { 0x80, (uint8_t) c, 0x80, d0 };
+      uint8_t data[] = { ssd1306_cmd_prefix, (uint8_t) c, ssd1306_cmd_prefix, d0 };
       channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
@@ -134,7 +140,7 @@ public:
    } 	
    
    void command( ssd1306_commands c , uint8_t d0, uint8_t d1 ){
-      uint8_t data[] = { 0x80, (uint8_t) c, 0x80, d0, 0x80, d1 };
+      uint8_t data[] = { ssd1306_cmd_prefix, (uint8_t) c, ssd1306_cmd_prefix, d0, ssd1306_cmd_prefix, d1 };
       channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
@@ -153,7 +159,7 @@ public:
          cursor_x = x;
          cursor_y = y;
       }   
-      uint8_t data[] = { 0x40, d };
+      uint8_t data[] = { ssd1306_data_prefix, d };
       channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
