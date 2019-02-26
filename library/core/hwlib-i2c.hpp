@@ -256,6 +256,7 @@ public:
 //
 // ==========================================================================
    
+/// transactions on an i2c bus   
 class i2c_bus_transactions {
 private:
 
@@ -263,14 +264,17 @@ private:
    
 public:    
 
+   /// construct from the primitives
    i2c_bus_transactions( i2c_primitives & primitives ):
       primitives( primitives )
    {}	  
        
+   /// returns a write transaction	   
    i2c_write_transaction write( uint_fast8_t a ){
        return i2c_write_transaction( primitives, a );
    }
          
+   /// returns a read transaction		 
    i2c_read_transaction read( uint_fast8_t a ){
        return i2c_read_transaction( primitives, a );
    }
@@ -284,6 +288,10 @@ public:
 //
 // ==========================================================================
 
+/// transactions on a channel on an i2c bus
+///
+/// An i2c bus channel is the communication channel to a specific 
+/// slave chip on the i2c bus, identified by its slave address.
 class i2c_channel_transactions {
 private:
 
@@ -292,6 +300,7 @@ private:
    	
 public:    
 
+   /// construct from the primitives and the slave address
    i2c_channel_transactions( 
       i2c_primitives & primitives,
       uint_fast8_t a
@@ -300,10 +309,12 @@ public:
       a( a )
    {}	  
       
+   /// returns a write transaction oibject	  
    i2c_write_transaction write(){
        return i2c_write_transaction( primitives, a );
    }
          
+   /// returns a read transaction object		 
    i2c_read_transaction read(){
        return i2c_read_transaction( primitives, a );
    }
@@ -321,9 +332,13 @@ public:
 class i2c_channel {
 public:	
    
+   /// the i2c primitives
    i2c_primitives & primitives;
+   
+   /// the i2c transactions
    i2c_channel_transactions transactions;	  
 
+   /// construct from the primitives and the slave address
    i2c_channel( 
       i2c_primitives & primitives,
 	  uint_fast8_t a 
@@ -493,6 +508,7 @@ public:
       t.read( data, n );	  
    }	   
    
+   /// return a channel to the slave at the address a
    i2c_channel channel( uint_fast8_t a ){
       return i2c_channel( primitives, a );
    }	  

@@ -1,12 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Session Name="C:\ti-software\hwlib\demo\arduino-uno\__codelite.workspace">
-  <int Value="0" Name="m_selectedTab"/>
+  <int Value="3" Name="m_selectedTab"/>
   <wxString Value="C:\ti-software\hwlib\demo\arduino-uno\__codelite.workspace" Name="m_workspaceName"/>
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
-      <wxString Value="C:\ti-software\hwlib\library\hwlib-arduino-uno.hpp" Name="FileName"/>
-      <int Value="434" Name="FirstVisibleLine"/>
-      <int Value="323" Name="CurrentLine"/>
+      <wxString Value="C:\ti-software\bmptk\targets\avr\include\array" Name="FileName"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="0" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\ti-software\hwlib\library\ports\hwlib-port-from-port.hpp" Name="FileName"/>
+      <int Value="231" Name="FirstVisibleLine"/>
+      <int Value="250" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\ti-software\hwlib\library\core\hwlib-string.hpp" Name="FileName"/>
+      <int Value="558" Name="FirstVisibleLine"/>
+      <int Value="573" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\ti-software\hwlib\library\graphics\hwlib-graphics-font-16x16.hpp" Name="FileName"/>
+      <int Value="44" Name="FirstVisibleLine"/>
+      <int Value="66" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+      <IntVector Name="CollapsedFolds"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="C:\ti-software\hwlib\library\targets\hwlib-arduino-uno.hpp" Name="FileName"/>
+      <int Value="432" Name="FirstVisibleLine"/>
+      <int Value="441" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>

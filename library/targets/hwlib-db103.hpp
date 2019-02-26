@@ -16,8 +16,14 @@
 #ifndef HWLIB_DB103_H
 #define HWLIB_DB103_H
 
+#define _HWLIB_TARGET_WAIT_NS_BUSY
+#define _HWLIB_TARGET_WAIT_US_BUSY
 #include HWLIB_INCLUDE( ../hwlib-all.hpp )
+
+// the LPC header file use 'register' in the pre-C++17 sense
+#define register
 #include "LPC11xx.h"
+#undef register
 
 /// \brief
 /// hwlib implementation for the DB103 board
@@ -36,7 +42,6 @@
 ///
 /// This implementation doesn't (yet) offer:
 ///    - hardware UART
-///    - clock-based timing
 ///    - full CPU speed (48 MHz)
 ///    - hardware SPI
 ///
@@ -150,9 +155,8 @@ private:
    
 public:
 
-   /// \brief
    /// LPC1114 pin_in constructor
-   /// \details
+   /// 
    /// Constructor for an LPC11114 input pin.
    ///
    /// This constructor sets the pin direction to input.   
@@ -171,6 +175,7 @@ public:
    
    void refresh() override{
    }
+   
 };   
 
 /// pin_out implementation for the LPC1114
@@ -180,9 +185,8 @@ private:
    
 public:
 
-   /// \brief
    /// LPC1114 pin_out constructor
-   /// \details
+   /// 
    /// Constructor for an LPC11114 output pin.
    ///
    /// This constructor sets the pin direction to output.   
@@ -201,6 +205,7 @@ public:
    
    void flush() override{
    }   
+   
 };
 
 /// pin_in_out implementation for the LPC1114
@@ -210,9 +215,8 @@ private:
    
 public:
 
-   /// \brief
    /// LPC1114 pin_out constructor
-   /// \details
+   ///
    /// Constructor for an LPC1114 input pin.
    ///
    /// This constructor doesn't set the pin direction 
@@ -247,6 +251,10 @@ public:
    
    void flush() override{
    }   
+   
+   void direction_flush() override{
+   } 
+   
 };   
 
 /// pin_oc implementation for the LPC1114
@@ -256,9 +264,8 @@ private:
    
 public:
 
-   /// \brief
    /// LPC1114 pin_oc constructor
-   /// \details
+   ///
    /// Constructor for an LPC1114 input pin.
    ///
    /// This constructor sets the pin to high (high-impedance). 
@@ -296,6 +303,7 @@ public:
    
    void flush() override{
    }   
+   
 };   
 
 /// adc implementation for an LPC1114
@@ -329,8 +337,8 @@ public:
    
    void refresh() override {
    }
+      
 };
-
 
 }; // namespace db103
 
@@ -338,11 +346,60 @@ namespace hwlib {
 
 namespace target = db103;
 
-void HWLIB_WEAK wait_ns( int_fast32_t n ){
+
+// ===========================================================================
+//
+// implementations
+//
+// ===========================================================================
+
+#ifdef _HWLIB_ONCE
+
+/// the number of ticks per us
+uint_fast64_t HWLIB_WEAK ticks_per_us(){
+   return 12;
+}
+
+/// returns the number of ticks since some fixed starting point
+uint_fast64_t HWLIB_WEAK now_ticks(){
+   static bool init_done = false;
+   if( ! init_done ){
+            
+      SysTick->CTRL  = 0;         // stop the timer
+      SysTick->LOAD  = 0xFFFFFF;  // use its as a 24-bit timer
+      SysTick->VAL   = 0;         // clear the timer
+      SysTick->CTRL  = 5;         // start the timer, 1:1
+
+      init_done = true;      
+   }
+   
+   static unsigned int last_low = 0;
+   static unsigned long long int high = 0;
+
+   // the timer ticks down, but we want an up counter
+   unsigned int low = 0xFFFFFF - ( SysTick->VAL & 0xFFFFFF );
+   if( low < last_low ){
+   
+      // the timer rolled over, so increment the high part
+      high += 0x1ULL << 24;
+   }
+   last_low = low;
+
+   // return the aggregated ticks value
+   // the counter runs at 84 MHz 
+   return ( low | high ); 
+
+} 
+
+uint64_t now_us(){
+   return now_ticks() / ticks_per_us();
+} 
+
+void HWLIB_WEAK wait_ns_busy( int_fast32_t n ){
    wait_us( n / 1000 );
 }
 
-void HWLIB_WEAK wait_us( int_fast32_t n ){
+void HWLIB_WEAK wait_us_busy( int_fast32_t n ){
    // for the default clock frequency of 12 MHz:
    // the loop uses 12 cycles
    __asm volatile( 
@@ -359,17 +416,17 @@ void HWLIB_WEAK wait_us( int_fast32_t n ){
    );
 }
 
-void HWLIB_WEAK wait_ms( int_fast32_t n ){
-   while( n > 0 ){
-      wait_us( 1000 );
-      --n;
-   }   
-}
-
 void HWLIB_WEAK uart_putc( char c ){
    static target::pin_out pin( 1, 7 );
    uart_putc_bit_banged_pin( c, pin );
 }
+
+char HWLIB_WEAK uart_getc(){
+   static target::pin_in pin( 1, 6 );
+   return uart_getc_bit_banged_pin( pin );
+}
+
+#endif // _HWLIB_ONCE
 
 }; //namespace hwlib   
 

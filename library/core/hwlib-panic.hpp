@@ -43,7 +43,14 @@ void HWLIB_NORETURN panic(
 /// This macro calls panic( __FILE__, __LINE__ ).
 #define HWLIB_PANIC_WITH_LOCATION ::hwlib::panic( __FILE__, __LINE__ )
 
-#ifdef HWLIB_ONCE 
+
+// ===========================================================================
+//
+// implementations
+//
+// ===========================================================================
+
+#ifdef _HWLIB_ONCE 
 
 // The weak attribute allows an application 
 // to specify its own panic function
@@ -54,6 +61,6 @@ void HWLIB_NORETURN HWLIB_WEAK panic(
    for(;;);
 }
 
-#endif // #ifdef HBLIB_ONCE
+#endif // #ifdef _HWLIB_ONCE
 
 }; // namespace hwlib

@@ -45,11 +45,18 @@ void _equal(
 /// Call test_end() at the end of your test application
 /// that uses HWLIB_TEST_EQUAL for its checks.
 /// It will print (to hwlib::cout) either the number of 
-/// tests (if all were succesfull), or the number of failures
-/// (when not all test were succesfull).
+/// tests (if all were successful), or the number of failures
+/// (when not all test were successful).
 void test_end();
 
-#ifdef HWLIB_ONCE
+
+// ===========================================================================
+//
+// implementations
+//
+// ===========================================================================
+
+#ifdef _HWLIB_ONCE 
 
 int _equal_calls_count    = 0;	
 int _equal_failures_count = 0;
@@ -68,6 +75,6 @@ void test_end(){
    }	  
 }
 
-#endif
+#endif // _HWLIB_ONCE
 
 }; // namespace hwlib

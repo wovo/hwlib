@@ -98,25 +98,32 @@ constexpr const uint8_t ssd1306_initialization[] = {
    0x80,  (uint8_t) ssd1306_commands::display_on                     
 };
 
+/// ssd1306, accessed by i2c
 class ssd1306_i2c {
 protected:
 
+   /// the i2c channel
    i2c_channel & channel;
    
-   // current cursor setting in the controller;
-   // used to avoid explicit cursor updates when such are not needed
+   /// current cursor setting in the controller
+   ///
+   /// These used to avoid explicit cursor updates when such are not needed.
+   ///@{
    uint8_t cursor_x, cursor_y;
-    
+   ///@}
+	   
 public:	
     
+   /// construct by providing the i2c channel	
    ssd1306_i2c( i2c_channel & channel ):
       channel( channel ),
       cursor_x( 255 ), cursor_y( 255 )
    {
-      // wait for the coontroller to be ready for the initialization       
+      // wait for the controller to be ready for the initialization       
       wait_ms( 20 );
    }      
    
+   /// send a command without data
    void command( ssd1306_commands c ){
       uint8_t data[] = { 0x80, (uint8_t) c };
       channel.write( 
@@ -125,6 +132,7 @@ public:
       );      
    } 
    
+   /// send a command with one data byte
    void command( ssd1306_commands c, uint8_t d0 ){
       uint8_t data[] = { 0x80, (uint8_t) c, 0x80, d0 };
       channel.write( 
@@ -133,6 +141,7 @@ public:
       );    
    } 	
    
+   /// send a command with two data bytes
    void command( ssd1306_commands c , uint8_t d0, uint8_t d1 ){
       uint8_t data[] = { 0x80, (uint8_t) c, 0x80, d0, 0x80, d1 };
       channel.write( 
@@ -141,7 +150,7 @@ public:
       );     
    } 	
    
-   // unbuffered write
+   /// write the pixel byte d at column x page y
    void pixels( 
       uint8_t x, 
       uint8_t y, 
@@ -163,6 +172,7 @@ public:
       
 }; // class ssd1306_i2c
 
+/// buffered oled window
 class glcd_oled_i2c_128x64_buffered : public ssd1306_i2c, public window {
 private:
 
@@ -185,6 +195,7 @@ private:
      
 public:
    
+   /// construct by providing the i2c channel
    glcd_oled_i2c_128x64_buffered( i2c_channel & channel ):
       ssd1306_i2c( channel ),
       window( wsize, black, white )
@@ -224,7 +235,7 @@ public:
    
 }; // class glcd_oled_i2c_128x64_buffered
 
+/// the default oled is the buffered version
 using glcd_oled = glcd_oled_i2c_128x64_buffered;
    
 }; // namespace hwlib
-

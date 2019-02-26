@@ -22,7 +22,7 @@ namespace hwlib {
 /// This class interfaces to a matrix of keys (switches).
 class matrix_of_switches {
 private:
-public:
+
    port_oc & output;
    port_in & input;
 

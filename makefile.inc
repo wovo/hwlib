@@ -23,28 +23,51 @@ HEADERS           += hwlib-all.hpp
 HEADERS           += core/hwlib-defines.hpp
 HEADERS           += core/hwlib-panic.hpp
 HEADERS           += core/hwlib-common.hpp
-
-HEADERS           += core/hwlib-pin.hpp
-HEADERS           += core/hwlib-pin-dummies.hpp
-HEADERS           += core/hwlib-pin-stores.hpp
-HEADERS           += core/hwlib-pin-from.hpp
-HEADERS           += core/hwlib-pin-invert.hpp
-HEADERS           += core/hwlib-pin-all.hpp
-HEADERS           += core/hwlib-port.hpp
-HEADERS           += core/hwlib-port-from-pins.hpp
-HEADERS           += core/hwlib-port-decorators.hpp
-
 HEADERS           += core/hwlib-wait.hpp
+
+HEADERS           += pins/hwlib-pin.hpp
+HEADERS           += pins/hwlib-pin-dummies.hpp
+HEADERS           += pins/hwlib-pin-stores.hpp
+HEADERS           += pins/hwlib-pin-from-pin.hpp
+HEADERS           += pins/hwlib-pin-invert.hpp
+HEADERS           += pins/hwlib-pin-all.hpp
+HEADERS           += pins/hwlib-pin-direct.hpp
+HEADERS           += pins/hwlib-pin-demos.hpp
+
+HEADERS           += ports/hwlib-port.hpp
+HEADERS           += ports/hwlib-port-from-port.hpp
+HEADERS           += ports/hwlib-port-from-pins.hpp
+HEADERS           += ports/hwlib-port-invert.hpp
+HEADERS           += ports/hwlib-port-all.hpp
+HEADERS           += ports/hwlib-port-direct.hpp
+HEADERS           += ports/hwlib-port-demos.hpp
+
+HEADERS           += char-io/hwlib-ostream.hpp
+HEADERS           += char-io/hwlib-istream.hpp
+HEADERS           += char-io/hwlib-bb-uart.hpp
+HEADERS           += char-io/hwlib-console.hpp
+HEADERS           += char-io/hwlib-terminal.hpp
+
+
+HEADERS           += core/hwlib-test.hpp
+HEADERS           += core/hwlib-string.hpp
 
 HEADERS           += core/hwlib-adc.hpp
 HEADERS           += core/hwlib-dac.hpp
-HEADERS           += core/hwlib-console.hpp
-HEADERS           += core/hwlib-graphics.hpp
-HEADERS           += core/hwlib-font-default-8x8.hpp
-HEADERS           += core/hwlib-font-default-16x16.hpp
-HEADERS           += core/hwlib-ostream.hpp
+HEADERS           += core/hwlib-dac-demos.hpp
 HEADERS           += core/hwlib-i2c.hpp
 HEADERS           += core/hwlib-spi.hpp
+
+HEADERS           += graphics/hwlib-graphics-xy.hpp
+HEADERS           += graphics/hwlib-graphics-color.hpp
+HEADERS           += graphics/hwlib-graphics-image.hpp
+HEADERS           += graphics/hwlib-graphics-window.hpp
+HEADERS           += graphics/hwlib-graphics-drawables.hpp
+HEADERS           += graphics/hwlib-graphics-window-decorators.hpp
+HEADERS           += graphics/hwlib-graphics-window-demos.hpp
+HEADERS           += graphics/hwlib-graphics-console.hpp
+HEADERS           += graphics/hwlib-graphics-font-8x8.hpp
+HEADERS           += graphics/hwlib-graphics-font-16x16.hpp
 
 HEADERS           += peripherals/hwlib-pcf8574a.hpp
 HEADERS           += peripherals/hwlib-pcf8591.hpp
@@ -53,14 +76,10 @@ HEADERS           += peripherals/hwlib-hd44780.hpp
 HEADERS           += peripherals/hwlib-glcd-5510.hpp
 HEADERS           += peripherals/hwlib-glcd-oled.hpp
 
-HEADERS           += core/hwlib-string.hpp
-HEADERS           += core/hwlib-demo.hpp
-HEADERS           += core/hwlib-test.hpp
-
 HEADERS           += targets/hwlib-arduino-due.hpp
-HEADERS           += targets/hwlib-arduino-uno.hpp
-HEADERS           += targets/hwlib-blue-pill.hpp
-HEADERS           += targets/hwlib-stm32f103c8.hpp
+#HEADERS           += targets/hwlib-arduino-uno.hpp
+#HEADERS           += targets/hwlib-blue-pill.hpp
+#HEADERS           += targets/hwlib-stm32f103c8.hpp
 HEADERS           += targets/hwlib-db103.hpp
 HEADERS           += targets/hwlib-native.hpp
 HEADERS           += targets/hwlib-none.hpp

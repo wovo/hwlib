@@ -10,8 +10,8 @@
 //
 // ==========================================================================
 
-// The (very few) code parts that must be compiled (instead of included)
-// are in the header files, enabled only when #HWLIB_ONCE is defined.
+// The (few) code parts that must be compiled (instead of included)
+// are in the header files, enabled only when _HWLIB_ONCE is defined.
 
-#define HWLIB_ONCE
+#define _HWLIB_ONCE
 #include "hwlib.hpp"

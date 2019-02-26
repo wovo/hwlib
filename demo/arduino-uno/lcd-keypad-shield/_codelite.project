@@ -30,7 +30,7 @@
   <Dependencies/>
   <VirtualDirectory Name="source">
     <File Name="main.cpp"/>
-    <File Name="makefile"/>
+    <File Name="Makefile"/>
   </VirtualDirectory>
   <Settings Type="Dynamic Library">
     <GlobalSettings>

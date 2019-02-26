@@ -17,9 +17,8 @@
 
 namespace hwlib {
 
-/// \brief
 /// A/D input interface
-/// \details
+/// 
 /// This class abstracts the interface to an ADC (Analog to Digital Converter).
 class adc {
 public:
@@ -29,10 +28,9 @@ public:
    
    /// the type of the result returned by get()
    typedef uint_fast32_t adc_value_type; 
-    
-   /// \brief
+
    /// do an A/D conversion and return the result
-   /// \details
+   /// 
    /// This function performs an A/D conversion and returns the result.
    /// The lower n_bits of the result are the conversion result,
    /// the remaining higher bits are 0.
@@ -46,15 +44,15 @@ public:
       }
    }
    
-   /// \brief
    /// refresh the adc value
-   /// \details
+   /// 
    /// This function refreshes the contents of the read buffer that might
    /// be used by a buffered read().
    ///
    /// That buffer might also be refreshed as a side-effect of other
    /// operations.  
    virtual void refresh() = 0;
-};
+   
+}; // class adc
 
 }; // namespace hwlib
