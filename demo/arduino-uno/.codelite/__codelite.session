@@ -4,9 +4,9 @@
   <wxString Value="C:\ti-software\hwlib\demo\arduino-uno\__codelite.workspace" Name="m_workspaceName"/>
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
-      <wxString Value="C:\ti-software\hwlib\library\hwlib-arduino-uno.hpp" Name="FileName"/>
-      <int Value="434" Name="FirstVisibleLine"/>
-      <int Value="323" Name="CurrentLine"/>
+      <wxString Value="C:\ti-software\hwlib\library\graphics\hwlib-graphics-font-16x16.hpp" Name="FileName"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="79" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>

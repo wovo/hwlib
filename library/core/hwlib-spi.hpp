@@ -17,9 +17,8 @@
 
 namespace hwlib {
    
-/// \brief
 /// spi bus interface
-/// \details
+///
 /// This class abstracts the interface of a master to a SPI bus.   
 /// 
 /// The SPI (Serial Peripheral Interface) protocol 
@@ -69,9 +68,8 @@ namespace hwlib {
 class spi_bus {
 private:
 
-   /// \brief
    /// spi transaction object
-   /// \details
+   ///
    /// This is the read-and-write operation 
    /// that a concrete spi_bus must implement.
    /// It simultaneaously reads and writes n bytes of data.
@@ -89,9 +87,8 @@ private:
    
 public:   
 
-   /// \brief
    /// spi transaction object
-   /// \details
+   ///
    /// A SPI transaction object is created (adn destructed) 
    /// for each SPI transaction.
    /// When a SPI transaction object is is constructed, 
@@ -125,7 +122,7 @@ public:
 
       /// \brief
       /// read and write data (raw arrays)
-      /// \details      
+      ///      
       /// This function simultaneously writes n bytes 
       /// from data_out to the peripheral 
       /// and reads n bytes from the peripheral into data_in.
@@ -143,9 +140,8 @@ public:
          bus.write_and_read( n, data_out, data_in );
       }
    
-      /// \brief
       /// read and write data (std::array<>'s)
-      /// \details      
+      ///      
       /// This function simultaneously writes the data from 
       /// data_out to the peripheral 
       /// and reads from the peripheral into data_in.
@@ -157,9 +153,8 @@ public:
          bus.write_and_read( n, data_out.begin(), data_in.begin() );
       }   
       
-      /// \brief
       /// write data (raw array)
-      /// \details      
+      ///      
       /// This function writes n bytes 
       /// from data_out to the peripheral.
       ///
@@ -172,9 +167,8 @@ public:
          bus.write_and_read( n, data_out, nullptr );
       }
 
-      /// \brief
       /// write data (std:array<>)
-      /// \details      
+      ///      
       /// This function writes the data 
       /// from data_out to the peripheral.      
       template< size_t n > 
@@ -184,9 +178,8 @@ public:
          bus.write_and_read( n, data_out.begin(), nullptr );
       }   
       
-      /// \brief
       /// write data (uint8_t)
-      /// \details      
+      ///      
       /// This function writes a single byte of
       /// data to the peripheral.
       void HWLIB_INLINE write( 
@@ -195,9 +188,8 @@ public:
          bus.write_and_read( 1, & d, nullptr );
       }
       
-      /// \brief
       /// read data (raw array)
-      /// \details      
+      ///      
       /// This function reads n bytes from the peripheral into data_in.
       ///	  
       /// This function uses an unsafe (raw array) interface.
@@ -209,9 +201,8 @@ public:
          bus.write_and_read( n, nullptr, data_in );
       }      
       
-      /// \brief
       /// read data (std::array<>)
-      /// \details      
+      ///      
       /// This function reads n bytes from the peripheral into data_in.
       template< size_t n >
       void HWLIB_INLINE read( 
@@ -220,9 +211,8 @@ public:
          bus.write_and_read( n, nullptr, data_in.begin() );
       }   
       
-      /// \brief
       /// read a single byte
-      /// \details      
+      ///      
       /// This function reads and returns a single byte.
       uint8_t HWLIB_INLINE read_byte(){
          uint8_t d;          
@@ -232,9 +222,8 @@ public:
    
    }; // class spi_transaction   
    
-   /// \brief
    /// spi read-and-write transaction 
-   /// \details
+   ///
    /// This function creates and returns a SPI transaction object
    /// for the spi bus and the indicated sel pin. 
    spi_transaction transaction( pin_out & sel ){
@@ -244,9 +233,8 @@ public:
 }; // class spi_bus  
 
 
-/// \brief
 /// bit-banged SPI bus implementation
-/// \details
+///
 /// This class implements a bit-banged master interface to a SPI bus.
 class spi_bus_bit_banged_sclk_mosi_miso : public spi_bus {
 private:
@@ -295,9 +283,8 @@ private:
    
 public:
 
-   /// \brief
    /// construct a bit-banged SPI bus from the sclk, miso and mosi pins
-   /// \details
+   ///
    /// This constructor creates a simple bit-banged SPI bus master
    /// from the sclk, miso and mosi pins. 
    ///

@@ -10,7 +10,6 @@
 //
 // ==========================================================================
 
-//! [[blink example]]
 #include "hwlib.hpp"
 
 int main( void ){
@@ -21,4 +20,4 @@ int main( void ){
    auto led = hwlib::target::pin_out( 1, 27 );
    hwlib::blink( led );
 }
-//! [[blink example]]
+

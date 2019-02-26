@@ -17,9 +17,8 @@
 
 namespace hwlib {
    
-/// \brief
 /// pcf8591 I2C A/D and D/A converter 
-/// \details
+///
 /// This class implements an interface to a pcf8591 A/D & D/A converter chip.
 ///
 /// \image html pcf8591-pinout.png
@@ -34,7 +33,7 @@ namespace hwlib {
 /// The next code repeatedly prints the values read
 /// by the 4 (single-ended) A/D converters.
 ///
-/// \snippet "demo\db103\pcf8591-adc\main.cpp" [Doxygen pcf8591-adc example]
+/// \snippet "db103\pcf8591\main.cpp" [Doxygen pcf8591-adc example]
 ///
 /// references:
 ///    - <A HREF="http://www.nxp.com/documents/data_sheet/PCF8591.pdf">
@@ -100,6 +99,8 @@ private:
             sizeof( message ) / sizeof( uint8_t ) 
          ); 
       }   
+	  
+	  void flush() override {}
    };
    
    // hide the private classes from Doxygen
@@ -113,9 +114,8 @@ private:
 
 public:
 
-   /// \brief
    /// construct an interface to a pcf8591 chip
-   /// \details
+   ///
    /// This constructor creates an interface to a pcf8591 I2C
    /// A/D and D/A converter from the I2C bus it is connected to and 
    /// and the chip address.
@@ -127,9 +127,8 @@ public:
       configuration{ 0x40 }
    {}         
 
-   /// \brief
    /// the A/D converter channels of the chip
-   /// \details
+   ///
    /// The adc0 ... adc3 attributes represent the 4 A/D 
    /// inputs of the chip. 
    //@{ 

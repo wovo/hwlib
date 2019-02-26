@@ -18,7 +18,11 @@
 namespace hwlib {
 
 /// A/D input interface
+<<<<<<< HEAD
 ///
+=======
+/// 
+>>>>>>> f4298cb2616827df3f0fe6c5a4f959ef0c42f16d
 /// This class abstracts the interface to an ADC (Analog to Digital Converter).
 class adc {
 public:
@@ -28,7 +32,11 @@ public:
    
    /// the type of the result returned by get()
    typedef uint_fast32_t adc_value_type; 
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> f4298cb2616827df3f0fe6c5a4f959ef0c42f16d
    /// do an A/D conversion and return the result
    /// 
    /// This function performs an A/D conversion and returns the result.
@@ -43,15 +51,22 @@ public:
          HWLIB_PANIC_WITH_LOCATION;
       }
    }
+<<<<<<< HEAD
     
    /// refresh the adc value
    ///
+=======
+   
+   /// refresh the adc value
+   /// 
+>>>>>>> f4298cb2616827df3f0fe6c5a4f959ef0c42f16d
    /// This function refreshes the contents of the read buffer that might
    /// be used by a buffered read().
    ///
    /// That buffer might also be refreshed as a side-effect of other
    /// operations.  
    virtual void refresh() = 0;
-};
+   
+}; // class adc
 
 }; // namespace hwlib

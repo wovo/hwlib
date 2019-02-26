@@ -20,7 +20,8 @@ int main( void ){
    auto sda      = hwlib::target::pin_oc{ 0, 5 };
    
    auto i2c_bus  = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
-   auto oled     = hwlib::glcd_oled( i2c_bus, 0x3c ); 
+   auto oled_channel = i2c_bus.channel( 0x3c );
+   auto oled         = hwlib::glcd_oled( oled_channel );
    
    
    auto font1     = hwlib::font_default_8x8();
@@ -28,7 +29,7 @@ int main( void ){
    auto font2     = hwlib::font_default_16x16();
    auto console2  = hwlib::window_ostream( oled, font2 );
    
-   display 
+   console2  
       << "\f" << "Hello world!!" 
       << "\n" << "second line.."
       << "\t0305" << "pos 3 line 5"

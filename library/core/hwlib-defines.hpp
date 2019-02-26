@@ -19,6 +19,7 @@
 // is only symbolic.
 namespace hwlib {
 
+
 /// mark a function declaration as never returning
 /// 
 /// This is useful when other code relies a function not to return.
@@ -110,5 +111,13 @@ namespace hwlib {
 #define HWLIB_TEST_EQUAL( a, b ) \
    hwlib::_equal( __FILE__, __LINE__, #a, #b, a, b );   
    
+   
+#ifndef HWLIB_BAUDRATE 
+/// console baudrate
+///
+/// When no HWLIB_BAUDRATE is defined, it will default to 1200 baud.
+#define HLWIB_BAUDRATE 1200    
+#endif   
+
    
 }; // namespace hwlib   

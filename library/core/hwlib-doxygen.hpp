@@ -70,19 +70,13 @@ namespace hwlib {}
 ///
 /// The easy way is to use the library with bmptk:
 /// Include hwlib.hpp, which will include the
-/// correct target header based on the BMPTK_TARGET_* macro that is set 
+/// correct target header based on the HWLIB_TARGET_* macro that is set 
 /// in the bmptk makefile. Bmptk passes this setting to the hwlib.hpp file 
 /// via a macro definition on the compiler command line.
 ///
-/// \snippet "demo\arduino-due\blink\main.cpp" [blink example]
-/// \snippet "demo\arduino-due\makefile.link" [makefile example]
-/// 
-/// Another way to use the library is by directly including the header 
-/// for the target (hwlib-arduino-due.hpp, ...), and using some other
-/// build system.
-///
-/// \snippet "demo\arduino-due\blink-direct-include\main.cpp" [blink example]
-/// 
+/// \snippet "db103\blink\main.cpp" [Doxygen blink example]
+/// \snippet "db103\blink\makefile" [Doxygen makefile example]
+/// \snippet "db103\makefile.link"  [Doxygen makefile example]
 /// 
 
 
@@ -140,8 +134,8 @@ namespace hwlib {}
 /// 
 /// Hwlib is used in a number of C++ courses
 ///    - as library for the examples
-///    - as library for homework
-///    - style example for hardware OO interfacing
+///    - as library for use in homework assignments
+///    - as a style example for hardware OO interfacing
 ///
 /// Hwlib is meant to be usable and understandable by users with (only) 
 /// a basic knowledge of C++, specifically:
@@ -153,6 +147,7 @@ namespace hwlib {}
 ///    - inheritance, virtual, abstract interface, override, final
 ///    - const, constexpr
 ///    - static_cast<>
+///    - std::array<>
 ///    - references, object lifetime (danger of dangling references)
 ///    - for(:) used with arrays
 ///    - the effect of __attribute__((weak)) 
@@ -164,13 +159,15 @@ namespace hwlib {}
 ///    - non-virtual interface (NVI)
 ///    - dependency injection
 ///    - proxy
+///    - creator functions
 ///
 /// The following C++ features are deliberately *not* used, 
 /// because they are eiter too advanced, 
 /// or not appropriate for use on small micro-controllers:
 ///    - dynamic memory (new, delete, STL containers)
 ///    - exception handling (throw, try ... catch)
-///    - templates (except static_cast<>, and string<N>)
+///    - templates (except static_cast<>, and string<N>) 
+///      (except for hwlib::string)
 ///    - RTTI, dynamic_cast
 ///
 /// Hwlib must be effective on micro-controllers with different word sizes.
@@ -178,10 +175,10 @@ namespace hwlib {}
 /// instead the likes of uint_fast8_t are used.
 ///
 /// Hwlib is *not* meant to be the most effective (fast, compact) library
-/// for close-to-the-hardware programming, because that requires concepts
-/// (templates, and a lot of SFINAE) that are not appropriate for 
+/// for close-to-the-hardware programming, because that requires templates
+/// and concepts, which are not appropriate for 
 /// (relatively) new C++ programmers.
-/// My hwcpp library is an (ongoing) attempt to fill that niche.d
+/// Hwcpp library is my (ongoing) attempt to fill that niche.
 ///
 
 
@@ -209,7 +206,7 @@ namespace hwlib {}
 /// 
 ///--------------------------------------------------------------------------
 ///
-/// \image html mini-micro-pinout.png
+/// \image html mini-pro-pinout.png
 /// Creative Commons, details in the image itself
 /// 
 ///--------------------------------------------------------------------------
@@ -219,7 +216,7 @@ namespace hwlib {}
 /// 
 ///--------------------------------------------------------------------------
 ///
-/// A source for IC pinouts: 
+/// A nice source for IC pinouts: 
 /// https://commons.wikimedia.org/wiki/Category:IC_pinout_diagrams
 
 

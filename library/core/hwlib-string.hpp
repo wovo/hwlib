@@ -17,17 +17,9 @@
 // this file contains Doxygen lines
 /// @file
 
-//#define HWLIB_STRING_H
-
-#include <stddef.h>
-#include <type_traits>
-
 namespace hwlib {
 
-// forward declaration of the class template   
-template< size_t maximum_length > class string;
-
-// return the end iterator from an asciz string
+/// return the end iterator from an asciz string
 constexpr const char * asciz_beyond( const char * p ){
    while( *p != '\0' ){
       ++p;
@@ -38,28 +30,25 @@ constexpr const char * asciz_beyond( const char * p ){
   
 //============================================================================
 //
-// string< 0 >
+// string_base
 //  
 //============================================================================
 
-/// \brief
-/// abstract fixed-maximum-length string
-/// \details  
+/// fixed-maximum-length string interface
+///  
 /// This is a string class template with a fixed maximum length. 
 /// The maximum length is the template parameter.
-/// All such strings inherit from string< 0 >.
+/// All such strings inherit from string_base.
 ///
 /// An attempt to add characters beyond the maximum length will ignore
 /// the excess characters.
-/// Accessing an invalid character by the operator[] will yield
+/// Accessing an invalid character by the operator[] will yield either
 /// an undefined character value, or a reference to a (hidden) static
 /// character.
 ///
-/// This string is meant for small micro-controller applications.
-/// It doesn't use the heap, RTTI, exceptions, virtuals or recursion.
-/// It was assumed that this class will be used in the not-time-critical
-/// part of the application, hence the implementation leans towards small
-/// code size, not maximum speed.
+/// This class was assumed to be part of the the not-time-critical
+/// part of an application, hence the implementation leans towards small
+/// code size, not maximum speed, and tries to avoid Undefined Behaviour.
 ///
 /// For assignment, appending, and comparison the following types are
 /// supported for the other side: 
@@ -81,8 +70,7 @@ constexpr const char * asciz_beyond( const char * p ){
 /// (The .clear() is not strictly needed because the default constructor
 /// creates an empty string, but it improves readability).
 //
-template<>
-class string< 0 > {
+class string_base {
 private:   
    
    // maximum length (maximum number of valid characters) of the string
@@ -94,14 +82,19 @@ private:
    // pointer to the array that stores the characters
    char * const content;
 
-   // dummy char used for out-of-bounds accesses
+   // dummy char returned on out-of-bounds accesses
    static char dummy; 
    
-   // only string< N > is allowed to construct a string< 0 >
+   // only string< N > is allowed to construct a string_base
    template< size_t > friend class string;
    
    // return a pointer into the context, clipped to the valid range
-   const char * sanitize( size_t n ){
+   const char * sanitize( size_t n ) const {
+      return ( n <= current_length )
+         ? content + n
+         : content + current_length;
+   }
+   char * sanitize( size_t n ){
       return ( n <= current_length )
          ? content + n
          : content + current_length;
@@ -109,7 +102,7 @@ private:
    
    // object constructor, called by string< N >'s constructors
    template< typename T > 
-   constexpr string( size_t allocated_length, char * content, const T & x ):
+   constexpr string_base( size_t allocated_length, char * content, const T & x ):
       allocated_length{ allocated_length }, 
       current_length{ 0 },
       content{ content }
@@ -123,11 +116,12 @@ private:
    
    // range constructor, called by range()
    // not used directly, because the result must be a const
-   constexpr string( char * start, char * beyond ):
+   constexpr string_base( char * start, char * beyond ):
       allocated_length( beyond - start ),
       current_length( beyond - start ),
       content( start )
    {}      
+   
    
    //=========================================================================
    //
@@ -178,32 +172,28 @@ public:
    //=========================================================================
    
    /// special value for beyond-end or not-found
-   static const size_t nsize = 1;
-   
-   /// \brief   
+   static const size_t nsize = 0xFFFF;
+     
    /// the maximum number of characters that can be stored
    constexpr size_t max_size() const {
       return allocated_length;
    }   
-    
-   /// \brief   
+      
    /// the number of characters that are currently stored
    constexpr size_t length() const {
       return current_length;
    }     
-   
-   /// \brief   
+     
    /// check index for validity
-   /// \details
+   ///
    /// Return whether n is a valid index.
    constexpr bool valid_index( const size_t n ) const {
       return( n < allocated_length );
    }
-   
-   /// \brief   
+     
    /// output to any target that supports operator<< for a char *
    template< typename T >
-   friend T & operator<< ( T & lhs, const string< 0 > & rhs ){
+   friend T & operator<< ( T & lhs, const string_base & rhs ){
       for( char c : rhs ){
          lhs << c;
       }   
@@ -216,42 +206,37 @@ public:
    // append
    //
    //=========================================================================
-
-   /// \brief   
+ 
    /// append the char if possible, otherwise ignore it  
-   string & append( char c ){
+   string_base & append( char c ){
       if( current_length < allocated_length ){
          content[ current_length++ ] = c;
       }   
       return *this;
    }
    
-   /// \brief   
    /// append a char if possible, otherwise ignore it 
-   string & operator+=( char c ){
+   string_base & operator+=( char c ){
       return append( c );
    }
-   
-   /// \brief   
+     
    /// append a char if possible, otherwise ignore it    
-   string & operator<<( char c ){
+   string_base & operator<<( char c ){
       return append( c );
    }
-   
-   /// \brief   
+     
    /// append something (as far as possible, ignore the excess)
    template< typename T >
-   string & operator+=( const T & rhs ){
+   string_base & operator+=( const T & rhs ){
       for( char c : iterate( rhs ) ){
          append( c );
       }
       return *this;
    }
-   
-   /// \brief   
+    
    /// append something (as far as possible, ignore the excess)   
    template< typename T >
-   string & operator<<( const T & rhs ){
+   string_base & operator<<( const T & rhs ){
       return operator+=( rhs );
    }
    
@@ -261,18 +246,16 @@ public:
    // assign
    //
    //=========================================================================   
-   
-   /// \brief   
+     
    /// set to ""
-   string & clear(){
+   string_base & clear(){
       current_length = 0;
       return *this;
    } 
    
-   /// \brief   
    /// assign something
    template< typename T >
-   string & operator=( const T & rhs ){
+   string_base & operator=( const T & rhs ){
       return clear() += rhs;
    }   
    
@@ -282,26 +265,22 @@ public:
    // iterate
    //
    //=========================================================================       
-   
-   /// \brief   
+     
    /// start iterator
    char * begin() {
       return content;
    }
-
-   /// \brief   
+  
    /// end iterator
    char * end() {
       return content + current_length;
    }   
-   
-   /// \brief   
+     
    /// start const iterator
    const char * begin() const {
       return content;
    }
-
-   /// \brief   
+ 
    /// end const iterator
    const char * end() const {
       return content + current_length;
@@ -314,41 +293,39 @@ public:
    //
    //=========================================================================
 
-   /// \brief
    /// non-owning string (sub)range from two iterators 
-   /// \details
+   ///
    /// This function returns a const string object that appears to contains 
    /// the characters range pointed to by the start parameter up to 
    /// (but excluding) the character pointed to by the end parameter.
    /// 
    /// The object is a non-owning range: it doesn't make a copy.
    /// Hence any change to the characters will be reflected in the range.
-   static constexpr const string< 0 > range( 
+   static constexpr const string_base range( 
       const char * start, 
       const char * beyond 
    ){
       // Casting the const away is OK because the returned range object is
       // returned as const, so the stored char pointers are const again.
       // Blame C++ for not having a const constructor :(
-      return string( 
+      return string_base( 
          const_cast< char * >( start ), 
          const_cast< char * >( beyond )
       );
    }      
    
-   /// \brief
    /// non-owning string (sub)range from an asciz string
-   /// \details
+   ///
    /// This function returns a const string object that appears to contains 
    /// the characters in the asciz string pointed to by the start parameter.
    /// 
    /// The object is a non-owning range: it doesn't make a copy.
    /// Hence any change to the characters will be reflected in the range.
-   static constexpr const string< 0 > range(
+   static constexpr const string_base range(
       const char * start
    ){
       // see above
-      return string( 
+      return string_base( 
          const_cast< char * >( start ), 
          const_cast< char * >( asciz_beyond( start ) )
       );
@@ -357,21 +334,16 @@ public:
 
    //=========================================================================
    //
-   // erase & replace
+   // erase & replace:
+   // remove a substring
    //
-   //=========================================================================
-   
-   /// \brief     
-   /// remove a substring
-   /// \details
-   ///
-   
-   
-   
    // replace_inplace
    // inplace_replace
    // inplace_erase   
-   
+   //
+   //=========================================================================
+  
+   // TBW
    
    
    //=========================================================================
@@ -379,10 +351,9 @@ public:
    // find
    //
    //=========================================================================
-   
-   /// \brief     
+       
    /// check whether a substring occurs in a string at a given position
-   /// \details
+   ///
    /// Searches the string for the first occurrence of the 
    /// sequence specified by its arguments.
    /// 
@@ -398,10 +369,9 @@ public:
       }   
       return true;
    }
-   
-   /// \brief     
+        
    /// find a substring in a string
-   /// \details
+   ///
    /// Searches the string for the first occurrence of the 
    /// sequence specified by its arguments.
    /// 
@@ -420,10 +390,9 @@ public:
       }     
       return nsize;
    }      
-   
-   /// \brief     
+        
    /// find a substring in a string
-   /// \details
+   ///
    /// Searches the string for the last occurrence of the 
    /// sequence specified by its arguments.
    /// 
@@ -450,19 +419,17 @@ public:
    // operator[]
    //
    //=========================================================================
-   
-   /// \brief   
+     
    /// return n'th character reference
-   /// \details
+   ///
    /// Return a reference to the n'th character if the index is valid,
    /// otherwise return the dummy character.
    char & operator[]( int n ){
       return valid_index( n ) ? content[ n ] : dummy;
    }
-
-   /// \brief      
+      
    /// return n'th character value
-   /// \details
+   ///
    /// Return the value of the n'th character if the index is valid,
    /// otherwise return the dummy character value.
    char operator[]( int n ) const {
@@ -476,33 +443,35 @@ public:
    //
    //=========================================================================   
    
-   /*
-   string_range range_start_length( size_t a, size_t b ){
-      return string_range( sanitize( a ), sanitize( a + b ) );   
+   /// subrange based on start index and length
+   string_base range_start_length( size_t a, size_t b ){
+      return string_base( sanitize( a ), sanitize( a + b ) );   
    }
    
-   string_range range_start_end( size_t a, size_t b ){
-      return string_range( sanitize( a ), sanitize( b ) );   
+   /// subrange based on start index and end index
+   string_base range_start_end( size_t a, size_t b ){
+      return string_base( sanitize( a ), sanitize( b ) );   
    }
    
+   /// subrange based on substring start and length
    template< typename T >
-   string_range range_find_length( const T & a, size_t b ){
-      return string_range( sanitize( a ), sanitize( a + b ) );   
+   string_base range_find_length( const T & a, size_t b ){
+      return string_base( sanitize( a ), sanitize( a + b ) );   
    }
   
+   /// subrange based on first substring start and second substring start
    template< typename T, typename Q >
-   string_range range_find_find( const T & a, const Q & b ){
-      return string_range( sanitize( a ), sanitize( a + b ) );   
+   string_base range_find_find( const T & a, const Q & b ){
+      return string_base( sanitize( a ), sanitize( a + b ) );   
    }
-   */
+
    
    //=========================================================================
    //
    // compare 
    //
    //=========================================================================        
-   
-   /// \brief   
+     
    /// compare for equality
    template< typename T >
    bool operator==( const T & rhs ) const {         
@@ -517,15 +486,13 @@ public:
       }
       return p == end();
    }    
-
-   /// \brief   
+ 
    /// compare for inequality
    template< typename T >
    bool operator!=( const T & rhs ) const {   
       return ! ( *this == rhs );
    }   
-   
-   /// \brief   
+    
    /// compare for larger than 
    template< typename T >
    bool operator>( const T & rhs ) const {
@@ -541,7 +508,6 @@ public:
       return true;
    }    
 
-   /// \brief   
    /// compare for larger than or equal
    template< typename T >
    bool operator>=( const T & rhs ) const {
@@ -556,8 +522,7 @@ public:
       }
       return true;
    }    
-
-   /// \brief   
+   
    /// compare for smaller than 
    template< typename T >
    bool operator<( const T & rhs ) const {
@@ -572,8 +537,7 @@ public:
       }
       return false;
    }    
-
-   /// \brief   
+   
    /// compare for smaller than or equal
    template< typename T >
    bool operator<=( const T & rhs ) const {
@@ -597,9 +561,9 @@ public:
 //  
 //============================================================================
 
-#ifdef HWLIB_ONCE 
-char string<0>::dummy; 
-#endif
+//#ifdef HWLIB_ONCE 
+//char string<0>::dummy; 
+//#endif
 
 //============================================================================
 //
@@ -607,69 +571,58 @@ char string<0>::dummy;
 //  
 //============================================================================
 
-
-/* not on AVR
+#ifndef HWLIB_TARGET_arduino_uno
  
-/// \brief   
 /// compare for equality
 template< typename T >   
 typename std::enable_if < 
-   ! std::is_base_of< string< 0 >, T >::value, bool >::type    
-operator==( const T & lhs, const string< 0 > & rhs ){
+   ! std::is_base_of< string_base, T >::value, bool >::type    
+operator==( const T & lhs, const string_base & rhs ){
    return rhs.operator==( lhs );
 }
-
-/// \brief   
+   
 /// compare for inequality
 template< typename T >   
 typename std::enable_if < 
-   ! std::is_base_of< string< 0 >, T >::value, bool >::type    
-operator!=( const T & lhs, const string< 0 > & rhs ){
+   ! std::is_base_of< string_base, T >::value, bool >::type    
+operator!=( const T & lhs, const string_base & rhs ){
    return rhs.operator!=( lhs );
 }
-
-/// \brief   
+   
 /// compare for large than
 template< typename T >   
 typename std::enable_if < 
-   ! std::is_base_of< string< 0 >, T >::value, bool >::type    
-operator>( const T & lhs, const string< 0 > & rhs ){
+   ! std::is_base_of< string_base, T >::value, bool >::type    
+operator>( const T & lhs, const string_base & rhs ){
    return ! rhs.operator<=( lhs );
 }
- * 
- * */
-
-/* not on AVR
-
-/// \brief   
+   
 /// compare for large than or equal
 template< typename T >   
 typename std::enable_if < 
-   ! std::is_base_of< string< 0 >, T >::value, bool >::type    
-operator>=( const T & lhs, const string< 0 > & rhs ){
+   ! std::is_base_of< string_base, T >::value, bool >::type    
+operator>=( const T & lhs, const string_base & rhs ){
    return ! rhs.operator<( lhs );
 }
-
-/// \brief   
+   
 /// compare for smaller than
 template< typename T >   
 typename std::enable_if < 
-   ! std::is_base_of< string< 0 >, T >::value, bool >::type    
-operator<( const T & lhs, const string< 0 > & rhs ){
+   ! std::is_base_of< string_base, T >::value, bool >::type    
+operator<( const T & lhs, const string_base & rhs ){
    return ! rhs.operator>=( lhs );
 }
-
-/// \brief   
+   
 /// compare for smaller than or equal
 template< typename T >   
 typename std::enable_if < 
-   ! std::is_base_of< string< 0 >, T >::value, bool >::type    
-operator<=( const T & lhs, const string< 0 > & rhs ){
+   ! std::is_base_of< string_base, T >::value, bool >::type    
+operator<=( const T & lhs, const string_base & rhs ){
    return ! rhs.operator>( lhs );
 }
 
- * */
-
+#endif
+ 
 //============================================================================
 //
 // template< size_t N >
@@ -677,40 +630,39 @@ operator<=( const T & lhs, const string< 0 > & rhs ){
 //  
 //============================================================================
 
-/// \brief   
 /// concrete fixed-maximum-length string
-/// \details
+///
 /// This is the concrete string class template. Use it to declare
 /// a variable of a known (maximum) size. 
-/// Use string< 0 > for references, parameters, ranges, etc.
+/// Use string_base for references, parameters, ranges, etc.
 template< size_t maximum_length >
-class string: public string< 0 > {
+class string: public string_base {
 private:
 
    // the store for the characters
    char content[ maximum_length ];
    
 public:
-
-   /// \brief   
+  
    /// create fixed-maximum-size string, initially empty
    string():
-      string< 0 >( maximum_length, content, "" )
+      string_base( maximum_length, content, "" )
    {}      
-   
-   /// \brief      
+         
    /// create fixed-maximum-size string, with an initial value
    template< typename T > 
    string( const T & x ):
-      string< 0 >( maximum_length, content, x )
+      string_base( maximum_length, content, x )
    {}      
-
-   // avoid ambiguity
+   
+   
+   /// \cond INTERNAL 
+   // needed to avoid ambiguity
    string & operator=( const string & rhs ){
-       string< 0 >::operator=( rhs );
+       string_base::operator=( rhs );
        return *this;
    }
-   
+   /// \endcond    
 };
 
 }; // namespace hwlib

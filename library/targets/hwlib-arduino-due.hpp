@@ -16,14 +16,16 @@
 #ifndef HWLIB_ARDUINO_DUE_H
 #define HWLIB_ARDUINO_DUE_H
 
+#define _HWLIB_TARGET_WAIT_US_BUSY
 #include HWLIB_INCLUDE( ../hwlib-all.hpp )
+
 #define register
 #include "sam.h"
+
 #include HWLIB_INCLUDE( hwlib-arduino-due-system-sam3xa.inc )
 
-/// \brief
 /// hwlib implementation for the Arduino Due
-/// \details
+/// 
 /// \image html due-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing
@@ -56,9 +58,8 @@
 ///
 namespace due {
 
-/// \brief
 /// Arduino Due GPIO pin names
-/// \details
+/// 
 /// These are the pins of an Arduino Due board.
 /// Digital pins d0..d13, analog input pins A0..A5, 
 /// SCL, SDA, TX (=D1), RX (=D0), 
@@ -193,9 +194,9 @@ const HWLIB_WEAK pin_info_type & pin_info( pins name ){
 
 /// \endcond  
 
-/// \brief
+
 /// Arduino Due pin names
-/// \details
+/// 
 /// These are the ADC pins of an Arduino Due board.
 enum class ad_pins {
    a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11
@@ -299,9 +300,8 @@ private:
    
 public:
 
-   /// \brief
    /// Arduino Due pin_in constructor
-   /// \details
+   /// 
    /// Constructor for a ATSAM3X8E input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -316,9 +316,8 @@ public:
       port.PIO_ODR = mask;
    }
    
-   /// \brief
    /// Arduino Due pin_in constructor from a Due pin name
-   /// \details
+   /// 
    /// This call creates a pin_in from an Arduino Due pin name.
    ///
    /// This constructor sets the pin direction to input.
@@ -343,6 +342,9 @@ public:
    bool read() override {
       return (( port.PIO_PDSR & mask ) != 0 );   
    }
+   
+   void refresh() override {}
+   
 };
 
 /// pin_out implementation for a ATSAM3X8E
@@ -353,9 +355,8 @@ private:
    
 public:
 
-   /// \brief
    /// Arduino Due pin_out constructor
-   /// \details
+   /// 
    /// Constructor for a ATSAM3X8E input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -369,9 +370,8 @@ public:
       port.PIO_OER  = mask; 
    }
    
-   /// \brief
    /// Arduino Due pin_out constructor from a Due pin name
-   /// \details
+   /// 
    /// This call creates a pin_out from an Arduino Due pin name.
    ///
    /// This constructor sets the pin direction to output.
@@ -388,6 +388,9 @@ public:
          :  port.PIO_CODR 
       )  = mask;
    }
+
+   void flush() override {}
+
 };
 
 /// pin_in_out implementation for a ATSAM3X8E
@@ -398,9 +401,8 @@ private:
    
 public:
 
-   /// \brief
    /// Arduino Due pin_out constructor
-   /// \details
+   /// 
    /// Constructor for a ATSAM3X8E input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -414,9 +416,8 @@ public:
       mask{ 0x1U << pin_number }
    {}
    
-   /// \brief
    /// Arduino Due pin_out constructor from a Due pin name
-   /// \details
+   /// 
    /// This call creates a pin_out from an Arduino Due pin name.
    ///
    /// This constructor doesn't set the pin direction 
@@ -447,6 +448,13 @@ public:
          :  port.PIO_CODR 
       )  = mask;
    }
+   
+   void flush() override {}
+   
+   void refresh() override {}
+   
+   void direction_flush() override {}
+   
 };   
 
 /// pin_oc implementation for a ATSAM3X8E
@@ -457,9 +465,8 @@ private:
    
 public:
 
-   /// \brief
    /// Arduino Due pin_oc constructor
-   /// \details
+   /// 
    /// Constructor for a ATSAM3X8E input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -473,9 +480,8 @@ public:
       port.PIO_ODR = mask;
    }
    
-   /// \brief
    /// Arduino Due pin_oc constructor from a Due pin name
-   /// \details
+   /// 
    /// This call creates a pin_oc from an Arduino Due pin name.
    ///
    /// This constructor sets the pin to high (high-impedance). 
@@ -499,7 +505,11 @@ public:
       }
    }
 
-};
+   void flush() override {}
+   
+   void refresh() override {}
+
+   };
 
 /// 36kHz output on pin chip PB25 = Arduino D2
 ///
@@ -576,9 +586,8 @@ private:
    
 public:
 
-   /// \brief
    /// Constructor for a ATSAM3X8E AD channel number.
-   /// \details/
+   /// 
    /// This constructor initializes the pin to be an ADC input. 
    pin_adc( uint32_t channel ): 
       adc( 12 ),
@@ -607,9 +616,8 @@ public:
    
      }
    
-   /// \brief
    /// Arduino Due pin_adc constructor from a Due pin name
-   /// \details
+   /// 
    /// This call creates a pin_adc from an Arduino Due pin name.
    ///
    /// This constructor initializes the pin to be an ADC input.
@@ -619,9 +627,8 @@ public:
       }
    {}  
    
-   /// \brief
    /// get an adc reading
-   /// \details/
+   ///
    /// This function performs and ADC conversion and returns the result.
    adc_value_type get() override {
        
@@ -657,9 +664,8 @@ private:
    
 public:
 
-   /// \brief
    /// Constructor for a ATSAM3X8E AD channel number.
-   /// \details/
+   ///
    /// This constructor initializes the pin to be an ADC input. 
    pin_adc( uint32_t channel ): 
       adc( 12 ),
@@ -696,9 +702,8 @@ public:
    
      }
    
-   /// \brief
    /// Arduino Due pin_adc constructor from a Due pin name
-   /// \details
+   ///
    /// This call creates a pin_adc from an Arduino Due pin name.
    ///
    /// This constructor initializes the pin to be an ADC input.
@@ -708,14 +713,13 @@ public:
       }
    {}  
    
-   /// \brief
    /// get an adc reading
-   /// \details/
+   /// 
    /// This function performs and ADC conversion and returns the result.
    /// For the SAM3X, a conversion is done for all pins that are configured
    /// as ADC inputs, but only the value for the pin itself is returned.
    /// This is wastefull, but it seems to be how this chip must be used.
-   adc_value_type get() override {
+   adc_value_type read() override {
        
       // wait 
       // hwlib::wait_us( 1000 );
@@ -779,7 +783,7 @@ bool uart_char_available();
 char uart_getc();
 void uart_putc( char c );
 
-#ifdef HWLIB_ONCE
+#ifdef _HWLIB_ONCE
 
 Uart * hw_uart = UART;
 
@@ -883,7 +887,7 @@ char HWLIB_WEAK uart_getc( ){
 
 #endif
 
-#ifdef HWLIB_ONCE
+#ifdef _HWLIB_ONCE
 
 uint64_t now_ticks(){
    return target::now_ticks();
@@ -897,7 +901,7 @@ uint64_t now_us(){
    return now_ticks() / ticks_per_us();
 }   
 
-void wait_us_busy( int_fast32_t n ){
+void HWLIB_WEAK wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){}
 }

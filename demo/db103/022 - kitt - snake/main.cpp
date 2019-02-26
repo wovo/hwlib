@@ -45,7 +45,7 @@ int main( void ){
    auto g3 = hwlib::all( p06, p12, p18 );
    auto g4 = hwlib::all( p07, p13, p19 );
    
-   auto leds = hwlib::port_out_from_pins( g1, g2, g3, g4 );
+   auto leds = hwlib::port_out_from( g1, g2, g3, g4 );
    
    hwlib::snake( leds );
 }

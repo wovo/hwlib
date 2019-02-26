@@ -17,9 +17,8 @@
 
 namespace hwlib {
    
-/// \brief
 /// hc595 8-bit output shift register 
-/// \details
+/// 
 /// This class implements an interface to 
 /// an hc595 8-bit output shift register chip.  
 ///
@@ -47,7 +46,7 @@ namespace hwlib {
 ///
 /// The next code shows a kitt display 
 /// on 8 LEDs connected to the HC595 output pins:
-/// \snippet "demo\db103\hc595\main.cpp" [Doxygen hc595 example]
+/// \snippet "db103\hc595\main.cpp" [Doxygen hc595 example]
 ///
 /// The 74HCT595 is a similar chip, but intended (only) for 5V power,
 /// and for use with the old TTL signal levels 
@@ -63,7 +62,7 @@ private:
    pin_out & sel;
    uint8_t write_buffer;
      
-   /// one_pin is an implemenation detail
+   // one_pin is an implementation detail
    class one_pin : public pin_out {
       hc595 & chip;
       uint_fast8_t mask;
@@ -90,9 +89,8 @@ private:
    
 public:
 
-   /// \brief
    /// construct an interface to an hc595 chip
-   /// \details
+   ///
    /// This constructor creates an interface to 
    /// an hc595 8-bit output shift register chip
    /// from the SPI bus it is connected to and 
@@ -112,14 +110,13 @@ public:
       bus.transaction( sel ).write_and_read( 1, &write_buffer, nullptr ); 
    }
    
-   /// \brief
    /// the output pins of the chip
-   /// \details
+   ///
    /// The p0 ... p7 attributes represent the 8 
    /// output pins of the chip. 
    /// A write to one of these pins will affect (only) 
    /// the corresponding output pin of the chip.
-   //@{ 
+   ///@{ 
    one_pin p0{ *this, 0 };   
    one_pin p1{ *this, 1 };   
    one_pin p2{ *this, 2 };   
@@ -128,7 +125,7 @@ public:
    one_pin p5{ *this, 5 };   
    one_pin p6{ *this, 6 };   
    one_pin p7{ *this, 7 };   
-   //@}   
+   ///@}   
       
 }; // class hc595
    

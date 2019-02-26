@@ -120,7 +120,8 @@ private:
       if( col == black ){
          pixel_buffer[ a ] |= m;
       } else {     
-         pixel_buffer[ a ] &= ~m;         
+         pixel_buffer[ a ] &= ~m;   
+      }
    }
    
 public:   

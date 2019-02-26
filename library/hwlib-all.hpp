@@ -14,6 +14,8 @@
 // (except hwlib-doxygen.hpp, which contains only Doxygen stuff)
 // to add a file, add it here and in the Makefile.inc
 //
+// C/C++ library files are included here rather than in the individual
+// library files.
 // The individual hwlib header files depend on the order in which they 
 // are included here, and don't have multiple-include guards.
 // They are not meant to be included individually.
@@ -25,32 +27,56 @@
 
 #include <cstdint>
 #include <array>
+//#include <stddef.h>
+#include <type_traits>
 
 #include HWLIB_INCLUDE( core/hwlib-defines.hpp )
 #include HWLIB_INCLUDE( core/hwlib-panic.hpp )
 #include HWLIB_INCLUDE( core/hwlib-common.hpp )
-
-#include HWLIB_INCLUDE( core/hwlib-pin.hpp )
-#include HWLIB_INCLUDE( core/hwlib-pin-dummies.hpp )
-#include HWLIB_INCLUDE( core/hwlib-pin-stores.hpp )
-#include HWLIB_INCLUDE( core/hwlib-pin-from.hpp )
-#include HWLIB_INCLUDE( core/hwlib-pin-invert.hpp )
-#include HWLIB_INCLUDE( core/hwlib-pin-all.hpp )
-#include HWLIB_INCLUDE( core/hwlib-port.hpp )
-#include HWLIB_INCLUDE( core/hwlib-port-from-pins.hpp )
-#include HWLIB_INCLUDE( core/hwlib-port-decorators.hpp )
-
 #include HWLIB_INCLUDE( core/hwlib-wait.hpp )
+
+#include HWLIB_INCLUDE( pins/hwlib-pin.hpp )
+#include HWLIB_INCLUDE( pins/hwlib-pin-dummies.hpp )
+#include HWLIB_INCLUDE( pins/hwlib-pin-stores.hpp )
+#include HWLIB_INCLUDE( pins/hwlib-pin-from-pin.hpp )
+#include HWLIB_INCLUDE( pins/hwlib-pin-invert.hpp )
+#include HWLIB_INCLUDE( pins/hwlib-pin-all.hpp )
+#include HWLIB_INCLUDE( pins/hwlib-pin-direct.hpp )
+#include HWLIB_INCLUDE( pins/hwlib-pin-demos.hpp )
+
+#include HWLIB_INCLUDE( ports/hwlib-port.hpp )
+#include HWLIB_INCLUDE( ports/hwlib-port-from-port.hpp )
+#include HWLIB_INCLUDE( ports/hwlib-port-from-pins.hpp )
+#include HWLIB_INCLUDE( ports/hwlib-port-invert.hpp )
+#include HWLIB_INCLUDE( ports/hwlib-port-all.hpp )
+#include HWLIB_INCLUDE( ports/hwlib-port-direct.hpp )
+#include HWLIB_INCLUDE( ports/hwlib-port-demos.hpp )
+
+#include HWLIB_INCLUDE( char-io/hwlib-ostream.hpp )
+#include HWLIB_INCLUDE( char-io/hwlib-istream.hpp )
+#include HWLIB_INCLUDE( char-io/hwlib-bb-uart.hpp )
+#include HWLIB_INCLUDE( char-io/hwlib-console.hpp )
+#include HWLIB_INCLUDE( char-io/hwlib-terminal.hpp )
+
+#include HWLIB_INCLUDE( core/hwlib-test.hpp )
+#include HWLIB_INCLUDE( core/hwlib-string.hpp )
 
 #include HWLIB_INCLUDE( core/hwlib-adc.hpp )
 #include HWLIB_INCLUDE( core/hwlib-dac.hpp )
-#include HWLIB_INCLUDE( core/hwlib-ostream.hpp )
-#include HWLIB_INCLUDE( core/hwlib-console.hpp )
-#include HWLIB_INCLUDE( core/hwlib-graphics.hpp )
-#include HWLIB_INCLUDE( core/hwlib-font-default-8x8.hpp )
-#include HWLIB_INCLUDE( core/hwlib-font-default-16x16.hpp )
+#include HWLIB_INCLUDE( core/hwlib-dac-demos.hpp )
 #include HWLIB_INCLUDE( core/hwlib-i2c.hpp )
 #include HWLIB_INCLUDE( core/hwlib-spi.hpp )
+
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-xy.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-color.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-image.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-window.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-drawables.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-window-decorators.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-window-demos.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-console.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-font-8x8.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-font-16x16.hpp )
 
 #include HWLIB_INCLUDE( peripherals/hwlib-pcf8574a.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-pcf8591.hpp )
@@ -60,8 +86,5 @@
 #include HWLIB_INCLUDE( peripherals/hwlib-glcd-oled.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-matrix-keypad.hpp )
 
-#include HWLIB_INCLUDE( core/hwlib-string.hpp )
-#include HWLIB_INCLUDE( core/hwlib-demo.hpp )
-#include HWLIB_INCLUDE( core/hwlib-test.hpp )
 
 #endif // HWLIB_ALL_H

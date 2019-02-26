@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="example code" Database="" Version="10.0.0">
-  <Project Name="blink" Path="blink/_codelite.project" Active="Yes"/>
+  <Project Name="000 empty" Path="000 empty/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
-      <Project Name="blink" ConfigName="Release"/>
+      <Project Name="000 empty" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="empty" Path="empty/_codelite.project" Active="No"/>
+  <Project Name="010 blink - direct" Path="010 blink - direct/_codelite.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
-      <Project Name="empty" ConfigName="Release"/>
+      <Project Name="010 blink - direct" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="hello" Path="hello/_codelite.project" Active="No"/>
+  <Project Name="011 blink - gpio" Path="011 blink - gpio/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
-      <Project Name="hello" ConfigName="Release"/>
+      <Project Name="011 blink - gpio" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+  <Project Name="012 blink - blink" Path="012 blink - blink/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="012 blink - blink" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+  <Project Name="030 uart - hello" Path="030 uart - hello/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="030 uart - hello" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
   <Project Name="lcd-16x1" Path="lcd-16x1/_codelite.project" Active="No"/>

@@ -17,9 +17,8 @@
 
 namespace hwlib {
    
-/// \brief
 /// pcf8574a I2C I/O extender 
-/// \details
+///
 /// This class implements an interface to a pcf8574a I2C I/O extender chip.
 ///
 /// \image html pcf8574a-pinout.png
@@ -45,7 +44,7 @@ namespace hwlib {
 /// Because the output pins are open-collector, the LEDs
 /// are connected to power (instead of to the ground), hence
 /// the use of hwlib::port_out_invert().
-/// \snippet "demo\db103\pcf8574a\main.cpp" [Doxygen pcf8574a example]
+/// \snippet "db103\pcf8574a\main.cpp" [Doxygen pcf8574a example]
 ///
 /// The pcf8574 (without the -a) is the same chip, but with a different
 /// I2C bus address.
@@ -66,7 +65,7 @@ private:
    uint8_t write_buffer;
    uint8_t read_buffer;
    
-   /// one_pin is an implemenation detail
+   /// one_pin is an implementation detail
    class one_pin : public pin_oc {
       pcf8574a & chip;
       uint_fast8_t mask;
@@ -101,9 +100,8 @@ private:
    
 public:
 
-   /// \brief
    /// construct an interface to a pcf8574a chip
-   /// \details
+   ///
    /// This constructor creates an interface to a pcf8574a I2C
    /// I/O extender chip from the I2C bus it is connected to and 
    /// and the chip address.
@@ -132,16 +130,15 @@ public:
       bus.read( base + address, & read_buffer, 1 ); 
    }
 
-   /// \brief
    /// the open-collector pins of the chip
-   /// \details
+   ///
    /// The p0 ... p7 attributes represent the 8 open-collector 
    /// output pins of the chip. 
    /// A write to one of these pins will affect (only) 
    /// the corresponding output pin of the chip.
    /// A read of one of these pins will reflect the status
    /// of the corresponding pin of the chip.
-   //@{ 
+   ///@{ 
    one_pin p0{ *this, 0 };   
    one_pin p1{ *this, 1 };   
    one_pin p2{ *this, 2 };   
@@ -150,7 +147,7 @@ public:
    one_pin p5{ *this, 5 };   
    one_pin p6{ *this, 6 };   
    one_pin p7{ *this, 7 };   
-   //@}
+   ///@}
       
 }; // class pcf8574a
    
