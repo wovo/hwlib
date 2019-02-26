@@ -45,6 +45,9 @@ todo
 - now two ways of keep-out-of-doxygen: ifdef DOXYGEN and ///cond
 - update avr-gcc from http://blog.zakkemble.net/avr-gcc-builds/
 - update arm gcc to 8.2
+- difference between 16x16 and 8x8 fonts??
+- avr8 problem with 16x16 font
+- nr4f24 lib
 
 
 ================================
