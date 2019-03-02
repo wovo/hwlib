@@ -10,7 +10,7 @@
 #
 #============================================================================
 
-//! [[Doxygen makefile example]]
+#//! [[Doxygen makefile example]]
 
 # source files in this project (main.* is automatically assumed)
 SOURCES :=
@@ -26,4 +26,4 @@ SEARCH  :=
 RELATIVE := ..
 include $(RELATIVE)/makefile.link
 
-//! [[Doxygen makefile example]]
+#//! [[Doxygen makefile example]]

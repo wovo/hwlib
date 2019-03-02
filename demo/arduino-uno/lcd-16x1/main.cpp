@@ -19,7 +19,7 @@ int main( void ){
     auto d5 = target::pin_out( target::pins::d5 );
     auto d6 = target::pin_out( target::pins::d6 );
     auto d7 = target::pin_out( target::pins::d7 );
-    auto d  = hwlib::port_out_from_pins( d4, d5, d6, d7 );
+    auto d  = hwlib::port_out_from( d4, d5, d6, d7 );
     auto rs = target::pin_out( target::pins::d8 );
     auto e  = target::pin_out( target::pins::d9 );
     auto bl = target::pin_out( target::pins::d10 );

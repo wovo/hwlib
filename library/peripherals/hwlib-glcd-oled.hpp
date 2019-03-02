@@ -2,7 +2,7 @@
 //
 // File      : hwlib-glcd-oled.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
@@ -40,7 +40,7 @@ namespace hwlib {
 /// and available from lots of sources.
 ///
 /// \image html oled.jpg
-///
+//
 
 /// SSD1306 chip commands
 enum class ssd1306_commands : uint8_t {
@@ -131,7 +131,9 @@ public:
    
    /// send a command without data
    void command( ssd1306_commands c ){
-      uint8_t data[] = { ssd1306_cmd_prefix, (uint8_t) c };
+      uint8_t data[] = { 
+         ssd1306_cmd_prefix, (uint8_t) c 
+      };
       channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
@@ -140,7 +142,10 @@ public:
    
    /// send a command with one data byte
    void command( ssd1306_commands c, uint8_t d0 ){
-      uint8_t data[] = { ssd1306_cmd_prefix, (uint8_t) c, ssd1306_cmd_prefix, d0 };
+      uint8_t data[] = { 
+         ssd1306_cmd_prefix, (uint8_t) c, 
+         ssd1306_cmd_prefix, d0 
+      };
       channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
@@ -149,7 +154,11 @@ public:
    
    /// send a command with two data bytes
    void command( ssd1306_commands c , uint8_t d0, uint8_t d1 ){
-      uint8_t data[] = { ssd1306_cmd_prefix, (uint8_t) c, ssd1306_cmd_prefix, d0, ssd1306_cmd_prefix, d1 };
+      uint8_t data[] = { 
+         ssd1306_cmd_prefix, (uint8_t) c, 
+         ssd1306_cmd_prefix, d0, 
+         ssd1306_cmd_prefix, d1 
+      };
       channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
@@ -162,32 +171,91 @@ public:
       uint8_t y, 
       uint8_t d 
    ){
+
       if(( x != cursor_x ) || ( y != cursor_y )){
          command( ssd1306_commands::column_addr,  x,  127 );
          command( ssd1306_commands::page_addr,    y,    7 );
          cursor_x = x;
          cursor_y = y;
       }   
+
       uint8_t data[] = { ssd1306_data_prefix, d };
       channel.write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       ); 
-      cursor_x++;      
+      cursor_x++;  
+    
    }
       
 }; // class ssd1306_i2c
+
+
+// ==========================================================================
+//
+// direct
+//
+// ==========================================================================
+
+/// buffered oled window
+class glcd_oled_i2c_128x64_direct : public ssd1306_i2c, public window {
+private:
+
+   static auto constexpr wsize = xy( 128, 64 );
+
+   uint8_t buffer[ wsize.x * wsize.y / 8 ];
+      
+   void write_implementation( 
+      xy pos, 
+      color col
+   ) override {
+
+      int a = pos.x + ( pos.y / 8 ) * size.x;
+
+      if( col == foreground ){ 
+         buffer[ a ] |=  ( 0x01 << (pos.y % 8 ));  
+      } else {
+         buffer[ a ] &= ~( 0x01 << ( pos.y % 8 )); 
+      }   
+
+      pixels( pos.x, pos.y / 8, buffer[ a ] );   
+
+   }   
+     
+public:
+   
+   /// construct by providing the i2c channel
+   glcd_oled_i2c_128x64_direct( i2c_channel & channel ):
+      ssd1306_i2c( channel ),
+      window( wsize, black, white )
+   {
+      channel.write( 
+         ssd1306_initialization, 
+         sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
+      );     
+   }
+   
+   void flush() override {}     
+   
+}; // class glcd_oled_i2c_128x64_direct
+
+
+// ==========================================================================
+//
+// buffered
+//
+// ==========================================================================
 
 /// buffered oled window
 class glcd_oled_i2c_128x64_buffered : public ssd1306_i2c, public window {
 private:
 
-   static auto constexpr wsize = location( 128, 64 );
+   static auto constexpr wsize = xy( 128, 64 );
 
    uint8_t buffer[ wsize.x * wsize.y / 8 ];
       
    void write_implementation( 
-      location pos, 
+      xy pos, 
       color col
    ) override {
       int a = pos.x + ( pos.y / 8 ) * size.x;
@@ -226,22 +294,29 @@ public:
          }   
 		 
 		 // yield the CPU when this is run with an I2C implementation 
-		 // that doesn't ever wait to
+		 // that doesn't ever wait, to
 		 //    - prevent polling timing from missing an overflow
 		 //    - keep other threads in a in a multi-threading context alive
          wait_us( 0 );		 
       }  
       //for( int y = 0; y < 64 / 8; y++ ){
          auto t = channel.transactions.write();
-         uint8_t cmd[] = { 0x40 };
-         t.write( cmd, 1 );
+         t.write( ssd1306_data_prefix );
          t.write( buffer, sizeof( buffer ) / sizeof( uint8_t )  );
       //}   
    }     
    
 }; // class glcd_oled_i2c_128x64_buffered
 
+
+// ==========================================================================
+//
+// default
+//
+// ==========================================================================
+
 /// the default oled is the buffered version
 using glcd_oled = glcd_oled_i2c_128x64_buffered;
    
+
 }; // namespace hwlib

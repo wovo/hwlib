@@ -2,7 +2,7 @@
 //
 // File      : hwlib-pcf8591.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
@@ -29,6 +29,7 @@ namespace hwlib {
 /// The power supply range is 2.5 .. 5.5 Volt.
 /// Of the 7-bit slave address, 
 /// 3 bits are set by the level of 3 input pins (A0..A2) of the chip.
+/// When all 3 are pulled low, the slave address is 0x48.
 ///
 /// The next code repeatedly prints the values read
 /// by the 4 (single-ended) A/D converters.
@@ -41,38 +42,38 @@ namespace hwlib {
 /// 
 class pcf8591 {
 private:
-   i2c_bus & bus;
-   uint_fast8_t address;
-   
-   static constexpr uint_fast8_t base = 0x48;
-   
+
+   i2c_channel & channel;
    uint_fast8_t configuration;
    
-   uint_fast8_t get( uint_fast8_t channel ){
+   uint_fast8_t get( uint_fast8_t adc_channel ){
+
       // select the correct channel
-      uint8_t control = ( configuration & ( ~ 0x03 )) + channel; 
-      bus.write( base + address, & control, 1 ); 
+      uint8_t control = ( configuration & ( ~ 0x03 )) + adc_channel; 
+      channel.write( control ); 
       
       // read results, note that the first byte is the 
       // *previous* ADC result, the second byte is what we want
       uint8_t results[ 2 ];
-      bus.read( base + address, results, 2 );
+      channel.read( results, 2 );
       return results[ 1 ];
    }   
    
    class _one_adc : public adc {
+   private:
+
       pcf8591 & chip;
-      uint_fast8_t channel;
+      uint_fast8_t adc_channel;
       
    public:
-      _one_adc( pcf8591 & chip, uint_fast8_t channel ): 
+      _one_adc( pcf8591 & chip, uint_fast8_t adc_channel ): 
          adc{ 8 },
          chip( chip ), 
-         channel{ channel }
+         adc_channel{ adc_channel }
       {}
       
       adc_value_type read() override {
-         return chip.get( channel );
+         return chip.get( adc_channel );
       }   
       
       void refresh(){
@@ -80,6 +81,8 @@ private:
    };
    
    class _one_dac : public dac {
+   private:
+
       pcf8591 & chip;
       
    public:
@@ -93,8 +96,7 @@ private:
             static_cast< uint8_t >( chip.configuration ), 
             static_cast< uint8_t >( x )
          };
-         chip.bus.write( 
-            chip.base + chip.address, 
+         chip.channel.write( 
             message, 
             sizeof( message ) / sizeof( uint8_t ) 
          ); 
@@ -121,9 +123,8 @@ public:
    /// and the chip address.
    /// The address is the 3-bit address that is determined by the 3 
    /// address input pins of the chip.
-   pcf8591( i2c_bus & bus, uint_fast8_t address ):
-      bus( bus ), 
-      address{ address }, 
+   pcf8591( i2c_channel channel ):
+      channel( channel ), 
       configuration{ 0x40 }
    {}         
 

@@ -1,8 +1,8 @@
 // ==========================================================================
 //
-// blink a LED on pin 1-9
+// blink a single LED on pin 1-9
 //
-// (c) Wouter van Ooijen (wouter@voti.nl) 2017
+// (c) Wouter van Ooijen (wouter@voti.nl) 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -19,11 +19,16 @@ int main( void ){
    
    for(;;){
       led.write( 1 );
+      led.flush();
       hwlib::wait_ms( 200 );   
+      
       led.write( 0 );
+      led.flush();
       hwlib::wait_ms( 200 );   
    }
 }
+
+// blink example (using an explicit loop and explicit flush calls)
 
 //! [[Doxygen blink example]]
 

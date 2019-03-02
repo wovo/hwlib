@@ -1,8 +1,8 @@
 // ==========================================================================
 //
-// blink on 1 LEDs on a HC595 connected to a DB103 
+// blink on 1 LED on a HC595 connected to a DB103 
 //
-// (c) Wouter van Ooijen (wouter@voti.nl) 2017
+// (c) Wouter van Ooijen (wouter@voti.nl) 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -27,5 +27,7 @@ int main( void ){
  
    hwlib::blink( chip.p0 );
 }  
+
+// blink a LED that is connected to p0 of a HC595 chip
 
 //! [[Doxygen hc595 example]]

@@ -2,7 +2,7 @@
 //
 // File      : hwlib-pcf8574.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
@@ -28,6 +28,7 @@ namespace hwlib {
 /// The power supply range is 2.5 .. 5.5 Volt.
 /// Of the 7-bit slave address, 
 /// 3 bits are set by the level of 3 input pins (A0..A2) of the chip.
+/// With all pulled low the iw2c address is 0x38.
 ///
 /// \image html pcf8574a-iopin.png
 ///
@@ -44,7 +45,7 @@ namespace hwlib {
 /// Because the output pins are open-collector, the LEDs
 /// are connected to power (instead of to the ground), hence
 /// the use of hwlib::port_out_invert().
-/// \snippet "db103\pcf8574a\main.cpp" [Doxygen pcf8574a example]
+/// \snippet "db103\pcf8574a-blink\main.cpp" [Doxygen pcf8574a example]
 ///
 /// The pcf8574 (without the -a) is the same chip, but with a different
 /// I2C bus address.
@@ -57,20 +58,19 @@ namespace hwlib {
 /// 
 class pcf8574a : public port_oc {
 private:
-   i2c_bus & bus;
-   uint_fast8_t address;
-   
-   static constexpr uint_fast8_t base = 0x38;
-   
+
+   i2c_channel & channel;
    uint8_t write_buffer;
    uint8_t read_buffer;
+   bool dirty;
    
-   /// one_pin is an implementation detail
+   // one_pin is an implementation detail
    class one_pin : public pin_oc {
       pcf8574a & chip;
       uint_fast8_t mask;
       
    public:
+
       one_pin( pcf8574a & chip, uint_fast8_t n ): 
          chip( chip ), 
          mask{ static_cast< uint_fast8_t >( 0x01 << n ) }
@@ -81,7 +81,8 @@ private:
             chip.write_buffer |= mask;
          } else {
             chip.write_buffer &= ~ mask;
-         }      
+         }    
+         chip.dirty = true;  
       }   
       
       bool read() override {
@@ -103,12 +104,9 @@ public:
    /// construct an interface to a pcf8574a chip
    ///
    /// This constructor creates an interface to a pcf8574a I2C
-   /// I/O extender chip from the I2C bus it is connected to and 
-   /// and the chip address.
-   /// The address is the 3-bit address that is determined by the 3 
-   /// address input pins of the chip.
-   pcf8574a( i2c_bus & bus, uint_fast8_t address ):
-      bus( bus ), address{ address } {}    
+   /// I/O extender chip from an I2C bus channel.
+   pcf8574a( i2c_channel & channel ):
+      channel( channel ), dirty( false ) {}    
 
    uint_fast8_t number_of_pins() override {
       return 8;
@@ -116,6 +114,7 @@ public:
       
    void write( uint_fast8_t x ) override {
       write_buffer = x; 
+      dirty = true;
    }  
    
    uint_fast8_t read() override {
@@ -123,11 +122,14 @@ public:
    }  
 
    void flush() override {
-      bus.write( base + address, & write_buffer, 1 ); 
+      if( dirty ){
+         channel.write( write_buffer ); 
+         dirty = false;
+      }
    }
    
    void refresh() override {
-      bus.read( base + address, & read_buffer, 1 ); 
+      channel.read( read_buffer ); 
    }
 
    /// the open-collector pins of the chip

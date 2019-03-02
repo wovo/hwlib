@@ -2,7 +2,7 @@
 //
 // File      : hwlib-due.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -30,8 +30,7 @@
 //
 /// This namespace contains the hwlib implementation of the pins, timing
 /// and (software) UART output for the Arduino Due (ATSAM3X8E chip).
-/// The first wait call configures the chip to run at 12 MHz, 
-/// from its internal (calibrated) RC oscillator. [update!]
+/// The first wait call configures the chip to run at 84 MHz.
 ///
 /// The port and pin parameters to the constructors of the pin classes
 /// can either use to the ATSAM3X8E ports and pins, or the Arduino names.
@@ -778,7 +777,10 @@ uint_fast64_t HWLIB_WEAK now_ticks(){
 
 } 
 
+/// \cond INTERNAL
 void uart_init();
+/// \endcond 
+
 bool uart_char_available();
 char uart_getc();
 void uart_putc( char c );

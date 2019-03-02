@@ -2,7 +2,7 @@
 //
 // File      : hwlib-db103.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -31,7 +31,7 @@
 /// \image html db103-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing
-/// and (sotware) UART output for the DB103 board (LPC1111FN28/102 chip).
+/// and (sotware) UART output for the DB103 board (LPC1114FN28/102 chip).
 /// The chip runs at its default speed of 12 MHz, 
 /// from its internal RC oscillator.
 ///

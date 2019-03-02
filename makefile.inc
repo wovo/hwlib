@@ -51,6 +51,7 @@ HEADERS           += char-io/hwlib-terminal.hpp
 
 HEADERS           += core/hwlib-test.hpp
 HEADERS           += core/hwlib-string.hpp
+HEADERS           += core/hwlib-xy.hpp
 
 HEADERS           += core/hwlib-adc.hpp
 HEADERS           += core/hwlib-dac.hpp
@@ -58,14 +59,14 @@ HEADERS           += core/hwlib-dac-demos.hpp
 HEADERS           += core/hwlib-i2c.hpp
 HEADERS           += core/hwlib-spi.hpp
 
-HEADERS           += graphics/hwlib-graphics-xy.hpp
 HEADERS           += graphics/hwlib-graphics-color.hpp
 HEADERS           += graphics/hwlib-graphics-image.hpp
+HEADERS           += graphics/hwlib-graphics-font.hpp
 HEADERS           += graphics/hwlib-graphics-window.hpp
 HEADERS           += graphics/hwlib-graphics-drawables.hpp
 HEADERS           += graphics/hwlib-graphics-window-decorators.hpp
 HEADERS           += graphics/hwlib-graphics-window-demos.hpp
-HEADERS           += graphics/hwlib-graphics-console.hpp
+HEADERS           += graphics/hwlib-graphics-window-terminal.hpp
 HEADERS           += graphics/hwlib-graphics-font-8x8.hpp
 HEADERS           += graphics/hwlib-graphics-font-16x16.hpp
 
@@ -77,9 +78,10 @@ HEADERS           += peripherals/hwlib-glcd-5510.hpp
 HEADERS           += peripherals/hwlib-glcd-oled.hpp
 
 HEADERS           += targets/hwlib-arduino-due.hpp
-#HEADERS           += targets/hwlib-arduino-uno.hpp
-#HEADERS           += targets/hwlib-blue-pill.hpp
-#HEADERS           += targets/hwlib-stm32f103c8.hpp
+HEADERS           += targets/hwlib-arduino-uno.hpp
+HEADERS           += targets/hwlib-blue-pill.hpp
+HEADERS           += targets/hwlib-stm32f103c8.hpp
+#HEADERS           += targets/hwlib-stm32f030x6.hpp
 HEADERS           += targets/hwlib-db103.hpp
 HEADERS           += targets/hwlib-native.hpp
 HEADERS           += targets/hwlib-none.hpp

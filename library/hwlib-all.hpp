@@ -2,7 +2,7 @@
 //
 // File      : hwlib-all.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -60,6 +60,7 @@
 
 #include HWLIB_INCLUDE( core/hwlib-test.hpp )
 #include HWLIB_INCLUDE( core/hwlib-string.hpp )
+#include HWLIB_INCLUDE( core/hwlib-xy.hpp )
 
 #include HWLIB_INCLUDE( core/hwlib-adc.hpp )
 #include HWLIB_INCLUDE( core/hwlib-dac.hpp )
@@ -67,14 +68,14 @@
 #include HWLIB_INCLUDE( core/hwlib-i2c.hpp )
 #include HWLIB_INCLUDE( core/hwlib-spi.hpp )
 
-#include HWLIB_INCLUDE( graphics/hwlib-graphics-xy.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-color.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-image.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-font.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-drawables.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window-decorators.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window-demos.hpp )
-#include HWLIB_INCLUDE( graphics/hwlib-graphics-console.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-window-terminal.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-font-8x8.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-font-16x16.hpp )
 

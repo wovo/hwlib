@@ -1,8 +1,8 @@
 // ==========================================================================
 //
-// File      : hwlib-graphics.hpp
+// File      : hwlib-graphics-drawables.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -17,15 +17,21 @@
 
 namespace hwlib {
 
+// ==========================================================================
+//
+// drawable
+//
+// ==========================================================================
+
 /// interface to an drawable object
 class drawable {
 public:
 
    /// the location where the object is drawn
-   location start;
+   xy start;
 
-   /// create a drawable object by bsupplying its (initial) location
-   drawable( location start ): start{ start }{}
+   /// create a drawable object by supplying its (initial) location
+   drawable( xy start ): start{ start }{}
 
    /// \brief
    /// interface to draw the object buffered
@@ -36,12 +42,19 @@ public:
    /// until flush() is aclled.
    virtual void draw( window & w ) = 0;    
 
-};
+}; // class drawable
+
+
+// ==========================================================================
+//
+// line
+//
+// ==========================================================================
 
 /// a line object                 
 class line : public drawable {
 private:   
-   location end;
+   xy end;
    color fg;
    
    static void swap( int_fast16_t & a, int_fast16_t & b ){
@@ -56,7 +69,7 @@ private:
 
 public:
    /// create a line object
-   line( location start, location end, color fg = black )
+   line( xy start, xy end, color fg = black )
       : drawable{ start }, end{ end }, fg{ fg }
    {}   
    
@@ -109,7 +122,7 @@ public:
             yDraw = y;
          }
 
-         w.write( location( xDraw, yDraw ), fg );
+         w.write( xy( xDraw, yDraw ), fg );
 
          if( E > 0 ){
             E += TwoDyTwoDx; //E += 2*Dy - 2*Dx;
@@ -123,6 +136,12 @@ public:
 }; // class line   
 
 
+// ==========================================================================
+//
+// circle
+//
+// ==========================================================================
+
 /// a circle object                   
 class circle : public drawable {
 private:   
@@ -132,7 +151,12 @@ private:
    
 public:
    /// create a circle object
-   circle( location start, uint_fast16_t radius, color fg = black, color bg = transparent )
+   circle( 
+      xy start, 
+      uint_fast16_t radius, 
+      color fg = black, 
+      color bg = transparent 
+   )
       : drawable{ start }, radius{ radius }, fg{ fg }, bg{ bg }
    {}     
    
@@ -152,23 +176,23 @@ public:
       int_fast16_t y = radius;
     
       // top and bottom
-      w.write( start + location( 0, + radius ), fg );
-      w.write( start + location( 0, - radius ), fg );
+      w.write( start + xy( 0, + radius ), fg );
+      w.write( start + xy( 0, - radius ), fg );
 
       // left and right 
-      w.write( start + location( + radius, 0 ), fg );
-      w.write( start + location( - radius, 0 ), fg );
+      w.write( start + xy( + radius, 0 ), fg );
+      w.write( start + xy( - radius, 0 ), fg );
          
       if( bg != transparent ){
    
          // top and bottom
-         w.write( start + location( 0, + radius ), fg );
-         w.write( start + location( 0, - radius ), fg );
+         w.write( start + xy( 0, + radius ), fg );
+         w.write( start + xy( 0, - radius ), fg );
 
          // left and right
          line(  
-              start - location( radius, 0 ), 
-              start + location( radius, 0 ), 
+              start - xy( radius, 0 ), 
+              start + xy( radius, 0 ), 
               fg 
           ).draw( w );
       } 
@@ -185,31 +209,31 @@ public:
          ddFx += 2;
          fx += ddFx;   
                     
-         w.write( start + location( + x, + y ), fg );
-         w.write( start + location( - x, + y ), fg );
-         w.write( start + location( + x, - y ), fg );
-         w.write( start + location( - x, - y ), fg );
-         w.write( start + location( + y, + x ), fg );
-         w.write( start + location( - y, + x ), fg );
-         w.write( start + location( + y, - x ), fg );
-         w.write( start + location( - y, - x ), fg );
+         w.write( start + xy( + x, + y ), fg );
+         w.write( start + xy( - x, + y ), fg );
+         w.write( start + xy( + x, - y ), fg );
+         w.write( start + xy( - x, - y ), fg );
+         w.write( start + xy( + y, + x ), fg );
+         w.write( start + xy( - y, + x ), fg );
+         w.write( start + xy( + y, - x ), fg );
+         w.write( start + xy( - y, - x ), fg );
             
          if( bg != transparent  ){
             line( 
-               start + location( -x,  y ), 
-               start + location(  x,  y ), 
+               start + xy( -x,  y ), 
+               start + xy(  x,  y ), 
                bg ).draw( w );
             line( 
-               start + location( -x, -y ), 
-               start + location(  x, -y ), 
+               start + xy( -x, -y ), 
+               start + xy(  x, -y ), 
                bg ).draw( w );
             line( 
-               start + location( -y,  x ), 
-               start + location(  y,  x ), 
+               start + xy( -y,  x ), 
+               start + xy(  y,  x ), 
                bg ).draw( w );
             line( 
-               start + location( -y, -x ), 
-               start + location(  y, -x ), 
+               start + xy( -y, -x ), 
+               start + xy(  y, -x ), 
                bg ).draw( w );
          }
       }

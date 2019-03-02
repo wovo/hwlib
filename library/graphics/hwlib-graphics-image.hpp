@@ -2,7 +2,7 @@
 //
 // File      : hwlib-graphics-image.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -23,7 +23,7 @@ namespace hwlib {
 class image {
 private:
 
-   virtual color get_implementation( location pos ) const = 0;
+   virtual color get_implementation( xy pos ) const = 0;
 
 public:
 
@@ -31,16 +31,15 @@ public:
    /// 
    /// This is the size of the image: the number of pixels
    /// in the x and y direction.
-   // wovo: should be const, but that conflicts with the 16x16 font
-   location size;
+   const xy size;
 
    /// construct an image by specifying its size.
-   constexpr image( location size )
+   constexpr image( xy size )
       : size{ size }
    {}
 
-   /// return the color at the specified location
-   color operator[]( location pos ) const {
+   /// the color at the specified location
+   color operator[]( xy pos ) const {
       return (
                ( pos.x >= 0 ) && ( pos.x < size.x )
             && ( pos.y >= 0 ) && ( pos.y < size.y )
@@ -51,12 +50,19 @@ public:
 
 };
 
+
+// ==========================================================================
+//
+// image_8x8
+//
+// ==========================================================================
+
 /// an 8x8 pixel image that contains its pixels
 class image_8x8 : public image {
 private:
    unsigned char data[ 8 ];
 
-   color get_implementation( location pos ) const override {
+   color get_implementation( xy pos ) const override {
       return
          ( data[ pos.y ] & ( 0x01 << pos.x )) == 0
             ? white
@@ -74,24 +80,10 @@ public:
       unsigned char d4, unsigned char d5,
       unsigned char d6, unsigned char d7
    ):
-      image( location( 8, 8 ) ),
+      image( xy( 8, 8 ) ),
       data{ d0, d1, d2, d3, d4, d5, d6, d7 }
    {}
 };
 
-
-// ==========================================================================
-
-/// a font
-/// 
-/// A font provides an image for each supported character
-class font {
-public:
-
-   /// get image for a character
-   /// 
-   /// This function returns the image for the specified character.
-   virtual const image & operator[]( char c ) const = 0;
-};
 
 }; // namespace hwlib

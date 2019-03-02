@@ -1,9 +1,8 @@
 // ==========================================================================
 //
-// File      : hwlib-font-default-16x16.hpp
+// File      : hwlib-grahpics-font-16x16.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
-//
+// Copyright : wouter@voti.nl 2017-2019
 //
 // based on http://www.rinkydinkelectronics.com/r_fonts.php
 //
@@ -18,16 +17,20 @@
 // this file contains Doxygen lines
 /// @file
 
-namespace hwlib {  
+// the AVR8 compiler doesn't like waht is happening here,
+// maybe due to the split code/data address spaces of the AVR8
+#ifndef HWLIB_TARGET_arduino_uno
 
+namespace hwlib {      
+    
 // hide this from DOXYGEN
 #ifndef DOXYGEN
 
-// points to its data, in a particular format
+// toints to its data, in a particular format
 class image_16x16 : public image {
 private:   
    
-   color get_implementation( location pos ) const override {
+   color get_implementation( xy pos ) const override {
       auto x = 16 - pos.x; //wovo !@!
       return
          (( 
@@ -42,12 +45,12 @@ public:
    const uint8_t * data;
    
    constexpr image_16x16(): 
-      image( location( 16, 16 )),
+      image( xy( 16, 16 )),
       data( nullptr ) 
    {}
    
    constexpr image_16x16( uint8_t * data ):
-      image( location( 16, 16 )),
+      image( xy( 16, 16 )),
       data( data )
    {}
    
@@ -197,3 +200,5 @@ const uint8_t font_16x16_data[ 3044 ] = {
 #endif // #ifdef _HWLIB_ONCE
 
 }; //namespace hwlib 
+
+#endif // ifndef HWLIB_TARGET_arduino_uno

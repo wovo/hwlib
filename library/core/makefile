@@ -3,7 +3,7 @@
 # hwlib makefile that gives an clear error message 
 # when a bmptk build inside the library directory is attempted
 #
-# (c) Wouter van Ooijen (wouter@voti.nl) 2017
+# (c) Wouter van Ooijen (wouter@voti.nl) 2017-2019
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at 
@@ -15,6 +15,8 @@
 
 # error handling
 
+notab:
+test:
 build:
 clean:
 run: error

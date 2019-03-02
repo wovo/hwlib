@@ -1,8 +1,8 @@
 // ==========================================================================
 //
-// File      : hwlib-graphics.hpp
+// File      : hwlib-graphics-window_demos.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -17,9 +17,8 @@
 
 namespace hwlib {
 
-/// \brief
 /// random lines demo
-/// \details
+/// 
 /// This functions repeats the following actions:
 /// - clears the window
 /// - draws a border
@@ -30,9 +29,8 @@ void graphics_random_lines(
    uint_fast16_t n_lines = 30
 );
 
-/// \brief
 /// random circles demo
-/// \details
+/// 
 /// This functions repeats the following actions:
 /// - clears the window
 /// - draws n_circles (default is 30) random circles 
@@ -43,10 +41,14 @@ void graphics_random_circles(
    uint_fast16_t n_circles = 30 
 );
 
-#ifdef HWLIB_ONCE 
 
-// hide from Doxygen
-#ifndef DOXYGEN
+// ===========================================================================
+//
+// implementations
+//
+// ===========================================================================
+
+#ifdef _HWLIB_ONCE
 
 uint_fast32_t HWLIB_WEAK rand(){ 
    static uint_fast32_t n = 0;
@@ -63,8 +65,6 @@ uint_fast32_t HWLIB_WEAK random_in_range(
    return min + x;
 }
 
-#endif
-
 void HWLIB_NORETURN graphics_random_lines( 
    window & w, 
    uint_fast16_t n_lines 
@@ -72,18 +72,18 @@ void HWLIB_NORETURN graphics_random_lines(
    for(;;){
       w.clear();
       for( uint_fast16_t x = 0; x < w.size.x; x++ ){
-         w.write( hwlib::location{ 
+         w.write( hwlib::xy{ 
             x,            
             0 } );
-         w.write( hwlib::location{ 
+         w.write( hwlib::xy{ 
             x, 
             static_cast< uint_fast16_t >( w.size.y - 1 ) } );
       }   
       for( uint_fast16_t y = 0; y < w.size.y; y++ ){
-         w.write( hwlib::location{            
+         w.write( hwlib::xy{            
             0, 
             y } );
-         w.write( hwlib::location{ 
+         w.write( hwlib::xy{ 
             static_cast< uint_fast16_t >( w.size.x - 1 ), 
             y } );
       }   
@@ -94,8 +94,8 @@ void HWLIB_NORETURN graphics_random_lines(
          const uint_fast16_t y  = random_in_range( 0, w.size.y );
          const uint_fast16_t y1 = random_in_range( 0, w.size.y );
          auto line = hwlib::line( 
-            hwlib::location{  x,  y },
-            hwlib::location{ x1, y1 }, 
+            hwlib::xy{  x,  y },
+            hwlib::xy{ x1, y1 }, 
             w.foreground 
          );
          line.draw( w );
@@ -117,7 +117,7 @@ void HWLIB_NORETURN graphics_random_circles(
          const uint_fast16_t y  = random_in_range( 10, w.size.y - 10 );
          const uint_fast16_t s  = random_in_range(  0, w.size.y / 4 );
          auto circle = hwlib::circle( 
-            hwlib::location{  x,  y },
+            hwlib::xy{  x,  y },
             s,
             w.foreground 
          );
@@ -128,6 +128,6 @@ void HWLIB_NORETURN graphics_random_circles(
    }  
 }
 
-#endif // #ifdef HWLIB_ONCE
+#endif // #ifdef _HWLIB_ONCE
 
 }; // namespace hwlib

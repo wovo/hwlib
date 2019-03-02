@@ -16,6 +16,8 @@ RELATIVE          ?= .
 # get the paths 
 HWLIB             := $(RELATIVE)
 
+$(info HWLIB=$(HWLIB) )
+
 ifneq ($(wildcard $(RELATIVE)/makefile.custom),)
    include $(RELATIVE)/makefile.custom
 else ifneq ($(wildcard $(RELATIVE)/../makefile.custom),)
@@ -31,7 +33,7 @@ include           $(HWLIB)/makefile.inc
 SEARCH            += $(CATCH)/include
 
 # set BMPTK to the bmptk subdirectory
-BMPTK             ?= $(HWCPP)/../bmptk
+BMPTK             ?= $(HWLIB)/../bmptk
 
 # defer to the bmptk makefile.inc
 include           $(BMPTK)/makefile.inc

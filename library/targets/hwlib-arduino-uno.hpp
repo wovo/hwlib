@@ -2,7 +2,7 @@
 //
 // File      : hwlib-uno.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -24,9 +24,8 @@
 #include "avr/io.h"
 
 
-/// \brief
 /// hwlib implementation for the Arduino Uno
-/// \details
+///
 /// \image html uno-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing
@@ -76,9 +75,8 @@
 ///
 namespace uno {
 
-/// \brief
 /// Arduino Uno pin names
-/// \details
+///
 /// These are the pins of an Arduino Uno board.
 /// Digital pins d0..d13, analog input pins A0..A5, 
 /// SCL, SDA, TX (=D1), RX (=D0), 
@@ -183,14 +181,14 @@ void HWLIB_WEAK configure_as_gpio( uint_fast8_t port, uint_fast8_t pin ){
 /// pin_in implementation for an ATMega328P
 class pin_in : public hwlib::pin_in {
 private:
+
    volatile uint8_t & port;
    uint8_t mask;
  
 public:
 
-   /// \brief
    /// Arduino Uno pin_in constructor from ATMega328P port/pin numbers
-   /// \details
+   ///
    /// This call creates a pin_in from an ATMega328P port/pin
    /// number pair.
    ///
@@ -203,9 +201,8 @@ public:
       port_direction( port_number ) &= ~mask;
    }
    
-   /// \brief
    /// Arduino Uno pin_in constructor from an Uno pin name
-   /// \details
+   ///
    /// This call creates a pin_in from an Arduino Uno pin name.
    ///
    /// This constructor sets the pin direction to input.
@@ -232,9 +229,8 @@ private:
    
 public:
 
-   /// \brief
    /// Arduino Uno pin_out constructor from ATMega328P port/pin numbers
-   /// \details
+   ///
    /// This call creates a pin_out from an ATMega328P port/pin
    /// number pair.
    ///
@@ -247,9 +243,8 @@ public:
       port_direction( port_number ) |= mask;
    }
    
-   /// \brief
    /// Arduino Uno pin_out constructor from an Uno pin name
-   /// \details
+   ///
    /// This call creates a pin_out from an Arduino Uno pin name.
    ///
    /// This constructor sets the pin direction to output.
@@ -275,15 +270,15 @@ public:
 /// pin_in_out implementation for a ATMega328P
 class pin_in_out : public hwlib::pin_in_out {
 private:
+
    volatile uint8_t & port;
    uint8_t port_number;
    uint8_t mask;
    
 public:
 
-   /// \brief
    /// Arduino Uno pin_in_out constructor
-   /// \details
+   ///
    /// Constructor for a ATMega328P input/output pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -300,9 +295,8 @@ public:
       configure_as_gpio( port_number, pin_number );
    }
    
-   /// \brief
    /// Arduino Uno pin_in_out constructor from an Uno pin name
-   /// \details
+   ///
    /// This call creates a pin_in_out from an Arduino Uno pin name.
    ///
    /// This constructor doesn't set the pin direction 
@@ -346,15 +340,15 @@ public:
 /// pin_oc implementation for a ATMega328P
 class pin_oc : public hwlib::pin_oc {
 private:
+
    volatile uint8_t & port;
    uint8_t port_number;
    uint8_t mask;
    
 public:
 
-   /// \brief
    /// Arduino Uno pin_oc constructor
-   /// \details
+   ///
    /// Constructor for a ATMega328P input pin.
    ///
    /// The port_number and pin_number refer to the chip, 
@@ -369,9 +363,8 @@ public:
       configure_as_gpio( port_number, pin_number );
    }
    
-   /// \brief
    /// Arduino Uno pin_oc constructor from an Uno pin name
-   /// \details
+   ///
    /// This call creates a pin_oc from an Arduino Uno pin name.
    ///
    /// This constructor sets the pin to high (high-impedance). 
@@ -471,8 +464,14 @@ void HWLIB_WEAK uart_putc( char c ){
    uart_putc_bit_banged_pin( c, pin );
 }
 
+char HWLIB_WEAK uart_getc(){
+   static target::pin_in pin( 1, 6 );
+   return uart_getc_bit_banged_pin( pin );
+}
+
+
 #endif
 
 }; //namespace hwlib   
 
-#endif // HWLIB_UNO_H
+#endif // HWLIB_UNO_H      for( uint16_t i = 0; i < 10'000; ++i );

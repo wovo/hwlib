@@ -2,7 +2,7 @@
 //
 // File      : hwlib-graphics-color.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -17,7 +17,7 @@
 
 namespace hwlib {
 
-/// graphics color
+/// color
 /// 
 /// This class abstracts a color as used in a graphics window.
 /// A color is represented by 3 RGB bytes an a transparency flag.
@@ -137,5 +137,37 @@ constexpr color silver      = color( 0xC0C0C0 );
 constexpr color brown       = color( 0xA52A2A );        
 constexpr color salmon      = color( 0xFA8072 );
 //@}
+
+
+/// print a color pair
+///
+/// An color is printed in [NNNN,NNNN,NNNN] format,
+/// or [transparent]. 
+/// The NNNN's are the hexadecimal value of the
+/// red, green and blue components.
+ostream & operator<<( ostream & lhs, color rhs );
+
+
+// ===========================================================================
+//
+// implementations
+//
+// ===========================================================================
+
+#ifdef _HWLIB_ONCE
+
+ostream & operator<<( ostream & lhs, const color & rhs ){
+   if( rhs.is_transparent ){
+      return lhs << "[transparent]"; 
+   } else {
+      return lhs 
+         << "[" << hex << setw(4) << setfill( '0' )
+         << rhs.red << "," 
+         << rhs.green << ","
+         << rhs.blue << "]";
+   }
+}
+
+#endif // #ifdef _HWLIB_ONCE
 
 }; // namespace hwlib

@@ -1,8 +1,8 @@
 // ==========================================================================
 //
 // File      : hwlib-matrix-keypad.hpp
-// Part of   : hwlib library for V2THDE
-// Copyright : wouter@voti.nl 2016
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
+// Copyright : wouter@voti.nl 2016-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
@@ -23,16 +23,13 @@ namespace hwlib {
 class matrix_of_switches {
 private:
 
-   port_oc & output;
-   port_in & input;
+   port_direct_from_oc_t  output;
+   port_direct_from_in_t  input;
 
 public:
 
-   /// the number of columns
-   const int x_size;
-   
-   /// the number of rows
-   const int y_size;
+   /// the number of columns (x) and rows (y)
+   xy size;
 
    /// create a matrix interface from the row and column pins
    //
@@ -40,13 +37,12 @@ public:
    /// ports that contain the pins that connect to the columns (x direction) 
    /// and the columns (y direction).
    /// The column pins must be an open-collector port,
-   /// the row pins muts be an input port that has (internal or external)
+   /// the row pins must be an input port that has (internal or external)
    /// pull-up resistors.
    matrix_of_switches( port_oc & output, port_in & input ):
       output( output ), 
       input( input ),
-      x_size( output.number_of_pins() ),
-      y_size( input.number_of_pins() )
+      size( output.number_of_pins(), input.number_of_pins() )
    {}
 
    /// test whether a particular switch is closed
@@ -54,16 +50,19 @@ public:
    /// This function returns whether the switch at column x
    /// and row y is closed.
    /// It doesn't suppress bouncing.
-   bool switch_is_closed_at( int x, int y ){
+   bool switch_is_closed_at( xy v ){
        
       // make (only) the x'th output pin low 
-      output.write( ~ ( 0x01 << x ));
+      output.write( ~ ( 0x01 << v.x ));
+
+      // wait for the input level to settle
+      wait_us( 1'000 );
       
       // returns whether the y'th input pin is low
-      return ( input.read() & ( 0x01 << y )) == 0;
+      return ( input.read() & ( 0x01 << v.y )) == 0;
    }
    
-};
+}; // class class matrix_of_switches
 
 /// istream from a keaypad matrix
 //
@@ -98,7 +97,7 @@ public:
     {
        // fill the translation string, add \0's when the
        // tr parameter is exhausted 
-       for( int i = 0; i < N; ++i ){
+       for( uint_fast8_t i = 0; i < N; ++i ){
            if( *translation_string != '\0' ){
                translation[ i ] = *translation_string++;
            } else {
@@ -115,12 +114,10 @@ public:
     /// translation).
     /// This function doesn't suppress bouncing.
     char pressed(){
-       for( int x = 0; x < matrix.x_size; ++x ){
-          for( int y = 0; y < matrix.x_size; ++y ){
-             if( matrix.switch_is_closed_at( x, y )){
-                return translation[ x * matrix.y_size + y ];
-             }
-          }   
+       for( auto v : all( matrix.size )){
+          if( matrix.switch_is_closed_at( v )){
+             return translation[ v.x + matrix.size.x * v.y ];
+          }
        }
        return '\0';
     }
@@ -162,6 +159,6 @@ public:
        return previous;
     }
     
-};   
+}; // class keypad  
    
 }; // namespace hwlib

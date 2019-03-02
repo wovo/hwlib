@@ -2,7 +2,7 @@
 //
 // File      : hwlib-string.hpp
 // Part of   : C++ library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // This code is partially based on a research project by Martin Broers.
 //

@@ -1,8 +1,8 @@
 // ==========================================================================
 //
-// File      : hwlib-font-default-8x8.hpp
+// File      : hwlib-graphics-font-8x8.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // based on https://github.com/dhepper/font8x8, which is based on
 // http://dimensionalrift.homelinux.net/combuster/mos3/?p=viewsource&file=/modules/gfx/font8_8.asm
@@ -27,14 +27,11 @@ private:
    static const image_8x8 images[ 128 ];
    
 public:   
+
    constexpr const image & operator[]( char c ) const override {
       return images[ c & 0x7F ];      
    }      
 };
-
-/// an 8x8 font
-// needs a constructor??
-//extern const image_8x8 font_default_8x8::images[ 128 ];
 
 
 // ===========================================================================

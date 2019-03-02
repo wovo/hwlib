@@ -17,8 +17,10 @@ int main( void ){
    
    for(;;){
       led.write( 1 );
+      led.flush();
       hwlib::wait_ms( 200 );   
       led.write( 0 );
+      led.flush();
       hwlib::wait_ms( 200 );   
    }
 }

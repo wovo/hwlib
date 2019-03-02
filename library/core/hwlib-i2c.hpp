@@ -2,7 +2,7 @@
 //
 // File      : hwlib-i2c.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -173,6 +173,16 @@ public:
       primitives.write_start();
       primitives.write_byte( a << 1 );		  
    }
+   
+   /// write a single byte
+   /// 
+   /// This function write the byte d to the slave.
+   ///
+   void write( 
+      const uint8_t d
+   ){
+      primitives.write( &d, 1 );			 
+   }		  
    
    /// write bytes
    /// 
@@ -346,7 +356,7 @@ public:
       primitives( primitives ), transactions( primitives, a )
    {}
    
-   /// single i2c write transaction
+   /// i2c write transaction
    ///
    /// This function writes n bytes from data[] to the slave 
    ///
@@ -359,7 +369,17 @@ public:
       t.write( data, n );	  
    }
 
-   /// single i2c read transaction
+   /// single byte i2c write transaction
+   ///
+   /// This function writes the byte d to the slave 
+   virtual void write( 
+      const uint8_t d
+   ){
+      auto t = transactions.write();
+      t.write( &d, 1 );	  
+   }
+
+   /// i2c read transaction
    /// 
    /// This function reads n bytes from the slave 
    ///
@@ -370,6 +390,16 @@ public:
    ){
       auto t = transactions.read();
       t.read( data, n );	  
+   }	   
+	  
+   /// i2c single byte read transaction
+   /// 
+   /// This function reads one byte from the slave 
+   virtual void read(  
+      uint8_t & d
+   ){
+      auto t = transactions.read();
+      t.read( &d, 1 );	  
    }	   
 	  
 }; // class i2c_channel

@@ -2,7 +2,7 @@
 //
 // File      : hwlib-console.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2017-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
@@ -83,7 +83,7 @@ public:
       pin_out & sdin,
       pin_out & sclk   
    )
-      : window{ location{ 84, 48 }, black, white },
+      : window{ xy{ 84, 48 }, black, white },
       sce( sce ), res( res ), dc( dc ), sdin( sdin ), sclk( sclk )
    {
    
@@ -111,7 +111,7 @@ private:
    unsigned char pixel_buffer[ 504 ];
 
    void write_implementation( 
-      location pos, 
+      xy pos, 
       color col
    ) override {
       uint_fast8_t a = pos.x + ( pos.y / 8 ) * 84;

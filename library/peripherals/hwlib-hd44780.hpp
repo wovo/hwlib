@@ -1,8 +1,8 @@
 // ==========================================================================
 //
 // File      : hwlib-hd44780.hpp
-// Part of   : hwlib library for V1OOPC and V1IPAS
-// Copyright : wouter@voti.nl 2016
+// Part of   : C++ hwlib library for close-to-the-hardware OO programming
+// Copyright : wouter@voti.nl 2016-2019
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,7 +10,7 @@
 //
 // ==========================================================================
 
-// included only via hwlib.hpp, hence no multipl-include guard is needed
+// included only via hwlib.hpp, hence no multiple-include guard is needed
 
 // this file contains Doxygen lines
 /// @file
@@ -85,9 +85,9 @@ namespace hwlib {
 /// 
 class hd44780 : public terminal {
 private:
-   pin_out & pin_e;
-   pin_out & pin_rs;
-   port_out & port_data;
+   pin_direct_from_out_t   pin_e;
+   pin_direct_from_out_t   pin_rs;
+   port_direct_from_out_t  port_data;
    
    void write4( unsigned char n ){
       wait_us( 10 );
@@ -130,8 +130,8 @@ public:
       pin_rs.write( 0 );
       wait_ms( 100  );
 
-      // interface initialisation: make sure the LCD is in 4 bit mode
-      // (magical sequence, taken from the HD44780 datasheet)
+      // interface initialization: make sure the LCD is in 4 bit mode
+      // (magical sequence, taken from the HD44780 data-sheet)
       write4( 0x03 );
       wait_ms( 15 );
       write4( 0x03 );
@@ -139,7 +139,7 @@ public:
       write4( 0x03 );
       write4( 0x02 );     // 4 bit mode
 
-      // functional initialisation
+      // functional initialization
       command( 0x28 );    // 4 bit mode, 2 lines, 5x8 font
       command( 0x0C );    // display on, no cursor, no blink
       clear();            // clear display, 'cursor' home
