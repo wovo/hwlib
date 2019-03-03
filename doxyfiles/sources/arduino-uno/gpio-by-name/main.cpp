@@ -16,9 +16,9 @@ int main( void ){
     
 //! [[Doxygen pin example]]
 
-   auto pin = hwlib::target::pin_out( hwlib::target::pins::led );
-   
    // specify a pin by its Arduino pin name
+   
+   auto pin = hwlib::target::pin_out( hwlib::target::pins::led );
    
 //! [[Doxygen pin example]]
 

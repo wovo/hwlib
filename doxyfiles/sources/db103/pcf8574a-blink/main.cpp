@@ -12,6 +12,8 @@
 
 //! [[Doxygen pcf8574a example]]
 
+// kitt display on 8 LEDs connected to a pcf8574a i2c I/O extender
+
 #include "hwlib.hpp"
 
 int main( void ){
@@ -24,7 +26,5 @@ int main( void ){
  
    hwlib::blink( chip.p0, 200 );
 }  
-
-// kitt display on 8 LEDs connected to a pcf8574a i2c I/O extender
 
 //! [[Doxygen pcf8574a example]]

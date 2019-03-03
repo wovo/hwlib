@@ -13,9 +13,6 @@
 #include "hwlib.hpp"
 
 int main( void ){
-    
-       // kill the watchdog
-   WDT->WDT_MR = WDT_MR_WDDIS;
  
    auto scl = hwlib::target::pin_oc{ hwlib::target::pins::scl };
    auto sda = hwlib::target::pin_oc{ hwlib::target::pins::sda };
@@ -23,4 +20,5 @@ int main( void ){
    auto chip = hwlib::pcf8591{ i2c_bus, 0 };
    
    hwlib::dac_triangle( chip.dac0 );
+   
 }  

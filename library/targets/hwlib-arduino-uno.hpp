@@ -24,10 +24,11 @@
 #include "avr/io.h"
 
 
-/// hwlib implementation for the Arduino Uno
+/// \brief
+/// hwlib HAL for the Arduino Uno
 ///
 /// \image html uno-pcb.jpg
-//
+///
 /// This namespace contains the hwlib implementation of the pins, timing
 /// and (sotware) UART output for the Arduino Uno (ATMega328P chip).
 ///

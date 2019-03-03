@@ -47,7 +47,7 @@ HEADERS           += char-io/hwlib-istream.hpp
 HEADERS           += char-io/hwlib-bb-uart.hpp
 HEADERS           += char-io/hwlib-console.hpp
 HEADERS           += char-io/hwlib-terminal.hpp
-
+HEADERS           += char-io/hwlib-terminal-demos.hpp
 
 HEADERS           += core/hwlib-test.hpp
 HEADERS           += core/hwlib-string.hpp
@@ -70,7 +70,7 @@ HEADERS           += graphics/hwlib-graphics-window-terminal.hpp
 HEADERS           += graphics/hwlib-graphics-font-8x8.hpp
 HEADERS           += graphics/hwlib-graphics-font-16x16.hpp
 
-HEADERS           += peripherals/hwlib-pcf8574a.hpp
+HEADERS           += peripherals/hwlib-pcf8574.hpp
 HEADERS           += peripherals/hwlib-pcf8591.hpp
 HEADERS           += peripherals/hwlib-hc595.hpp
 HEADERS           += peripherals/hwlib-hd44780.hpp

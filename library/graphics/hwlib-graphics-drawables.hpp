@@ -54,8 +54,9 @@ public:
 /// a line object                 
 class line : public drawable {
 private:   
-   xy end;
-   color fg;
+   xy     end;
+   color  ink;
+   bool   use_foreground;
    
    static void swap( int_fast16_t & a, int_fast16_t & b ){
       auto t = a; 
@@ -68,12 +69,19 @@ private:
    }
 
 public:
-   /// create a line object
-   line( xy start, xy end, color fg = black )
-      : drawable{ start }, end{ end }, fg{ fg }
+   /// create a line object with a specific color
+   line( xy start, xy end, color ink )
+      : drawable{ start }, end{ end }, ink{ ink }, use_foreground( false )
+   {}   
+   
+   /// create a line object in the foreground coloor
+   line( xy start, xy end )
+      : drawable{ start }, end{ end }, ink{ black }, use_foreground( true )
    {}   
    
    void draw( window & w ) override { 
+   
+      color col = use_foreground ? w.foreground : ink;
        
       int_fast16_t x0 = start.x;
       int_fast16_t y0 = start.y;
@@ -122,7 +130,7 @@ public:
             yDraw = y;
          }
 
-         w.write( xy( xDraw, yDraw ), fg );
+         w.write( xy( xDraw, yDraw ), col );
 
          if( E > 0 ){
             E += TwoDyTwoDx; //E += 2*Dy - 2*Dx;
@@ -145,19 +153,26 @@ public:
 /// a circle object                   
 class circle : public drawable {
 private:   
-   uint_fast16_t radius;
-   color fg;
-   color bg;
+   uint_fast16_t  radius;
+   color          ink;
+   bool           use_foreground;
    
 public:
-   /// create a circle object
+   /// create a circle object of a specific color
    circle( 
       xy start, 
       uint_fast16_t radius, 
-      color fg = black, 
-      color bg = transparent 
+      color ink 
    )
-      : drawable{ start }, radius{ radius }, fg{ fg }, bg{ bg }
+      : drawable{ start }, radius{ radius }, ink{ ink }, use_foreground( false )
+   {}     
+   
+   /// create a circle object of the foregroudn color
+   circle( 
+      xy start, 
+      uint_fast16_t radius
+   )
+      : drawable{ start }, radius{ radius }, ink{ black }, use_foreground( true )
    {}     
    
    void draw( window & w ) override { 

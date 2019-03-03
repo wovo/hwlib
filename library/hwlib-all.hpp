@@ -56,11 +56,12 @@
 #include HWLIB_INCLUDE( char-io/hwlib-istream.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-bb-uart.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-console.hpp )
+#include HWLIB_INCLUDE( core/hwlib-xy.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-terminal.hpp )
+#include HWLIB_INCLUDE( char-io/hwlib-terminal-demos.hpp )
 
 #include HWLIB_INCLUDE( core/hwlib-test.hpp )
 #include HWLIB_INCLUDE( core/hwlib-string.hpp )
-#include HWLIB_INCLUDE( core/hwlib-xy.hpp )
 
 #include HWLIB_INCLUDE( core/hwlib-adc.hpp )
 #include HWLIB_INCLUDE( core/hwlib-dac.hpp )
@@ -79,7 +80,7 @@
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-font-8x8.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-font-16x16.hpp )
 
-#include HWLIB_INCLUDE( peripherals/hwlib-pcf8574a.hpp )
+#include HWLIB_INCLUDE( peripherals/hwlib-pcf8574.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-pcf8591.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-hc595.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-hd44780.hpp )

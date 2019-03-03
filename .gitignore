@@ -2,6 +2,7 @@
 .codelite/
 _codelite.project
 __codelite.workspace
+__codelite.session
 ~$*.docx
 .project
 *.o

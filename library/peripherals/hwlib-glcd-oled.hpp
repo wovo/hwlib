@@ -111,19 +111,15 @@ protected:
    /// the i2c channel
    i2c_channel & channel;
    
-   /// current cursor setting in the controller
-   ///
-   /// These used to avoid explicit cursor updates when such are not needed.
-   ///@{
-   uint8_t cursor_x, cursor_y;
-   ///@}
+   /// current cursor location in the controller
+   xy cursor;
 	   
 public:	
     
    /// construct by providing the i2c channel	
    ssd1306_i2c( i2c_channel & channel ):
-      channel( channel ),
-      cursor_x( 255 ), cursor_y( 255 )
+      channel( channel ), 
+	  cursor( 255, 255 )
    {
       // wait for the controller to be ready for the initialization       
       wait_ms( 20 );
@@ -166,17 +162,15 @@ public:
    } 	
    
    /// write the pixel byte d at column x page y
-   void pixels( 
-      uint8_t x, 
-      uint8_t y, 
+   void pixels_byte_write( 
+      xy location,
       uint8_t d 
    ){
 
-      if(( x != cursor_x ) || ( y != cursor_y )){
-         command( ssd1306_commands::column_addr,  x,  127 );
-         command( ssd1306_commands::page_addr,    y,    7 );
-         cursor_x = x;
-         cursor_y = y;
+      if( location != cursor ){
+         command( ssd1306_commands::column_addr,  location.x,  127 );
+         command( ssd1306_commands::page_addr,    location.y,    7 );
+         cursor = location;
       }   
 
       uint8_t data[] = { ssd1306_data_prefix, d };
@@ -184,7 +178,7 @@ public:
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       ); 
-      cursor_x++;  
+      cursor.x++;  
     
    }
       
@@ -211,23 +205,23 @@ private:
    ) override {
 
       int a = pos.x + ( pos.y / 8 ) * size.x;
-
-      if( col == foreground ){ 
-         buffer[ a ] |=  ( 0x01 << (pos.y % 8 ));  
+      
+      if( col == white ){ 
+         buffer[ a ] |=  ( 0x01 << ( pos.y % 8 ));  
       } else {
          buffer[ a ] &= ~( 0x01 << ( pos.y % 8 )); 
       }   
 
-      pixels( pos.x, pos.y / 8, buffer[ a ] );   
+      pixels_byte_write( xy( pos.x, pos.y / 8 ), buffer[ a ] );   
 
    }   
      
 public:
    
    /// construct by providing the i2c channel
-   glcd_oled_i2c_128x64_direct( i2c_channel & channel ):
+   glcd_oled_i2c_128x64_direct( i2c_channel & channel ): 
       ssd1306_i2c( channel ),
-      window( wsize, black, white )
+      window( wsize, white, black )
    {
       channel.write( 
          ssd1306_initialization, 
@@ -235,8 +229,22 @@ public:
       );     
    }
    
-   void flush() override {}     
+   void clear() override {
+      const uint8_t d = ( background == white ) ? 0xFF : 0x00;
+      command( ssd1306_commands::column_addr,  0,  127 );
+      command( ssd1306_commands::page_addr,    0,    7 );  
+      auto t = channel.transactions.write();
+      t.write( ssd1306_data_prefix );
+      for( uint_fast16_t x = 0; x < sizeof( buffer ); ++x ){                
+	     buffer[ x ] = d;
+		 t.write( d );
+      }        
+	  cursor = xy( 255, 255 );
+   }
    
+   void flush() override {}  
+
+
 }; // class glcd_oled_i2c_128x64_direct
 
 
@@ -260,7 +268,7 @@ private:
    ) override {
       int a = pos.x + ( pos.y / 8 ) * size.x;
 
-      if( col == foreground ){ 
+      if( col == white ){ 
          buffer[ a ] |=  ( 0x01 << (pos.y % 8 ));  
       } else {
          buffer[ a ] &= ~( 0x01 << ( pos.y % 8 )); 
@@ -272,7 +280,7 @@ public:
    /// construct by providing the i2c channel
    glcd_oled_i2c_128x64_buffered( i2c_channel & channel ):
       ssd1306_i2c( channel ),
-      window( wsize, black, white )
+      window( wsize, white, black )
    {
       channel.write( 
          ssd1306_initialization, 

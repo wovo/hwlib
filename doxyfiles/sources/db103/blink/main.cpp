@@ -14,6 +14,8 @@
 
 #include "hwlib.hpp"
 
+// blink example (using an explicit loop and explicit flush calls)
+
 int main( void ){
    auto led = hwlib::target::pin_out( 1, 9 );
    
@@ -27,8 +29,6 @@ int main( void ){
       hwlib::wait_ms( 200 );   
    }
 }
-
-// blink example (using an explicit loop and explicit flush calls)
 
 //! [[Doxygen blink example]]
 

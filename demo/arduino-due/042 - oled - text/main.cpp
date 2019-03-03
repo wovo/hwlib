@@ -16,14 +16,14 @@ int main( void ){
        
    namespace target = hwlib::target;
    
-   auto scl      = hwlib::target::pin_oc{ hwlib::target::pins::scl };
-   auto sda      = hwlib::target::pin_oc{ hwlib::target::pins::sda };
+   auto scl           = hwlib::target::pin_oc{ hwlib::target::pins::scl };
+   auto sda           = hwlib::target::pin_oc{ hwlib::target::pins::sda };
+   auto i2c_bus       = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
    
-   auto i2c_bus  = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
-   auto oled_channel = i2c_bus.channel( 0x3c );
-   auto oled         = hwlib::glcd_oled( oled_channel ); 
-   auto font     = hwlib::font_default_8x8();
-   auto display  = hwlib::window_ostream( oled, font );
+   auto oled_channel  = i2c_bus.channel( 0x3c );
+   auto oled          = hwlib::glcd_oled_i2c_128x64_buffered( oled_channel ); 
+   auto font          = hwlib::font_default_8x8();
+   auto display       = hwlib::terminal_from( oled, font );
    
    display 
       << "\f" << "Hello world!!" 

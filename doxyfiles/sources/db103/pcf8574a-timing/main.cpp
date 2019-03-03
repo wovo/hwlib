@@ -34,6 +34,8 @@ void direct( hwlib::pcf8574a & chip ){
 void buffered( hwlib::pcf8574a & chip ){
    //! [[Doxygen buffered example]]
 
+   // writing to pins on a pcf8574a chip, flushing after all writes
+   
    auto t1 = hwlib::now_us();
    
    chip.p0.write( 0 );  
@@ -49,8 +51,6 @@ void buffered( hwlib::pcf8574a & chip ){
    auto t2 = hwlib::now_us();
    hwlib::cout << "buffered took " << t2 - t1 << " us.\n";
 
-   // writing to pins on a pcf8574a chip, flushing after all writes
-   
    //! [[Doxygen buffered example]]   
 }
 

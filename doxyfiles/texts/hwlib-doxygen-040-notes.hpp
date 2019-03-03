@@ -16,56 +16,65 @@
 
 /// \page notes Notes
 ///
-/// Open issues and further work
+/// Open issues and further work:
 /// - string class needs rework, tests and documentation
 /// - lpc1114 should run at 48 MHz, and use timer for timing
 /// - arduino uno should use timer for timing, and hardware uart
 /// - native target should support hwlib:cout and (less urgent) hwlib::cin  
 ///
-/// More-or-less urgent things to do      
+/// Things that would be good to do but are not urgent:
+/// - add some window decorators, like for instance a frame
+/// - comment after each class closing }; 
+/// - doxygen class list should be sorted by category
+/// - consistency in decorator class names: all xxx_from_yyy_t
+/// - document matrix keypart with 4x4 illustrations, add 3x4 demo
+/// - add smart-buffering oled version, and read-write version
+/// - find out what goes wrong with AVR8 and the 16x16 font
+/// - add border decorator for frame, use in demos
+/// - single way of keep-out-of-doxygen: ifdef DOXYGEN and ///cond
+/// - add a list of i2c slave addresses
+/// - add examples for pin & port 'all'
+/// - add examples to istream, ostream, graphics, timing, i2c, spi, adc, dac
+/// - add examples & more documentation for matrix-of-switches (pics of good & bad foil!)
+/// - document the demo's (pin, port, dac)
+/// = check and document the 'native' target
+/// - add nrf24
+/// - use invert() for an inverted window
+/// - use part() for a window part
+/// - more documentation for the graphics page
+/// - check demo comment titles
+/// - how to \\ref to overloaded constructors (graphics)
+///
+/// More-or-less urgent things to do:
+/// - finish graphics documentation
+/// - document I2C and SPI
+/// - check snippet comment titles (or remove?)
+/// - solve -lgdi32 
+/// - yield in oled i2c
+/// - renumber script for these dopxygen files
 /// - test the blue-pil blink (delay)
-/// - repair the blue-pillk uart
-/// - test doxy code fragments
-/// - something wring with matrix keypad
-/// - oled direct
-/// - demo that displays long string on 1-line character window
+/// - repair the blue-pill uart
 /// - sub_terminal like sub_window
 /// - port names instead of numbers
 /// - yield in oled long i2c transfer!
 /// - uno hardware uart note limitations
 /// - uno check other LCD sizes
-/// - document pins & decorators
 /// - rename to _*_t for invert, all, from
 /// - test pins & decorators : add test pin
 /// - more tests for pins and more
-/// - needs class list per category...
 /// - copy-protect relevant classes like i2c transaction
 /// - SPI write/read single byte
-/// - oled smarter buffer flush, and dumb version
 /// - lines/circles demo optional frame (parameter)? or frame decorator?
-/// - frame modifier!
 /// - always use constructor function
-/// - string partial problem with avr?
 /// - compare i2c and spi
 /// - add 'best used via' to all generator functions
 /// - more general text (buffering, generator functions, conversions)
 /// - targets auto-generate from text in targets??
 /// - check more files, not done yet!
-/// - eliminate[[examples]] from demo => doxyfiles
 /// - due demos' rename / renumber
-/// - now two ways of keep-out-of-doxygen: ifdef DOXYGEN and ///cond
-/// - avr8 problem with 16x16 font
-/// - nrf24 lib
-/// - comment on each }; or the like
-/// - list of i2c slave addresses
 /// - check SPI for flush
-/// - doxy examples compileren
-/// - doxy timing example for multiple pins on PCF
-/// - doxy.hpp naar doxydirs, split
-/// - check matrix, compare size
 /// - check 595 buffering
-/// - order of info pages
-/// - doxygen get targets from hwlib.hpp
+/// - add blue-pill documentation & picture
 ///
 
 /*

@@ -23,13 +23,13 @@ namespace hwlib {
 class dac {
 public:
 
-   /// the number of bits in the result returned by get()
+   /// the number of bits in the result returned by write()
    const uint_fast8_t dac_n_bits;
    
-   /// the maximum value that can be returned by get()
+   /// the maximum value that can be returned by write()
    const uint_fast8_t dac_max_value;
    
-   /// the type of the result returned by get()
+   /// the type of the result returned by write()
    typedef uint_fast32_t dac_value_type; 
     
    /// write a value to the D/A output 
@@ -57,7 +57,7 @@ public:
       dac_max_value( static_cast< dac_value_type >( ( 1 << n_bits ) - 1 ))
    {
       if( dac_n_bits > static_cast<int>( 8 * sizeof( dac_value_type ))){
-         // the number of bits won't fit in the return type of get()
+         // the number of bits won't fit in the return type of read()
          HWLIB_PANIC_WITH_LOCATION;
       }
    }

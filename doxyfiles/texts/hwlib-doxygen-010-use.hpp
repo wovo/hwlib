@@ -16,20 +16,14 @@
 
 /// \page use Use
 ///
-/// Implementations of the hardware abstractions (like pins and delays)
-/// are provided for the supported targets:
-///    - Arduino Uno (ATMEGA328P chip)
-///    - Arduino Due (ATSAM3X8E chip)
-///    - DB103 (LPC1114 chip)
-///    - blue-pill (stm32f103c8 chip)
-///
 /// A hwlib application includes hwlib.hpp. 
 ///
 /// \snippet "db103\blink\main.cpp" [Doxygen blink example]
 ///
-/// This filer will include the correct target header based on the 
-/// HWLIB_TARGET_* macro., which must be defined in the compiler
-/// command line.
+/// This file will include the correct target header based on the 
+/// HWLIB_TARGET_* macro., defined in the compiler
+/// command line. This macro must identify one of the supported
+/// \ref targets "targets ".
 ///
 /// When the bmptk build system is used, the HWLIB_TARGET_* passed
 /// is determined by the TARGET setting in the bmptk makefile.

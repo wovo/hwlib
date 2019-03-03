@@ -117,10 +117,9 @@ public:
       pin_out & rs, 
       pin_out & e, 
       port_out & data, 
-      uint_fast8_t lines, 
-      uint_fast8_t columns
+      xy size
     ):
-      terminal{ columns, lines },
+      terminal{ size },
       pin_e( e ), 
       pin_rs( rs ), 
       port_data( data )
@@ -140,10 +139,10 @@ public:
       write4( 0x02 );     // 4 bit mode
 
       // functional initialization
-      command( 0x28 );    // 4 bit mode, 2 lines, 5x8 font
-      command( 0x0C );    // display on, no cursor, no blink
-      clear();            // clear display, 'cursor' home
-      goto_xy( 0, 0 );    // 'cursor' home    
+      command( 0x28 );            // 4 bit mode, 2 lines, 5x8 font
+      command( 0x0C );            // display on, no cursor, no blink
+      clear();                    // clear display, 'cursor' home
+      cursor_set( xy( 0, 0 ) );   // 'cursor' home    
    }    
    
    /// write a command byte to the LCD
@@ -167,39 +166,39 @@ public:
    void clear() override {
       command( 0x01 );
       wait_ms( 5 );
-      goto_xy( 0, 0 );
+      cursor_set( xy( 0, 0 ) );
    }   
    
 private:
 
-   void goto_xy_implementation( uint_fast16_t new_x, uint_fast16_t new_y ) override {
+   void cursor_set_implementation( xy new_cursor ) override {
       // the NVI goto_xy() has already set the x and y variables
       
-      if( lines == 1 ){
-         if( x < 8 ){
-            command( 0x80 + x );
+      if( size.y == 1 ){
+         if( new_cursor.x < 8 ){
+            command( 0x80 + new_cursor.x );
          } else {
-            command( 0x80 + 0x40 + ( x - 8 ));
+            command( 0x80 + 0x40 + ( new_cursor.x - 8 ));
          }
       } else {
-         if( lines == 2 ){
+         if( size.y == 2 ){
             command( 
                0x80
-               + (( y > 0 ) 
+               + (( new_cursor.y > 0 ) 
                   ? 0x40 
                   : 0x00 )
-               + ( x )
+               + ( new_cursor.x )
             );
          } else {
             command( 
                 0x80
-                 + (( y & 0x01 )
+                 + (( new_cursor.y & 0x01 )
                     ? 0x40 
                     : 0x00 )
-                 + (( y & 0x02 )
+                 + (( new_cursor.y & 0x02 )
                     ? 0x14 
                     : 0x00 )
-                 + ( x )
+                 + ( new_cursor.x )
              );              
          }
       }
@@ -209,10 +208,8 @@ private:
       // the NVI putc() handles the x and y variables
       
       // handle the gap for 1-line displays
-      if( lines == 1 ){
-         if( x == 8 ){
-            goto_xy( x, y );
-         }
+      if( ( size.x == 1 ) && ( cursor.x == 8 ) ){
+         cursor_set( cursor );
       }   
       
       data( chr );

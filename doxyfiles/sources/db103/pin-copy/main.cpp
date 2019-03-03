@@ -13,8 +13,11 @@
 #include "hwlib.hpp"
 
 void flush(){
+
 //! [[Doxygen flush example]]
 
+   // copying an input to an output, with explcit refersh() and flush()
+   
    auto sw   = hwlib::target::pin_in( 1, 8 );
    auto led  = hwlib::target::pin_out( 1, 9 );
    for(;;){
@@ -25,14 +28,16 @@ void flush(){
       led.flush();
    }
    
-   // copying an input to an output, with explcit refersh() and flush()
-   
 //! [[Doxygen flush example]]
+
 }
 
 void direct(){
+   
 //! [[Doxygen direct example]]
 
+   // copying an input to an output, using direct()
+   
    auto sw_pin   = hwlib::target::pin_in( 1, 8 );
    auto led_pin  = hwlib::target::pin_out( 1, 9 );
    auto sw       = hwlib::direct( sw_pin );;
@@ -42,9 +47,8 @@ void direct(){
       led.write( v );
    }
    
-   // copying an input to an output, using direct()
-   
-//! [[Doxygen direct example]]
+///! [[Doxygen direct example]]
+
 }
 
 int main( void ){

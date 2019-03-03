@@ -17,13 +17,14 @@
 
 namespace hwlib {
    
-/// pcf8574a I2C I/O extender 
+/// pcf8574 / pcf8574a I2C I/O extender 
 ///
-/// This class implements an interface to a pcf8574a I2C I/O extender chip.
+/// This class implements an interface to a pcf8574 and pcf8574a 
+/// I2C I/O extender chip.
 ///
 /// \image html pcf8574a-pinout.png
 ///
-/// A pcf8574a is an I2C slave that provides 8 open-collector input/output
+/// A pcf8574(a) is an I2C slave that provides 8 open-collector input/output
 /// pins with weak pull-ups. 
 /// The power supply range is 2.5 .. 5.5 Volt.
 /// Of the 7-bit slave address, 
@@ -47,7 +48,7 @@ namespace hwlib {
 /// the use of hwlib::port_out_invert().
 /// \snippet "db103\pcf8574a-blink\main.cpp" [Doxygen pcf8574a example]
 ///
-/// The pcf8574 (without the -a) is the same chip, but with a different
+/// The pcf8574 and pcf8574a are the same chips, but with a different
 /// I2C bus address.
 ///
 /// \image html pcf8574a-addresses.png
@@ -56,7 +57,7 @@ namespace hwlib {
 ///    - <A HREF="http://www.nxp.com/documents/data_sheet/PCF8574_PCF8574A.pdf">
 ///       PCF8574A data sheet</A> (pdf)
 /// 
-class pcf8574a : public port_oc {
+class pcf8574 : public port_oc {
 private:
 
    i2c_channel & channel;
@@ -66,12 +67,12 @@ private:
    
    // one_pin is an implementation detail
    class one_pin : public pin_oc {
-      pcf8574a & chip;
+      pcf8574 & chip;
       uint_fast8_t mask;
       
    public:
 
-      one_pin( pcf8574a & chip, uint_fast8_t n ): 
+      one_pin( pcf8574 & chip, uint_fast8_t n ): 
          chip( chip ), 
          mask{ static_cast< uint_fast8_t >( 0x01 << n ) }
       {}
@@ -101,11 +102,11 @@ private:
    
 public:
 
-   /// construct an interface to a pcf8574a chip
+   /// construct an interface to a pcf8574 chip
    ///
-   /// This constructor creates an interface to a pcf8574a I2C
+   /// This constructor creates an interface to a pcf8574 I2C
    /// I/O extender chip from an I2C bus channel.
-   pcf8574a( i2c_channel & channel ):
+   pcf8574( i2c_channel & channel ):
       channel( channel ), dirty( false ) {}    
 
    uint_fast8_t number_of_pins() override {
@@ -151,6 +152,9 @@ public:
    one_pin p7{ *this, 7 };   
    ///@}
       
-}; // class pcf8574a
+}; // class pcf8574
+
+/// pcf8574a is thge same chip, but with a different i2c address
+using pcf8574a = pcf8574;
    
 }; // namespace hwlib

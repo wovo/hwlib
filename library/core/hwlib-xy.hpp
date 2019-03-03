@@ -17,23 +17,30 @@
 
 namespace hwlib {
 
+
+// ==========================================================================
+//
+// xy
+//
+// ==========================================================================
+
 /// an xy pair 
 /// 
 /// This class abstracts an (at least 16 bit) integer pair.
-/// It is used for instance for the size of a graphics or character screeen,
+/// It is used for instance for the size of a graphics or character screen,
 /// and to identify a single pixel location,
 /// or the distance between two pixel locations.
 class xy final {
 public:
 
    /// x value of the pair
-   uint_fast16_t x;
+   int_fast16_t x;
    
    /// y value of the pair
-   uint_fast16_t y;
+   int_fast16_t y;
    
    /// construct from its x and y values
-   constexpr xy( uint_fast16_t x, uint_fast16_t y ): x{ x }, y{ y }{}
+   constexpr xy( uint_fast16_t x, int_fast16_t y ): x{ x }, y{ y }{}
    
    /// default constructor, zero's the x and y
    constexpr xy():x{0}, y{0}{}
@@ -55,10 +62,18 @@ public:
    }      
 
    /// divide by an integer
-   constexpr xy operator/( const uint_fast16_t rhs ) const {
+   constexpr xy operator/( const int_fast16_t rhs ) const {
       return xy{ 
-          static_cast< uint_fast16_t >( x / rhs ),
-          static_cast< uint_fast16_t >( y / rhs )
+          static_cast< int_fast16_t >( x / rhs ),
+          static_cast< int_fast16_t >( y / rhs )
+      };         
+   }    
+
+   /// multiply by an integer
+   constexpr xy operator*( const int_fast16_t rhs ) const {
+      return xy{ 
+          static_cast< int_fast16_t >( x * rhs ),
+          static_cast< int_fast16_t >( y * rhs )
       };         
    }    
 
@@ -73,6 +88,13 @@ public:
    }
 
 }; 
+
+
+// ==========================================================================
+//
+// iterator
+//
+// ==========================================================================
 
 /// \cond INTERNAL
 
@@ -127,7 +149,7 @@ public:
    }
 
    xy_iterator_t end() const {
-      return xy_iterator_t( limits, xy( 0, limits.y + 1 ) );
+      return xy_iterator_t( limits, xy( 0, limits.y ) );
    }
 
 };

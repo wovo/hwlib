@@ -21,8 +21,6 @@ void time( const char *name, int n, T lambda ){
 }
 
 int main( void ){
-   // kill the watchdog
-   WDT->WDT_MR = WDT_MR_WDDIS;
    
    // wait for the PC to start the terminal
    hwlib::wait_ms( 500 );

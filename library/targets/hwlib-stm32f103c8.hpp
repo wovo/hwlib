@@ -23,9 +23,9 @@
 #include "stm32f103x6.h"
 #undef register
 
-/// hwlib implementation for the stm32f103c8 
+/// \brief
+/// hwlib HAL for the stm32f103c8 
 /// 
-//
 /// This namespace contains the hwlib implementation of the pins, timing
 /// and (software) UART output for the stm32f103c8.
 ///
@@ -185,7 +185,7 @@ public:
 };
 /// \endcond 
 
-/// pin_in implementation for a ATSAM3X8E
+/// pin_in implementation for an stm32f103c8
 class pin_in : public hwlib::pin_in, private pin_base {
 public:
 

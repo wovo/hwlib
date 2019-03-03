@@ -16,7 +16,14 @@
 /// @file
 
 namespace hwlib {
-  
+
+	
+// ==========================================================================
+//
+// image
+//
+// ==========================================================================
+
 /// an image
 /// 
 /// An image abstracts a rectangular set of pixel values (colors).
@@ -49,6 +56,47 @@ public:
    }
 
 };
+
+
+// ==========================================================================
+//
+// invert
+//
+// ==========================================================================
+
+/// \cond INTERNAL    
+
+class image_invert_t : public image {
+private:
+
+   const image & slave;
+   
+   color get_implementation( xy pos ) const override {
+      return - slave[ pos ];
+   }	  
+
+public:
+
+   constexpr image_invert_t( const image & slave ): 
+      image( slave.size ), slave( slave ){}
+	  
+};  
+
+/// \endcond   
+
+/// invert an image
+///
+/// This function returns the image, but with the color of 
+/// all its pixels inverted.
+const image_invert_t invert( const image & slave );
+
+#ifdef _HWLIB_ONCE 
+
+const image_invert_t invert( const image & slave ){
+   return image_invert_t( slave );
+}
+
+#endif   
 
 
 // ==========================================================================

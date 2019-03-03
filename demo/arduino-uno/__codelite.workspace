@@ -24,7 +24,7 @@
       <Project Name="011 - blink - gpio" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="012 - blink - blink" Path="012 - blink - blink/_codelite.project" Active="Yes"/>
+  <Project Name="012 - blink - blink" Path="012 - blink - blink/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="012 - blink - blink" ConfigName="Release"/>
@@ -40,6 +40,12 @@
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="031 - uart - input" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+  <Project Name="lcd - scrolling message" Path="lcd - scrolling message/_codelite.project" Active="Yes"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="lcd - scrolling message" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
   <Project Name="lcd-16x1" Path="lcd-16x1/_codelite.project" Active="No"/>

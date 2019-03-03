@@ -24,7 +24,8 @@
 
 #include HWLIB_INCLUDE( hwlib-arduino-due-system-sam3xa.inc )
 
-/// hwlib implementation for the Arduino Due
+/// \brief
+/// hwlib HAL for the Arduino Due
 /// 
 /// \image html due-pcb.jpg
 //
@@ -43,11 +44,8 @@
 ///
 /// The ATSAM3X8E chip has a watchdog system that is enabled by default.
 /// If left alone, the watchdog will reset the chip after a short time. 
-/// To prevent this, all Due applications start with these lines:
-/// \code{.cpp}
-/// // kill the watchdog
-/// WDT->WDT_MR = WDT_MR_WDDIS;
-/// \endcode
+/// To prevent this, the watchdog is disabled on the first 
+/// timing call (wait_*() or now_*()).
 ///
 /// References:
 ///    - <A HREF="https://www.arduino.cc/en/uploads/Main/arduino-uno-schematic.pdf">
@@ -744,6 +742,9 @@ uint_fast64_t HWLIB_WEAK ticks_per_us(){
 uint_fast64_t HWLIB_WEAK now_ticks(){
    static bool init_done = false;
    if( ! init_done ){
+	   
+      // kill the watchdog
+      WDT->WDT_MR = WDT_MR_WDDIS;
       
       // switch to the 84 MHz crystal/PLL clock
       sam3xa::SystemInit();

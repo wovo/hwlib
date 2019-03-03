@@ -16,6 +16,8 @@
 
 namespace hwlib {
    
+   // defining your own panic hnadling function
+
    void HWLIB_NORETURN panic( const char * file, const uint_fast16_t line ){
 
       // wait for the console connection to be ready
@@ -34,8 +36,6 @@ namespace hwlib {
       for(;;);
    }
 }
-
-// defining your own panic hnadling function
 
 //! [[Doxygen panic example]]
 

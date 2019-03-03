@@ -38,7 +38,7 @@ public:
    all_from_port_out_t( port_out & slave ): slave( slave ) {}        
    
    void write( bool x ) override {
-      slave.write( x ? 0xFFFF : 0x000 );       
+      slave.write( x ? 0xFF : 0x0 );       
    }
    
    void flush() override {

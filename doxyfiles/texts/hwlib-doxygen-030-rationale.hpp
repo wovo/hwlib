@@ -68,4 +68,7 @@
 /// for close-to-the-hardware programming, because that requires templates
 /// and concepts, which are not appropriate for 
 /// (relatively) new C++ programmers.
-/// Hwcpp library is my (ongoing) attempt to fill that niche.
+/// Instead it aims to make close-to-the-hardware programming,
+/// understandable for those who understand classic (virtual-based)
+/// C++ O0.
+///

@@ -12,6 +12,8 @@
 
 //! [[Doxygen hc595 example]]
 
+// blink a LED that is connected to p0 of a HC595 chip
+
 #include "hwlib.hpp"
 
 int main( void ){
@@ -27,7 +29,5 @@ int main( void ){
  
    hwlib::blink( chip.p0 );
 }  
-
-// blink a LED that is connected to p0 of a HC595 chip
 
 //! [[Doxygen hc595 example]]

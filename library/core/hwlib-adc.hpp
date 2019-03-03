@@ -23,11 +23,14 @@ namespace hwlib {
 class adc {
 public:
 
-   /// the number of bits in the result returned by get()
+   /// the number of bits in the result returned by read()
    const uint_fast8_t adc_n_bits;
    
-   /// the type of the result returned by get()
+   /// the type of the result returned by read()
    typedef uint_fast32_t adc_value_type; 
+   
+   /// the maximum value that can be meaningfully written using write())
+   const uint_fast8_t adc_max_value;   
 
    /// do an A/D conversion and return the result
    /// 
@@ -37,9 +40,12 @@ public:
    virtual adc_value_type read() = 0;
    
    /// specify the number of bits
-   adc( uint_fast8_t n_bits ): adc_n_bits{ n_bits }{
+   adc( uint_fast8_t n_bits ): 
+      adc_n_bits{ n_bits },
+	  adc_max_value( static_cast< adc_value_type >( ( 1 << n_bits ) - 1 ))
+   {
       if( n_bits > static_cast<int>( 8 * sizeof( adc_value_type ))){
-         // the number of bits won't fit in the return type of get()
+         // the number of bits won't fit in the return type of read()
          HWLIB_PANIC_WITH_LOCATION;
       }
    }

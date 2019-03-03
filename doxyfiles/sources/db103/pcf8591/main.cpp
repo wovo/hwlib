@@ -12,6 +12,8 @@
 
 //! [[Doxygen pcf8591-adc example]]
 
+// reading the adc inputs of a pcf8591 i2c adc and dac chip
+
 #include "hwlib.hpp"
 
 int main( void ){
@@ -35,7 +37,5 @@ int main( void ){
       hwlib::wait_ms( 250 );
    }
 }  
-
-// reading the adc inputs of a pcf8591 i2c adc and dac chip
 
 //! [[Doxygen pcf8591-adc example]]

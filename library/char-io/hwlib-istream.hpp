@@ -49,6 +49,9 @@ public:
    }
         
    /// input operator for char
+   ///
+   /// This function reads and 'returns' a single character. 
+   /// When no character is available it waits for one.   
    friend istream & operator>>( istream & stream, char & x ){
       x = stream.getc();            
       return stream;   

@@ -28,7 +28,7 @@ private:
 
 public:
 
-   /// the number of columns (x) and rows (y)
+   /// the number of columns and rows
    xy size;
 
    /// create a matrix interface from the row and column pins
@@ -64,7 +64,7 @@ public:
    
 }; // class class matrix_of_switches
 
-/// istream from a keaypad matrix
+/// istream from a matrix_of_switches
 //
 /// This class template turns a keypad matrix into an istream
 /// (a character input stream).

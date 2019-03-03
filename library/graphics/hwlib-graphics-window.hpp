@@ -103,11 +103,8 @@ public:
       xy pos, 
       const image & img
    ){                 
-      for( uint_fast16_t x = 0; x < img.size.x; ++x ){
-         for( uint_fast16_t y = 0; y < img.size.y; ++y ){
-            auto loc = hwlib::xy( x, y );
-            write( pos + loc, img[ loc ] );
-         }
+      for( const auto p : all( size ) ){
+         write( pos + p, img[ p ] );
       }
    }
    
@@ -116,12 +113,22 @@ public:
    /// This function clears the windows by writing the background
    /// color to all pixels.
    /// The default implementation writes to all pixels in sequence.
-   /// A concrete window can probably provide a faster implementation.    
-   virtual void clear( ){
-      for( uint_fast16_t x = 0; x < size.x; ++x ){
-         for( uint_fast16_t y = 0; y < size.y; ++y ){
-            write( xy{ x, y }, background );    
-         }                 
+   /// A concrete window can provide a faster implementation.    
+   virtual void clear(){
+      for( const auto p : all( size ) ){
+         write( p, background );    
+      }        
+   }
+   
+   /// clear the window
+   /// 
+   /// This function clears the windows by writing the specified
+   /// color to all pixels.
+   /// The default implementation writes to all pixels in sequence.
+   /// A concrete window can provide a faster implementation.    
+   virtual void clear( color col ){
+      for( const auto p : all( size ) ){
+         write( p, col );    
       }        
    }
    

@@ -16,9 +16,9 @@ int main( void ){
     
 //! [[Doxygen pin example]]
 
-   auto pin = hwlib::target::pin_out( 1, 5 );
+   // specify a pin by its port name and pin number
    
-   // specify a pin by its port name and pibn number
+   auto pin = hwlib::target::pin_out( 1, 5 );
    
 //! [[Doxygen pin example]]
 

@@ -26,8 +26,8 @@
 #undef register
 
 /// \brief
-/// hwlib implementation for the DB103 board
-/// \details
+/// hwlib HAL for the DB103 board
+/// 
 /// \image html db103-pcb.jpg
 //
 /// This namespace contains the hwlib implementation of the pins, timing

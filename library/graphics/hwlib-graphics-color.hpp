@@ -90,7 +90,7 @@ public:
    {}   
    
    /// return the negative of a color   
-   constexpr color operator - ( void ) const {
+   constexpr color operator- ( void ) const {
       return color( 
          0xFF - static_cast< uint8_t >( red ), 
          0xFF - static_cast< uint8_t >( green ), 
@@ -99,7 +99,7 @@ public:
    }   
    
    /// reports whether two colors are equal   
-   constexpr bool operator == ( const color c ) const {
+   constexpr bool operator== ( const color c ) const {
       return is_transparent 
          ? c.is_transparent 
          : ( 
@@ -111,9 +111,17 @@ public:
    }
 
    /// reports whether two colors are unequal
-   constexpr bool operator != ( const color c ) const {
+   constexpr bool operator!= ( const color c ) const {
       return ! ( *this == c );  
    }     
+   
+   /// print a color pair
+   ///
+   /// An color is printed in [NNNN,NNNN,NNNN] format,
+   /// or [transparent]. 
+   /// The NNNN's are the hexadecimal value of the
+   /// red, green and blue components.
+   friend ostream & operator<<( ostream & lhs, color rhs );   
 
 };
 
@@ -137,15 +145,6 @@ constexpr color silver      = color( 0xC0C0C0 );
 constexpr color brown       = color( 0xA52A2A );        
 constexpr color salmon      = color( 0xFA8072 );
 //@}
-
-
-/// print a color pair
-///
-/// An color is printed in [NNNN,NNNN,NNNN] format,
-/// or [transparent]. 
-/// The NNNN's are the hexadecimal value of the
-/// red, green and blue components.
-ostream & operator<<( ostream & lhs, color rhs );
 
 
 // ===========================================================================

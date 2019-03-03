@@ -24,7 +24,8 @@
 /// next flush operation (output), or work on input that is as old
 /// as the most recent refresh() operation.
 ///
-/// Operations on pins, ports, AD-inputs, DA-outputs, character streams,
+/// Operations on \ref pins "pins", \ref ports "ports", 
+/// AD-inputs, DA-outputs, character streams,
 /// graphic windows, etc. are by default (potentially) buffered.
 /// To ensure direct effects, all reads must be preceded by a refresh call, 
 /// and all writes must be succeeded by a flush call
@@ -41,7 +42,7 @@
 /// handle all pending changes in one go.
 ///
 /// The pcf8574a is an i2c I/O extender that provided 8 open-collector
-/// pins. The hwlib pcf8574a class is buffered: when a value is written
+/// pins. The hwlib::pcf8574a class is buffered: when a value is written
 /// to a pin, it is actually written to a buffer in RAM. A flush call
 /// writes this buffer to the chip, but only when it has beenm written to
 /// since the last flush.
@@ -52,7 +53,9 @@
 /// \snippet "db103\pcf8574a-timing\main.cpp" [Doxygen flush example]
 ///
 /// When the flush() calls are done after the four write() calls, 
-/// it takes only 1.0 ms. Most of this is spent in the first flush() call.
+/// it all takes only 1.0 ms. 
+/// Most of this is spent in the first flush() call, the others
+/// have nothing left to do.
 ///
 /// \snippet "db103\pcf8574a-timing\main.cpp" [Doxygen buffered example]
 ///

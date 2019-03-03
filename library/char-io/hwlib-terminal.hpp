@@ -36,14 +36,14 @@ namespace hwlib {
 ///
 /// The x and y coordinates are 0-origin and count to the right and down.
 /// In other words, the top-left character position is (0,0), and the bottom
-/// right character position is (rows - 1, columns - 1).
+/// right character position is size - (1,1).
 ///
 /// \image html terminal-positions.png
 ///
 class terminal : public ostream {
 private:
 
-   uint_fast8_t goto_xy_state;
+   uint_fast8_t goto_state;
 
 protected:
 
@@ -54,46 +54,35 @@ protected:
    /// not one of the special characters (\\n, \\r, \\c)
    virtual void putc_implementation( char c ) = 0;
 
-   /// change the write location to x, y
+   /// change the write location 
    /// 
    /// This function is called when the write location is
    /// changed *except* when it is changed to the next x
    /// position by a call to putc_implementation.
    ///
    /// The default implementation does nothing.
-   virtual void goto_xy_implementation( uint_fast16_t x, uint_fast16_t y ){}
+   virtual void cursor_set_implementation( xy target ){}
 
    /// The default implementation of flush does nothing.
    virtual void flush(){}
 
 public:
 
-   /// the number of colums in the terminal
-   const uint_fast16_t  columns;
+   /// the size of the terminal in characters in x and y direction
+   const xy size;
+   
+   /// the current cursor location
+   ///
+   /// Don't write to this attribute, use cursor_set().
+   xy cursor;
 
-   /// the number of lines (rows) in the terminal
-   const uint_fast16_t  lines;
-
-   /// the current write column;
-   uint_fast16_t  x;
-
-   /// the current write line;
-   uint_fast16_t  y;
-
-   /// construct a terminal from its columns (X size) and lines (Y size)
-   terminal(
-      uint_fast16_t  columns,
-      uint_fast16_t  lines
-   ):
-      columns{ columns },
-      lines{ lines }
-   { }
+   /// construct a terminal from its size in characters in x and y direction
+   terminal( xy size ): size( size ){}
 
    /// put the cursor (write location) at x, y
-   virtual void goto_xy( uint_fast16_t  new_x, uint_fast16_t  new_y ){
-      x = new_x;
-      y = new_y;
-      goto_xy_implementation( x, y );
+   virtual void cursor_set( xy target ){
+      cursor = target;
+      cursor_set_implementation( target );
    }
 
    /// write a single character
@@ -101,57 +90,57 @@ public:
       
       //WLIB_TRACE << c << " " << x <<  " " << y << " " << goto_xy_state;
 
-      switch( goto_xy_state ){
+      switch( goto_state ){
 
          case 0 :
             break;
 
          case 1 :
-            x = 10 * ( c - '0' );
-            ++goto_xy_state;
+            cursor.x = 10 * ( c - '0' );
+            ++goto_state;
             return;
 
          case 2 :
-            x += c - '0' ;
-            ++goto_xy_state;
+            cursor.x += c - '0' ;
+            ++goto_state;
             return;
 
          case 3 :
-            y = 10 * ( c - '0' );
-            ++goto_xy_state;
+            cursor.y = 10 * ( c - '0' );
+            ++goto_state;
             return;
 
          case 4 :
-            y += c - '0' ;
-            goto_xy_state = 0;
-            goto_xy( x, y );
+            cursor.y += c - '0' ;
+            goto_state = 0;
+            cursor_set( cursor );
             return;
 
       }
 
       if( c == '\n' ){
-         goto_xy( 0, y + 1 );
+         cursor_set( xy( 0, cursor.y + 1 ) );
 
       } else if( c == '\r' ){
-         goto_xy( 0, y );
+         cursor_set( xy( 0, cursor.y ) );
 
       } else if( c == '\v' ){
-         goto_xy( 0, 0 );
+         cursor_set( xy( 0, 0 ) );
 
       } else if( c == '\f' ){
          clear();
 
       } else if( c == '\t' ){
-         goto_xy_state = 1;
+         goto_state = 1;
 
       } else if(
-         ( x >= 0 )
-         && ( x < columns )
-         && ( y >= 0 )
-         && ( y < lines )
+         ( cursor.x >= 0 )
+         && ( cursor.x < size.x )
+         && ( cursor.y >= 0 )
+         && ( cursor.y < size.y )
       ){
           putc_implementation( c );
-          ++x;
+          ++cursor.x;
       }
    }
 
@@ -162,13 +151,13 @@ public:
    /// locations. A concrete implementation might provide
    /// a better (faster) way.
    virtual void clear(){
-      for( uint_fast16_t y = 0; y < lines; ++y ){
-         goto_xy( 0, y );
-         for( uint_fast16_t x = 0; x < columns; ++x ){
+      for( uint_fast16_t y = 0; y < size.y; ++y ){
+         cursor_set( xy( 0, y ) );
+         for( uint_fast16_t x = 0; x < size.x; ++x ){
             putc( ' ' );
          }
       }
-      goto_xy( 0, 0 );
+      cursor_set( xy( 0, 0 ) ) ;
    }
    
 }; // class terminal

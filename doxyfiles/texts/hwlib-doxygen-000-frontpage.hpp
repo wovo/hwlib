@@ -15,8 +15,8 @@
 
 
 /// \brief
-/// hwlib library
-/// \details
+/// hwlib library (traget-independent parts)
+/// 
 /// This namespace contains the target-independent 
 /// parts of the hwlib library.
 /// (Except for some macro's, which can't be inside a namespace.)
