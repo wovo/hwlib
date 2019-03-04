@@ -116,7 +116,7 @@ namespace hwlib {
 /// console baudrate
 ///
 /// When no HWLIB_BAUDRATE is defined, it will default to 1200 baud.
-#define HLWIB_BAUDRATE 1200    
+#define HWLIB_BAUDRATE 1200    
 #endif   
 
    
