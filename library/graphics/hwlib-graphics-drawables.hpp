@@ -183,6 +183,8 @@ public:
       }
    
       // http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
+      
+      color col = use_foreground ? w.foreground : ink;      
    
       int_fast16_t fx = 1 - radius;
       int_fast16_t ddFx = 1;
@@ -191,26 +193,26 @@ public:
       int_fast16_t y = radius;
     
       // top and bottom
-      w.write( start + xy( 0, + radius ), fg );
-      w.write( start + xy( 0, - radius ), fg );
+      w.write( start + xy( 0, + radius ), col );
+      w.write( start + xy( 0, - radius ), col );
 
       // left and right 
-      w.write( start + xy( + radius, 0 ), fg );
-      w.write( start + xy( - radius, 0 ), fg );
+      w.write( start + xy( + radius, 0 ), col );
+      w.write( start + xy( - radius, 0 ), col );
          
-      if( bg != transparent ){
+      //if( bg != transparent ){
    
          // top and bottom
-         w.write( start + xy( 0, + radius ), fg );
-         w.write( start + xy( 0, - radius ), fg );
+         w.write( start + xy( 0, + radius ), col );
+         w.write( start + xy( 0, - radius ), col );
 
          // left and right
          line(  
               start - xy( radius, 0 ), 
               start + xy( radius, 0 ), 
-              fg 
+              col 
           ).draw( w );
-      } 
+      //} 
     
       while( x < y ){
       
@@ -224,33 +226,33 @@ public:
          ddFx += 2;
          fx += ddFx;   
                     
-         w.write( start + xy( + x, + y ), fg );
-         w.write( start + xy( - x, + y ), fg );
-         w.write( start + xy( + x, - y ), fg );
-         w.write( start + xy( - x, - y ), fg );
-         w.write( start + xy( + y, + x ), fg );
-         w.write( start + xy( - y, + x ), fg );
-         w.write( start + xy( + y, - x ), fg );
-         w.write( start + xy( - y, - x ), fg );
+         w.write( start + xy( + x, + y ), col );
+         w.write( start + xy( - x, + y ), col );
+         w.write( start + xy( + x, - y ), col );
+         w.write( start + xy( - x, - y ), col );
+         w.write( start + xy( + y, + x ), col );
+         w.write( start + xy( - y, + x ), col );
+         w.write( start + xy( + y, - x ), col );
+         w.write( start + xy( - y, - x ), col );
             
-         if( bg != transparent  ){
+         //if( bg != transparent  ){
             line( 
                start + xy( -x,  y ), 
                start + xy(  x,  y ), 
-               bg ).draw( w );
+               col ).draw( w );
             line( 
                start + xy( -x, -y ), 
                start + xy(  x, -y ), 
-               bg ).draw( w );
+               col ).draw( w );
             line( 
                start + xy( -y,  x ), 
                start + xy(  y,  x ), 
-               bg ).draw( w );
+               col ).draw( w );
             line( 
                start + xy( -y, -x ), 
                start + xy(  y, -x ), 
-               bg ).draw( w );
-         }
+               col ).draw( w );
+         //}
       }
    }   
     

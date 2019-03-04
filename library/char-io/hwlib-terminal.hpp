@@ -151,9 +151,9 @@ public:
    /// locations. A concrete implementation might provide
    /// a better (faster) way.
    virtual void clear(){
-      for( uint_fast16_t y = 0; y < size.y; ++y ){
+      for( int_fast16_t y = 0; y < size.y; ++y ){
          cursor_set( xy( 0, y ) );
-         for( uint_fast16_t x = 0; x < size.x; ++x ){
+         for( int_fast16_t x = 0; x < size.x; ++x ){
             putc( ' ' );
          }
       }

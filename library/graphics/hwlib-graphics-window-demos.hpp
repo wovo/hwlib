@@ -71,28 +71,32 @@ void HWLIB_NORETURN graphics_random_lines(
 ){
    for(;;){
       w.clear();
-      for( uint_fast16_t x = 0; x < w.size.x; x++ ){
+      for( int_fast16_t x = 0; x < w.size.x; x++ ){
          w.write( hwlib::xy{ 
             x,            
             0 } );
          w.write( hwlib::xy{ 
             x, 
-            static_cast< uint_fast16_t >( w.size.y - 1 ) } );
+            static_cast< int_fast16_t >( w.size.y - 1 ) } );
       }   
-      for( uint_fast16_t y = 0; y < w.size.y; y++ ){
+      for( int_fast16_t y = 0; y < w.size.y; y++ ){
          w.write( hwlib::xy{            
             0, 
             y } );
          w.write( hwlib::xy{ 
-            static_cast< uint_fast16_t >( w.size.x - 1 ), 
+            static_cast< int_fast16_t >( w.size.x - 1 ), 
             y } );
       }   
       w.flush();			
-      for( uint_fast16_t n = 0; n < n_lines; n++ ){
-         const uint_fast16_t x  = random_in_range( 0, w.size.y );
-         const uint_fast16_t x1 = random_in_range( 0, w.size.x );
-         const uint_fast16_t y  = random_in_range( 0, w.size.y );
-         const uint_fast16_t y1 = random_in_range( 0, w.size.y );
+      for( 
+         int_fast16_t n = 0; 
+         n < static_cast< int_fast16_t >( n_lines ); 
+         n++ 
+      ){
+         const int_fast16_t x  = random_in_range( 0, w.size.y );
+         const int_fast16_t x1 = random_in_range( 0, w.size.x );
+         const int_fast16_t y  = random_in_range( 0, w.size.y );
+         const int_fast16_t y1 = random_in_range( 0, w.size.y );
          auto line = hwlib::line( 
             hwlib::xy{  x,  y },
             hwlib::xy{ x1, y1 }, 
@@ -113,9 +117,9 @@ void HWLIB_NORETURN graphics_random_circles(
       w.clear();
       w.flush();		  
       for( uint_fast16_t n = 0; n < n_circles; n++ ){
-         const uint_fast16_t x  = random_in_range( 10, w.size.x - 10 );
-         const uint_fast16_t y  = random_in_range( 10, w.size.y - 10 );
-         const uint_fast16_t s  = random_in_range(  0, w.size.y / 4 );
+         const int_fast16_t x  = random_in_range( 10, w.size.x - 10 );
+         const int_fast16_t y  = random_in_range( 10, w.size.y - 10 );
+         const int_fast16_t s  = random_in_range(  0, w.size.y / 4 );
          auto circle = hwlib::circle( 
             hwlib::xy{  x,  y },
             s,

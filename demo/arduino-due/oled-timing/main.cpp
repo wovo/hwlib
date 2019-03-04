@@ -18,10 +18,10 @@ void time( const char *name, T lambda ){
 
 }
 
-void circles( hwlib::window & w, int n, hwlib::buffering buf ){
+void circles( hwlib::window & w, int n ){
    auto m = w.size / 2;
    for( int i = 0; i < n; ++i ){
-      hwlib::circle( m, 5 + 2 * i ).draw( w, buf );
+      hwlib::circle( m, 5 + 2 * i ).draw( w );
    }
 }
 

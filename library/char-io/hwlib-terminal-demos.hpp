@@ -61,7 +61,7 @@ void HWLIB_NORETURN scrolling_text(
    for(;;){
       for( uint_fast16_t i = 0; ( i + term.size.x ) <= len; ++i ){
          term << '\r';
-         for( uint_fast16_t j = 0; j < term.size.x; ++j ){
+         for( int_fast16_t j = 0; j < term.size.x; ++j ){
 			 term << text[ i + j ];
 		 }
 		 term << flush;

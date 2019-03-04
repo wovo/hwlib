@@ -40,7 +40,7 @@ public:
    int_fast16_t y;
    
    /// construct from its x and y values
-   constexpr xy( uint_fast16_t x, int_fast16_t y ): x{ x }, y{ y }{}
+   constexpr xy( int_fast16_t x, int_fast16_t y ): x{ x }, y{ y }{}
    
    /// default constructor, zero's the x and y
    constexpr xy():x{0}, y{0}{}
@@ -48,16 +48,16 @@ public:
    /// add two 
    constexpr xy operator+( const xy rhs ) const {
       return xy{ 
-          static_cast< uint_fast16_t >( x + rhs.x ),
-          static_cast< uint_fast16_t >( y + rhs.y )
+          static_cast< int_fast16_t >( x + rhs.x ),
+          static_cast< int_fast16_t >( y + rhs.y )
       };      
    }      
    
    /// subtract two 
    constexpr xy operator-( const xy rhs ) const {
       return xy{ 
-          static_cast< uint_fast16_t >( x - rhs.x ),
-          static_cast< uint_fast16_t >( y - rhs.y )
+          static_cast< int_fast16_t >( x - rhs.x ),
+          static_cast< int_fast16_t >( y - rhs.y )
       };         
    }      
 

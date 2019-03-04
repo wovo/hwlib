@@ -16,13 +16,14 @@
 #ifndef HWLIB_NATIVE_H
 #define HWLIB_NATIVE_H
 
+#define _HWLIB_TARGET_WAIT_US_BUSY
 #include HWLIB_INCLUDE( ../hwlib-all.hpp )
 #include <iostream>
 #include <Windows.h>
 
 namespace hwlib {
 
-#ifdef HWLIB_ONCE 
+#ifdef _HWLIB_ONCE 
 
 uint64_t now_ticks(){
    // https://stackoverflow.com/questions/1695288/getting-the-current-time-in-milliseconds-from-the-system-clock-in-windows	 
@@ -44,25 +45,6 @@ void wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){}
 }
-
-void wait_ns( int_fast32_t n ){ 
-   wait_us_busy( 1 + n / 1'000 );
-}
-
-void wait_us( int_fast32_t n ){ 
-   wait_us_busy( n );
-}
-
-void wait_ms( int_fast32_t n ){
-   wait_us( 1'000 * n );
-// why doesn't this work (asny more)??
-/*
-   while( n > 0 ){
-      wait_us( 1'000 );
-      --n;
-   }
-*/
-}  
 
 /*
 
@@ -87,9 +69,6 @@ uint_fast64_t now_us(){
 void uart_putc( char c ){
    std::cout << c << std::flush;
 }
-
-void uart_putc( char c ){}
-
 
 char uart_getc(){
    return std::getchar();   

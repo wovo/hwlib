@@ -40,36 +40,34 @@
 /// = check and document the 'native' target
 /// - add nrf24
 /// - use invert() for an inverted window
-/// - use part() for a window part
+/// - use part() for a window part, add terminal-part
 /// - more documentation for the graphics page
 /// - check demo comment titles
 /// - how to \\ref to overloaded constructors (graphics)
+/// - always use constructor function
+/// - more tests, start with pins and ports
+/// - targets auto-generate from text in targets??
+/// - add 'best used via' to all generator function classes
+/// - more text and examples in the graphics documentation
 ///
 /// More-or-less urgent things to do:
-/// - finish graphics documentation
 /// - document I2C and SPI
 /// - check snippet comment titles (or remove?)
 /// - solve -lgdi32 
 /// - yield in oled i2c
-/// - renumber script for these dopxygen files
 /// - test the blue-pil blink (delay)
 /// - repair the blue-pill uart
-/// - sub_terminal like sub_window
 /// - port names instead of numbers
 /// - yield in oled long i2c transfer!
 /// - uno hardware uart note limitations
 /// - uno check other LCD sizes
 /// - rename to _*_t for invert, all, from
 /// - test pins & decorators : add test pin
-/// - more tests for pins and more
 /// - copy-protect relevant classes like i2c transaction
 /// - SPI write/read single byte
 /// - lines/circles demo optional frame (parameter)? or frame decorator?
-/// - always use constructor function
 /// - compare i2c and spi
-/// - add 'best used via' to all generator functions
 /// - more general text (buffering, generator functions, conversions)
-/// - targets auto-generate from text in targets??
 /// - check more files, not done yet!
 /// - due demos' rename / renumber
 /// - check SPI for flush
