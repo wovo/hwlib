@@ -78,6 +78,73 @@
 ///
 
 /*
+
+To do list
+
+2019 refurbishment
+- hwlib equal -> can't be included earlier??
+- demo/due/chris oled spi
+- uno common files doesn't work => depends on bmptk!! (doesn't work for arduino?)
+- add external dependencies notes in doxygen (bmptk, linker, atmega lib stuff)
+- 'nowait' I2C
+
+Quality & consistency:
+  - file-local objects are not documented? (check ostream)
+  - db103 align pin classes
+  - more examples (graphics, ...)
+  - lcd5510 should use SPI!
+  - i2c example of address-only write
+  - test for input, output, oc, analog pins of a chip
+  - rewrite text for uno (due?) IO pins
+  - rename lcd to something that includes oled
+  - cleanup oled => ssd1306, provide init code, expose command interface
+  - pin decorators - did they exist at one point??
+  - also check line length (in tab checker)
+  - there is no on-line manual :(
+  - columns,lines or other way round, or use position? (ostream, hd44780)
+
+Nice to haves:
+  - rectangle (filled), circle (filled), image (external converter)
+  - graphics 2"4 LCD
+  - targets: Pi, Liliypad85, ESP8266, ST32, MCP430
+  - LCD/button shield
+  - use and provide ranges (instead of x, y for loops)
+  - add an I2C temp sensor for Leo of iets anders
+  - I2C read, pcf8574a, demo: copy 1 to 2
+  - use an abstraction instead of copied code in the extenders one_pin => pin_out_through_buffer
+  - uno A/D, test with LCD shield
+  - i2c hd44780 LCD
+  - more pin/port cross type decorators
+
+Misc:
+  - meer examples lpc1114 - need the hardware!
+  - db103 uart?
+  - uart gebruikt??
+  - rtos??
+  - images licences!!
+  - check all documentation
+  - meer tests voor hwlib::string
+  - bmptk...
+  - bmptk blink examples
+  - linux
+  - esp8266 - eerste in bmptk
+  - switch due to full speed??
+  - geweer hardware aanpassen (private repository??)
+  - oled spi, hw spi
+  - graphics buffering via buffering::buffered -> ook in text
+  - delays moeten 16-bit parameter Zijn ivm AVR en MSP430?
+  - uno hello baudrate klopt niet
+
+     lpc due uno
+empty 1224 120 176
+blink 1268! 420 680
+- why is blink uno large??
+
+make tool to extract this kind of info?
+
+bmptk => use usbasp2, has no serial (include uno bootloader?)
+but possible with separate serial!
+
 ================================
 check
 ================================
