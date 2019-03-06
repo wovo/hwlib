@@ -66,7 +66,6 @@
 /// - copy-protect relevant classes like i2c transaction
 /// - SPI write/read single byte
 /// - lines/circles demo optional frame (parameter)? or frame decorator?
-/// - compare i2c and spi
 /// - more general text (buffering, generator functions, conversions)
 /// - check more files, not done yet!
 /// - due demos' rename / renumber

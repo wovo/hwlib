@@ -114,13 +114,11 @@ public:
       
    public:    
    
-      /// \brief
       /// destructor: deselect the sel pin
       ~spi_transaction(){
          sel.write( 1 );          
       }
 
-      /// \brief
       /// read and write data (raw arrays)
       ///      
       /// This function simultaneously writes n bytes 
@@ -239,9 +237,9 @@ public:
 class spi_bus_bit_banged_sclk_mosi_miso : public spi_bus {
 private:
 
-   pin_out & sclk, & mosi;
-
-   pin_in & miso;
+   pin_direct_from_out_t sclk;
+   pin_direct_from_out_t mosi;
+   pin_direct_from_in_t  miso;
    
    // very crude;
    // delay should be a constructor parameter
@@ -295,13 +293,13 @@ public:
    /// the unused pin argument can be specified as pin_out_dummy or
    /// pin_in_dummy.
    spi_bus_bit_banged_sclk_mosi_miso( 
-      pin_out & sclk, 
-      pin_out & mosi, 
-      pin_in & miso 
+      pin_out & _sclk, 
+      pin_out & _mosi, 
+      pin_in & _miso 
    ):
-      sclk( sclk ), 
-      mosi( mosi ), 
-      miso( miso )
+      sclk( direct( sclk ) ), 
+      mosi( direct( mosi ) ), 
+      miso( direct( miso ) )
    {
       sclk.write( 0 );
    }
