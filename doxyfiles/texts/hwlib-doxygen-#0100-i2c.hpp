@@ -29,7 +29,7 @@
 ///
 /// =========================================================================
 ///
-/// \section i2c-transactions transactions
+/// \section i2c-transaction=format transaction format
 ///
 /// An I2C transaction is either a read transaction or a write transaction.
 /// In both cases, the transaction starts with the master transmitting a 
@@ -160,20 +160,76 @@
 ///
 /// \section i2c-transactions i2c transactions
 ///
-/// An i2xc transaction encompasses a complete read or write transaction.
+/// An i2c transaction encompasses a complete read or write transaction.
 /// A transaction is created from an i2c_bus object and the slave address.
 /// The transaction can be used to read (for a read transaction) or write 
 /// (for a write transaction) data.
 ///
 /// functions for a read transaction object | effect
 /// --------------------------------------- | -------------------- 
-/// read(d)                                 | read the single byte d
+/// read( d )                               | read the single byte d
 /// read( d, n )                            | read n bytes (into d)
 ///
 ///
 /// functions for a write transaction object | effect
 /// ---------------------------------------- | -------------------- 
-/// write(d)                                 | write the single byte d
+/// write( d )                               | write the single byte d
 /// write( d, n )                            | write n bytes (into d)
 ///
+///
+/// <BR>
+///
+/// =========================================================================
+///
+/// \section i2c-channel i2c channel
+///
+/// An i2c channel astract the communication over an i2c bus to a specifid
+/// slave, identified by its slave address. And i2c channel is created
+/// from an i2c bus by providing the slave address.
+///
+/// i2c channel attributes and functions     | contains
+/// ---------------------------------------- | -------------------- 
+/// primitives                               | low-level operations
+/// transactions.read()                      | creates a read transaction
+/// transactions.write()                     | creates a write transaction
+/// read( d )                                | performs a single byte read transaction
+/// read( d, n )                             | performs an n byte read transaction
+/// write( d )                               | performs a single byte write transaction
+/// write( d, n )                            | performs an n byte write transaction
+///
+///
+/// <BR>
+///
+/// =========================================================================
+///
+/// \section i2c-bus i2c bus
+///
+/// An i2c bus object represents an i2c bus.
+/// An i2c bus can be used
+///    - through its primitives
+///    - by read or write transactions, which specify the slave
+///    - by creating a channel to a slave, 
+///      and using the operations of that channel
+///
+
+
+
+/// A \ref hwlib::i2c_bus_bit_banged_scl_sda
+/// "bit-banged i2c bus implementation" is provided.
+/// An object of this class is constructed from the two pins (scl and scd),
+/// which must be pin_oc pins.
+///
+/// i2c bus attributes and functions     | contains
+/// ---------------------------------------- | -------------------- 
+/// primitives                               | low-level operations
+/// transactions.read()                      | creates a read transaction
+/// transactions.write()                     | creates a write transaction
+/// read( d )                                | performs a single byte read transaction
+/// read( d, n )                             | performs an n byte read transaction
+/// write( d )                               | performs a single byte write transaction
+/// write( d, n )                            | performs an n byte write transaction
+///
+
+/// 
+
 
