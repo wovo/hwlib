@@ -67,8 +67,8 @@
 /// \ref hwlib::color::red "rad"                        | red intensity
 /// \ref hwlib::color::green "green"                    | green intensity
 /// \ref hwlib::color::blue "blue"                      | blue intensity
-/// \ref hwlib::color::color(r,g,b) "color(r,g,b)"      | construct a color from its components
-/// \ref hwlib::color::color(v) "color(v)"              | construct a color from its 24-bit RGB value
+/// \ref hwlib::color::color(uint_fast32_t red,uint_fast32_t green,uint_fast32_t blue,bool transparent) "color(r,g,b)"      | construct a color from its components
+/// \ref hwlib::color::color(uint_fast32_t) "color(v)"              | construct a color from its 24-bit RGB value
 /// \ref hwlib::color::operator- "-"                    | yields the inverse of a color
 /// \ref hwlib::color::operator== "=="                  | tests for equality
 /// \ref hwlib::color::operator!= "!="                  | tests for inequality
@@ -77,7 +77,7 @@
 /// The following color constants are available:
 /// - \ref hwlib::black "black"
 /// - \ref hwlib::white "white"    
-/// - \ref hwlib::red "rad"  
+/// - \ref hwlib::red "red"  
 /// - \ref hwlib::green "green"    
 /// - \ref hwlib::blue "blue"    
 /// - \ref hwlib::gray "gray"     

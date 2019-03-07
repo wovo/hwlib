@@ -68,9 +68,9 @@ public:
    /// The arguments are integers, but they are clipped
    /// to the 0..255 range by the constructor.   
    constexpr color( 
-      uint8_t red, 
-      uint8_t green, 
-      uint8_t blue, 
+      uint_fast32_t red, 
+      uint_fast32_t green, 
+      uint_fast32_t blue, 
       bool transparent = false 
    ): 
       is_transparent{ transparent },

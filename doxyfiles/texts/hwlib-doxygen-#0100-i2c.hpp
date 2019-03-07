@@ -17,10 +17,11 @@
 ///
 /// \section i2c-hardware hardware
 ///
-/// In its simplest form, an I2C bus has one master and a number of slaves
+/// In its simplest form, an i2c bus has one master and a number of slaves
 /// that are connected by two wires: SCL (clock) and SDA (data). 
 /// Both lines are pulled up by pull-up resistor, and can (only) 
-/// be pulled down by a connected chip (open-collector).
+/// be pulled down by a connected chip (open-collector,
+/// hwlib pin type \ref hwlib::pin_oc "pin_oc").
 ///
 /// \image html i2c-bus.png
 ///
@@ -29,9 +30,9 @@
 ///
 /// =========================================================================
 ///
-/// \section i2c-transaction=format transaction format
+/// \section i2c-transaction-format transaction formats
 ///
-/// An I2C transaction is either a read transaction or a write transaction.
+/// An i2c transaction is either a read transaction or a write transaction.
 /// In both cases, the transaction starts with the master transmitting a 
 /// control byte, which contains the address of the slave chip, and one bit
 /// that indicates whether it is a read or a write transaction.
@@ -51,7 +52,7 @@
 ///
 /// =========================================================================
 ///
-/// \section i2c-bits bit transfer 
+/// \section i2c-bits bit-level signaling
 ///
 /// At the bit level, master generates clock pulses by pulling the
 /// SCL line low. While the SCL is low, the master or slave can put a bit
@@ -63,13 +64,6 @@
 /// the SDA line is driven by the device on the bus that sends the bit.
 ///
 /// \image html i2c-bit-level.png 
-///
-///
-/// <BR>
-///
-/// =========================================================================
-///
-/// \section i2c-specials special conditions
 ///
 /// Two special conditions are used.
 /// To signal the start (S) of a transaction, the sda is pulled low while
@@ -101,11 +95,12 @@
 /// The common trick is that a read addresses the last address specified by 
 /// a (previous) write transaction.
 /// Hence to read from address X first a write is done to address X, but
-/// the transaction stops after the X, hence nothing is written,
+/// the transaction stops after the X.
+/// Hence nothing is written,
 /// but this sets the address pointer inside the slave chip.
 /// Now a read transaction reads from this address.
 ///
-/// As always, consult the datasheet of the chip for the details.
+/// As always, consult the datasheet of the chip for the details!
 ///
 ///
 /// <BR>
@@ -125,33 +120,75 @@
 ///
 /// references:
 /// - <a href="http://www.nxp.com/documents/user_manual/UM10204.pdf">
-///    I2C bus specification and user manual</a> (pdf)
+///    I2C bus specification and user manual (pdf)</a>
 /// - <a href="http://i2c.info/i2c-bus-specification">
-///    I2C Bus Specification</A> (info page)
+///    I2C Bus Specification (info page)</A>
 /// - <a href="https://en.wikipedia.org/wiki/I2C">
-///    I2C Bus</A> (wikipedia)
+///    I2C Bus (wikipedia)</A>
 ///
 ///
 /// <BR>
 ///
 /// =========================================================================
 ///
-/// \section i2c-primitives i2c primitives abstraction
+/// \section i2c-bus i2c bus
 ///
-/// The class i2c_primitives abstracts the primitive i2c operations, 
-/// on which the higher-level read and write transactions can 
-/// be implemented. 
-/// In most cases it is advised to use i2c transactions.
+/// An i2c bus object represents an i2c bus.
+/// An i2c bus can be used (in order of preference)
+///    - by creating a channel to a slave
+///      and using the operations of that channel
+///    - by read or write transactions or a transaction object, 
+///      which specify the slave
+///    - through its primitives
 ///
-/// function                  | effect
-/// ------------------------- | ------------------------------------------
-/// read_ack()                | read and return an (expected) ack bit
-/// write_ack()               | write an ack bit
-/// write_nack()              | read and ack bit
-/// write_byte( b )           | write one byte (8 bits)
-/// read_byte( b )            | read one byte (8 bits)
-/// write( d, n )   |         | write n bytes (frm d )
-/// read( d, n )              | read n bytes (into d)
+/// i2c bus attributes and functions     | use
+/// ------------------------------------ | -------------------- 
+/// \ref hwlib::i2c_bus::channel "channel( s )"                         | creates a channel to slave s
+/// \ref hwlib::i2c_bus::read "read( s, d )"                         | performs a single byte read transaction
+/// \ref hwlib::i2c_bus::read "read( s, d, n )"                      | performs an n byte read transaction
+/// \ref hwlib::i2c_bus::write "write( s, d )"                        | performs a single byte write transaction
+/// \ref hwlib::i2c_bus::write "write( s, d, n )"                     | performs an n byte write transaction
+/// \ref hwlib::i2c_bus_transactions::read "transactions.read( s )"               | creates a read transaction
+/// \ref hwlib::i2c_bus_transactions::write "transactions.write( s )"              | creates a write transaction
+/// \ref hwlib::i2c_primitives "primitives"                           | low-level operations
+///
+/// The read and write operations are easier to use than a transaction, 
+/// but require the data to be read or written is one contiguous block.
+///
+/// A \ref hwlib::i2c_bus_bit_banged_scl_sda
+/// "bit-banged i2c bus implementation" is provided.
+/// An object of this class is constructed from the two pins (scl and scd),
+/// which must be \ref hwlib::pin_oc "pin_oc" pins.
+///
+///
+/// <BR>
+///
+/// =========================================================================
+///
+/// \section i2c-channel i2c channel
+///
+/// An i2c channel abstracts the communication over an i2c bus 
+/// to a specific slave. An i2c channel is created
+/// from an i2c bus by providing the slave address.
+///
+/// An i2c channel can be used (in order of preference)
+///    - by read or write transactions on a single byte or a block of bytes
+///    - by creating a read or write transaction 
+///      and using the operations of that transaction
+///    - through its primitives (which are same as the i2c bus primitives)
+///
+/// The read and write operations are easier to use than a transaction, 
+/// but require the data to be read or written is one contiguous block.
+///
+/// i2c channel attributes and functions     | use
+/// ---------------------------------------- | -------------------- 
+/// \ref hwlib::i2c_channel::read "read( d )"                                | performs a single byte read transaction
+/// \ref hwlib::i2c_channel::read "read( d, n )"                             | performs an n byte read transaction
+/// \ref hwlib::i2c_channel::read "write( d )"                               | performs a single byte write transaction
+/// \ref hwlib::i2c_channel::read "write( d, n )"                            | performs an n byte write transaction
+/// \ref hwlib::i2c_channel_transactions::read "transactions.read()"                      | creates a read transaction
+/// \ref hwlib::i2c_channel_transactions::write "transactions.write()"                     | creates a write transaction
+/// \ref hwlib::i2c_primitives "primitives"                               | low-level operations
 ///
 ///
 /// <BR>
@@ -164,72 +201,44 @@
 /// A transaction is created from an i2c_bus object and the slave address.
 /// The transaction can be used to read (for a read transaction) or write 
 /// (for a write transaction) data.
+/// A transaction allows for multiple read or write operations
+/// within a single transaction.
+/// A transaction is started (control byte send) by the transaction constructor.
+/// A transaction is closed (final NACK send) by the transaction destructor.
 ///
-/// functions for a read transaction object | effect
-/// --------------------------------------- | -------------------- 
-/// read( d )                               | read the single byte d
-/// read( d, n )                            | read n bytes (into d)
+/// i2c read transaction functions     | use
+/// ---------------------------------- | -------------------- 
+/// \ref hwlib::i2c_read_transaction::read_byte "read_byte()"                          | performs a single byte read
+/// \ref hwlib::i2c_read_transaction::read(uint8_t data[],size_t n) "read( d, n )"                       | performs an n byte read
 ///
-///
-/// functions for a write transaction object | effect
-/// ---------------------------------------- | -------------------- 
-/// write( d )                               | write the single byte d
-/// write( d, n )                            | write n bytes (into d)
-///
-///
-/// <BR>
-///
-/// =========================================================================
-///
-/// \section i2c-channel i2c channel
-///
-/// An i2c channel astract the communication over an i2c bus to a specifid
-/// slave, identified by its slave address. And i2c channel is created
-/// from an i2c bus by providing the slave address.
-///
-/// i2c channel attributes and functions     | contains
-/// ---------------------------------------- | -------------------- 
-/// primitives                               | low-level operations
-/// transactions.read()                      | creates a read transaction
-/// transactions.write()                     | creates a write transaction
-/// read( d )                                | performs a single byte read transaction
-/// read( d, n )                             | performs an n byte read transaction
-/// write( d )                               | performs a single byte write transaction
-/// write( d, n )                            | performs an n byte write transaction
+/// i2c write transaction functions    | use
+/// ---------------------------------- | -------------------- 
+/// \ref hwlib::i2c_write_transaction::write(uint8_t) "write( d )"                         | performs a single byte write
+/// \ref hwlib::i2c_write_transaction::write "write(const uint8_t data[],size_t n)"                      | performs an n byte write
 ///
 ///
 /// <BR>
 ///
 /// =========================================================================
 ///
-/// \section i2c-bus i2c bus
+/// \section i2c-primitives i2c primitives abstraction
 ///
-/// An i2c bus object represents an i2c bus.
-/// An i2c bus can be used
-///    - through its primitives
-///    - by read or write transactions, which specify the slave
-///    - by creating a channel to a slave, 
-///      and using the operations of that channel
+/// The class i2c_primitives abstracts the primitive i2c operations, 
+/// from which the higher-level read and write transactions 
+/// are implemented. 
 ///
-
-
-
-/// A \ref hwlib::i2c_bus_bit_banged_scl_sda
-/// "bit-banged i2c bus implementation" is provided.
-/// An object of this class is constructed from the two pins (scl and scd),
-/// which must be pin_oc pins.
+/// function                  | effect
+/// ------------------------- | ------------------------------------------
+/// read_ack()                | read and return an (expected) ack bit
+/// write_ack()               | write an ack bit
+/// write_nack()              | read and ack bit
+/// write_byte( b )           | write one byte (8 bits)
+/// read_byte( b )            | read one byte (8 bits)
+/// write( d, n )             | write n bytes (from d )
+/// read( d, n )              | read n bytes (into d)
 ///
-/// i2c bus attributes and functions     | contains
-/// ---------------------------------------- | -------------------- 
-/// primitives                               | low-level operations
-/// transactions.read()                      | creates a read transaction
-/// transactions.write()                     | creates a write transaction
-/// read( d )                                | performs a single byte read transaction
-/// read( d, n )                             | performs an n byte read transaction
-/// write( d )                               | performs a single byte write transaction
-/// write( d, n )                            | performs an n byte write transaction
 ///
-
+/// <BR>
 /// 
 
 

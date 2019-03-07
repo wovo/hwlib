@@ -238,6 +238,16 @@ public:
       primitives.read_ack();		 
    }   
 
+   /// read a single bytes
+   ///
+   /// This function reads and returns  a single byte from the slave
+   uint_fast8_t read_byte(){	 
+      uint8_t data;
+      primitives.read( first_write, data, 1 );			  
+      first_write = false;
+      return data;
+   }
+   
    /// read bytes
    ///
    /// This function reads n bytes from the slave to data[].
