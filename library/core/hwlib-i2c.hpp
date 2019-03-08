@@ -87,7 +87,7 @@ public:
    /// output (write) a single byte
    ///
    /// The default implementation outputs the 8 bits.
-   virtual void write_byte( uint_fast8_t x ){
+   virtual void write( uint_fast8_t x ){
       for( uint_fast8_t i = 0; i < 8; i++ ){
          write_bit( ( x & 0x80 ) != 0 );
          x = x << 1;
@@ -105,7 +105,7 @@ public:
    ){
       for( size_t i = 0; i < n; i++ ){
          (void) read_ack();
-         write_byte( data[ i ] );
+         write( data[ i ] );
       }   
    }      
 
@@ -171,7 +171,7 @@ public:
        primitives( primitives )
    {
       primitives.write_start();
-      primitives.write_byte( a << 1 );		  
+      primitives.write( a << 1 );		  
    }
    
    /// write a single byte
@@ -234,7 +234,7 @@ public:
        first_write( false )
    {
       primitives.write_start();
-      primitives.write_byte( ( a << 1 ) | 0x01 );		
+      primitives.write( ( a << 1 ) | 0x01 );		
       primitives.read_ack();		 
    }   
 
@@ -243,7 +243,7 @@ public:
    /// This function reads and returns  a single byte from the slave
    uint_fast8_t read_byte(){	 
       uint8_t data;
-      primitives.read( first_write, data, 1 );			  
+      primitives.read( first_write, &data, 1 );			  
       first_write = false;
       return data;
    }

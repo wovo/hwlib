@@ -107,7 +107,7 @@
 ///
 /// =========================================================================
 ///
-/// \section i2c-ownership I2C bus intellectual ownership
+/// \section i2c-ownership I2C ownership
 ///
 /// The I2C bus was invented by Philips, who had a patent on it. 
 /// Hence other manufacturers that implemented the I2C bus on their 
@@ -182,12 +182,12 @@
 ///
 /// i2c channel attributes and functions     | use
 /// ---------------------------------------- | -------------------- 
-/// \ref hwlib::i2c_channel::read "read( d )"                                | performs a single byte read transaction
-/// \ref hwlib::i2c_channel::read "read( d, n )"                             | performs an n byte read transaction
-/// \ref hwlib::i2c_channel::read "write( d )"                               | performs a single byte write transaction
-/// \ref hwlib::i2c_channel::read "write( d, n )"                            | performs an n byte write transaction
-/// \ref hwlib::i2c_channel_transactions::read "transactions.read()"                      | creates a read transaction
-/// \ref hwlib::i2c_channel_transactions::write "transactions.write()"                     | creates a write transaction
+/// \ref hwlib::i2c_channel::read "read( d )"                             | performs a single byte read transaction
+/// \ref hwlib::i2c_channel::read "read( d, n )"                          | performs an n byte read transaction
+/// \ref hwlib::i2c_channel::read "write( d )"                            | performs a single byte write transaction
+/// \ref hwlib::i2c_channel::read "write( d, n )"                         | performs an n byte write transaction
+/// \ref hwlib::i2c_channel_transactions::read "transactions.read()"      | creates a read transaction
+/// \ref hwlib::i2c_channel_transactions::write "transactions.write()"    | creates a write transaction
 /// \ref hwlib::i2c_primitives "primitives"                               | low-level operations
 ///
 ///
@@ -209,33 +209,39 @@
 /// i2c read transaction functions     | use
 /// ---------------------------------- | -------------------- 
 /// \ref hwlib::i2c_read_transaction::read_byte "read_byte()"                          | performs a single byte read
-/// \ref hwlib::i2c_read_transaction::read(uint8_t data[],size_t n) "read( d, n )"                       | performs an n byte read
+/// \ref hwlib::i2c_read_transaction::read(uint8_t data[],size_t n) "read( d, n )"     | performs an n byte read
+///
+/// <BR>
 ///
 /// i2c write transaction functions    | use
 /// ---------------------------------- | -------------------- 
-/// \ref hwlib::i2c_write_transaction::write(uint8_t) "write( d )"                         | performs a single byte write
-/// \ref hwlib::i2c_write_transaction::write "write(const uint8_t data[],size_t n)"                      | performs an n byte write
+/// \ref hwlib::i2c_write_transaction::write(uint8_t) "write( d )"                     | performs a single byte write
+/// \ref hwlib::i2c_write_transaction::write "write(const uint8_t data[],size_t n)"    | performs an n byte write
 ///
 ///
 /// <BR>
 ///
 /// =========================================================================
 ///
-/// \section i2c-primitives i2c primitives abstraction
+/// \section i2c-primitives i2c primitives 
 ///
 /// The class i2c_primitives abstracts the primitive i2c operations, 
 /// from which the higher-level read and write transactions 
 /// are implemented. 
+/// These are the operations that must be implemented by an i2c
+/// implementation.
 ///
-/// function                  | effect
+/// As an i2c user, you should probably never use these functions.
+///
+/// function                  | use
 /// ------------------------- | ------------------------------------------
-/// read_ack()                | read and return an (expected) ack bit
-/// write_ack()               | write an ack bit
-/// write_nack()              | read and ack bit
-/// write_byte( b )           | write one byte (8 bits)
-/// read_byte( b )            | read one byte (8 bits)
-/// write( d, n )             | write n bytes (from d )
-/// read( d, n )              | read n bytes (into d)
+/// \ref hwlib::i2c_primitives::read_ack read_ack()      | read and return an (expected) ack bit
+/// \ref hwlib::i2c_primitives::write_ack write_ack()    | write an ack bit
+/// \ref hwlib::i2c_primitives::write_back write_nack()  | read and ack bit
+/// \ref hwlib::i2c_primitives::write_byte write( b )    | write one byte (8 bits)
+/// \ref hwlib::i2c_primitives::read_byte read_byte()    | read one byte (8 bits)
+/// \ref hwlib::i2c_primitives::write write( d, n )      | write n bytes (from d )
+/// \ref hwlib::i2c_primitives::read read( d, n )        | read n bytes (into d)
 ///
 ///
 /// <BR>
