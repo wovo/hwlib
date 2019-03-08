@@ -14,48 +14,49 @@
 /// @file
 
 
-/// \page buffering Buffering
-///
-/// For efficiency, some operations are (potentially) buffered. 
-/// A direct operation will have an immediate external effect 
-/// (for output operations) or work on a fresh sample of the external 
-/// conditions (for input operations).
-/// A buffered operation might have its effect delayed up to the
-/// next flush operation (output), or work on input that is as old
-/// as the most recent refresh() operation.
-///
-/// Operations on \ref pins "pins", \ref ports "ports", 
-/// AD-inputs, DA-outputs, character streams,
-/// graphic windows, etc. are by default (potentially) buffered.
-/// To ensure direct effects, all reads must be preceded by a refresh call, 
-/// and all writes must be succeeded by a flush call
+/// \page spi-bus spi bus   
 /// 
-/// \snippet "db103\pin-copy\main.cpp" [Doxygen flush example]
+/// The SPI (Serial Peripheral Interface) protocol 
+/// is based on shift registers. 
+/// The master (in most cases the micro-controller) generates
+/// clock pulses (SCLK), and on each pulse one bit of data is transferred
+/// from the shift register inside the master to the shift register inside
+/// the slave, AND one bit is transferred in the other direction.
+/// After N clock pulses, all N data bits in the master and the slave 
+/// are exchanged.
+/// The MOSI line transfers data from master to slave (Master Out Slave In),
+/// the MISO (Master In Slave Out) line transfers data 
+/// from the slave to the master.
 ///
-/// The direct() decorator automates this, making the refresh() 
-/// and flush() calls unnecessary. 
+/// \image html spi-master-slave.png
+///
+/// The SS (Slave Select) line is used to signal the start and end of a 
+/// SPOI transfer. In most cases, the select line is active low.
+///
+/// \image html spi-select-1.png
+///
+/// A SPI bus can have multiple slaves. 
+/// All slaves (and the master) share the MOSI, MISO and SLCK lines. 
+/// Each slave has a separate SS line, that is used to activate
+/// a single slave for a transfer.
+///
+/// \image html spi-select-2.png
+///
+/// The SPI bus is a de-facto standard: there is no official document
+/// that defines it, but various manufacturers agree on how it should work
+/// and (more or less!) implement it the same. But there are differences
+/// that might give problems: 
+///    - the polarity (active low or active high) of the SS line
+///    - the initial level of the clock 
+///    - the polarity of the clock 
+///       (the clock edge on which the master and slave transfer data)
+///    - the (maximum) clock frequency
+///
+/// As always, consult the datasheet of the chip for the details.
 /// 
-/// \snippet "db103\pin-copy\main.cpp" [Doxygen direct example]
-///
-/// Using buffered operations can produce a significant speedup
-/// because the actual output operation is postponed, and can 
-/// handle all pending changes in one go.
-///
-/// The pcf8574a is an i2c I/O extender that provided 8 open-collector
-/// pins. The hwlib::pcf8574a class is buffered: when a value is written
-/// to a pin, it is actually written to a buffer in RAM. A flush call
-/// writes this buffer to the chip, but only when it has beenm written to
-/// since the last flush.
-/// When a flush call is done after each write, 
-/// each flush writes to the chip. 
-/// On a 12 MHz LPC1114, four writes and flushes take 3.8 ms.
-///
-/// \snippet "db103\pcf8574a-timing\main.cpp" [Doxygen flush example]
-///
-/// When the flush() calls are done after the four write() calls, 
-/// it all takes only 1.0 ms. 
-/// Most of this is spent in the first flush() call, the others
-/// have nothing left to do.
-///
-/// \snippet "db103\pcf8574a-timing\main.cpp" [Doxygen buffered example]
-///
+/// references:
+/// - <a href="https://embeddedmicro.com/tutorials/mojo/serial-peripheral-interface-spi">
+///    SPI explanation</A> (Embedded Micro Forum)
+/// - <a href="https://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus">
+///    Serial Peripheral Bus</A> (wikipedia)
+///  

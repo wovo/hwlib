@@ -87,7 +87,7 @@ public:
    /// output (write) a single byte
    ///
    /// The default implementation outputs the 8 bits.
-   virtual void write( uint_fast8_t x ){
+   virtual void write( uint8_t x ){
       for( uint_fast8_t i = 0; i < 8; i++ ){
          write_bit( ( x & 0x80 ) != 0 );
          x = x << 1;

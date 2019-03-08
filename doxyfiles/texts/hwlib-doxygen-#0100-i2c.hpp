@@ -237,10 +237,10 @@
 /// ------------------------- | ------------------------------------------
 /// \ref hwlib::i2c_primitives::read_ack read_ack()      | read and return an (expected) ack bit
 /// \ref hwlib::i2c_primitives::write_ack write_ack()    | write an ack bit
-/// \ref hwlib::i2c_primitives::write_back write_nack()  | read and ack bit
-/// \ref hwlib::i2c_primitives::write_byte write( b )    | write one byte (8 bits)
+/// \ref hwlib::i2c_primitives::write_nack write_nack()  | read and ack bit
+/// \ref hwlib::i2c_primitives::write(uint8_t)  write( b )    | write one byte (8 bits)
 /// \ref hwlib::i2c_primitives::read_byte read_byte()    | read one byte (8 bits)
-/// \ref hwlib::i2c_primitives::write write( d, n )      | write n bytes (from d )
+/// \ref hwlib::i2c_primitives::write write(uint8_t data[],size_t n)      | write n bytes (from d )
 /// \ref hwlib::i2c_primitives::read read( d, n )        | read n bytes (into d)
 ///
 ///
