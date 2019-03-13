@@ -154,6 +154,18 @@ volatile uint8_t & HWLIB_WEAK port_data( uint_fast8_t port ){
    // doesn't return
 }
 
+volatile uint8_t & HWLIB_WEAK port_input( uint_fast8_t port ){
+   switch( port ){
+      // case 0  : return DDRA;
+      case 1  : return PINB;
+      case 2  : return PINC;
+      case 3  : return PIND;
+      default : break;
+   }   
+   HWLIB_PANIC_WITH_LOCATION; 
+   // doesn't return
+}
+
 volatile uint8_t & HWLIB_WEAK port_direction( uint_fast8_t port ){
    switch( port ){
       // case 0  : return DDRA;
@@ -219,7 +231,7 @@ public:
 class pin_in : public hwlib::pin_in {
 private:
 
-   volatile uint8_t & port;
+   volatile uint8_t & port_in;
    uint8_t mask;
  
 public:
@@ -231,7 +243,7 @@ public:
    ///
    /// This constructor sets the pin direction to input.
    pin_in( uint8_t port_number, uint8_t pin_number ): 
-      port{ port_data( port_number ) }, 
+      port_in{ port_input( port_number ) }, 
       mask( 0x1 << pin_number )
    {
       configure_as_gpio( port_number, pin_number );
@@ -251,7 +263,7 @@ public:
    {}
    
    bool read() override {
-      return ( port & mask ) != 0;   
+      return ( port_in & mask ) != 0;   
    }
    
    void refresh() override {}
@@ -261,7 +273,7 @@ public:
 /// pin_out implementation for a ATMega328P
 class pin_out : public hwlib::pin_out {
 private:
-   volatile uint8_t & port;
+   volatile uint8_t & port_out;
    uint8_t mask;
    
 public:
@@ -273,7 +285,7 @@ public:
    ///
    /// This constructor sets the pin direction to output.
    pin_out( uint8_t port_number, uint8_t pin_number ): 
-      port{ port_data( port_number ) }, 
+      port_out{ port_data( port_number ) }, 
       mask( 0x1 << pin_number )
    {
       configure_as_gpio( port_number, pin_number );
@@ -294,9 +306,9 @@ public:
    
    void write( bool v ) override {
       if( v ){
-         port |= mask;
+         port_out |= mask;
       } else {
-         port &= ~mask;
+         port_out &= ~mask;
       }
    }
 
@@ -308,7 +320,8 @@ public:
 class pin_in_out : public hwlib::pin_in_out {
 private:
 
-   volatile uint8_t & port;
+   volatile uint8_t & port_in;
+   volatile uint8_t & port_out;
    uint8_t port_number;
    uint8_t mask;
    
@@ -325,7 +338,8 @@ public:
    /// to input or output, a direction_set function must
    /// be called to do so.
    pin_in_out( uint8_t port_number, uint8_t pin_number ): 
-      port{ port_data( port_number ) }, 
+      port_in{ port_input( port_number ) }, 
+      port_out{ port_data( port_number ) }, 
       port_number( port_number ),
       mask( 0x1 << pin_number )
    {
@@ -351,7 +365,7 @@ public:
    }
    
    bool read() override {
-      return ( port & mask ) != 0;   
+      return ( port_in & mask ) != 0;   
    }
    
    virtual void direction_set_output() override {
@@ -360,9 +374,9 @@ public:
    
    void write( bool v ) override {
       if( v ){
-         port |= mask;
+         port_out |= mask;
       } else {
-         port &= ~mask;
+         port_out &= ~mask;
       }
    }
    
@@ -378,7 +392,8 @@ public:
 class pin_oc : public hwlib::pin_oc {
 private:
 
-   volatile uint8_t & port;
+   volatile uint8_t & port_in;
+   volatile uint8_t & port_out;
    uint8_t port_number;
    uint8_t mask;
    
@@ -393,7 +408,8 @@ public:
    ///
    /// This constructor sets the pin to high (high-impedance). 
    pin_oc( uint8_t port_number, uint8_t pin_number ): 
-      port{ port_data( port_number ) }, 
+      port_in{ port_input( port_number ) }, 
+      port_out{ port_data( port_number ) }, 
       port_number( port_number ),
       mask( 0x1 << pin_number )
    {
@@ -413,7 +429,7 @@ public:
    {}    
    
    bool read() override {
-      return ( port & mask ) != 0;   
+      return ( port_in & mask ) != 0;   
    }   
    
    void write( bool v ) override {
@@ -421,7 +437,7 @@ public:
          port_direction( port_number ) &= ~ mask;
       } else {
          port_direction( port_number ) |= mask;
-         port &= ~mask;
+         port_out &= ~mask;
       }
    }
 
