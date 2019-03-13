@@ -42,7 +42,7 @@ public:
       return slave.number_of_pins();
    }   
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       slave.write( x );
    }	  
    
@@ -70,7 +70,7 @@ public:
       return slave.number_of_pins();
    }
 
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       slave.write( x );
    }	
 
@@ -101,7 +101,7 @@ public:
       return slave.number_of_pins();
    }   
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       slave.write( x );
    }
 
@@ -146,7 +146,7 @@ public:
       return slave.number_of_pins();
    }   
     
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return slave.read();
    }	  
       
@@ -174,7 +174,7 @@ public:
       return slave.number_of_pins();
    }	
 	
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return slave.read();
    }	  
       
@@ -204,7 +204,7 @@ public:
       return slave.number_of_pins();
    }
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return slave.read();
    }	  
       
@@ -256,11 +256,11 @@ public:
       // nothing more to do
    }
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return slave.read();
    }	  
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       if( is_output ){
          slave.write( x );
       }		 
@@ -306,11 +306,11 @@ public:
       slave.direction_set_output(); 
    }
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return slave.read();
    }	  
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       slave.write( x );
    }
 
@@ -359,11 +359,11 @@ public:
       return slave.number_of_pins();
    }
 
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return slave.read();
    }	  
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       slave.write( x );
    }
 

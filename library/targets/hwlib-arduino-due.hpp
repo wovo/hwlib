@@ -851,6 +851,8 @@ void uart_putc( char c ){
 namespace hwlib {
 
 namespace target = ::due;
+const auto target_chip  = target_chips::atsam3x8e;
+const auto target_board = target_boards::arduino_due;
    
 void wait_ns( int_fast32_t n );
 void wait_us( int_fast32_t n );

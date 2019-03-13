@@ -48,7 +48,7 @@ public:
    ///
    /// Before calling this function the port direction must have been 
    /// set to input by calling port_direction_set_input().     
-   virtual uint_fast8_t read() = 0;         
+   virtual uint_fast16_t read() = 0;         
    
    /// refresh the port buffer
    /// 
@@ -71,7 +71,7 @@ public:
    ///
    /// Before calling this function the port direction must have been 
    /// set to output by calling direction_set_output().    
-   virtual void write( uint_fast8_t x ) = 0;     
+   virtual void write( uint_fast16_t x ) = 0;     
    
    /// flush the port buffer
    /// 
@@ -108,7 +108,7 @@ public:
    virtual uint_fast8_t number_of_pins() = 0;
    
    /// @copydoc port_in_out::read()
-   virtual uint_fast8_t read() = 0; 
+   virtual uint_fast16_t read() = 0; 
 
    /// @copydoc port_in_out::refresh()
    virtual void refresh() = 0;
@@ -132,7 +132,7 @@ public:
    virtual uint_fast8_t number_of_pins() = 0;
    
    /// @copydoc port_in_out::write( uint_fast8_t x )
-   virtual void write( uint_fast8_t x ) = 0;     
+   virtual void write( uint_fast16_t x ) = 0;     
    
    /// @copydoc port_in_out::flush()
    virtual void flush() = 0;      
@@ -156,10 +156,10 @@ public:
    virtual uint_fast8_t number_of_pins() = 0;   
    
    /// @copydoc port_in_out::read()
-   virtual uint_fast8_t read() = 0;      
+   virtual uint_fast16_t read() = 0;      
 
    /// @copydoc port_in_out::write() 
-   virtual void write( uint_fast8_t x ) = 0;     
+   virtual void write( uint_fast16_t x ) = 0;     
 
    /// @copydoc port_in_out::refresh()
    virtual void refresh() = 0;   

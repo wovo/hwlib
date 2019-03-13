@@ -46,12 +46,12 @@ public:
       return slave.number_of_pins();
    }	  
    
-   void write( uint_fast8_t  v ) override {
+   void write( uint_fast16_t  v ) override {
       slave.write( v );
       slave.flush();
    }
    
-   uint_fast8_t  read() override { 
+   uint_fast16_t read() override { 
       slave.refresh();
       return slave.read();
    }
@@ -106,7 +106,7 @@ public:
       return slave.number_of_pins();
    }	  
    
-   uint_fast8_t  read() override { 
+   uint_fast16_t  read() override { 
       slave.refresh();
       return slave.read();
    }
@@ -145,7 +145,7 @@ public:
       return slave.number_of_pins();
    }	  
    
-   void write( uint_fast8_t  v ) override {
+   void write( uint_fast16_t  v ) override {
       slave.write( v );
 	  slave.flush();
    }
@@ -184,12 +184,12 @@ public:
       return slave.number_of_pins();
    }	  
    
-   void write( uint_fast8_t  v ) override {
+   void write( uint_fast16_t  v ) override {
       slave.write( v );
 	  slave.flush();
    }
    
-   uint_fast8_t read() override { 
+   uint_fast16_t read() override { 
       slave.refresh();
       return slave.read();
    }

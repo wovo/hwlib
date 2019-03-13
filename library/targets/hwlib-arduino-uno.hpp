@@ -430,6 +430,8 @@ public:
 namespace hwlib {
 
 namespace target = ::uno;
+const auto target_chip  = target_chips::atmega328p;
+const auto target_board = target_boards::arduino_uno;
    
 #ifdef _HWLIB_ONCE
    

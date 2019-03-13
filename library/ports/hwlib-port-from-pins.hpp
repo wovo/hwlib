@@ -26,20 +26,21 @@ namespace hwlib {
 
 /// port_in_out from pins class
 ///
-/// This class implements an input-only port made from port up to 8 pins.
+/// This class implements an input-only port made from port up to 10 pins.
 class port_in_out_from_pins_t : public port_in_out {
 private:
-   
+
+   static constexpr int max_pins = 16;
+
    uint_fast8_t _number_of_pins;  
 
-   // 8 must match the number of parameters of the constructor
-   pin_in_out * pins[ 8 ];   
+   pin_in_out * pins[ max_pins ];   
    
 public:
 
-   /// construct a port_out from up to 8 pin_outs
+   /// construct a port_out from up to 16 pin_outs
    ///
-   /// This constructor creates a port_out from up to 8 pin_in pins.
+   /// This constructor creates a port_out from up to 16 pin_in pins.
    /// The first pin is the lowest pin in the port, etc.
    port_in_out_from_pins_t(
       pin_in_out & p0 = pin_in_out_dummy,
@@ -49,11 +50,21 @@ public:
       pin_in_out & p4 = pin_in_out_dummy,
       pin_in_out & p5 = pin_in_out_dummy,
       pin_in_out & p6 = pin_in_out_dummy,
-      pin_in_out & p7 = pin_in_out_dummy
+      pin_in_out & p7 = pin_in_out_dummy,
+      pin_in_out & p8 = pin_in_out_dummy,
+      pin_in_out & p9 = pin_in_out_dummy,
+      pin_in_out & p10 = pin_in_out_dummy,
+      pin_in_out & p11 = pin_in_out_dummy,
+      pin_in_out & p12 = pin_in_out_dummy,
+      pin_in_out & p13 = pin_in_out_dummy,
+      pin_in_out & p14 = pin_in_out_dummy,
+      pin_in_out & p15 = pin_in_out_dummy
    ):
-      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7 }
+      pins{ 
+         &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, 
+         &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15 }
    {
-      for( _number_of_pins = 0; _number_of_pins < 8; ++_number_of_pins ){
+      for( _number_of_pins = 0; _number_of_pins < max_pins; ++_number_of_pins ){
          if( pins[ _number_of_pins ] == & pin_in_out_dummy ){
              break;
          }            
@@ -82,7 +93,7 @@ public:
       }
    }
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       uint_fast8_t result = 0;
       for( int_fast8_t i = _number_of_pins -1; i >=0; --i ){
          result = result << 1;
@@ -99,7 +110,7 @@ public:
       }         
    }      
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       for( uint_fast8_t i = 0; i < _number_of_pins; i++ ){
          pins[ i ]->write( ( x & 0x01 ) != 0 );
          x = x >> 1;
@@ -121,9 +132,9 @@ public:
 //
 // ==========================================================================
 
-/// input port from input pins calss
+/// input port from input pins
 //
-/// This class implements an input-only port made from port up to 8 pins.
+/// This class implements an input-only port made from port up to 16 pins.
 class port_in_from_pins_t : public port_in {
 private:
 
@@ -131,15 +142,14 @@ private:
    
    uint_fast8_t _number_of_pins;  
 
-   // 8 must match the number of parameters of the constructor
    pin_in * pins[ max_pins ];   
    
 public:
 
    /// \brief
-   /// construct a port_out from up to 8 pin_outs
+   /// construct a port_out from up to 16 pin_outs
    /// \details
-   /// This constructor creates a port_out from up to 8 pin_in pins.
+   /// This constructor creates a port_out from up to 16 pin_in pins.
    /// The first pin is the lowest pin in the port, etc.
    port_in_from_pins_t(
       pin_in & p0 = pin_in_dummy,
@@ -159,7 +169,9 @@ public:
       pin_in & p14 = pin_in_dummy,
       pin_in & p15 = pin_in_dummy							 
    ):
-      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15 }
+      pins{ 
+         &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, 
+         &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15 }
    {
       for( _number_of_pins = 0; _number_of_pins < max_pins; ++_number_of_pins ){
          if( pins[ _number_of_pins ] == & pin_in_dummy ){
@@ -172,7 +184,7 @@ public:
       return _number_of_pins;               
    }   
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       uint_fast8_t result = 0;  
       for( int_fast8_t i = _number_of_pins -1; i >=0; --i ){
          result = result << 1;
@@ -199,7 +211,7 @@ public:
 
 /// output port from output pins class
 ///
-/// This class implements an output-only port made from port up to 8 pins.
+/// This class implements an output-only port made from port up to 16 pins.
 class port_out_from_pins_t : public port_out {
 private:
 
@@ -207,7 +219,6 @@ private:
    
    uint_fast8_t _number_of_pins;  
 
-   // 8 must match the number of parameters of the constructor
    pin_out * pins[ max_pins ];   
    
 public:
@@ -235,7 +246,9 @@ public:
       pin_out & p14 = pin_out_dummy,
       pin_out & p15 = pin_out_dummy	
    ):
-      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15}
+      pins{ 
+         &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, 
+         &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15 }
    {
       for( _number_of_pins = 0; _number_of_pins < max_pins; ++_number_of_pins ){
          if( pins[ _number_of_pins ] == & pin_out_dummy ){
@@ -248,7 +261,7 @@ public:
       return _number_of_pins;               
    }   
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       for( uint_fast8_t i = 0; i < _number_of_pins; i++ ){
          pins[ i ]->write( ( x & 0x01 ) != 0 );
          x = x >> 1;
@@ -300,7 +313,9 @@ public:
       pin_oc & p14 = pin_oc_dummy,
       pin_oc & p15 = pin_oc_dummy	
    ):
-      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15}
+      pins{ 
+         &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, 
+         &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15 }
    {
       for( _number_of_pins = 0; _number_of_pins < max_pins; ++_number_of_pins ){
          if( pins[ _number_of_pins ] == & pin_oc_dummy ){
@@ -313,7 +328,7 @@ public:
       return _number_of_pins;               
    }   
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       for( uint_fast8_t i = 0; i < _number_of_pins; i++ ){
          pins[ i ]->write( ( x & 0x01 ) != 0 );
          x = x >> 1;
@@ -340,10 +355,12 @@ public:
 class port_oc_from_pins_t : public port_oc {
 private:
    
+   static constexpr int max_pins = 16;
+
    uint_fast8_t _number_of_pins;  
 
    // 8 must match the number of parameters of the constructor
-   pin_oc * pins[ 8 ];   
+   pin_oc * pins[ max_pins ];   
    
 public:
 
@@ -359,11 +376,21 @@ public:
       pin_oc & p4 = pin_oc_dummy,
       pin_oc & p5 = pin_oc_dummy,
       pin_oc & p6 = pin_oc_dummy,
-      pin_oc & p7 = pin_oc_dummy
+      pin_oc & p7 = pin_oc_dummy,
+      pin_oc & p8 = pin_oc_dummy,
+      pin_oc & p9 = pin_oc_dummy,
+      pin_oc & p10 = pin_oc_dummy,
+      pin_oc & p11 = pin_oc_dummy,
+      pin_oc & p12 = pin_oc_dummy,
+      pin_oc & p13 = pin_oc_dummy,
+      pin_oc & p14 = pin_oc_dummy,
+      pin_oc & p15 = pin_oc_dummy
    ):
-      pins{ &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7 }
+      pins{ 
+         &p0, &p1, &p2, &p3, &p4, &p5, &p6, &p7, 
+         &p8, &p9, &p10, &p11, &p12, &p13, &p14, &p15 }
    {
-      for( _number_of_pins = 0; _number_of_pins < 8; ++_number_of_pins ){
+      for( _number_of_pins = 0; _number_of_pins <  max_pins; ++_number_of_pins ){
          if( pins[ _number_of_pins ] == & pin_oc_dummy ){
              break;
          }            
@@ -374,7 +401,7 @@ public:
       return _number_of_pins;               
    }   
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       uint_fast8_t result = 0;
       for( int_fast8_t i = _number_of_pins -1; i >=0; --i ){
          result = result << 1;
@@ -385,7 +412,7 @@ public:
        return result;
    }
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       for( uint_fast8_t i = 0; i < _number_of_pins; i++ ){
          pins[ i ]->write( ( x & 0x01 ) != 0 );
          x = x >> 1;
@@ -424,7 +451,15 @@ port_in_out_from_pins_t port_in_out_from(
    pin_in_out & p4 = pin_in_out_dummy,
    pin_in_out & p5 = pin_in_out_dummy,
    pin_in_out & p6 = pin_in_out_dummy,
-   pin_in_out & p7 = pin_in_out_dummy
+   pin_in_out & p7 = pin_in_out_dummy,
+   pin_in_out & p8 = pin_in_out_dummy,
+   pin_in_out & p9 = pin_in_out_dummy,
+   pin_in_out & p10 = pin_in_out_dummy,
+   pin_in_out & p11 = pin_in_out_dummy,
+   pin_in_out & p12 = pin_in_out_dummy,
+   pin_in_out & p13 = pin_in_out_dummy,
+   pin_in_out & p14 = pin_in_out_dummy,
+   pin_in_out & p15 = pin_in_out_dummy
 );
 
 port_out_from_pins_t port_out_from(
@@ -435,7 +470,15 @@ port_out_from_pins_t port_out_from(
    pin_out & p4 = pin_out_dummy,
    pin_out & p5 = pin_out_dummy,
    pin_out & p6 = pin_out_dummy,
-   pin_out & p7 = pin_out_dummy
+   pin_out & p7 = pin_out_dummy,
+   pin_out & p8 = pin_out_dummy,
+   pin_out & p9 = pin_out_dummy,
+   pin_out & p10 = pin_out_dummy,
+   pin_out & p11 = pin_out_dummy,
+   pin_out & p12 = pin_out_dummy,
+   pin_out & p13 = pin_out_dummy,
+   pin_out & p14 = pin_out_dummy,
+   pin_out & p15 = pin_out_dummy
 );
 
 port_out_from_pins_oc_t port_out_from(
@@ -446,7 +489,15 @@ port_out_from_pins_oc_t port_out_from(
    pin_oc & p4 = pin_oc_dummy,
    pin_oc & p5 = pin_oc_dummy,
    pin_oc & p6 = pin_oc_dummy,
-   pin_oc & p7 = pin_oc_dummy
+   pin_oc & p7 = pin_oc_dummy,
+   pin_oc & p8 = pin_oc_dummy,
+   pin_oc & p9 = pin_oc_dummy,
+   pin_oc & p10 = pin_oc_dummy,
+   pin_oc & p11 = pin_oc_dummy,
+   pin_oc & p12 = pin_oc_dummy,
+   pin_oc & p13 = pin_oc_dummy,
+   pin_oc & p14 = pin_oc_dummy,
+   pin_oc & p15 = pin_oc_dummy
 );
 
 port_in_from_pins_t port_in_from(
@@ -457,7 +508,15 @@ port_in_from_pins_t port_in_from(
    pin_in & p4 = pin_in_dummy,
    pin_in & p5 = pin_in_dummy,
    pin_in & p6 = pin_in_dummy,
-   pin_in & p7 = pin_in_dummy
+   pin_in & p7 = pin_in_dummy,
+   pin_in & p8 = pin_in_dummy,
+   pin_in & p9 = pin_in_dummy,
+   pin_in & p10 = pin_in_dummy,
+   pin_in & p11 = pin_in_dummy,
+   pin_in & p12 = pin_in_dummy,
+   pin_in & p13 = pin_in_dummy,
+   pin_in & p14 = pin_in_dummy,
+   pin_in & p15 = pin_in_dummy
 );
 
 port_oc_from_pins_t port_oc_from(
@@ -468,7 +527,15 @@ port_oc_from_pins_t port_oc_from(
    pin_oc & p4 = pin_oc_dummy,
    pin_oc & p5 = pin_oc_dummy,
    pin_oc & p6 = pin_oc_dummy,
-   pin_oc & p7 = pin_oc_dummy
+   pin_oc & p7 = pin_oc_dummy,
+   pin_oc & p8 = pin_oc_dummy,
+   pin_oc & p9 = pin_oc_dummy,
+   pin_oc & p10 = pin_oc_dummy,
+   pin_oc & p11 = pin_oc_dummy,
+   pin_oc & p12 = pin_oc_dummy,
+   pin_oc & p13 = pin_oc_dummy,
+   pin_oc & p14 = pin_oc_dummy,
+   pin_oc & p15 = pin_oc_dummy
 );
 
 ///@}
@@ -490,9 +557,19 @@ port_in_out_from_pins_t port_in_out_from(
    pin_in_out & p4,
    pin_in_out & p5,
    pin_in_out & p6,
-   pin_in_out & p7 
+   pin_in_out & p7, 
+   pin_in_out & p8,
+   pin_in_out & p9,
+   pin_in_out & p10,
+   pin_in_out & p11,
+   pin_in_out & p12,
+   pin_in_out & p13,
+   pin_in_out & p14,
+   pin_in_out & p15 
 ){
-   return port_in_out_from_pins_t( p0, p1, p2, p3, p4, p5, p6, p7 );
+   return port_in_out_from_pins_t( 
+      p0, p1, p2, p3, p4, p5, p6, p7, 
+      p8, p9, p10, p11, p12, p13, p14, p15 );
 }
 
 port_out_from_pins_oc_t port_out_from(
@@ -503,9 +580,19 @@ port_out_from_pins_oc_t port_out_from(
    pin_oc & p4,
    pin_oc & p5,
    pin_oc & p6,
-   pin_oc & p7 
+   pin_oc & p7, 
+   pin_oc & p8,
+   pin_oc & p9,
+   pin_oc & p10,
+   pin_oc & p11,
+   pin_oc & p12,
+   pin_oc & p13,
+   pin_oc & p14,
+   pin_oc & p15
 ){
-   return port_out_from_pins_oc_t( p0, p1, p2, p3, p4, p5, p6, p7 );
+   return port_out_from_pins_oc_t( 
+      p0, p1, p2, p3, p4, p5, p6, p7, 
+      p8, p9, p10, p11, p12, p13, p14, p15 );
 }
 
 port_out_from_pins_t port_out_from(
@@ -516,9 +603,19 @@ port_out_from_pins_t port_out_from(
    pin_out & p4,
    pin_out & p5,
    pin_out & p6,
-   pin_out & p7 
+   pin_out & p7, 
+   pin_out & p8,
+   pin_out & p9,
+   pin_out & p10,
+   pin_out & p11,
+   pin_out & p12,
+   pin_out & p13,
+   pin_out & p14,
+   pin_out & p15
 ){
-   return port_out_from_pins_t( p0, p1, p2, p3, p4, p5, p6, p7 );
+   return port_out_from_pins_t( 
+      p0, p1, p2, p3, p4, p5, p6, p7, 
+      p8, p9, p10, p11, p12, p13, p14, p15 );
 }
 
 port_in_from_pins_t port_in_from(
@@ -529,9 +626,19 @@ port_in_from_pins_t port_in_from(
    pin_in & p4,
    pin_in & p5,
    pin_in & p6,
-   pin_in & p7 
+   pin_in & p7, 
+   pin_in & p8,
+   pin_in & p9,
+   pin_in & p10,
+   pin_in & p11,
+   pin_in & p12,
+   pin_in & p13,
+   pin_in & p14,
+   pin_in & p15
 ){
-   return port_in_from_pins_t( p0, p1, p2, p3, p4, p5, p6, p7 );
+   return port_in_from_pins_t( 
+      p0, p1, p2, p3, p4, p5, p6, p7, 
+      p8, p9, p10, p11, p12, p13, p14, p15 );
 }
 
 port_oc_from_pins_t port_oc_from(
@@ -542,9 +649,19 @@ port_oc_from_pins_t port_oc_from(
    pin_oc & p4,
    pin_oc & p5,
    pin_oc & p6,
-   pin_oc & p7 
+   pin_oc & p7,
+   pin_oc & p8,
+   pin_oc & p9,
+   pin_oc & p10,
+   pin_oc & p11,
+   pin_oc & p12,
+   pin_oc & p13,
+   pin_oc & p14,
+   pin_oc & p15 
 ){
-   return port_oc_from_pins_t( p0, p1, p2, p3, p4, p5, p6, p7 );
+   return port_oc_from_pins_t( 
+      p0, p1, p2, p3, p4, p5, p6, p7, 
+      p8, p9, p10, p11, p12, p13, p14, p15 );
 }
 
 #endif // _HWLIB_ONCE

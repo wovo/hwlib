@@ -113,12 +113,12 @@ public:
       return 8;
    }   
       
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       write_buffer = x; 
       dirty = true;
    }  
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return read_buffer;  
    }  
 

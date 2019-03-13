@@ -58,7 +58,7 @@ public:
       return port.number_of_pins();               
    }  
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return port.read() ^ -1;      
    }   
    
@@ -66,7 +66,7 @@ public:
       return port.refresh();      
    }   
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       port.write( x ^ -1 );
    }
    
@@ -111,7 +111,7 @@ public:
       return port.number_of_pins();               
    }  
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return port.read() ^ -1;      
    }   
   
@@ -153,7 +153,7 @@ public:
       return port.number_of_pins();               
    }  
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       port.write( x ^ -1 );      
    }   
    
@@ -195,7 +195,7 @@ public:
       return port.number_of_pins();               
    }  
    
-   uint_fast8_t read() override {
+   uint_fast16_t read() override {
       return port.read() ^ -1;      
    }   
    
@@ -203,7 +203,7 @@ public:
       return port.refresh();      
    }      
    
-   void write( uint_fast8_t x ) override {
+   void write( uint_fast16_t x ) override {
       port.write( x ^ -1 );
    }
    

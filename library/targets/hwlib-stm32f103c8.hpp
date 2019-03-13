@@ -528,6 +528,8 @@ void uart_putc( char c ){
 namespace hwlib {
 
 namespace target = ::stm32f103c8;
+const auto target_chip  = target_chips::stm32f103c8;
+const auto target_board = target_boards::blue_pill;
    
 void wait_ns( int_fast32_t n );
 void wait_us( int_fast32_t n );
