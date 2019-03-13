@@ -12,7 +12,7 @@
       <Project Name="001 - two" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="010 - blink - direct" Path="010 - blink - direct/_codelite.project" Active="Yes"/>
+  <Project Name="010 - blink - direct" Path="010 - blink - direct/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="010 - blink - direct" ConfigName="Release"/>
@@ -34,6 +34,12 @@
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="030 - uart - hello" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+  <Project Name="031 - adc" Path="031 - adc/_codelite.project" Active="Yes"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="031 - adc" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
   <Project Name="031 - uart - input" Path="031 - uart - input/_codelite.project" Active="No"/>

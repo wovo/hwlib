@@ -177,6 +177,42 @@ void HWLIB_WEAK configure_as_gpio( uint_fast8_t port, uint_fast8_t pin ){
    }
 }
 
+class pin_adc : public hwlib::adc {
+private:
+   uint_fast8_t pin;
+
+public:
+
+   pin_adc( uint_fast8_t pin ):
+      adc( 10 ),
+      pin( pin )
+   {
+      
+      // reference is AVCC
+      ADMUX = 0x01 << REFS0;
+	  
+      // Enable the ADC and prescale
+      ADCSRA = 7 | ( 0x01 << ADEN );  
+   }
+
+   uint_fast32_t read() override {
+	   
+      // select the ADC input pin 
+      ADMUX = ( 0x01 << REFS0 ) | pin;
+
+      // start the conversion.
+      ADCSRA |= 0x01 << ADSC;
+
+      // wait for the conversion to finish
+      while ( (ADCSRA & ( 0x01 << ADSC )) != 0 ){}
+
+      return ADCW;
+   }
+
+   void refresh() override {}
+   
+};
+
 /// \endcond
    
 /// pin_in implementation for an ATMega328P
