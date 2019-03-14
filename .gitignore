@@ -3,6 +3,8 @@
 _codelite.project
 __codelite.workspace
 __codelite.session
+__codelite.tags
+refactoring.db
 ~$*.docx
 .project
 *.o

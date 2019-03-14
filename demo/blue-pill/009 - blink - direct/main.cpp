@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// Hello world on an Arduino Uno
+// blink the LED on a blue-pill board
 //
 // (c) Wouter van Ooijen (wouter@voti.nl) 2017
 //
@@ -13,7 +13,21 @@
 #include "hwlib.hpp"
 
 int main( void ){
-   // wait for the PC side to start the terminal
-   hwlib::wait_ms( 500 );
-   hwlib::cout << "Hello world\n"; 
+  
+   GPIOB->CRH &= ~( 0xF << ( 5 * 4 ));
+   GPIOB->CRH |= 0x03 << ( 5 * 4 );
+   
+   for(;;){
+      GPIOB->BSRR |= ( 0x01 << 13 );
+
+      // wait some time
+      for( volatile int i = 0; i < 10'000; i++ ){}
+	  
+      GPIOB->BSRR |= ( 0x01 << ( 13 + 16 ));
+	  
+      // wait some time
+      for( volatile int i = 0; i < 10'000; i++ ){}
+	  
+   }	  
 }
+

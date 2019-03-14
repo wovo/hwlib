@@ -26,3 +26,5 @@ BMPTK             ?= $(RELATIVE)/../bmptk
 
 # where to find Catch
 CATCH             := $(RELATIVE)/../Catch2
+
+SEARCH +=  $(RELATIVE)/../boost_1_66_0
