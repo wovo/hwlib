@@ -476,6 +476,23 @@ public:
    {}    
 };
 */
+static inline uint16_t last_low = 0;
+static inline uint32_t high = 0;
+
+static uint64_t now_ticks(){
+   static bool init_done = false;
+   if(!init_done){
+      TCCR1B = 0x01;
+      init_done = true;
+   }
+   uint16_t low = TCNT1L;
+   low |= (TCNT1H<<8);
+   if(low < last_low){
+      high += 0x1ULL << 16;
+   }
+   last_low = low;
+
+   return (low | high);
 
 }; // namespace uno
 
@@ -523,7 +540,10 @@ char HWLIB_WEAK uart_getc(){
    static target::pin_in pin( 1, 6 );
    return uart_getc_bit_banged_pin( pin );
 }
-
+	
+uint64_t now_ticks(){
+   return target::now_ticks();
+}
 
 #endif
 
