@@ -19,7 +19,7 @@ int main( void ){
     auto d5 = target::pin_out( target::pins::d5 );
     auto d6 = target::pin_out( target::pins::d6 );
     auto d7 = target::pin_out( target::pins::d7 );
-    auto d  = hwlib::port_out_from( d4, d5, d6, d7 );
+    auto d  = hwlib::port_out_from_pins( d4, d5, d6, d7 );
     auto rs = target::pin_out( target::pins::d8 );
     auto e  = target::pin_out( target::pins::d9 );
     auto bl = target::pin_out( target::pins::d10 );
@@ -27,13 +27,13 @@ int main( void ){
     // select the LCD size.
     // the shield has a 2 x 16 LCD
     // auto lcd = hwlib::hd44780( rs, e, d, 1, 16 );  
-    auto lcd = hwlib::hd44780( rs, e, d, hwlib::xy( 16, 2) );  
+    auto lcd = hwlib::hd44780( rs, e, d, 2, 16 );  
     // auto lcd = hwlib::hd44780( rs, e, d, 4, 20 );  
     // auto lcd = hwlib::hd44780( rs, e, d, 2, 40 );  
      
-    bl.write( 0 );
+    bl.set( 0 );
     hwlib::wait_ms( 500 );    
-    bl.write( 1 );
+    bl.set( 1 );
   
     lcd 
        << "\fHello world!        | this is only for a"

@@ -3,17 +3,17 @@ import os
 def rename( s, n ):
    for char in "0123456789":
        s = s.replace( char, "" )
-   s = s.replace( "#", ( "##%04d" % n ))
+   s = s.replace( "#", ( "##%04d" % ( 10 * n )))
    return s
    
 def renumber():
    list = os.listdir( "." )
    list.sort()
-   n = 0
+   n = 1
    for file_name in list:
       if file_name.find( "#" ) > -1:
          temp_name = rename( file_name, n )
-         n += 10
+         n += 1
          os.rename( file_name, temp_name )
 
    for file_name in os.listdir( "." ):
