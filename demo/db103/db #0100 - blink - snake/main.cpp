@@ -29,12 +29,12 @@ int main( void ){
    auto sda = hwlib::target::pin_out{ 0, 5 };
    auto scl = hwlib::target::pin_out{ 0, 4 };
    
-   auto p18i = hwlib::pin_invert_from_out( p18 );
-   auto p14i = hwlib::pin_invert_from_out( p14 );
-   auto p12i = hwlib::pin_invert_from_out( p12 );
-   auto p10i = hwlib::pin_invert_from_out( p10 );
-   auto p06i = hwlib::pin_invert_from_out( p06 );
-   auto scli = hwlib::pin_invert_from_out( scl );   
+   auto p18i = hwlib::invert( p18 );
+   auto p14i = hwlib::invert( p14 );
+   auto p12i = hwlib::invert( p12 );
+   auto p10i = hwlib::invert( p10 );
+   auto p06i = hwlib::invert( p06 );
+   auto scli = hwlib::invert( scl );   
    
    auto leds = hwlib::all( 
       p19, p18i, p15, p14i,

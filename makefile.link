@@ -16,8 +16,6 @@ RELATIVE          ?= .
 # get the paths 
 HWLIB             := $(RELATIVE)
 
-$(info HWLIB=$(HWLIB) )
-
 ifneq ($(wildcard $(RELATIVE)/makefile.custom),)
    include $(RELATIVE)/makefile.custom
 else ifneq ($(wildcard $(RELATIVE)/../makefile.custom),)

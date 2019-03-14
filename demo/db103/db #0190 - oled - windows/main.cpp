@@ -25,13 +25,22 @@ int main( void ){
    
    
    auto font1     = hwlib::font_default_8x8();
-   auto console1  = hwlib::window_ostream( oled, font1 );
-   auto font2     = hwlib::font_default_16x16();
-   auto console2  = hwlib::window_ostream( oled, font2 );
+   auto part1     = hwlib::window_part( oled, hwlib::xy( 0, 0 ), hwlib::xy( 128, 32 ) );
+   auto console1  = hwlib::terminal_from( part1, font1 );
    
-   console2  
+   auto font2     = hwlib::font_default_16x16();
+   auto part2     = hwlib::window_part( oled, hwlib::xy( 0, 32 ), hwlib::xy( 128, 32 ) );
+   auto console2  = hwlib::terminal_from( part2, font2 );
+   
+   console1 
       << "\f" << "Hello world!!" 
       << "\n" << "second line.."
-      << "\t0305" << "pos 3 line 5"
+      << "\n" << "line 3"
+      << "\n" << "line 4"
+      << hwlib::flush;    
+ 
+   console2  
+      << "\fBIG BIG"
+      << "\nFONT"
       << hwlib::flush;     
 }

@@ -51,6 +51,7 @@
 /// - more text and examples in the graphics documentation
 ///
 /// More-or-less urgent things to do:
+/// - https://www.rhydolabz.com/wiki/?p=16424 ; https://alselectro.wordpress.com/2016/05/12/serial-lcd-i2c-module-pcf8574/
 /// - document I2C and SPI
 /// - check snippet comment titles (or remove?)
 /// - solve -lgdi32 

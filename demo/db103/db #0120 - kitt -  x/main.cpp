@@ -40,7 +40,7 @@ int main( void ){
    auto sda = hwlib::target::pin_out{ 0, 5 };
    auto scl = hwlib::target::pin_out{ 0, 4 };
    
-   auto leds = hwlib::port_out_from_pins(
+   auto leds = hwlib::port_out_from(
       p19, p18, p15, p14,
       p13, p12, p11, p10,
       p07, p06, sda, scl

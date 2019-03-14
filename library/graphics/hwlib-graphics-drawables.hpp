@@ -167,7 +167,7 @@ public:
       : drawable{ start }, radius{ radius }, ink{ ink }, use_foreground( false )
    {}     
    
-   /// create a circle object of the foregroudn color
+   /// create a circle object of the foreground color
    circle( 
       xy start, 
       uint_fast16_t radius
@@ -200,7 +200,8 @@ public:
       w.write( start + xy( + radius, 0 ), col );
       w.write( start + xy( - radius, 0 ), col );
          
-      //if( bg != transparent ){
+      // filled circle
+      if(0) if( col != transparent ){
    
          // top and bottom
          w.write( start + xy( 0, + radius ), col );
@@ -212,7 +213,7 @@ public:
               start + xy( radius, 0 ), 
               col 
           ).draw( w );
-      //} 
+      } 
     
       while( x < y ){
       
@@ -235,7 +236,8 @@ public:
          w.write( start + xy( + y, - x ), col );
          w.write( start + xy( - y, - x ), col );
             
-         //if( bg != transparent  ){
+         // filled circle
+         if(0) if( col != transparent  ){
             line( 
                start + xy( -x,  y ), 
                start + xy(  x,  y ), 
@@ -252,7 +254,7 @@ public:
                start + xy( -y, -x ), 
                start + xy(  y, -x ), 
                col ).draw( w );
-         //}
+         }
       }
    }   
     

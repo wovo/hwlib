@@ -21,12 +21,12 @@ int main( void ){
       GPIOB->BSRR |= ( 0x01 << 13 );
 
       // wait some time
-      for( volatile int i = 0; i < 10'000; i++ ){}
+      for( volatile uint32_t i = 0; i < 10'000; i++ ){}
 	  
       GPIOB->BSRR |= ( 0x01 << ( 13 + 16 ));
 	  
       // wait some time
-      for( volatile int i = 0; i < 10'000; i++ ){}
+      for( volatile uint32_t i = 0; i < 10'000; i++ ){}
 	  
    }	  
 }
