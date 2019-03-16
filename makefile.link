@@ -15,7 +15,14 @@ RELATIVE          ?= .
 
 # get the paths 
 HWLIB             := $(RELATIVE)
-include           $(HWLIB)/makefile.find_local
+
+ifneq ($(wildcard $(RELATIVE)/makefile.custom),)
+   include $(RELATIVE)/makefile.custom
+else ifneq ($(wildcard $(RELATIVE)/../makefile.custom),)
+   include $(RELATIVE)/../makefile.custom
+else 
+   include $(RELATIVE)/makefile.local
+endif
 
 # add hwlib itself
 include           $(HWLIB)/makefile.inc
@@ -24,7 +31,7 @@ include           $(HWLIB)/makefile.inc
 SEARCH            += $(CATCH)/include
 
 # set BMPTK to the bmptk subdirectory
-BMPTK              ?= $(HWCPP)/../bmptk
+BMPTK             ?= $(HWLIB)/../bmptk
 
 # defer to the bmptk makefile.inc
 include           $(BMPTK)/makefile.inc
