@@ -12,12 +12,10 @@
 # 
 #############################################################################
 
-#! [[makefile example]]
 # common settings for Arduino Due projects
 TARGET            ?= arduino_due
 SERIAL_PORT       ?= COM2
 CONSOLE_BAUDRATE  ?= 2400
-#! [[makefile example]]
 
 # defer to the next-level makefile.link
 RELATIVE          ?= .

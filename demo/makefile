@@ -1,23 +1,15 @@
 #############################################################################
 # 
-# Makefile that defers clean and build to subdirectories
+# Makefile that
+#    - defers commands to the subdirectories
 #
-# (c) Wouter van Ooijen (www.voti.nl) 2016
+# (c) Wouter van Ooijen (www.voti.nl) 2019
 #
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at 
 # http://www.boost.org/LICENSE_1_0.txt)
 # 
 #############################################################################
-
-SUBDIRS += arduino-due
-SUBDIRS += arduino-uno
-SUBDIRS += db103
-SUBDIRS += native
-
-BUILDDIRS = $(SUBDIRS:%=build-%)
-CLEANDIRS = $(SUBDIRS:%=clean-%)
-NOTABDIRS = $(SUBDIRS:%=notab-%)
 
 ifeq ($(OS),Windows_NT)
    REMOVE := $(BMPTK)/tools/bmptk-rm 
@@ -27,26 +19,21 @@ else
    MAKE := make
 endif
 
-.phony: clean build run error notab (BUILDDIRS) $(CLEANDIRS) $(NOTABDIRS)
+.PHONY: renumber clean build run error notab
 
-# include the bmptk makefile, and clean this directory
+renumber:
+	$(MAKE) -f makefile.link renumber-subdirs
 
-clean: $(CLEANDIRS)
-	$(MAKE) -f makefile.link clean
+build:
+	$(MAKE) -f makefile.link build-subdirs
    
-# defer to the subdirectories
-
-$(CLEANDIRS): 
-	$(MAKE) -C $(@:clean-%=%) clean
+clean:
+	$(MAKE) -f makefile.link clean-subdirs
    
-build: $(BUILDDIRS)
-$(BUILDDIRS):
-	$(MAKE) -C $(@:build-%=%) build
+notab:
+	$(MAKE) -f makefile.link notab-subdirs
    
-notab: $(NOTABDIRS)
-$(NOTABDIRS):
-	$(MAKE) -C $(@:notab-%=%) notab 
-   
+ 
 # user error handling   
 
 run: error

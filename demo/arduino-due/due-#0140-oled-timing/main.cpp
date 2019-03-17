@@ -38,7 +38,7 @@ void circles_direct( hwlib::window & w ){
 void circles_buffered( hwlib::window & w ){
    auto m = w.size / 2;
    for( int i = 0; i < 10; ++i ){       
-      hwlib::circle( m, 5 + 2 * i ).draw( w, hwlib::buffering::buffered );
+      hwlib::circle( m, 5 + 2 * i ).draw( w );
    }
    w.flush();
 }
@@ -51,10 +51,11 @@ int main( void ){
    hwlib::cout << "OLED timing demo - have patience!\n";
    
    // create the i2c-interfaced display
-   auto scl = target::pin_oc( target::pins::scl );
-   auto sda = target::pin_oc( target::pins::sda );
-   auto i2c_bus = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
-   auto display = hwlib::glcd_oled( i2c_bus, 0x3c );   
+   auto scl         = target::pin_oc( target::pins::scl );
+   auto sda         = target::pin_oc( target::pins::sda );
+   auto i2c_bus     = hwlib::i2c_bus_bit_banged_scl_sda( scl,sda );
+   auto i2c_channel = i2c_bus.channel( 0x3c);
+   auto display     = hwlib::glcd_oled( i2c_channel );   
    
    time( 
       "clear - direct", 
@@ -65,7 +66,7 @@ int main( void ){
    time( 
       "clear - buffered", 
       [&](){ 
-         display.clear( hwlib::buffering::buffered ); 
+         display.clear(); 
          display.flush();
       } );
 
@@ -73,14 +74,14 @@ int main( void ){
       "one circle - direct", 
       [&](){ 
          display.clear();          
-         circles( display, 1, hwlib::buffering::unbuffered );
+         circles( display, 1 );
       } );
       
    time( 
       "one circle - buffered", 
       [&](){ 
-         display.clear( hwlib::buffering::buffered );             
-         circles( display, 1, hwlib::buffering::buffered ); 
+         display.clear();             
+         circles( display, 1 ); 
          display.flush();
       } );
       
@@ -88,14 +89,14 @@ int main( void ){
       "10 circles - direct", 
       [&](){ 
          display.clear();             
-         circles( display, 10, hwlib::buffering::unbuffered );
+         circles( display, 10 );
       } );
       
    time( 
       "10 circles - buffered", 
       [&](){ 
-         display.clear( hwlib::buffering::buffered );   
-         circles( display, 10, hwlib::buffering::buffered ); 
+         display.clear();   
+         circles( display, 10 ); 
          display.flush();
       } );
       

@@ -2,8 +2,8 @@
 
 void test_dump1( hwlib::matrix_of_switches & kbd ){
    for(;;){
-      for( uint_fast8_t x = 0; x < kbd.size.x; ++x ){
-         for( uint_fast8_t y = 0; y < kbd.size.y; ++y ){
+      for( int_fast8_t x = 0; x < kbd.size.x; ++x ){
+         for( int_fast8_t y = 0; y < kbd.size.y; ++y ){
              if( kbd.switch_is_closed_at( hwlib::xy( x, y ) ) ){
                 hwlib::cout 
                    << x << "," << y 
