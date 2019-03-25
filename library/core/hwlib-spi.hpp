@@ -55,10 +55,10 @@ public:
    
       spi_bus & bus;
       
-      pin_out & sel;
+      pin_direct_from_out_t sel;
       
-      spi_transaction( spi_bus & bus, pin_out & sel ):
-         bus( bus ), sel( sel )
+      spi_transaction( spi_bus & bus, pin_out & _sel ):
+         bus( bus ), sel( direct( _sel ))
       {
          sel.write( 0 );
       }

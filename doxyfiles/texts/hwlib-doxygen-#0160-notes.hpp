@@ -73,6 +73,8 @@
 /// - check SPI for flush
 /// - check 595 buffering
 /// - add blue-pill documentation & picture
+/// - char stream mux / demux
+/// - ostream has format data *inside*: shouild be separate. raw_ostream?
 ///
 
 /*

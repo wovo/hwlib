@@ -27,7 +27,7 @@ int main( void ){
     // select the LCD size.
     // the shield has a 2 x 16 LCD
     // auto lcd = hwlib::hd44780( rs, e, d, 1, 16 );  
-    auto lcd = hwlib::hd44780( rs, e, d, 2, 16 );  
+    auto lcd = hwlib::hd44780( rs, e, d, hwlib::xy( 16, 2 ) );  
     // auto lcd = hwlib::hd44780( rs, e, d, 4, 20 );  
     // auto lcd = hwlib::hd44780( rs, e, d, 2, 40 );  
      

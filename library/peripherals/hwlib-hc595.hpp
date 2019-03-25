@@ -107,7 +107,7 @@ public:
    }  
 
    void flush() override {
-      bus.transaction( sel ).write_and_read( 1, &write_buffer, nullptr ); 
+      bus.transaction( sel ).write( write_buffer ); 
    }
    
    /// the output pins of the chip

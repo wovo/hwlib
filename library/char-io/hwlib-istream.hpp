@@ -58,5 +58,14 @@ public:
    }           
    
 }; // class istream
+
+/*
+ * class stream_demux : public istream {
+   istream & left;
+   istream & right;
+public:
+
+};
+*/
    
 }; // namespace hwlib
