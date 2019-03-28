@@ -64,7 +64,7 @@
 #endif
 
 /// - HWLIB_TARGET_native : Linux native 
-#ifdef HWLIB_TARGET_Limux
+#ifdef HWLIB_TARGET_Linux
    #define HWLIB_TARGET
    #include HWLIB_INCLUDE( targets/hwlib-native-linux.hpp )
 #endif
