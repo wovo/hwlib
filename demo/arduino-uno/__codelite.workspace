@@ -1,63 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Workspace Name="example code" Database="" Version="10.0.0">
+<CodeLite_Workspace Name="example code" Database="">
   <Project Name="uno-#0010-empty" Path="uno-#0010-empty/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0010-empty" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
   <Project Name="uno-#0020-two" Path="uno-#0020-two/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0020-two" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
   <Project Name="uno-#0030-blink-direct" Path="uno-#0030-blink-direct/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0030-blink-direct" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
   <Project Name="uno-#0040-blink-gpio" Path="uno-#0040-blink-gpio/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0040-blink-gpio" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
   <Project Name="uno-#0050-blink-blink" Path="uno-#0050-blink-blink/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0050-blink-blink" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
   <Project Name="uno-#0060-uart-input" Path="uno-#0060-uart-input/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0060-uart-input" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
   <Project Name="uno-#0070-lcd-16x2" Path="uno-#0070-lcd-16x2/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0070-lcd-16x2" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
   <Project Name="uno-#0080-lcd-scrolling-message" Path="uno-#0080-lcd-scrolling-message/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0080-lcd-scrolling-message" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
   <Project Name="uno-#0090-lcd-keypad-shield" Path="uno-#0090-lcd-keypad-shield/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0090-lcd-keypad-shield" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
-  <Project Name="uno-#0100-pcfa8574a-lcd-16x2" Path="uno-#0100-pcfa8574a-lcd-16x2/_codelite.project" Active="Yes"/>
+  </BuildMatrix> 
+  <Project Name="uno-#0098-pcfa8574a-kitt" Path="uno-#0098-pcfa8574a-kitt/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="uno-#0098-pcfa8574a-kitt" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix> 
+  <Project Name="uno-#0100-pcfa8574a-lcd-16x2" Path="uno-#0100-pcfa8574a-lcd-16x2/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0100-pcfa8574a-lcd-16x2" ConfigName="Release"/>
     </WorkspaceConfiguration>
-  </BuildMatrix>
+  </BuildMatrix> 
 </CodeLite_Workspace>

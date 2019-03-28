@@ -84,5 +84,6 @@ HEADERS           += targets/hwlib-blue-pill.hpp
 HEADERS           += targets/hwlib-stm32f103c8.hpp
 #HEADERS           += targets/hwlib-stm32f030x6.hpp
 HEADERS           += targets/hwlib-db103.hpp
-HEADERS           += targets/hwlib-native.hpp
+HEADERS           += targets/hwlib-native-windows.hpp
+HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-none.hpp

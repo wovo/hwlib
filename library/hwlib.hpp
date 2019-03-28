@@ -57,10 +57,16 @@
    #include HWLIB_INCLUDE( hwlib-scouting-lock.hpp )
 #endif
 
-/// - HWLIB_TARGET_native : native target (Windows or Linux PC)
-#ifdef HWLIB_TARGET_native
+/// - HWLIB_TARGET_native : Windows native
+#ifdef HWLIB_TARGET_Windows
    #define HWLIB_TARGET
-   #include HWLIB_INCLUDE( targets/hwlib-native.hpp )
+   #include HWLIB_INCLUDE( targets/hwlib-native-windows.hpp )
+#endif
+
+/// - HWLIB_TARGET_native : Linux native 
+#ifdef HWLIB_TARGET_Limux
+   #define HWLIB_TARGET
+   #include HWLIB_INCLUDE( targets/hwlib-native-linux.hpp )
 #endif
 
 #ifdef HWLIB_TARGET_pyd

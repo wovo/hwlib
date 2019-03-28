@@ -135,7 +135,7 @@ public:
 
    void write( bool v ) override {
       slave.write( v );
-	  slave.flush();
+	   slave.flush();
    }
       
    void flush() override {

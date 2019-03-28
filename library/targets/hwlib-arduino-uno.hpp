@@ -117,7 +117,7 @@ const pin_info_type pin_info_array[ (int) pins::SIZE_THIS_IS_NOT_A_PIN ] = {
    
    { 2,  0 },  // a0
    { 2,  1 },  // a1
-   { 2,  2 },  // a1
+   { 2,  2 },  // a2
    { 2,  3 },  // a3
    { 2,  4 },  // a4
    { 2,  5 },  // a5
