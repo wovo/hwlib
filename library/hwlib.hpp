@@ -60,13 +60,13 @@
 /// - HWLIB_TARGET_native : Windows native
 #ifdef HWLIB_TARGET_Windows
    #define HWLIB_TARGET
-   #include HWLIB_INCLUDE( targets/hwlib-native-windows.hpp )
+   #include HWLIB_INCLUDE( targets/hwlib-native-sfml.hpp )
 #endif
 
 /// - HWLIB_TARGET_native : Linux native 
 #ifdef HWLIB_TARGET_Linux
    #define HWLIB_TARGET
-   #include HWLIB_INCLUDE( targets/hwlib-native-linux.hpp )
+   #include HWLIB_INCLUDE( targets/hwlib-native-sfml.hpp )
 #endif
 
 #ifdef HWLIB_TARGET_pyd
