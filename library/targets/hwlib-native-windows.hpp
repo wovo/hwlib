@@ -20,13 +20,79 @@
 #include HWLIB_INCLUDE( ../hwlib-all.hpp )
 #include <iostream>
 #include <Windows.h>
+#include <SFML/Graphics.hpp>
 
 namespace hwlib {
+	
+namespace target {
+   
+class window : public hwlib::window {
+private:
 
-#ifdef _HWLIB_ONCE 
+   int m;
+   sf::RenderWindow w;
+   sf::Image image;
+   
+public:   
+
+   window( xy size, int m = 5 ):
+      hwlib::window( size ),
+      m( m ),
+      w( sf::VideoMode( m * size.x, m * size.y ), "HWLIB-SFML window" )
+   {
+      image.create( m * size.x, m * size.y );
+      clear();
+      flush();
+   }	
+   
+   window( int x, int y, int m = 5 ): window( xy( x, y ), m ){}	
+   
+   void poll(){
+      if ( w.isOpen() ){
+        sf::Event event;
+        while (w.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                w.close();
+        }
+      }	   
+   }
+   
+   void write_implementation( 
+      xy pos, 
+      color col
+   ) override {
+      for( int x = 0; x < m; ++x ){
+         for( int y = 0; y < m; ++y ){
+            image.setPixel( 
+               x + m * pos.x, y + m * pos.y, 
+               ( col != hwlib::black ) ? sf::Color::Black : sf::Color::White );
+         }
+      }   
+   }
+   
+   void flush() override {
+	   w.clear();
+      
+sf::Texture texture;
+texture.loadFromImage(image);
+sf::Sprite sprite;
+sprite.setTexture(texture, true);
+w.draw(sprite);      
+      
+      w.display();
+	   poll();
+   }
+   
+}; // class window
+	
+};	// namespace target
+
+#ifdef _HWLIB_ONCE
 
 uint64_t now_ticks(){
    // https://stackoverflow.com/questions/1695288/getting-the-current-time-in-milliseconds-from-the-system-clock-in-windows	 
+   
    FILETIME ft_now;
    GetSystemTimeAsFileTime( &ft_now );
    uint64_t ll_now = (LONGLONG)ft_now.dwLowDateTime + ((LONGLONG)(ft_now.dwHighDateTime) << 32LL);   
@@ -77,6 +143,8 @@ char uart_getc(){
 bool HWLIB_WEAK uart_char_available(){
    return 1;
 }
+
+void *__gxx_personality_v0;
 
 #endif // #ifdef HBLIB_ONCE
 

@@ -87,3 +87,8 @@ HEADERS           += targets/hwlib-db103.hpp
 HEADERS           += targets/hwlib-native-windows.hpp
 HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-none.hpp
+
+LINKER_FLAGS      += -L$(HWLIB)/../SFML-2.5.1/lib 
+LINKER_FLAGS      += -lsfml-graphics-s -lsfml-window-s -lsfml-system-s 
+LINKER_FLAGS      += -lopengl32 -lgdi32 -lws2_32 -lwinmm
+DEFINES           += -DSFML_STATIC
