@@ -319,12 +319,49 @@ public:
 
 // ==========================================================================
 //
-// default
+// constructors
 //
 // ==========================================================================
 
-/// the default oled is the buffered version
-using glcd_oled = glcd_oled_i2c_128x64_buffered;
-   
+glcd_oled_i2c_128x64_buffered glcd_oled( i2c_channel & channel ){
+   return glcd_oled_i2c_128x64_buffered( channel );
+}
+
+/*
+struct glcd_oled_i2c_128x64_buffered_from_bus : window {
+   i2c_channel channel;
+   glcd_oled_i2c_128x64_buffered oled;
+
+   glcd_oled_i2c_128x64_buffered_from_bus(
+      i2c_bus & bus,
+      int address
+   ):
+      window( xy( 128, 64 ), white, black ),
+      channel( bus, address ),
+      oled( channel )
+   {}
+
+   void write_implementation( 
+      xy pos, 
+      color col
+   ) override {
+      oled.write( pos, col );
+   }   
+
+   void flush() override {
+      oled.flush();
+   }
+
+};
+
+glcd_oled_i2c_128x64_buffered_from_bus glcd_oled( 
+   i2c_bus & bus, 
+   int address = 0x3c 
+){
+   return glcd_oled_i2c_128x64_buffered_from_bus( 
+      bus, 
+      address );
+}
+*/
 
 }; // namespace hwlib

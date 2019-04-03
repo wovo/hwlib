@@ -21,8 +21,8 @@
 
 #define register
 #include "sam.h"
-
 #include HWLIB_INCLUDE( hwlib-arduino-due-system-sam3xa.inc )
+#undef register
 
 /// \brief
 /// hwlib HAL for the Arduino Due
@@ -271,7 +271,11 @@ const HWLIB_WEAK ad_seq_type & ad_seq_info( uint32_t channel ){
  
 Pio & __attribute__((weak)) port_registers( uint32_t port ){
    
-   // a bit of a cludge to put this here:
+   // a bit of a hack to put this here:
+
+   // kill the watchdog
+   WDT->WDT_MR = WDT_MR_WDDIS;
+
    // enable the clock to all GPIO ports
    PMC->PMC_PCER0 = ( 0x3F << 11 );  
 
@@ -627,7 +631,7 @@ public:
    /// get an adc reading
    ///
    /// This function performs and ADC conversion and returns the result.
-   adc_value_type get() override {
+   adc_value_type read() override {
        
       // select this one channel
       ADC->ADC_CHER = 0x01 << channel;  
@@ -650,6 +654,8 @@ public:
       // return the conversion result
       return ADC->ADC_LCDR & 0x0000'0FFF;
    }
+
+   void refresh() override {}
 };
 #endif
 
@@ -731,6 +737,8 @@ public:
       // return the conversion result
       return ADC->ADC_CDR[ channel ] & 0x0000'0FFF;
    }
+   
+   void refresh() override {}
 };
 
 /// the number of ticks per us
