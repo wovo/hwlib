@@ -58,9 +58,10 @@ namespace hwlib {
 ///       PCF8574A data sheet</A> (pdf)
 /// 
 class pcf8574 : public port_oc {
-private:
+   private:
 
-   i2c_channel & channel;
+   i2c_bus & bus;
+   uint8_t address;
    uint8_t write_buffer;
    uint8_t read_buffer;
    bool dirty;
@@ -106,8 +107,8 @@ public:
    ///
    /// This constructor creates an interface to a pcf8574 I2C
    /// I/O extender chip from an I2C bus channel.
-   pcf8574( i2c_channel & channel ):
-      channel( channel ), dirty( false ) {}    
+   pcf8574( i2c_bus & bus, uint_fast8_t address = 0x28 ):
+      bus( bus), address( address ), dirty( false ) {}    
 
    uint_fast8_t number_of_pins() override {
       return 8;
@@ -124,13 +125,13 @@ public:
 
    void flush() override {
       if( dirty ){
-         channel.write( write_buffer ); 
+         bus.write( address ).write( write_buffer ); 
          dirty = false;
       }
    }
    
    void refresh() override {
-      channel.read( read_buffer ); 
+      bus.read( address ).read( read_buffer ); 
    }
 
    /// the open-collector pins of the chip

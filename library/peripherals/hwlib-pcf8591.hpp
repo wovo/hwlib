@@ -43,19 +43,20 @@ namespace hwlib {
 class pcf8591 {
 private:
 
-   i2c_channel & channel;
+   i2c_bus & bus;
+   uint_fast8_t address;
    uint_fast8_t configuration;
    
    uint_fast8_t get( uint_fast8_t adc_channel ){
 
       // select the correct channel
       uint8_t control = ( configuration & ( ~ 0x03 )) + adc_channel; 
-      channel.write( control ); 
+      bus.write( address ).write( control ); 
       
       // read results, note that the first byte is the 
       // *previous* ADC result, the second byte is what we want
       uint8_t results[ 2 ];
-      channel.read( results, 2 );
+      bus.read( address ).read( results, 2 );
       return results[ 1 ];
    }   
    
@@ -96,7 +97,7 @@ private:
             static_cast< uint8_t >( chip.configuration ), 
             static_cast< uint8_t >( x )
          };
-         chip.channel.write( 
+         chip.bus.write( chip.address ).write( 
             message, 
             sizeof( message ) / sizeof( uint8_t ) 
          ); 
@@ -123,8 +124,9 @@ public:
    /// and the chip address.
    /// The address is the 3-bit address that is determined by the 3 
    /// address input pins of the chip.
-   pcf8591( i2c_channel channel ):
-      channel( channel ), 
+   pcf8591( i2c_bus & bus, uint_fast8_t address = 0x48 ):
+      bus( bus ), 
+      address( address ),
       configuration{ 0x40 }
    {}         
 

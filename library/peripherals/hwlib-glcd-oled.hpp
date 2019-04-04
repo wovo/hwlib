@@ -109,7 +109,8 @@ class ssd1306_i2c {
 protected:
 
    /// the i2c channel
-   i2c_channel & channel;
+   i2c_bus & bus;
+   uint_fast8_t address;
    
    /// current cursor location in the controller
    xy cursor;
@@ -117,9 +118,10 @@ protected:
 public:	
     
    /// construct by providing the i2c channel	
-   ssd1306_i2c( i2c_channel & channel ):
-      channel( channel ), 
-	  cursor( 255, 255 )
+   ssd1306_i2c( i2c_bus & bus, uint_fast8_t address = 0x3C ):
+      bus( bus ),
+      address( address ),
+	   cursor( 255, 255 )
    {
       // wait for the controller to be ready for the initialization       
       wait_ms( 20 );
@@ -130,7 +132,7 @@ public:
       uint8_t data[] = { 
          ssd1306_cmd_prefix, (uint8_t) c 
       };
-      channel.write( 
+      bus.write( address ).write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );      
@@ -142,7 +144,7 @@ public:
          ssd1306_cmd_prefix, (uint8_t) c, 
          ssd1306_cmd_prefix, d0 
       };
-      channel.write( 
+      bus.write( address ).write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );    
@@ -155,7 +157,7 @@ public:
          ssd1306_cmd_prefix, d0, 
          ssd1306_cmd_prefix, d1 
       };
-      channel.write( 
+      bus.write( address ).write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       );     
@@ -174,7 +176,7 @@ public:
       }   
 
       uint8_t data[] = { ssd1306_data_prefix, d };
-      channel.write( 
+      bus.write( address ).write( 
          data, 
          sizeof( data ) / sizeof( uint8_t ) 
       ); 
@@ -219,11 +221,11 @@ private:
 public:
    
    /// construct by providing the i2c channel
-   glcd_oled_i2c_128x64_direct( i2c_channel & channel ): 
-      ssd1306_i2c( channel ),
+   glcd_oled_i2c_128x64_direct( i2c_bus & bus, uint_fast8_t address = 0x3C ): 
+      ssd1306_i2c( bus, address ),
       window( wsize, white, black )
    {
-      channel.write( 
+      bus.write( address ).write( 
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
       );     
@@ -233,11 +235,11 @@ public:
       const uint8_t d = ( background == white ) ? 0xFF : 0x00;
       command( ssd1306_commands::column_addr,  0,  127 );
       command( ssd1306_commands::page_addr,    0,    7 );  
-      auto t = channel.transactions.write();
+      auto t = bus.write( address );
       t.write( ssd1306_data_prefix );
       for( uint_fast16_t x = 0; x < sizeof( buffer ); ++x ){                
-	     buffer[ x ] = d;
-		 t.write( d );
+	      buffer[ x ] = d;
+		   t.write( d );
       }        
 	  cursor = xy( 255, 255 );
    }
@@ -261,7 +263,7 @@ private:
    static auto constexpr wsize = xy( 128, 64 );
 
    uint8_t buffer[ wsize.x * wsize.y / 8 ];
-      
+         
    void write_implementation( 
       xy pos, 
       color col
@@ -278,11 +280,11 @@ private:
 public:
    
    /// construct by providing the i2c channel
-   glcd_oled_i2c_128x64_buffered( i2c_channel & channel ):
-      ssd1306_i2c( channel ),
+   glcd_oled_i2c_128x64_buffered( i2c_bus & bus, int address = 0x3C ):
+      ssd1306_i2c( bus, address ),
       window( wsize, white, black )
    {
-      channel.write( 
+      bus.write( address ).write( 
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
       );     
@@ -295,7 +297,7 @@ public:
          for( int x = 0; x < 128; x++ ){
             uint8_t d = buffer[ x + 128 * y ];
             uint8_t data[] = { 0x40, d };
-            channel.write( 
+            bus.write( address ).write( 
                data, 
                sizeof( data ) / sizeof( uint8_t ) 
             );
@@ -308,7 +310,7 @@ public:
          wait_us( 0 );		 
       }  
       //for( int y = 0; y < 64 / 8; y++ ){
-         auto t = channel.transactions.write();
+         auto t = bus.write( address );
          t.write( ssd1306_data_prefix );
          t.write( buffer, sizeof( buffer ) / sizeof( uint8_t )  );
       //}   
@@ -316,52 +318,6 @@ public:
    
 }; // class glcd_oled_i2c_128x64_buffered
 
-
-// ==========================================================================
-//
-// constructors
-//
-// ==========================================================================
-
-glcd_oled_i2c_128x64_buffered glcd_oled( i2c_channel & channel ){
-   return glcd_oled_i2c_128x64_buffered( channel );
-}
-
-/*
-struct glcd_oled_i2c_128x64_buffered_from_bus : window {
-   i2c_channel channel;
-   glcd_oled_i2c_128x64_buffered oled;
-
-   glcd_oled_i2c_128x64_buffered_from_bus(
-      i2c_bus & bus,
-      int address
-   ):
-      window( xy( 128, 64 ), white, black ),
-      channel( bus, address ),
-      oled( channel )
-   {}
-
-   void write_implementation( 
-      xy pos, 
-      color col
-   ) override {
-      oled.write( pos, col );
-   }   
-
-   void flush() override {
-      oled.flush();
-   }
-
-};
-
-glcd_oled_i2c_128x64_buffered_from_bus glcd_oled( 
-   i2c_bus & bus, 
-   int address = 0x3c 
-){
-   return glcd_oled_i2c_128x64_buffered_from_bus( 
-      bus, 
-      address );
-}
-*/
+using glcd_oled = glcd_oled_i2c_128x64_buffered;
 
 }; // namespace hwlib
