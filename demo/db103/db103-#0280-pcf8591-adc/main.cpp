@@ -19,8 +19,7 @@ int main( void ){
    auto sda          = hwlib::target::pin_oc{ 0, 5 };
    
    auto i2c_bus      = hwlib::i2c_bus_bit_banged_scl_sda{ scl,sda };
-   auto chip_channel = i2c_bus.channel( 0x48 );   
-   auto chip         = hwlib::pcf8591( chip_channel );
+   auto chip         = hwlib::pcf8591( i2c_bus, 0x48 );
    
    for(;;){
       hwlib::cout 

@@ -19,12 +19,10 @@ int main( void ){
    auto sda        = hwlib::target::pin_oc{ 0, 5 };
    
    auto i2c_bus_1  = hwlib::i2c_bus_bit_banged_scl_sda{ scl,sda };
-   auto channel_1  = i2c_bus_1.channel( 0x38 );
-   auto chip_1     = hwlib::pcf8574a{ channel_1 };
+   auto chip_1     = hwlib::pcf8574a{ i2c_bus_1, 0x38 };
    
    auto i2c_bus_2  = hwlib::i2c_bus_bit_banged_scl_sda{ chip_1.p6, chip_1.p7 };
-   auto channel_2  = i2c_bus_2.channel( 0x38 );
-   auto chip_2     = hwlib::pcf8574a{ channel_2 };
+   auto chip_2     = hwlib::pcf8574a{ i2c_bus_2, 0x38 };
    
    hwlib::blink( chip_2.p4, 100 );
 }  
