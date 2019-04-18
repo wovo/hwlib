@@ -86,6 +86,7 @@ HEADERS           += targets/hwlib-stm32f103c8.hpp
 HEADERS           += targets/hwlib-db103.hpp
 HEADERS           += targets/hwlib-native-windows.hpp
 HEADERS           += targets/hwlib-native-linux.hpp
+HEADERS           += targets/hwlib-native-sfml.hpp
 HEADERS           += targets/hwlib-none.hpp
 
 ifeq ($(OS),Windows_NT)

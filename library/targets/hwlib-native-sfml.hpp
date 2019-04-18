@@ -34,8 +34,13 @@ private:
    
 public:   
 
-   window( xy size, int m = 5 ):
-      hwlib::window( size ),
+   window( 
+      xy size, 
+      color foreground = black, 
+      color background = white,
+      int m = 5 
+   ):
+      hwlib::window( size, foreground, background ),
       m( m ),
       w( sf::VideoMode( m * size.x, m * size.y ), "HWLIB-SFML window" )
    {
@@ -65,7 +70,8 @@ public:
          for( int y = 0; y < m; ++y ){
             image.setPixel( 
                x + m * pos.x, y + m * pos.y, 
-               ( col != hwlib::black ) ? sf::Color::Black : sf::Color::White );
+//               ( col != hwlib::black ) ? sf::Color::Black : sf::Color::White );
+               sf::Color( col.red, col.green, col.blue, 255 ) );
          }
       }   
    }
