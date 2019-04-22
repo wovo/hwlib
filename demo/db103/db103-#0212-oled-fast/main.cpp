@@ -16,14 +16,14 @@ int main( void ){
        
    namespace target = hwlib::target;
    
-   auto scl      = hwlib::target::pin_oc{ 0, 4 };
-   auto sda      = hwlib::target::pin_oc{ 0, 5 };
+   auto scl       = hwlib::target::pin_oc{ 0, 4 };
+   auto sda       = hwlib::target::pin_oc{ 0, 5 };
    
-   auto i2c_bus       = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
-   auto oled          = hwlib::glcd_oled( i2c_bus );
+   auto bus       = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
+   auto oled      = hwlib::glcd_oled_i2c_128x64_fast_buffered( bus );
    
-   auto font1         = hwlib::font_default_8x8();
-   auto part1         = hwlib::window_part( oled, hwlib::xy( 0, 0 ), hwlib::xy( 128, 16 ) );
+   auto font1     = hwlib::font_default_8x8();
+   auto part1     = hwlib::window_part( oled, hwlib::xy( 0, 0 ), hwlib::xy( 128, 16 ) );
    auto console1  = hwlib::terminal_from( part1, font1 );
    
    auto part2     = hwlib::window_part( oled, hwlib::xy( 10, 16 ), hwlib::xy( 108, 32 ) );

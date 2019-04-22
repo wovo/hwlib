@@ -21,11 +21,11 @@ namespace hwlib {
 class spi_bus {
 private:
 
-   /// spi transaction object
+   /// spi transaction
    ///
    /// This is the read-and-write operation 
    /// that a concrete spi_bus must implement.
-   /// It simultaneaously reads and writes n bytes of data.
+   /// It simultaneously reads and writes n bytes of data.
    ///
    /// The implementation must handle the situation that 
    /// one or both of data_out or data_in are nullptr.

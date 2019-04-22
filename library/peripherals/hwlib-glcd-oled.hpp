@@ -104,7 +104,13 @@ constexpr const uint8_t ssd1306_initialization[] = {
    ssd1306_cmd_prefix, (uint8_t) ssd1306_commands::display_on                     
 };
 
-/// ssd1306, accessed by i2c
+
+// ==========================================================================
+//
+// ssd1306, accessed by i2c
+//
+// ==========================================================================
+
 class ssd1306_i2c {
 protected:
 
@@ -162,7 +168,7 @@ public:
          sizeof( data ) / sizeof( uint8_t ) 
       );     
    } 	
-   
+  
    /// write the pixel byte d at column x page y
    void pixels_byte_write( 
       xy location,
@@ -189,7 +195,89 @@ public:
 
 // ==========================================================================
 //
-// direct
+// ssd1306, accessed by spi
+//
+// ==========================================================================
+
+class ssd1306_spi_res_dc_cs {
+protected:
+
+   // the spi bus & pins
+   spi_bus & bus;
+   pin_out & res;
+   pin_out & dc;
+   pin_out & cs;
+   
+   // current cursor location in the controller
+   xy cursor;
+	   
+public:	
+    
+   /// construct by providing the spi bus and the res, dc and cs pins	
+   ssd1306_spi_res_dc_cs( spi_bus & bus, pin_out & res, pin_out & dc, pin_out & cs ):
+      bus( bus ),
+      res( res ),
+      dc( dc ),
+      cs( cs ),
+	   cursor( 255, 255 )
+   {
+      res.write( 0 );
+      wait_ms( 1 );      
+      res.write( 1 );
+      
+      // wait for the controller to be ready for the initialization       
+      wait_ms( 20 );
+   }      
+   
+   /// send a command without data
+   void command( ssd1306_commands c ){
+      dc.write( 0 );
+      auto t = bus.transaction( cs );
+      t.write( static_cast< uint8_t >( c ) );      
+   } 
+   
+   /// send a command with one data byte
+   void command( ssd1306_commands c, uint8_t d0 ){
+      dc.write( 0 );
+      auto t = bus.transaction( cs );
+      t.write( static_cast< uint8_t >( c ) );      
+      t.write( d0 );      
+   } 	
+   
+   /// send a command with two data bytes
+   void command( ssd1306_commands c , uint8_t d0, uint8_t d1 ){
+      dc.write( 0 );
+      auto t = bus.transaction( cs );
+      t.write( static_cast< uint8_t >( c ) );      
+      t.write( d0 );      
+      t.write( d1 );      
+   } 	
+   
+   /// write the pixel byte d at column x page y
+   void pixels_byte_write( 
+      xy location,
+      uint8_t d 
+   ){
+
+      if( location != cursor ){
+         command( ssd1306_commands::column_addr,  location.x,  127 );
+         command( ssd1306_commands::page_addr,    location.y,    7 );
+         cursor = location;
+      }   
+
+      dc.write( 1 );
+      auto t = bus.transaction( cs );
+      t.write( d );
+      cursor.x++;  
+    
+   }
+      
+}; // class ssd1306_spi
+
+
+// ==========================================================================
+//
+// direct i2c
 //
 // ==========================================================================
 
@@ -236,6 +324,85 @@ public:
       command( ssd1306_commands::column_addr,  0,  127 );
       command( ssd1306_commands::page_addr,    0,    7 );  
       auto t = bus.write( address );
+      t.write( ssd1306_data_prefix );
+      for( uint_fast16_t x = 0; x < sizeof( buffer ); ++x ){                
+	      buffer[ x ] = d;
+		   t.write( d );
+      }        
+	  cursor = xy( 255, 255 );
+   }
+   
+   void flush() override {}  
+
+
+}; // class glcd_oled_i2c_128x64_direct
+
+
+// ==========================================================================
+//
+// direct spi
+//
+// ==========================================================================
+
+/// buffered oled window
+class glcd_oled_spi_128x64_direct_res_dc_cs : 
+   public ssd1306_spi_res_dc_cs, 
+   public window 
+{
+private:
+
+   static auto constexpr wsize = xy( 128, 64 );
+
+   uint8_t buffer[ wsize.x * wsize.y / 8 ];
+      
+   void write_implementation( 
+      xy pos, 
+      color col
+   ) override {
+
+      int a = pos.x + ( pos.y / 8 ) * size.x;
+      
+      if( col == white ){ 
+         buffer[ a ] |=  ( 0x01 << ( pos.y % 8 ));  
+      } else {
+         buffer[ a ] &= ~( 0x01 << ( pos.y % 8 )); 
+      }   
+
+      pixels_byte_write( xy( pos.x, pos.y / 8 ), buffer[ a ] );   
+
+   }   
+     
+public:
+   
+   /// construct by providing the i2c channel
+   glcd_oled_spi_128x64_direct_res_dc_cs( spi_bus & bus, pin_out & res, pin_out & dc, pin_out & cs ):
+      ssd1306_spi_res_dc_cs( bus, res, dc, cs ),
+      window( wsize, white, black )
+   {
+      command( ssd1306_commands::display_off );
+      command( ssd1306_commands::set_display_clock_div, 0x80 );
+      command( ssd1306_commands::set_multiplex,         0x3f ); 
+      command( ssd1306_commands::set_display_offset,    0x00 ); 
+      command( (ssd1306_commands) (((int) ssd1306_commands::set_start_line )      | 0x00 ));
+      command( ssd1306_commands::charge_pump,           0x14 );   
+      command( ssd1306_commands::memory_mode,           0x00 );   
+      command( (ssd1306_commands) (((int)  ssd1306_commands::seg_remap  )          | 0x01 ));
+      command( ssd1306_commands::com_scan_dec );
+      command( ssd1306_commands::set_compins,           0x12 );
+      command( ssd1306_commands::set_contrast,          0xcf ); 
+      command( ssd1306_commands::set_precharge,         0xf1 );
+      command( ssd1306_commands::set_vcom_detect,       0x40 );
+      command( ssd1306_commands::display_all_on_resume );  
+      command( ssd1306_commands::normal_display );
+      command( ssd1306_commands::display_on );
+      
+   }
+   
+   void clear() override {
+      const uint8_t d = ( background == white ) ? 0xFF : 0x00;
+      command( ssd1306_commands::column_addr,  0,  127 );
+      command( ssd1306_commands::page_addr,    0,    7 );  
+      auto t = bus.transaction( cs );
       t.write( ssd1306_data_prefix );
       for( uint_fast16_t x = 0; x < sizeof( buffer ); ++x ){                
 	      buffer[ x ] = d;
@@ -317,6 +484,96 @@ public:
    }     
    
 }; // class glcd_oled_i2c_128x64_buffered
+
+// ==========================================================================
+//
+// fast buffered
+//
+// ==========================================================================
+
+/// buffered oled window
+class glcd_oled_i2c_128x64_fast_buffered : public ssd1306_i2c, public window {
+private:
+
+   static auto constexpr wsize = xy( 128, 64 );
+   
+   static auto constexpr buf_size = wsize.x * wsize.y / 8;
+
+   uint8_t buffer[ buf_size  ];
+   bool     dirty[ buf_size ];
+         
+   void write_implementation( 
+      xy pos, 
+      color col
+   ) override {
+      int a = pos.x + ( pos.y / 8 ) * size.x;
+
+      if( col == white ){ 
+         buffer[ a ] |=  ( 0x01 << (pos.y % 8 ));  
+      } else {
+         buffer[ a ] &= ~( 0x01 << ( pos.y % 8 )); 
+      }   
+      
+      dirty[ a ] = true;
+   }   
+     
+public:
+   
+   /// construct by providing the i2c channel
+   glcd_oled_i2c_128x64_fast_buffered( i2c_bus & bus, int address = 0x3C ):
+      ssd1306_i2c( bus, address ),
+      window( wsize, white, black )
+   {
+      bus.write( address ).write( 
+         ssd1306_initialization, 
+         sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
+      );     
+   }
+   
+   void flush() override {
+      unsigned int start = 0;
+      while( start < buf_size ){
+         
+         // find first/next dirty pixel
+         while( !dirty[ start ] ){ 
+            ++start;
+            if( start == buf_size ){ 
+               // no dirty pixels: nothing to do
+               return;
+            }               
+         }    
+         
+         // find the extent of the next message
+         unsigned int tail    = start;
+         unsigned int cursor  = start;
+         unsigned int gap     = 0;
+         for(;;){
+            if( dirty[ cursor ] ){
+               gap = 0;
+               tail = cursor;
+               dirty[ cursor ] = false;
+            } else {                 
+               // if gap larger than 10: flush upto last visited dirty pixel
+               if( ++gap > 10 ){
+                  break;
+               }                  
+            }   
+            ++cursor;
+            // if end of buffer: flush 
+            if( cursor == buf_size ){
+               break;
+            }               
+         }            
+         
+         command( ssd1306_commands::column_addr,  start % wsize.x,  127 );
+         command( ssd1306_commands::page_addr,    start / wsize.x,    7 );   
+         auto t = bus.write( address );
+         t.write( ssd1306_data_prefix );
+         t.write( & buffer[ start ], 1 + ( tail - start ) );
+      }
+   }     
+   
+}; // class glcd_oled_i2c_128x64_fast_buffered
 
 using glcd_oled = glcd_oled_i2c_128x64_buffered;
 
