@@ -34,4 +34,4 @@ SEARCH            += $(CATCH)/include
 BMPTK             ?= $(HWLIB)/../bmptk
 
 # defer to the bmptk makefile.inc
-include           $(BMPTK)/makefile.inc
+include           $(BMPTK)/Makefile.inc
