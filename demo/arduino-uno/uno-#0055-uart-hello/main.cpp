@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// blink the LED on an Arduino Uno
+// Hello world on DB103 (LPC1114)
 //
 // (c) Wouter van Ooijen (wouter@voti.nl) 2017
 //
@@ -13,6 +13,12 @@
 #include "hwlib.hpp"
 
 int main( void ){
-   auto led = hwlib::target::pin_out( hwlib::target::pins::led );
-   hwlib::blink( led, 1 );
+   
+   // wait for the terminal emulator to start up
+   hwlib::wait_ms( 1'000 );   
+       
+   for(;;){       
+      hwlib::cout << "Hello world!\n" << hwlib::flush;
+      hwlib::wait_ms( 500 );   
+   }         
 }

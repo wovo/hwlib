@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// blink the LED on an Arduino Uno
+// empty project
 //
 // (c) Wouter van Ooijen (wouter@voti.nl) 2017
 //
@@ -13,6 +13,13 @@
 #include "hwlib.hpp"
 
 int main( void ){
-   auto led = hwlib::target::pin_out( hwlib::target::pins::led );
-   hwlib::blink( led, 1 );
+   hwlib::target::board board; 
+   
+   board.blue.write( 1 );
+   board.blue.flush();
+   
+   auto leds = hwlib::port_out_from(
+      board.led1, board.led2, board.led3, board.led6, 
+      board.led9, board.led8, board.led7, board.led4 );
+   hwlib::snake( leds, 50 );
 }

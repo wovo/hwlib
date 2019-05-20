@@ -19,7 +19,7 @@
 
 // the AVR8 compiler doesn't like waht is happening here,
 // maybe due to the split code/data address spaces of the AVR8
-#ifndef HWLIB_TARGET_arduino_uno
+#ifndef BMPTK_CHIP_atmega328
 
 namespace hwlib {      
     

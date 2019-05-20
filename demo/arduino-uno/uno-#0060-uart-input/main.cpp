@@ -21,7 +21,7 @@ int main( void ){
       hwlib::cout 
          << "Type a character : " << hwlib::flush;
          
-      char c = 'a'; // hwlib::cin.getc();
+      char c = hwlib::cin.getc();
       
       hwlib::cout 
          << "\n   "

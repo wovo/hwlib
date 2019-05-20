@@ -571,7 +571,7 @@ public:
 //  
 //============================================================================
 
-#ifndef HWLIB_TARGET_arduino_uno
+#ifndef BMPTK_CHIP_atmega328
  
 /// compare for equality
 template< typename T >   

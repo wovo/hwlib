@@ -34,6 +34,12 @@
    #include HWLIB_INCLUDE( targets/hwlib-arduino-uno.hpp )
 #endif
 
+/// - HWLIB_TARGET_my_first_devboard : board with Arduino Nano (ATMega328P chip)
+#ifdef HWLIB_TARGET_my_first_dev_board
+   #define HWLIB_TARGET
+   #include HWLIB_INCLUDE( targets/hwlib-my-first-dev-board.hpp )
+#endif
+
 /// - HWLIB_TARGET_arduino_due : Arduino Due(ATSAM3X8E chip chip)
 #ifdef HWLIB_TARGET_arduino_due
    #define HWLIB_TARGET

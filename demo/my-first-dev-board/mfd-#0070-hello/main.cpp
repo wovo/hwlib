@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// blink the LED on an Arduino Uno
+// empty project
 //
 // (c) Wouter van Ooijen (wouter@voti.nl) 2017
 //
@@ -13,6 +13,9 @@
 #include "hwlib.hpp"
 
 int main( void ){
-   auto led = hwlib::target::pin_out( hwlib::target::pins::led );
-   hwlib::blink( led, 1 );
-}
+   for(int i = 1;; ++ i){   
+      hwlib::cout << "Hello world for the " << i << "th time!\n";
+      hwlib::wait_ms( 1'000 );
+   }
+}      
+ 

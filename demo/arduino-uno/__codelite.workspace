@@ -12,7 +12,7 @@
       <Project Name="uno-#0020-two" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="uno-#0030-blink-direct" Path="uno-#0030-blink-direct/_codelite.project" Active="Yes"/>
+  <Project Name="uno-#0030-blink-direct" Path="uno-#0030-blink-direct/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0030-blink-direct" ConfigName="Release"/>
@@ -30,7 +30,13 @@
       <Project Name="uno-#0050-blink-blink" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="uno-#0060-uart-input" Path="uno-#0060-uart-input/_codelite.project" Active="No"/>
+  <Project Name="uno-#0055-uart-hello" Path="uno-#0055-uart-hello/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="uno-#0055-uart-hello" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+  <Project Name="uno-#0060-uart-input" Path="uno-#0060-uart-input/_codelite.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0060-uart-input" ConfigName="Release"/>
@@ -46,12 +52,6 @@
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0080-lcd-scrolling-message" ConfigName="Release"/>
-    </WorkspaceConfiguration>
-  </BuildMatrix>
-  <Project Name="uno-#0090-lcd-keypad-shield" Path="uno-#0090-lcd-keypad-shield/_codelite.project" Active="No"/>
-  <BuildMatrix>
-    <WorkspaceConfiguration Name="Release" Selected="yes">
-      <Project Name="uno-#0090-lcd-keypad-shield" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
   <Project Name="uno-#0100-pcfa8574a-lcd-16x2" Path="uno-#0100-pcfa8574a-lcd-16x2/_codelite.project" Active="No"/>
