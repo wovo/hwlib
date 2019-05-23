@@ -89,7 +89,7 @@ HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-native-sfml.hpp
 HEADERS           += targets/hwlib-none.hpp
 
-#ifeq ($(TARGET),native))
+ifeq ($(TARGET),native)
    ifeq ($(OS),Windows_NT)
       SEARCH            += $(HWLIB)/../SFML-2.5.1/include
       LINKER_FLAGS      += -L$(HWLIB)/../SFML-2.5.1/lib 
@@ -100,4 +100,4 @@ HEADERS           += targets/hwlib-none.hpp
       LINKER_FLAGS      += -lsfml-graphics -lsfml-window -lsfml-system 
       DEFINES           += -DSFML_STATIC
    endif
-#endif
+endif
