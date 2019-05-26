@@ -347,7 +347,10 @@ private:
       wait_half_period();
       sda.write( x ); sda.flush();
       scl.write( 1 ); scl.flush();
-      wait_half_period();
+
+      do {
+         wait_half_period();
+      } while( ! scl.read() );
    }
 
    bool read_bit() override {
@@ -355,7 +358,11 @@ private:
       sda.write( 1 ); sda.flush();
       wait_half_period();  
       scl.write( 1 ); scl.flush();
-      wait_half_period();
+
+      do {
+         wait_half_period();
+      } while( ! scl.read() );
+
       sda.refresh();
       bool result = sda.read();
       wait_half_period();    

@@ -568,7 +568,7 @@ char HWLIB_WEAK uart_getc( ){
 }
 
 #endif
-#ifdef HWLIB_ONCE
+#ifdef _HWLIB_ONCE
 
 uint64_t now_ticks(){
    return target::now_ticks();
