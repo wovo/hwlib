@@ -384,8 +384,10 @@ uint_fast64_t ticks_per_us(){
    return 16;
 }
 
-static inline uint16_t       last_low = 0;
-static inline uint_fast64_t  high = 0;
+//static inline uint16_t       last_low = 0;
+//static inline uint_fast64_t  high = 0;
+static uint16_t       last_low = 0;
+static uint_fast64_t  high = 0;
 
 uint_fast64_t now_ticks(){
    
