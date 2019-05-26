@@ -28,16 +28,65 @@ private:
    atmega328::pin_in sw3_pin;
    atmega328::pin_in sw4_pin;
    
+   atmega328::pin_adc sw5_adc; 
+   atmega328::pin_adc sw6_adc;
+   
+   class invert_and_pullup_t : public hwlib::pin_in {
+   private:
+	
+      atmega328::pin_in & slave;
+   
+   public:
+
+      invert_and_pullup_t( atmega328::pin_in & slave ): 
+         slave( slave )
+      {
+         slave.pullup_enable();
+      }
+   
+      bool read() override {
+         return ! slave.read();
+      }	
+
+      void refresh() override {
+         slave.refresh();            
+      }
+   };
+   
+   class pin_in_from_adc : public hwlib::pin_in {
+   private:      
+   
+      hwlib::adc & slave;
+      
+   public:
+   
+      pin_in_from_adc( hwlib::adc & slave ): 
+         slave( slave )
+      {}
+   
+      bool read() override {
+         return slave.read() > ( slave.adc_max_value / 2 ) ;
+      }	
+
+      void refresh() override {
+         slave.refresh();            
+      }
+   
+   };
+   
 public:   
 
    atmega328::pin_out buzzer;
    
    atmega328::pin_adc adc;
 
-   hwlib::pin_invert_from_in_t sw1;
-   hwlib::pin_invert_from_in_t sw2;
-   hwlib::pin_invert_from_in_t sw3;
-   hwlib::pin_invert_from_in_t sw4;
+   invert_and_pullup_t sw1;
+   invert_and_pullup_t sw2;
+   invert_and_pullup_t sw3;
+   invert_and_pullup_t sw4;
+   
+   pin_in_from_adc sw5;
+   pin_in_from_adc sw6;
       
    atmega328::pin_out red;
    atmega328::pin_out green;
@@ -58,6 +107,9 @@ public:
       sw2_pin( 2, 2 ),
       sw3_pin( 2, 3 ),
       sw4_pin( 2, 4 ),
+      
+      sw5_adc( 6 ),
+      sw6_adc( 7 ),
 
       buzzer( 3, 3 ),
       
@@ -67,6 +119,9 @@ public:
       sw2( sw2_pin ),
       sw3( sw3_pin ),
       sw4( sw4_pin ),
+       
+      sw5( sw5_adc ),
+      sw6( sw6_adc ),
       
       red(   1, 3 ),
       green( 1, 5 ),

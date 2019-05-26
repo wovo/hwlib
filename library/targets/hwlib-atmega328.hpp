@@ -112,8 +112,17 @@ public:
 class pin_in : public hwlib::pin_in {
 private:
 
+   volatile uint8_t & port_out;
    volatile uint8_t & port_in;
    uint8_t mask;
+   
+   void write( bool v ){
+      if( v ){
+         port_out |= mask;
+      } else {
+         port_out &= ~mask;
+      }
+   }   
  
 public:
 
@@ -124,6 +133,7 @@ public:
    ///
    /// This constructor sets the pin direction to input.
    pin_in( uint8_t port_number, uint8_t pin_number ): 
+      port_out{ port_data( port_number ) },   
       port_in{ port_input( port_number ) }, 
       mask( 0x1 << pin_number )
    {
@@ -136,6 +146,14 @@ public:
    }
    
    void refresh() override {}
+   
+   void pullup_enable(){
+      write( 1 );
+   }
+
+   void pullup_disable(){
+      write( 0 );
+   }   
    
 };
 
@@ -225,6 +243,14 @@ public:
    void flush() override {}
 
    void direction_flush() override {}
+   
+   void pullup_enable(){
+      write( 1 );
+   }
+
+   void pullup_disable(){
+      write( 0 );
+   }      
    
 };   
 
