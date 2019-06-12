@@ -257,7 +257,7 @@ public:
    uint_fast8_t read_byte(){	 
       uint8_t data;
       primitives.read( first_read, &data, 1 );			  
-      first_read = false;d
+      first_read = false;
       return data;
    }
    
