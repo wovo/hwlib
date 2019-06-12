@@ -257,7 +257,7 @@ public:
    uint_fast8_t read_byte(){	 
       uint8_t data;
       primitives.read( first_read, &data, 1 );			  
-      first_read = false;
+      first_read = false;d
       return data;
    }
    
@@ -277,6 +277,7 @@ public:
    
    /// terminate (close) the read transaction
    ~i2c_read_transaction(){
+      primitives.write_nack();
       primitives.write_stop();         		  
    }
      
