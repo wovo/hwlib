@@ -82,7 +82,7 @@
 /// showbase              | ints are witten with a base prefix
 /// noshowbase            | ints are written without a base prefix
 /// setfill(c)            | c is used as the fill character
-/// setwidth(n)           | a write uses a field of n positions
+/// setw(n)               | a write uses a field of n positions
 /// right                 | a write is left aligned in its field
 /// left                  | a write is right aligned in its field
 /// bin                   | integers are written base 2
