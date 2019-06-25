@@ -19,9 +19,8 @@ int main( void ){
    auto scl      = hwlib::target::pin_oc{ hwlib::target::pins::scl };
    auto sda      = hwlib::target::pin_oc{ hwlib::target::pins::sda };
    
-   auto i2c_bus      = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
-   auto oled_channel = i2c_bus.channel( 0x3c );
-   auto oled         = hwlib::glcd_oled_i2c_128x64_direct( oled_channel ); 
+   auto i2c_bus       = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
+   auto oled          = hwlib::glcd_oled( i2c_bus );  
    
    hwlib::graphics_random_circles( oled );  
    
