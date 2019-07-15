@@ -16,9 +16,9 @@ int main( void ){
 
    auto scl      = hwlib::target::pin_oc{ hwlib::target::pins::scl };
    auto sda      = hwlib::target::pin_oc{ hwlib::target::pins::sda };
-   auto i2c_bus  = hwlib::i2c_bus_bit_banged_scl_sda{ scl,sda };
-   auto channel  = i2c_bus.channel( 0x38 );   
-   auto chip     = hwlib::pcf8591{ channel };
+   
+   auto i2c_bus  = hwlib::i2c_bus_bit_banged_scl_sda{ scl,sda };  
+   auto chip     = hwlib::pcf8591{ i2c_bus };
    
    for(;;){
       chip.adc0.refresh();       
