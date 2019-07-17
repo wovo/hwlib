@@ -27,8 +27,7 @@
 /* EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                           */
 /* ---------------------------------------------------------------------------- */
 
-// 
-#include "sam.h"
+#include "sam3xa.h"
 
 struct sam3xa {
 
