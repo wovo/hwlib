@@ -24,6 +24,7 @@ HEADERS           += core/hwlib-defines.hpp
 HEADERS           += core/hwlib-targets.hpp
 HEADERS           += core/hwlib-panic.hpp
 HEADERS           += core/hwlib-common.hpp
+HEADERS           += core/hwlib-background.hpp
 HEADERS           += core/hwlib-wait.hpp
 
 HEADERS           += pins/hwlib-pin.hpp

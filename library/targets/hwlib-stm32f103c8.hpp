@@ -510,13 +510,17 @@ bool uart_char_available(){
 
 char uart_getc(){
    // uart_init() is not needed because uart_char_available does that
-   while( ! uart_char_available() ){}
+   while( ! uart_char_available() ){
+      hwlib::background::do_background_work();	   
+   }	   
    return hw_uart->UART_RHR; 
 }
 
 void uart_putc( char c ){
    uart_init(); 
-   while( ( hw_uart->UART_SR & 2 ) == 0 ){}
+   while( ( hw_uart->UART_SR & 2 ) == 0 ){
+      hwlib::background::do_background_work();	   
+   }
    hw_uart->UART_THR = c;
 }
 */
@@ -584,7 +588,9 @@ uint64_t now_us(){
 
 void wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
-   while( now_us() < end ){}
+   while( now_us() < end ){
+      background::do_background_work();	   
+   }
 }
 
 #endif

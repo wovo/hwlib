@@ -38,8 +38,8 @@ public:
    /// \details
    /// You must supply the window.
    ///
-   /// If buffering is specified, the actuial drawing can be delayed
-   /// until flush() is aclled.
+   /// If buffering is specified, the actual drawing can be delayed
+   /// until flush() is called.
    virtual void draw( window & w ) = 0;    
 
 }; // class drawable
@@ -142,6 +142,37 @@ public:
    }
    
 }; // class line   
+
+
+// ==========================================================================
+//
+// rectangle
+//
+// ==========================================================================
+
+class rectangle {
+private:
+
+   xy start, end;
+   color c;
+
+public:
+
+   rectangle( 
+      const xy & start, const xy & end,
+      const color & c = transparent
+   ):
+      start( start ), end( end ), c( c )
+   {}
+
+   void draw( hwlib::window & w ){
+      line( xy( start.x, start.y ), xy( start.x,   end.y + 1 ), c ).draw( w );
+      line( xy( end.x,   start.y ), xy( end.x,     end.y + 1 ), c ).draw( w );
+      line( xy( start.x, start.y ), xy( end.x + 1, start.y   ), c ).draw( w );
+      line( xy( start.x, end.y   ), xy( end.x + 1, end.y     ), c ).draw( w );
+   }
+
+};
 
 
 // ==========================================================================

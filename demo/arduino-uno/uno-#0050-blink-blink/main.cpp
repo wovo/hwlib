@@ -14,5 +14,5 @@
 
 int main( void ){
    auto led = hwlib::target::pin_out( hwlib::target::pins::led );
-   hwlib::blink( led, 1 );
+   hwlib::blink( led );
 }

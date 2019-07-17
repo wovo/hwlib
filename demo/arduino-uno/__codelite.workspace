@@ -36,7 +36,7 @@
       <Project Name="uno-#0055-uart-hello" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="uno-#0060-uart-input" Path="uno-#0060-uart-input/_codelite.project" Active="Yes"/>
+  <Project Name="uno-#0060-uart-input" Path="uno-#0060-uart-input/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0060-uart-input" ConfigName="Release"/>
@@ -58,6 +58,18 @@
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0100-pcfa8574a-lcd-16x2" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+  <Project Name="uno-#0110-background-blink" Path="uno-#0110-background-blink/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="uno-#0110-background-blink" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+  <Project Name="uno-#0120-lol-shield" Path="uno-#0120-lol-shield/_codelite.project" Active="No"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Project Name="uno-#0120-lol-shield" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>

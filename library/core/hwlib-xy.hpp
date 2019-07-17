@@ -77,6 +77,11 @@ public:
       };         
    }    
 
+   /// reverse multiply by an integer
+   friend constexpr xy operator*( int n, const xy & rhs ){
+      return rhs * n;
+   }    
+
    /// test whether two xy values are equal
    constexpr bool operator==( const xy & rhs ) const {
       return ( x == rhs.x ) && ( y == rhs.y );

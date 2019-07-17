@@ -30,10 +30,6 @@ private:
       w.write( start + pos, col );
    }      
 
-   void flush() override {
-      w.flush();
-   }      
-   
 public:      
 
    /// create a window_part from a larger window, its origin and its size
@@ -48,6 +44,10 @@ public:
       start( start )
    {}   
       
+   void flush() override {
+      w.flush();
+   }  
+   
 }; // class window_part
 
 

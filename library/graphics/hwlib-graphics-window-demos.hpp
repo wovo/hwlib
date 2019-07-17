@@ -26,7 +26,8 @@ namespace hwlib {
 /// - waits half a second.
 void graphics_random_lines( 
    window & w, 
-   uint_fast16_t n_lines = 30
+   uint_fast16_t n_lines = 30,
+   const color & c = transparent      
 );
 
 /// random circles demo
@@ -38,7 +39,8 @@ void graphics_random_lines(
 /// - waits half a second.
 void graphics_random_circles( 
    window & w, 
-   uint_fast16_t n_circles = 30 
+   uint_fast16_t n_circles = 30,
+   const color & c = transparent   
 );
 
 
@@ -67,27 +69,11 @@ uint_fast32_t HWLIB_WEAK random_in_range(
 
 void HWLIB_NORETURN graphics_random_lines( 
    window & w, 
-   uint_fast16_t n_lines 
+   uint_fast16_t n_lines,
+   const color & c   
 ){
    for(;;){
-      w.clear();
-      for( int_fast16_t x = 0; x < w.size.x; x++ ){
-         w.write( hwlib::xy{ 
-            x,            
-            0 } );
-         w.write( hwlib::xy{ 
-            x, 
-            static_cast< int_fast16_t >( w.size.y - 1 ) } );
-      }   
-      for( int_fast16_t y = 0; y < w.size.y; y++ ){
-         w.write( hwlib::xy{            
-            0, 
-            y } );
-         w.write( hwlib::xy{ 
-            static_cast< int_fast16_t >( w.size.x - 1 ), 
-            y } );
-      }   
-      w.flush();			
+      w.clear();			
       for( 
          int_fast16_t n = 0; 
          n < static_cast< int_fast16_t >( n_lines ); 
@@ -100,7 +86,7 @@ void HWLIB_NORETURN graphics_random_lines(
          auto line = hwlib::line( 
             hwlib::xy{  x,  y },
             hwlib::xy{ x1, y1 }, 
-            w.foreground 
+            c
          );
          line.draw( w );
          w.flush();			
@@ -111,7 +97,8 @@ void HWLIB_NORETURN graphics_random_lines(
 
 void HWLIB_NORETURN graphics_random_circles( 
    window & w, 
-   uint_fast16_t n_circles 
+   uint_fast16_t n_circles,
+   const color & c    
 ){
    for(;;){
       w.clear();
@@ -123,7 +110,7 @@ void HWLIB_NORETURN graphics_random_circles(
          auto circle = hwlib::circle( 
             hwlib::xy{  x,  y },
             s,
-            w.foreground 
+            c
          );
          circle.draw( w );
          w.flush();

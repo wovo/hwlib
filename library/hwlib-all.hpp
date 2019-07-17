@@ -34,6 +34,7 @@
 #include HWLIB_INCLUDE( core/hwlib-targets.hpp )
 #include HWLIB_INCLUDE( core/hwlib-panic.hpp )
 #include HWLIB_INCLUDE( core/hwlib-common.hpp )
+#include HWLIB_INCLUDE( core/hwlib-background.hpp )
 #include HWLIB_INCLUDE( core/hwlib-wait.hpp )
 
 #include HWLIB_INCLUDE( pins/hwlib-pin.hpp )
