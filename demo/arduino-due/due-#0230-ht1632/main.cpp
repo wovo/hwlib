@@ -161,8 +161,8 @@ int main( void ){
    hwlib::graphics_random_lines( w, 30, hwlib::red );
    for(;;){
       led.write( 0 );       
-      hwlib::wait_ms( 50 );
+      hwlib::wait_us( 50 );
       led.write( 1 );
-      hwlib::wait_ms( 50 );
+      hwlib::wait_us( 50 );
    }
 }   
