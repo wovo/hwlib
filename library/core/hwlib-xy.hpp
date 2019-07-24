@@ -91,6 +91,10 @@ public:
    constexpr bool operator!=( const xy & rhs ) const {
       return ! ( *this == rhs );
    }
+   
+   friend constexpr xy transpose( const xy & rhs ){
+      return xy( rhs.y, rhs.x );      
+   }      
 
 }; 
 
@@ -174,7 +178,10 @@ class xy_all_t all( xy v );
 /// An xy pair is printed in [x,y] format
 ///
 /// \relates xy
-ostream & operator<<( ostream & lhs, xy rhs );
+template< typename T >
+T & operator<<( T & lhs, xy rhs ){
+   return lhs << "[" << rhs.x << ":" << rhs.y << "]";
+}
 
 
 // ===========================================================================
@@ -185,14 +192,9 @@ ostream & operator<<( ostream & lhs, xy rhs );
 
 #ifdef _HWLIB_ONCE
 
-ostream & operator<<( ostream & lhs, xy rhs ){
-   return lhs << "[" << rhs.x << ":" << rhs.y << "]";
-}
-
 class xy_all_t all( xy v ){
    return xy_all_t( v );
 }
-
 
 #endif // #ifdef _HWLIB_ONCE
 

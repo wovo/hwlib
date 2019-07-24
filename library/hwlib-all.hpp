@@ -35,6 +35,9 @@
 #include HWLIB_INCLUDE( core/hwlib-panic.hpp )
 #include HWLIB_INCLUDE( core/hwlib-common.hpp )
 #include HWLIB_INCLUDE( core/hwlib-background.hpp )
+#include HWLIB_INCLUDE( core/hwlib-xy.hpp )
+#include HWLIB_INCLUDE( core/hwlib-color.hpp )
+#include HWLIB_INCLUDE( core/hwlib-random.hpp )
 #include HWLIB_INCLUDE( core/hwlib-wait.hpp )
 
 #include HWLIB_INCLUDE( pins/hwlib-pin.hpp )
@@ -58,7 +61,6 @@
 #include HWLIB_INCLUDE( char-io/hwlib-istream.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-bb-uart.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-console.hpp )
-#include HWLIB_INCLUDE( core/hwlib-xy.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-terminal.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-terminal-demos.hpp )
 
@@ -71,10 +73,11 @@
 #include HWLIB_INCLUDE( core/hwlib-i2c.hpp )
 #include HWLIB_INCLUDE( core/hwlib-spi.hpp )
 
-#include HWLIB_INCLUDE( graphics/hwlib-graphics-color.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-image.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-image-decorators.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-font.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-canvas.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-drawables.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window-decorators.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window-demos.hpp )

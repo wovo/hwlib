@@ -305,6 +305,19 @@ private:
       pixels_byte_write( xy( pos.x, pos.y / 8 ), buffer[ a ] );   
 
    }   
+   
+   void clear_implementation( color c ) override {
+      const uint8_t d = ( c == white ) ? 0xFF : 0x00;
+      command( ssd1306_commands::column_addr,  0,  127 );
+      command( ssd1306_commands::page_addr,    0,    7 );  
+      auto t = bus.write( address );
+      t.write( ssd1306_data_prefix );
+      for( uint_fast16_t x = 0; x < sizeof( buffer ); ++x ){                
+	      buffer[ x ] = d;
+		   t.write( d );
+      }        
+	  cursor = xy( 255, 255 );
+   }   
      
 public:
    
@@ -319,21 +332,7 @@ public:
       );     
    }
    
-   void clear() override {
-      const uint8_t d = ( background == white ) ? 0xFF : 0x00;
-      command( ssd1306_commands::column_addr,  0,  127 );
-      command( ssd1306_commands::page_addr,    0,    7 );  
-      auto t = bus.write( address );
-      t.write( ssd1306_data_prefix );
-      for( uint_fast16_t x = 0; x < sizeof( buffer ); ++x ){                
-	      buffer[ x ] = d;
-		   t.write( d );
-      }        
-	  cursor = xy( 255, 255 );
-   }
-   
    void flush() override {}  
-
 
 }; // class glcd_oled_i2c_128x64_direct
 
@@ -398,8 +397,8 @@ public:
       
    }
    
-   void clear() override {
-      const uint8_t d = ( background == white ) ? 0xFF : 0x00;
+   void clear_implementation(  color c ) override {
+      const uint8_t d = ( c == white ) ? 0xFF : 0x00;
       command( ssd1306_commands::column_addr,  0,  127 );
       command( ssd1306_commands::page_addr,    0,    7 );  
       auto t = bus.transaction( cs );

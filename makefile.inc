@@ -25,6 +25,8 @@ HEADERS           += core/hwlib-targets.hpp
 HEADERS           += core/hwlib-panic.hpp
 HEADERS           += core/hwlib-common.hpp
 HEADERS           += core/hwlib-background.hpp
+HEADERS           += core/hwlib-color.hpp
+HEADERS           += core/hwlib-random.hpp
 HEADERS           += core/hwlib-wait.hpp
 
 HEADERS           += pins/hwlib-pin.hpp
@@ -61,10 +63,11 @@ HEADERS           += core/hwlib-dac-demos.hpp
 HEADERS           += core/hwlib-i2c.hpp
 HEADERS           += core/hwlib-spi.hpp
 
-HEADERS           += graphics/hwlib-graphics-color.hpp
 HEADERS           += graphics/hwlib-graphics-image.hpp
+HEADERS           += graphics/hwlib-graphics-image-decorators.hpp
 HEADERS           += graphics/hwlib-graphics-font.hpp
 HEADERS           += graphics/hwlib-graphics-window.hpp
+HEADERS           += graphics/hwlib-graphics-canvas.hpp
 HEADERS           += graphics/hwlib-graphics-drawables.hpp
 HEADERS           += graphics/hwlib-graphics-window-decorators.hpp
 HEADERS           += graphics/hwlib-graphics-window-demos.hpp

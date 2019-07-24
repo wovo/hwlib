@@ -17,7 +17,7 @@
 
 namespace hwlib {
 
-	
+
 // ==========================================================================
 //
 // image
@@ -30,7 +30,7 @@ namespace hwlib {
 class image {
 private:
 
-   virtual color get_implementation( xy pos ) const = 0;
+   virtual color read_implementation( xy pos ) const = 0;
 
 public:
 
@@ -46,57 +46,21 @@ public:
    {}
 
    /// the color at the specified location
-   color operator[]( xy pos ) const {
+   
+   color read( xy pos ) const {
       return (
                ( pos.x >= 0 ) && ( pos.x < size.x )
             && ( pos.y >= 0 ) && ( pos.y < size.y )
          )
-            ? get_implementation( pos )
-            : black;
+            ? read_implementation( pos )
+            : transparent;
    }
 
+   /// the color at the specified location
+   color operator[]( xy pos ) const {
+      return read( pos );
+   }
 };
-
-
-// ==========================================================================
-//
-// invert
-//
-// ==========================================================================
-
-/// \cond INTERNAL    
-
-class image_invert_t : public image {
-private:
-
-   const image & slave;
-   
-   color get_implementation( xy pos ) const override {
-      return - slave[ pos ];
-   }	  
-
-public:
-
-   constexpr image_invert_t( const image & slave ): 
-      image( slave.size ), slave( slave ){}
-	  
-};  
-
-/// \endcond   
-
-/// invert an image
-///
-/// This function returns the image, but with the color of 
-/// all its pixels inverted.
-const image_invert_t invert( const image & slave );
-
-#ifdef _HWLIB_ONCE 
-
-const image_invert_t invert( const image & slave ){
-   return image_invert_t( slave );
-}
-
-#endif   
 
 
 // ==========================================================================
@@ -110,7 +74,7 @@ class image_8x8 : public image {
 private:
    unsigned char data[ 8 ];
 
-   color get_implementation( xy pos ) const override {
+   color read_implementation( xy pos ) const override {
       return
          ( data[ pos.y ] & ( 0x01 << pos.x )) == 0
             ? white

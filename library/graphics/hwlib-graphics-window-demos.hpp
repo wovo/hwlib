@@ -21,26 +21,29 @@ namespace hwlib {
 /// 
 /// This functions repeats the following actions:
 /// - clears the window
-/// - draws a border
-/// - draws 30 random lines,
+/// - draws a 1-pixel border
+/// - draws n random lines (default is 30),
+///   of the specified color (default is the window foreground)
 /// - waits half a second.
 void graphics_random_lines( 
    window & w, 
-   uint_fast16_t n_lines = 30,
-   const color & c = transparent      
+   uint_fast16_t n = 30,
+   const color & c = unspecified      
 );
 
 /// random circles demo
 /// 
 /// This functions repeats the following actions:
 /// - clears the window
-/// - draws n_circles (default is 30) random circles 
+/// - draws a 1-pixel border
+/// - draws n circles (default is 30) random circles 
 ///      (which might be partially out-of-screen),
+///   of the specified color (default is the window foreground)
 /// - waits half a second.
 void graphics_random_circles( 
    window & w, 
-   uint_fast16_t n_circles = 30,
-   const color & c = transparent   
+   uint_fast16_t n = 30,
+   const color & c = unspecified  
 );
 
 
@@ -51,21 +54,6 @@ void graphics_random_circles(
 // ===========================================================================
 
 #ifdef _HWLIB_ONCE
-
-uint_fast32_t HWLIB_WEAK rand(){ 
-   static uint_fast32_t n = 0;
-   n = n * 214013L + 2531011L; 
-   return ( n >> 16) & 0x7fff; 
-}
-
-uint_fast32_t HWLIB_WEAK random_in_range( 
-   uint_fast32_t min, 
-   uint_fast32_t max 
-){
-   auto x = rand();
-   x = x % ( max - min + 1 ); 
-   return min + x;
-}
 
 void HWLIB_NORETURN graphics_random_lines( 
    window & w, 
@@ -79,18 +67,13 @@ void HWLIB_NORETURN graphics_random_lines(
          n < static_cast< int_fast16_t >( n_lines ); 
          n++ 
       ){
-         const int_fast16_t x  = random_in_range( 0, w.size.y );
-         const int_fast16_t x1 = random_in_range( 0, w.size.x );
-         const int_fast16_t y  = random_in_range( 0, w.size.y );
-         const int_fast16_t y1 = random_in_range( 0, w.size.y );
-         auto line = hwlib::line( 
-            hwlib::xy{  x,  y },
-            hwlib::xy{ x1, y1 }, 
+         line( 
+            random_in( w.size ),
+            random_in( w.size ),
             c
-         );
-         line.draw( w );
+         ).draw( w );
          w.flush();			
-         hwlib::wait_ms( 500 );
+         wait_ms( 500 );
       }
    }  
 }
@@ -104,17 +87,13 @@ void HWLIB_NORETURN graphics_random_circles(
       w.clear();
       w.flush();		  
       for( uint_fast16_t n = 0; n < n_circles; n++ ){
-         const int_fast16_t x  = random_in_range( 10, w.size.x - 10 );
-         const int_fast16_t y  = random_in_range( 10, w.size.y - 10 );
-         const int_fast16_t s  = random_in_range(  0, w.size.y / 4 );
-         auto circle = hwlib::circle( 
-            hwlib::xy{  x,  y },
-            s,
+         circle( 
+            random_in( w.size ),
+            random_in(  0, w.size.y / 4 ),
             c
-         );
-         circle.draw( w );
+         ).draw( w );
          w.flush();
-         hwlib::wait_ms( 500 );
+         wait_ms( 500 );
       }
    }  
 }

@@ -20,7 +20,7 @@ namespace hwlib {
 /// a window_part (subwindow of a larger window)
 /// 
 /// A window_part is a rectangular part of a larger window.
-class window_part : public window {
+class window_part_t : public window {
 private:
 
    window & w;
@@ -38,7 +38,7 @@ public:
    /// (top-left pixel) of the subwindow, and the size of the subwindow.
    /// The foreground and background color are copied from the larger
    /// window.
-   window_part( window &w, xy start, xy size ):
+   window_part_t( window & w, xy start, xy size ):
       window( size, w.foreground, w.background ),
       w( w ),
       start( start )
@@ -48,7 +48,7 @@ public:
       w.flush();
    }  
    
-}; // class window_part
+}; // class window_part_t
 
 
 // ==========================================================================
@@ -56,7 +56,7 @@ public:
 /// window_invert (invert writes to a window)
 /// 
 /// A window_inverts writes inverted to its larger window.
-class window_invert : public window {
+class window_invert_t : public window {
 private:
 
    window & w;
@@ -81,12 +81,43 @@ public:
    /// of those of the minion window, and writes to the 
    /// window_invert write the inverted
    /// pixel color to the minion window.
-   window_invert( window &w ):
+   window_invert_t( window & w ):
       window( w.size, - w.foreground, - w.background ),
       w( w )
    {}   
 
 }; // class class window_invert
 
+
+// ===========================================================================
+//
+// constructor functions
+//
+// ===========================================================================
+
+/// return a part of a window
+window_part_t part( window & w, xy start, xy size );
+
+/// return the inverse of a window
+window_invert_t invert( window & w );
+
+
+// ===========================================================================
+//
+// implementations
+//
+// ===========================================================================
+
+#ifdef _HWLIB_ONCE
+
+window_part_t part( window & w, xy start, xy size ){
+   return window_part_t( w, start, size );
+}   
+
+window_invert_t invert( window & w ){
+   return window_invert_t( w );
+}   
+
+#endif // _HWLIB_ONCE
 
 }; // namespace hwlib

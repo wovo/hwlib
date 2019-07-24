@@ -30,7 +30,7 @@ namespace hwlib {
 class image_16x16 : public image {
 private:   
    
-   color get_implementation( xy pos ) const override {
+   color read_implementation( xy pos ) const override {
       auto x = 16 - pos.x; //wovo !@!
       return
          (( 

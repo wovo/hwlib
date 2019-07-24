@@ -29,5 +29,4 @@ public:
    virtual const image & operator[]( char c ) const = 0;
 };
 
-
 }; // namespace hwlib
