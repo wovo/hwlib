@@ -16,7 +16,6 @@
 #ifndef HWLIB_ARDUINO_DUE_H
 #define HWLIB_ARDUINO_DUE_H
 
-#define _HWLIB_TARGET_WAIT_US_BUSY
 #include HWLIB_INCLUDE( ../hwlib-all.hpp )
 
 #define register
@@ -918,12 +917,43 @@ uint64_t now_us(){
    return now_ticks() / ticks_per_us();
 }   
 
-void HWLIB_WEAK wait_us_busy( int_fast32_t n ){
+// busy waits
+
+void wait_ns_busy( int_fast32_t n ){
+   wait_us_busy( ( n + 999 ) / 1000 );
+}
+
+void wait_us_busy( int_fast32_t n ){
+   auto end = now_us() + n;
+   while( now_us() < end ){}
+}
+
+void wait_ms_busy( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us_busy( 1000 );
+      --n;
+   }   
+} 
+
+// non-busy waits
+
+void HWLIB_WEAK wait_ns( int_fast32_t n ){
+   wait_us( ( n + 999 ) / 1000 );
+}
+
+void HWLIB_WEAK wait_us( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){
       background::do_background_work();	   
    }
 }
+
+void HWLIB_WEAK wait_ms( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us( 1000 );
+      --n;
+   }   
+} 
 
 #endif
 

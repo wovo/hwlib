@@ -120,57 +120,6 @@ uint_fast64_t ticks_per_us();
 //
 // ===========================================================================
 
-#ifdef _HWLIB_ONCE
-
-// The default wait_xx functions call the wait_xx_busy functions.
-// An RTOS can override these defaults to hook into all waiting
-
-void HWLIB_WEAK wait_ns( int_fast32_t n ){
-   wait_ns_busy( n );
-}
-
-void HWLIB_WEAK wait_us( int_fast32_t n ){
-   wait_us_busy( n );
-}
-
-void HWLIB_WEAK wait_ms( int_fast32_t n ){
-   wait_ms_busy( n );
-}
-
-// the target must implement either wait_ns_busy(), wait_us_busy(), or both,
-// and indicate so by defining the corresponding macro, to
-// prevent multiple definitions.
-
-#ifndef _HWLIB_TARGET_WAIT_NS_BUSY
-
-void HWLIB_WEAK wait_ns_busy( int_fast32_t n ){
-   wait_us_busy( ( n + 999 ) / 1000 );
-}
-
-#endif // _HWLIB_TARGET_WAIT_NS_BUSY
-
-#ifndef _HWLIB_TARGET_WAIT_US_BUSY
-
-void HWLIB_WEAK wait_us_busy( int_fast32_t n ){
-   while( n > 0 ){
-      wait_ns_busy( 1000 );
-      --n;
-   } 
-}
-
-#endif // _HWLIB_TARGET_WAIT_US_BUSY
-
-#ifndef _HWLIB_TARGET_WAIT_MS
-
-void HWLIB_WEAK wait_ms_busy( int_fast32_t n ){
-   while( n > 0 ){
-      wait_us_busy( 1000 );
-      --n;
-   }   
-} 
-
-#endif // _HWLIB_TARGET_WAIT_MS
-
-#endif // _HWLIB_ONCE
+// must be provided by the target implementation
 
 }; // namespace hwlib

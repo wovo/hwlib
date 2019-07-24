@@ -41,6 +41,40 @@ void blink( pin_oc & pin, uint_fast16_t ms, uint_fast16_t t );
 /// @copydoc blink( pin_out & pin, uint_fast16_t ms, uint_fast16_t t );
 void blink( pin_in_out & pin, uint_fast16_t ms, uint_fast16_t t );
 
+/// background blinker
+///
+/// As for all background jobs: be carefuill to preserve the object!
+class [[nodiscard]] blinker : public background {
+private:	
+
+   pin_out & pin;
+   
+public: 
+
+   bool state;
+   bool active;
+   uint64_t interval;
+   uint_fast64_t next_run;   
+   
+   blinker( pin_out & pin, uint64_t interval ):
+      pin( pin ), 
+	  state( 0 ), 
+	  active( 1 ),
+	  interval( interval ), 
+	  next_run( hwlib::now_us() )
+   {
+       }   
+   
+   void work() override {     
+      if( now_us() > next_run ){
+         next_run += interval;   
+	     state = ( ! state ) & active;
+	     pin.write( state );
+	     pin.flush();
+      }         
+   }	  
+};
+
 
 // ===========================================================================
 //

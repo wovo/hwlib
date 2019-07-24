@@ -241,6 +241,7 @@ public:
 
 }
 
+/*
 class hoover : public hwlib::background {
 private:
     hwlib::window_buffer & b;
@@ -260,9 +261,19 @@ public:
       w.flush();
    }      
 };
-
+*/
 
 int main( void ){
+    
+   auto led1   = hwlib::target::pin_out{ hwlib::target::pins::d6  };
+   auto led2   = hwlib::target::pin_out{ hwlib::target::pins::d7  };
+   auto led3   = hwlib::target::pin_out{ hwlib::target::pins::d8  };
+   auto led4   = hwlib::target::pin_out{ hwlib::target::pins::d9  };
+   auto led5   = hwlib::target::pin_out{ hwlib::target::pins::d10 };
+   auto led6   = hwlib::target::pin_out{ hwlib::target::pins::d11 };
+   auto led7   = hwlib::target::pin_out{ hwlib::target::pins::d12 };
+   auto led8   = hwlib::target::pin_out{ hwlib::target::pins::d13 };
+   auto leds   = hwlib::port_out_from( led1, led2, led3, led4, led5, led6, led7, led8 );
     
    auto led   = hwlib::target::pin_out{ hwlib::target::pins::led };
    
@@ -291,6 +302,8 @@ int main( void ){
    gnd.write( 0 ); gnd.flush();
     
    auto w1 = hwlib::led_panel< 64, 32 >( rgb0, rgb1, abcd, clk, stb, oe );
+      hwlib::blinker( led1, 200 );    
+
    
    auto w1a = hwlib::window_part( w1, hwlib::xy(  0, 0 ), hwlib::xy( 32, 32 ) );
    auto w1b = hwlib::window_part( w1, hwlib::xy( 32, 0 ), hwlib::xy( 32, 32 ) );
@@ -302,13 +315,13 @@ int main( void ){
    
    auto w = hwlib::window_with_frame( w12, 2, hwlib::blue );
    
-   auto large = hwlib::window_buffer< 100, 100 >();
-   auto h = hoover( large, w );
-   hwlib::graphics_random_lines( large, 30, hwlib::red );
+//   auto large = hwlib::window_buffer< 100, 100 >();
+//   auto h = hoover( large, w );
+   hwlib::graphics_random_lines( w, 30, hwlib::red );
    for(;;){
-      led.write( 0 );       
+      led2.write( 0 );       
       hwlib::wait_ms( 50 );
-      led.write( 1 );
+      led2.write( 1 );
       hwlib::wait_ms( 50 );
    }
 }   

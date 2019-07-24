@@ -24,43 +24,104 @@ namespace hwlib {
 //
 // ==========================================================================
 
-class background;
-
+/// background processing
+//
+/// This class implements run-to-completion style background processing.
+///
+/// A class that needs background procesing must inherit from background
+/// and implement the work function. This work function will be called
+/// from the wait_s(), wait_ms(), wait_us() etc. functions.
+///
+/// When an application contains background work, 
+/// all plain wait functions can take longer than the specified time, 
+/// up to the run time of the longest runtime of the work() functions.
+///
+/// No background work will be done from delay calls made while
+/// a work() function is running.
+///
+/// For all background jobs: be carefuill to preserve the object!
+///
 class background {
 private:
 
    static background * first;
+   static background * current;
+   static bool running;
    background * next;	
 
 public:
 
-   virtual void work() = 0;   	 
-   
-   background(){
-      next = first;
+   /// background constructor
+   ///
+   /// The constructor will add this backround item 
+   /// to the list of backround items.
+   background():
+	  next( first )
+   {
       first = this;	  
    }
    
+   /// background destructor
+   ///
+   /// The destructor will remove this backround item 
+   /// from the list of backround items.
    ~background(){
-      for( background *p = first; p != nullptr; p = p->next ){
-         if( p->next == this ){
-            p->next = next;
+	   
+      // find the pointer that points to us
+      for( background **p = &first; *p != nullptr; p = &(*p)->next ){
+         if( (*p) == this ){
+			 
+			//remove us from the list:
+			// make it point to the next background itenm
+            (*p) = next;
             return;			
 		 }
 	  }		  
    }
 
+   /// background work function
+   ///
+   /// This function will be called to do backround work for its class.
+   virtual void work() = 0;   	 
+   
+   /// do background work
+   ///
+   /// This function is called by the wait functions to do background work.
    static void do_background_work(){
-      static bool active = false;;
-      if( active ){
-		  return;
+	 
+      // do not run any background work when called from background
+	  // work: this would pile stack and delay granularity
+	  if( running ){
+         return;
+      }		 
+	   
+      // if no current work object, start at the start of the list
+      if( current == nullptr ){
+         current = first;
       }
-      active = true;	  
-      for( background *p = first; p != nullptr; p = p->next ){
-         p->work();
+	  
+	  // if there is a current work item
+      if( current != nullptr ){
+		  
+		 // run it	  
+		 running = true;
+         current->work();
+         running = false;
+		 
+		 // next time, it is the turn of the next work item in the list
+		 current = current->next;
 	  }		  
-	  active = false;
-   }	   
+   }
+   
+   /// keep doing background work
+   ///
+   /// Call this function instead of terminating the application
+   /// to continue performing the background work.
+   static void HWLIB_NORETURN run(){
+      for(;;){
+         do_background_work();       
+      }
+   }
    
 };
 
@@ -72,10 +133,10 @@ public:
 
 #ifdef _HWLIB_ONCE
 
-background * background::first = nullptr;
+background * background::first   = nullptr;
+background * background::current = nullptr;
+bool         background::running = false;
 
 #endif // #ifdef _HWLIB_ONCE
-
-
 
 }; // namespace hwlib
