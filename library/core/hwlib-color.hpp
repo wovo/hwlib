@@ -130,6 +130,16 @@ public:
       ); 
    }   
    
+   /// return a color divided by a value (reduced intensity)  
+   constexpr color operator/ ( int n ) const {
+      return color( 
+         special,      
+         ( red / n ), 
+         ( green / n ), 
+         ( blue / n)
+      ); 
+   }   
+   
    /// reports whether two colors are equal   
    constexpr bool operator== ( const color c ) const {
       return special != color_special::normal 
