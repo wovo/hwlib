@@ -95,10 +95,25 @@ HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-native-sfml.hpp
 HEADERS           += targets/hwlib-none.hpp
 
+ifneq ($(wildcard $(HWLIB)/makefile.custom),)
+   include $(HWLIB)/makefile.custom
+else ifneq ($(wildcard $(HWLIB)/../makefile.custom),)
+   include $(HWLIB)/../makefile.custom
+else 
+   include $(HWLIB)/makefile.local
+endif
+
+# add Catch
+SEARCH            += $(CATCH)/single_include/catch2
+
+# add Boost
+SEARCH            += $(BOOST)
+
+# add SFML
 ifeq ($(TARGET),native)
    ifeq ($(OS),Windows_NT)
-      SEARCH            += $(HWLIB)/../SFML-2.5.1/include
-      LINKER_FLAGS      += -L$(HWLIB)/../SFML-2.5.1/lib 
+      SEARCH            += $(SFML)/include
+      LINKER_FLAGS      += -L$(SFML)/lib 
       LINKER_FLAGS      += -lsfml-graphics-s -lsfml-window-s -lsfml-system-s 
       LINKER_FLAGS      += -lopengl32 -lgdi32 -lws2_32 -lwinmm
       DEFINES           += -DSFML_STATIC
@@ -107,3 +122,6 @@ ifeq ($(TARGET),native)
       DEFINES           += -DSFML_STATIC
    endif
 endif
+
+# defer to bmptk
+include           $(BMPTK)/makefile.inc

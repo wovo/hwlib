@@ -49,7 +49,18 @@ public:
       flush();
    }	
    
-   window( int x, int y, int m = 5 ): window( xy( x, y ), m ){}	
+   window( 
+      int x, int y, 
+      color foreground = black, 
+      color background = white,
+      int m = 5 
+   ): window( xy( x, y ), foreground, background, m ){}	
+   
+   window( 
+      int x, int y, int m,
+      color foreground = black, 
+      color background = white
+   ): window( xy( x, y ), foreground, background, m ){}	
    
    void poll(){
       if ( w.isOpen() ){
@@ -119,25 +130,17 @@ void wait_us_busy( int_fast32_t n ){
    while( now_us() < end ){}
 }
 
-/*
-
 void wait_ns( int_fast32_t n ){
    wait_us( n / 1'000 );
 }
 
 void wait_us( int_fast32_t n ){
-   
+   wait_us_busy( n );
 }
 
 void wait_ms( int_fast32_t n ){
    wait_us( n * 1'000 );
 }
-
-uint_fast64_t now_us(){
-   return 0;
-}   
- 
-*/
 
 void uart_putc( char c ){
    std::cout << c << std::flush;
