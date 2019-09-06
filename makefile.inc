@@ -104,7 +104,7 @@ else
 endif
 
 # add Catch
-SEARCH            += $(CATCH)/single_include/catch2
+SEARCH            += $(CATCH)/single_include
 
 # add Boost
 SEARCH            += $(BOOST)

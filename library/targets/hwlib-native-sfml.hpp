@@ -1,3 +1,4 @@
+
 // ==========================================================================
 //
 // File      : hwlib-native.hpp
@@ -48,19 +49,6 @@ public:
       clear();
       flush();
    }	
-   
-   window( 
-      int x, int y, 
-      color foreground = black, 
-      color background = white,
-      int m = 5 
-   ): window( xy( x, y ), foreground, background, m ){}	
-   
-   window( 
-      int x, int y, int m,
-      color foreground = black, 
-      color background = white
-   ): window( xy( x, y ), foreground, background, m ){}	
    
    void poll(){
       if ( w.isOpen() ){
@@ -141,11 +129,7 @@ void wait_us( int_fast32_t n ){
 void wait_ms( int_fast32_t n ){
    wait_us( n * 1'000 );
 }
-<<<<<<< HEAD
 
-=======
- 
->>>>>>> d28e4107ea9cc7797e69ea413629b2f5070fab4a
 void uart_putc( char c ){
    std::cout << c << std::flush;
 }
