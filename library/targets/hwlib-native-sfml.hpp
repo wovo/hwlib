@@ -141,7 +141,11 @@ void wait_us( int_fast32_t n ){
 void wait_ms( int_fast32_t n ){
    wait_us( n * 1'000 );
 }
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> d28e4107ea9cc7797e69ea413629b2f5070fab4a
 void uart_putc( char c ){
    std::cout << c << std::flush;
 }
