@@ -124,4 +124,4 @@ ifeq ($(TARGET),native)
 endif
 
 # defer to bmptk
-include           $(BMPTK)/makefile.inc
+include           $(BMPTK)/Makefile.inc
