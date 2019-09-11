@@ -19,6 +19,5 @@ refactoring.db
 *.pdf
 _dummy.jpg
 bmptk_*_stack.c
-_push.bat
 _doxygen.bat
 html
