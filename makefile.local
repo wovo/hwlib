@@ -24,6 +24,9 @@
 # where to find bmptk
 BMPTK             ?= $(RELATIVE)/../bmptk
 
+# where to find rtos
+RTOS              ?= $(RELATIVE)/../rtos
+
 # where to find Catch
 CATCH             ?= $(RELATIVE)/../Catch2
 
