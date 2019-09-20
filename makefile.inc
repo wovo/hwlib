@@ -125,6 +125,6 @@ ifeq ($(TARGET),native)
    endif
 endif
 
-# defer to bmptk
+# defer to bmptk 
 BMPTK             ?= $(HWLIB)/../bmptk
 include           $(BMPTK)/Makefile.inc
