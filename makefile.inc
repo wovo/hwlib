@@ -109,6 +109,8 @@ SEARCH            += $(CATCH)/single_include
 # add Boost
 SEARCH            += $(BOOST)
 
+$(warning ==> $(SFML))
+
 # add SFML
 ifeq ($(TARGET),native)
    ifeq ($(OS),Windows_NT)
@@ -124,4 +126,5 @@ ifeq ($(TARGET),native)
 endif
 
 # defer to bmptk
+BMPTK             ?= $(HWLIB)/../bmptk
 include           $(BMPTK)/Makefile.inc
