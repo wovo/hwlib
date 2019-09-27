@@ -575,6 +575,8 @@ class d2_36kHz : public hwlib::pin_out {
       }
    }
    
+   void flush() override {}
+   
 }; // class d2_36kHz
 
 #ifdef NONO

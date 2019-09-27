@@ -95,6 +95,7 @@ HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-native-sfml.hpp
 HEADERS           += targets/hwlib-none.hpp
 
+RELATIVE ?= $(BMPTK)/..
 ifneq ($(wildcard $(HWLIB)/makefile.custom),)
    include $(HWLIB)/makefile.custom
 else ifneq ($(wildcard $(HWLIB)/../makefile.custom),)
@@ -108,8 +109,6 @@ SEARCH            += $(CATCH)/single_include
 
 # add Boost
 SEARCH            += $(BOOST)
-
-$(warning ==> $(SFML))
 
 # add SFML
 ifeq ($(TARGET),native)
@@ -126,5 +125,4 @@ ifeq ($(TARGET),native)
 endif
 
 # defer to bmptk 
-BMPTK             ?= $(HWLIB)/../bmptk
 include           $(BMPTK)/Makefile.inc
