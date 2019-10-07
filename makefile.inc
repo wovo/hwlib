@@ -106,6 +106,7 @@ endif
 
 # add Catch
 SEARCH            += $(CATCH)/single_include
+SEARCH            += $(CATCH)/single_include/catch2
 
 # add Boost
 SEARCH            += $(BOOST)
