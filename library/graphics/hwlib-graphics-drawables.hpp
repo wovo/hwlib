@@ -24,7 +24,7 @@ namespace hwlib {
 // ==========================================================================
 
 /// interface to an drawable object
-class drawable {
+class drawable : public noncopyable {
 public:
 
    /// the location where the object is drawn

@@ -23,6 +23,7 @@ HEADERS           += hwlib-all.hpp
 HEADERS           += core/hwlib-defines.hpp
 HEADERS           += core/hwlib-targets.hpp
 HEADERS           += core/hwlib-panic.hpp
+HEADERS           += core/hwlib-noncopyable.hpp
 HEADERS           += core/hwlib-common.hpp
 HEADERS           += core/hwlib-background.hpp
 HEADERS           += core/hwlib-color.hpp

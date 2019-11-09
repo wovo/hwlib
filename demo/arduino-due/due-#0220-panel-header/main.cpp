@@ -305,8 +305,8 @@ int main( void ){
       hwlib::blinker( led1, 200 );    
 
    
-   auto w1a = hwlib::window_part( w1, hwlib::xy(  0, 0 ), hwlib::xy( 32, 32 ) );
-   auto w1b = hwlib::window_part( w1, hwlib::xy( 32, 0 ), hwlib::xy( 32, 32 ) );
+   auto w1a = hwlib::part( w1, hwlib::xy(  0, 0 ), hwlib::xy( 32, 32 ) );
+   auto w1b = hwlib::part( w1, hwlib::xy( 32, 0 ), hwlib::xy( 32, 32 ) );
    
    auto w1af = hwlib::window_mirror_x( w1a );
    auto w1bf = hwlib::window_flip( w1b );

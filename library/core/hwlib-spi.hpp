@@ -18,7 +18,7 @@
 namespace hwlib {
    
 /// This class abstracts the interface of a master to a SPI bus. 
-class spi_bus {
+class spi_bus : public noncopyable {
 private:
 
    /// spi transaction

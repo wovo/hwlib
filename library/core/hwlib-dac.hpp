@@ -20,7 +20,7 @@ namespace hwlib {
 /// D/A output interface
 ///
 /// This class abstracts the interface to a DAC (Digital to Analog Converter).
-class dac {
+class dac : public noncopyable {
 public:
 
    /// the number of bits in the result returned by write()

@@ -22,12 +22,12 @@ int main( void ){
    auto i2c_bus       = hwlib::i2c_bus_bit_banged_scl_sda( scl, sda );
    auto oled          = hwlib::glcd_oled( i2c_bus );  
    
-   auto w1            = hwlib::window_part( 
+   auto w1            = hwlib::part( 
       oled, hwlib::xy( 0, 0 ), hwlib::xy( 128, 16 ));  
    auto font1         = hwlib::font_default_8x8();
    auto console1      = hwlib::terminal_from( w1, font1 );
    
-   auto w2            = hwlib::window_part( 
+   auto w2            = hwlib::part( 
       oled, hwlib::xy( 0, 16 ), hwlib::xy( 128, 48 ));   
    auto font2         = hwlib::font_default_16x16();
    auto console2      = hwlib::terminal_from( w2, font2 );

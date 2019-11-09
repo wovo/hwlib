@@ -33,6 +33,7 @@
 #include HWLIB_INCLUDE( core/hwlib-defines.hpp )
 #include HWLIB_INCLUDE( core/hwlib-targets.hpp )
 #include HWLIB_INCLUDE( core/hwlib-panic.hpp )
+#include HWLIB_INCLUDE( core/hwlib-noncopyable.hpp )
 #include HWLIB_INCLUDE( core/hwlib-common.hpp )
 #include HWLIB_INCLUDE( core/hwlib-background.hpp )
 #include HWLIB_INCLUDE( core/hwlib-xy.hpp )

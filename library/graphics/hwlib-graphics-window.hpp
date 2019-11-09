@@ -25,7 +25,7 @@ namespace hwlib {
 /// Window operations (clear, write) can be buffered.
 /// A flush() call is required to make sure that all previous operations
 /// take effect.
-class window {
+class window : public noncopyable {
 private:
 
    /// write a pixel - implementation

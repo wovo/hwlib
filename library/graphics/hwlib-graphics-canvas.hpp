@@ -51,7 +51,7 @@ public:
 };
 
 template< int size_x, int size_y >
-class canvas_bw : public window, private image {
+class canvas_bw : public window, private image  {
 private:
 
    uint8_t buffer[ ( size_x + 7 ) / 8 ][ size_y ];
@@ -65,7 +65,7 @@ private:
        }          
    }    
    
-   color get_implementation( xy pos ) const override {
+   color read_implementation( xy pos ) const override {
        return buffer[ pos.x ][ pos.y ]
           ? foreground
           : background;

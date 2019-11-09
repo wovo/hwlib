@@ -15,11 +15,11 @@
 int main( void ){
    hwlib::target::board board;  
    
-   auto color = board.green;
+   auto & color = board.green;
    color.write( 1 );
    color.flush();     
    
-   auto led = board.led1;
+   auto & led = board.led1;
 
    for(;;){   
       board.adc.refresh();

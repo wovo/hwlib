@@ -4,7 +4,7 @@
 int main(int argc, char **argv){
     
    // the window in which we want to print the line
-   hwlib::target::window w( 128, 64 );    
+   hwlib::target::window w( hwlib::xy( 128, 64 ));    
    w.clear();
     
    hwlib::line line( hwlib::xy( 20, 20 ), hwlib::xy( 30, 30 ), hwlib::green );

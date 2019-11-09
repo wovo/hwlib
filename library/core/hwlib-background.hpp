@@ -39,9 +39,9 @@ namespace hwlib {
 /// No background work will be done from delay calls made while
 /// a work() function is running.
 ///
-/// For all background jobs: be carefuill to preserve the object!
+/// For all background jobs: be carefull to preserve the object!
 ///
-class background {
+class background : public noncopyable {
 private:
 
    static background * first;

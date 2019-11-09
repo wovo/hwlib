@@ -395,8 +395,10 @@ uint64_t now_us(){
    return now_ticks() / ticks_per_us();
 } 
 
-void HWLIB_WEAK wait_ns_busy( int_fast32_t n ){
-   wait_us( n / 1000 );
+// busy waits
+
+void wait_ns_busy( int_fast32_t n ){
+   wait_us_busy( ( n + 999 ) / 1000 );
 }
 
 void HWLIB_WEAK wait_us_busy( int_fast32_t n ){
@@ -415,6 +417,35 @@ void HWLIB_WEAK wait_us_busy( int_fast32_t n ){
       :: [reg] "r" (n) : "r0"
    );
 }
+
+void wait_ms_busy( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us_busy( 1000 );
+      --n;
+   }   
+} 
+
+// non-busy waits
+
+void HWLIB_WEAK wait_ns( int_fast32_t n ){
+   wait_us( ( n + 999 ) / 1000 );
+}
+
+void HWLIB_WEAK wait_us( int_fast32_t n ){
+   auto end = now_us() + n;
+   while( now_us() < end ){
+      background::do_background_work();	   
+   }
+}
+
+void HWLIB_WEAK wait_ms( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us( 1000 );
+      --n;
+   }   
+} 
+
+// char IO
 
 void HWLIB_WEAK uart_putc( char c ){
    static target::pin_out pin( 1, 7 );

@@ -293,7 +293,7 @@ public:
 /// i2c bus master interface
 /// 
 /// This class abstracts the interface of a master to an I2C bus.
-class i2c_bus {
+class i2c_bus : public noncopyable {
 public:
 
    /// low-level i2c bus operations

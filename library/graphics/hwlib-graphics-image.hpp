@@ -27,7 +27,7 @@ namespace hwlib {
 /// an image
 /// 
 /// An image abstracts a rectangular set of pixel values (colors).
-class image {
+class image { // : public noncopyable { // gives problems
 private:
 
    virtual color read_implementation( xy pos ) const = 0;

@@ -28,7 +28,7 @@ namespace hwlib {
 /// input / output port interface
 /// 
 /// This is the interface of an input / output port.
-class port_in_out {
+class port_in_out : public noncopyable {
 public:
 
    /// get number of pins
@@ -101,7 +101,7 @@ public:
 /// input port interface
 /// 
 /// This is the interface of an input-only port.
-class port_in {
+class port_in : public noncopyable {
 public:
 
    /// @copydoc port_in_out::number_of_pins()
@@ -125,7 +125,7 @@ public:
 /// output port interface
 /// 
 /// This is the interface of an output-only port.
-class port_out {
+class port_out : public noncopyable {
 public:
 
    /// @copydoc port_in_out::number_of_pins()
@@ -149,7 +149,7 @@ public:
 /// open-collector interface
 /// 
 /// This is the interface of an open-collector port.
-class port_oc {
+class port_oc : public noncopyable {
 public:
 
    /// @copydoc port_in_out::number_of_pins()

@@ -23,7 +23,7 @@ namespace hwlib {
 /// (as yet, only reading a single character is supported)
 /// 
 /// This class is abstract: a concrete subclass must implement getc().  
-class istream {     
+class istream : public noncopyable {     
 public:        
 
    /// reports whether a character is available

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="example code" Database="" Version="10.0.0">
-  <Project Name="uno-#0010-empty" Path="uno-#0010-empty/_codelite.project" Active="No"/>
+  <Project Name="uno-#0010-empty" Path="uno-#0010-empty/_codelite.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0010-empty" ConfigName="Release"/>
@@ -60,13 +60,11 @@
       <Project Name="uno-#0100-pcfa8574a-lcd-16x2" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="uno-#0110-background-blink" Path="uno-#0110-background-blink/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0110-background-blink" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
-  <Project Name="uno-#0120-lol-shield" Path="uno-#0120-lol-shield/_codelite.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Project Name="uno-#0120-lol-shield" ConfigName="Release"/>

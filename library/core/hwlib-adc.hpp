@@ -20,7 +20,7 @@ namespace hwlib {
 /// A/D input interface
 ///
 /// This class abstracts the interface to an ADC (Analog to Digital Converter).
-class adc {
+class adc : public noncopyable {
 public:
 
    /// the number of bits in the result returned by read()

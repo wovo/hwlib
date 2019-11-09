@@ -23,11 +23,11 @@ int main( void ){
    auto oled      = hwlib::glcd_oled( bus );
    
    auto font1     = hwlib::font_default_8x8();
-   auto part1     = hwlib::window_part( oled, hwlib::xy( 0, 0 ), hwlib::xy( 128, 32 ) );
+   auto part1     = hwlib::part( oled, hwlib::xy( 0, 0 ), hwlib::xy( 128, 32 ) );
    auto console1  = hwlib::terminal_from( part1, font1 );
    
    auto font2     = hwlib::font_default_16x16();
-   auto part2     = hwlib::window_part( oled, hwlib::xy( 0, 32 ), hwlib::xy( 128, 32 ) );
+   auto part2     = hwlib::part( oled, hwlib::xy( 0, 32 ), hwlib::xy( 128, 32 ) );
    auto console2  = hwlib::terminal_from( part2, font2 );
    
    console1 

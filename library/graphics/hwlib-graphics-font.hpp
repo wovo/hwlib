@@ -20,7 +20,7 @@ namespace hwlib {
 /// a font
 /// 
 /// A font provides an image for each supported character
-class font {
+class font : public noncopyable {
 public:
 
    /// get image for a character

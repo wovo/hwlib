@@ -219,7 +219,7 @@ constexpr _flush flush;
 /// 
 /// This class is abstract: a concrete subclass 
 /// must implement putc() and flush().
-class ostream {
+class ostream : public noncopyable {
 private:
    
    uint_fast16_t field_width;
