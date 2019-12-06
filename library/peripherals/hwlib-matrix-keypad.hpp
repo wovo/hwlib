@@ -106,13 +106,31 @@ public:
        }    
     }  
     
+    /// return whether the requested key is pressed
+    //
+    /// This function repports whether the key corresponding
+	/// to the indicated character is pressed.
+	///
+    /// This function does not suppress bouncing.
+    bool is_pressed( char c ){
+       for( auto v : all( matrix.size )){
+          if( c == translation[ v.x + matrix.size.x * v.y ] ){
+             if( matrix.switch_is_closed_at( v )){
+                return true;
+             }
+          }
+       }
+       return false;
+    }
+
     /// return a press character or '\0' for none
     //
     /// This function returns the character corresponding to 
     /// a switch that is closed, or '\0' when no switch
     /// is closed (or a switch is closed that has no
     /// translation).
-    /// This function doesn't suppress bouncing.
+	///
+    /// This function does not suppress bouncing.
     char pressed(){
        for( auto v : all( matrix.size )){
           if( matrix.switch_is_closed_at( v )){

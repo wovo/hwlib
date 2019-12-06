@@ -25,6 +25,7 @@ HEADERS           += core/hwlib-targets.hpp
 HEADERS           += core/hwlib-panic.hpp
 HEADERS           += core/hwlib-noncopyable.hpp
 HEADERS           += core/hwlib-common.hpp
+HEADERS           += core/hwlib-ratio.hpp
 HEADERS           += core/hwlib-background.hpp
 HEADERS           += core/hwlib-color.hpp
 HEADERS           += core/hwlib-random.hpp
@@ -61,6 +62,7 @@ HEADERS           += core/hwlib-xy.hpp
 HEADERS           += core/hwlib-adc.hpp
 HEADERS           += core/hwlib-dac.hpp
 HEADERS           += core/hwlib-dac-demos.hpp
+HEADERS           += core/hwlib-servo.hpp
 HEADERS           += core/hwlib-i2c.hpp
 HEADERS           += core/hwlib-spi.hpp
 
@@ -82,6 +84,8 @@ HEADERS           += peripherals/hwlib-hc595.hpp
 HEADERS           += peripherals/hwlib-hd44780.hpp
 HEADERS           += peripherals/hwlib-glcd-5510.hpp
 HEADERS           += peripherals/hwlib-glcd-oled.hpp
+HEADERS           += peripherals/hwlib-matrix-keypad.hpp
+HEADERS           += peripherals/hwlib-servo-background.hpp
 
 HEADERS           += targets/hwlib-atmega328.hpp
 HEADERS           += targets/hwlib-arduino-uno.hpp

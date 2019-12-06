@@ -36,9 +36,6 @@ int main( void ){
    hwlib::wait_ms( 1'000 );
    
    hwlib::cout << "matrix of switches demo " << "\n";   
-    
-      // wait for the PC console to start
-   hwlib::wait_ms( 500 );
 
    auto out0 = target::pin_oc( target::pins::a4 );
    auto out1 = target::pin_oc( target::pins::a5 );
