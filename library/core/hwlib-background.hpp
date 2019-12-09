@@ -28,7 +28,7 @@ namespace hwlib {
 //
 /// This class implements run-to-completion style background processing.
 ///
-/// A class that needs background procesing must inherit from background
+/// A class that needs background processing must inherit from background
 /// and implement the work function. This work function will be called
 /// from the wait_s(), wait_ms(), wait_us() etc. functions.
 ///
@@ -39,7 +39,7 @@ namespace hwlib {
 /// No background work will be done from delay calls made while
 /// a work() function is running.
 ///
-/// For all background jobs: be carefull to preserve the object!
+/// For all background jobs: be careful to preserve the object!
 ///
 class background : public noncopyable {
 private:
@@ -90,7 +90,7 @@ public:
    static void do_background_work(){
 	 
       // do not run any background work when called from background
-	  // work: this would pile stack and delay granularity
+	  // work: this would seriously impact stack use and delay granularity
 	  if( running ){
          return;
       }		 

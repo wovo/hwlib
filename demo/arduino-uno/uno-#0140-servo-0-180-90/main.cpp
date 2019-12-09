@@ -1,7 +1,7 @@
 #include "hwlib.hpp"
 
 int main( void ){
-   auto servo_pin = hwlib::target::pin_out( hwlib::target::pins::d2 );
+   auto servo_pin = hwlib::target::pin_out( hwlib::target::pins::d8 );
    auto servo = hwlib::servo_background( servo_pin );
    const auto steps = 50;
    const auto t = 1'000'000;
