@@ -15,7 +15,7 @@
 # settings for DB103 (LPC1114) projects
 TARGET            := db103
 SERIAL_PORT       ?= COM4
-CONSOLE_BAUDRATE  := 2400
+CONSOLE_BAUDRATE  := 115200
 
 # defer to the next-level makefile
 RELATIVE          ?= .

@@ -13,7 +13,7 @@
 #include "hwlib.hpp"
 
 int main( void ){
-   auto led = hwlib::target::pin_out( 1, 9 );
+   auto led = hwlib::target::pin_out( 0, 6 );
    
    for(;;){
       led.write( 1 );

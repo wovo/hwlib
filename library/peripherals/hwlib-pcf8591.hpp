@@ -24,8 +24,8 @@ namespace hwlib {
 /// \image html pcf8591-pinout.png
 ///
 /// A pcf8591 is an I2C slave that provides 4 8-bits A/D inputs (that can 
-/// be arranged in various combinations of single and balaced inputs),
-/// and a single8-bits D/A output. 
+/// be arranged in various combinations of single and balanced inputs),
+/// and a single 8-bits D/A output. 
 /// The power supply range is 2.5 .. 5.5 Volt.
 /// Of the 7-bit slave address, 
 /// 3 bits are set by the level of 3 input pins (A0..A2) of the chip.

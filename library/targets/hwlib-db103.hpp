@@ -445,7 +445,93 @@ void HWLIB_WEAK wait_ms( int_fast32_t n ){
    }   
 } 
 
+// hardware UART
+// from https://github.com/zinahe/lpc1114/blob/master/UART.c
+// and https://github.com/zinahe/lpc1114/blob/master/LPC1114.h
+
+#define SYSAHBCLKCTRL_IOCON_BIT 		16
+#define SYSAHBCLKCTRL_UART_BIT			12
+#define UART_LCR_WORDLENGTH_08			0x03
+#define UART_LCR_WORDLENGTH_BIT			0
+#define UART_LCR_DLAB_BIT				7	
+#define  MMIO(addr) 					(*(volatile int*) addr)
+#define IOCON_PIO1_6					MMIO(0x400440A4)	
+#define IOCON_PIO1_7					MMIO(0x400440A8)	
+#define UART_LCR						MMIO(0x4000800C)
+#define UART_RBR						MMIO(0x40008000)		
+#define UART_THR						MMIO(0x40008000)
+#define UART_DLL						MMIO(0x40008000)
+#define UART_FDR						MMIO(0x40008028)	
+#define UART_LSR						MMIO(0x40008014)
+#define UARTCLKDIV						MMIO(0x40048098)
+#define UART_LSR_THRE_BIT				5
+#define UART_LSR_RDA_BIT				0
+#define UART_LSR_RXFE_BIT				7
+
+void hw_uart_init(void) {
+   
+   static bool init_done = false;
+   if( init_done ){
+      return;
+   }
+   init_done = true;   
+	
+	// Enable IOCON block  
+	LPC_SYSCON->SYSAHBCLKCTRL |= (1 << SYSAHBCLKCTRL_IOCON_BIT);
+   
+    LPC_IOCON->PIO1_6 &= ~0x07;    //Clear the first 3 bits in the FUNC of the 'PIO1_6'
+    LPC_IOCON->PIO1_6 |= 0x01;     //Set PIO1_6 as UART RXD
+    LPC_IOCON->PIO1_7 &= ~0x07;       //Clear the first 3 bits in the FUNC of the 'PIO1_7'
+    LPC_IOCON->PIO1_7 |= 0x01;     //Set PIO1_7 as UART TXD   
+	
+	// Enable power to UART block
+	LPC_SYSCON->SYSAHBCLKCTRL |= (1 << SYSAHBCLKCTRL_UART_BIT);
+	
+	// Enable UART_PCKL divider to supply clock to the baud generator
+	UARTCLKDIV = 0x01;
+   
+	// Set transmission parameters to 8N1 (8 data bits, NO partity, 1 stop bit, DLAB=1)
+	UART_LCR = (UART_LCR_WORDLENGTH_08 << UART_LCR_WORDLENGTH_BIT) | (1 << UART_LCR_DLAB_BIT);
+	
+	// Set baud rate to 115200 kb/s @ UART_CLK of 12Mhz  (DLM = 0, DLL = 4, DIVADDVAL = 5, and MULVAL = 8)
+	// UART_DLM = 0x00;		// Default
+	UART_DLL = 0x04;
+	UART_FDR = 0x85;		// FDR = (MULVAL << 4 ) | DIVADDVAL
+	
+	// Set baud rate to 115200 kb/s @ UART_CLK of 48Mhz  (DLM = 0, DLL = 17, DIVADDVAL = 8, and MULVAL = 15)
+	// UART_DLM = 0x00;		// Default
+	//UART_DLL = 0x11;		
+	//UART_FDR = 0xF8;		// FDR = (MULVAL << 4 ) | DIVADDVAL
+	
+	// Turn off DLAB
+	UART_LCR ^= (1 << UART_LCR_DLAB_BIT);
+	
+}
+
+void hw_uart_write(char c) {
+   
+   hw_uart_init();
+	
+	// Wait while THR contains data (until empty)
+	while( (UART_LSR & (1 << UART_LSR_THRE_BIT)) == 0 );
+      
+	// Send a byte from buffer
+	UART_THR = c;
+}
+
+char hw_uart_read() {
+
+   hw_uart_init();
+
+	// Wait until there is data in RBR
+	while( (UART_LSR & (1 << UART_LSR_RDA_BIT)) == 0);
+
+	return UART_RBR;
+}
+
 // char IO
+
+#ifdef BB_UART
 
 void HWLIB_WEAK uart_putc( char c ){
    static target::pin_out pin( 1, 7 );
@@ -456,6 +542,18 @@ char HWLIB_WEAK uart_getc(){
    static target::pin_in pin( 1, 6 );
    return uart_getc_bit_banged_pin( pin );
 }
+
+#else
+   
+void uart_putc( char c ){
+   hw_uart_write( c );
+}
+
+char uart_getc(){
+   return hw_uart_read();
+}
+   
+#endif
 
 #endif // _HWLIB_ONCE
 

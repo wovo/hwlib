@@ -15,7 +15,7 @@
 int main( void ){
    
    // wait for the terminal emulator to start up
-   hwlib::wait_ms( 1'000 );
+   hwlib::wait_ms( 2'000 );
        
    hwlib::cout 
       << "Hello world!\n" 
