@@ -143,9 +143,10 @@ public:
 // ==========================================================================
 
 class rectangle {
-private:
-
+protected:
    xy start, end;
+   
+private:
    color ink;
 
 public:
@@ -157,7 +158,7 @@ public:
       start( start ), end( end ), ink( ink )
    {}
 
-   void draw( hwlib::window & w ){
+   virtual void draw( hwlib::window & w ){
       line( 
          xy( start.x, start.y ), xy( start.x,   end.y + 1 ), ink ).draw( w );
       line( 
