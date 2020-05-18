@@ -142,10 +142,11 @@ public:
 //
 // ==========================================================================
 
-class rectangle {
+/// a rectangle object 
+class rectangle : public drawable  {
 private:
 
-   xy start, end;
+   xy end;
    color ink;
 
 public:
@@ -154,10 +155,11 @@ public:
       const xy & start, const xy & end,
       const color & ink = unspecified
    ):
-      start( start ), end( end ), ink( ink )
+      drawable{ start },
+      end( end ), ink( ink )
    {}
 
-   void draw( hwlib::window & w ){
+   void draw( hwlib::window & w ) override {
       line( 
          xy( start.x, start.y ), xy( start.x,   end.y + 1 ), ink ).draw( w );
       line( 
