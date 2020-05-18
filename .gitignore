@@ -17,6 +17,7 @@ refactoring.db
 *.lst
 *.exe
 *.pdf
+_run.bat
 _dummy.jpg
 bmptk_*_stack.c
 _doxygen.bat
