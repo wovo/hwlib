@@ -36,7 +36,7 @@ namespace hwlib {
 ///
 /// An implementation can implement these operations 
 /// (when it can perform these functions more efficiently than the default
-/// implementatiosn):
+/// implementation):
 ///    - read_ack()
 ///    - write_ack()
 ///    - write_nack()
@@ -328,7 +328,7 @@ public:
 /// This class implements a bit-banged master interface to an I2C bus.
 /// Limitations:
 ///    - only the 7-bit address format is supported
-///    - clock stretching by the slave is not supporte
+///    - clock stretching by the slave is not supported
 ///    - only a single master is supported
 ///    - the speed is fixed at ~ 100 kHz or somewhat lower
 class i2c_bus_bit_banged_scl_sda : 

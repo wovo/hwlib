@@ -100,7 +100,7 @@ HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-native-sfml.hpp
 HEADERS           += targets/hwlib-none.hpp
 
-RELATIVE ?= $(BMPTK)/..
+RELATIVE ?= $(HWLIB)
 ifneq ($(wildcard $(HWLIB)/makefile.custom),)
    include $(HWLIB)/makefile.custom
 else ifneq ($(wildcard $(HWLIB)/../makefile.custom),)
