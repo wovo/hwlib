@@ -25,9 +25,23 @@ int main( void ){
    auto font          = hwlib::font_default_8x8();
    auto display       = hwlib::terminal_from( oled, font );
    
-   display 
-      << "\f" << "Hello world!!" 
-      << "\n" << "second line.."
-      << "\t0305" << "pos 3 line 5"
-      << hwlib::flush;     
+   // wait for the terminal emulator to start up
+   hwlib::wait_ms( 1'000 );   
+   
+   for(;;){
+      auto t1 = hwlib::now_us();
+      display 
+         << "\f" << "Hello world!!" 
+         << "\n" << "second line.."
+         << "\t0305" << "pos 3 line 5"
+         << "\t0203" << "pos 2 line 3";
+      auto t2 = hwlib::now_us();
+      hwlib::cout << "chars: " << ( t2 - t1 ) << " us\n";
+
+      t1 = hwlib::now_us();
+      display 
+         << hwlib::flush;     
+      t2 = hwlib::now_us();
+      hwlib::cout << "flush: " << ( t2 - t1 ) << " us\n";
+   }         
 }

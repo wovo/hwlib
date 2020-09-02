@@ -110,7 +110,7 @@ public:
       xy pos, 
       const image & img
    ){                 
-      for( const auto p : all( size ) ){
+      for( const auto p : all( img.size ) ){
          write( pos + p, img[ p ] );
       }
    }
