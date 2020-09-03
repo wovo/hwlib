@@ -5,7 +5,7 @@ __codelite.workspace
 __codelite.session
 __codelite.tags
 _cpp_flags
-_link_flags
+_linker_flags
 refactoring.db
 ~$*.docx
 .project

@@ -84,6 +84,7 @@ HEADERS           += peripherals/hwlib-hc595.hpp
 HEADERS           += peripherals/hwlib-hd44780.hpp
 HEADERS           += peripherals/hwlib-glcd-5510.hpp
 HEADERS           += peripherals/hwlib-glcd-oled.hpp
+HEADERS           += peripherals/hwlib-glcd-st7789.hpp
 HEADERS           += peripherals/hwlib-matrix-keypad.hpp
 HEADERS           += peripherals/hwlib-servo-background.hpp
 

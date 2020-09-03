@@ -95,6 +95,7 @@
 #include HWLIB_INCLUDE( peripherals/hwlib-hd44780.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-glcd-5510.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-glcd-oled.hpp )
+#include HWLIB_INCLUDE( peripherals/hwlib-glcd-st7789.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-matrix-keypad.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-servo-background.hpp )
 
