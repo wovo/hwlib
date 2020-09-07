@@ -183,10 +183,10 @@ public:
       auto transaction = bus.transaction( cs );
       transaction.write( static_cast< uint8_t >( commands::RAMWR ) );     
       dc.write( 1 ); dc.flush();
-      for( int i = 0; i < 240 * 240; ++i ){
-         transaction.write( ( buffer[ i ] << 2 ) & 0xC0 );
-         transaction.write( ( buffer[ i ] << 4 ) & 0xC0 );
-         transaction.write( ( buffer[ i ] << 6 ) & 0xC0 );
+      for( auto d : buffer ){
+         transaction.write( ( d << 2 ) & 0xC0 );
+         transaction.write( ( d << 4 ) & 0xC0  );
+         transaction.write( ( d << 6 ) & 0xC0  );
       }   
    }     
         

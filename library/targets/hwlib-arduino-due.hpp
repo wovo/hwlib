@@ -382,14 +382,14 @@ public:
       }
    {}     
    
-   void write( bool v ) override {
+   void HWLIB_INLINE write( bool v ) override {
       ( v 
          ?  port.PIO_SODR 
          :  port.PIO_CODR 
       )  = mask;
    }
 
-   void flush() override {}
+   void HWLIB_INLINE flush() override {}
 
 };
 

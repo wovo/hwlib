@@ -214,6 +214,7 @@ private:
             : *data_out++;
              
          for( uint_fast8_t j = 0; j < 8; ++j ){
+         wait_half_period();
             mosi.write( ( d & 0x80 ) != 0 );
             wait_half_period();
             sclk.write( 1 );
@@ -250,10 +251,13 @@ public:
       pin_out & _mosi, 
       pin_in  & _miso 
    ):
-      sclk( direct( _sclk ) ), 
-      mosi( direct( _mosi ) ), 
-      miso( direct( _miso ) )
-   {
+      //sclk( direct( _sclk ) ), 
+      //mosi( direct( _mosi ) ), 
+      //miso( direct( _miso ) )
+      
+      sclk( _sclk ), 
+      mosi( _mosi ), 
+      miso( _miso )   {
       sclk.write( 0 );
    }
    

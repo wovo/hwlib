@@ -19,6 +19,8 @@ HEADERS :=
 # other places to look for files for this project
 SEARCH  := 
 
+RESULTS := main.lss
+
 # set RELATIVE to the next higher directory 
 # and defer to the appropriate Makefile.* there
 RELATIVE := ..

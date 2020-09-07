@@ -1,0 +1,49 @@
+000005cc <_ZN5hwlib35spi_bus_bit_banged_sclk_mosi_miso_214write_and_readEjPKhPh>:
+     5cc:	e92d 4ff7 	stmdb	sp!, {r0, r1, r2, r4, r5, r6, r7, r8, r9, sl, fp, lr}
+     5d0:	4606      	mov	r6, r0
+     5d2:	4615      	mov	r5, r2
+     5d4:	461f      	mov	r7, r3
+     5d6:	f04f 0a00 	mov.w	sl, #0
+     5da:	9101      	str	r1, [sp, #4]
+     5dc:	f100 0b0c 	add.w	fp, r0, #12
+     5e0:	f100 0904 	add.w	r9, r0, #4
+     5e4:	9b01      	ldr	r3, [sp, #4]
+     5e6:	459a      	cmp	sl, r3
+     5e8:	d028      	beq.n	63c <_ZN5hwlib35spi_bus_bit_banged_sclk_mosi_miso_214write_and_readEjPKhPh+0x70>
+     5ea:	b32d      	cbz	r5, 638 <_ZN5hwlib35spi_bus_bit_banged_sclk_mosi_miso_214write_and_readEjPKhPh+0x6c>
+     5ec:	782c      	ldrb	r4, [r5, #0]
+     5ee:	3501      	adds	r5, #1
+     5f0:	f04f 0808 	mov.w	r8, #8
+     
+     5f4:	f3c4 11c0 	ubfx	r1, r4, #7, #1
+     5f8:	4658      	mov	r0, fp
+     5fa:	f7ff fd2d 	bl	58 <_ZN5hwlib21pin_direct_from_out_t5writeEb>
+     5fe:	2101      	movs	r1, #1
+     600:	4648      	mov	r0, r9
+     602:	f7ff fd29 	bl	58 <_ZN5hwlib21pin_direct_from_out_t5writeEb>
+     606:	69b0      	ldr	r0, [r6, #24]
+     608:	0064      	lsls	r4, r4, #1
+     60a:	6802      	ldr	r2, [r0, #0]
+     60c:	6852      	ldr	r2, [r2, #4]
+     60e:	4790      	blx	r2
+     610:	69b0      	ldr	r0, [r6, #24]
+     612:	6802      	ldr	r2, [r0, #0]
+     614:	6812      	ldr	r2, [r2, #0]
+     616:	4790      	blx	r2
+     618:	b108      	cbz	r0, 61e <_ZN5hwlib35spi_bus_bit_banged_sclk_mosi_miso_214write_and_readEjPKhPh+0x52>
+     61a:	f044 0401 	orr.w	r4, r4, #1
+     61e:	2100      	movs	r1, #0
+     620:	4648      	mov	r0, r9
+     622:	f7ff fd19 	bl	58 <_ZN5hwlib21pin_direct_from_out_t5writeEb>
+     626:	f1b8 0801 	subs.w	r8, r8, #1
+     62a:	d1e3      	bne.n	5f4 <_ZN5hwlib35spi_bus_bit_banged_sclk_mosi_miso_214write_and_readEjPKhPh+0x28>
+
+     62c:	b10f      	cbz	r7, 632 <_ZN5hwlib35spi_bus_bit_banged_sclk_mosi_miso_214write_and_readEjPKhPh+0x66>
+     62e:	703c      	strb	r4, [r7, #0]
+     630:	3701      	adds	r7, #1
+     632:	f10a 0a01 	add.w	sl, sl, #1
+     636:	e7d5      	b.n	5e4 <_ZN5hwlib35spi_bus_bit_banged_sclk_mosi_miso_214write_and_readEjPKhPh+0x18>
+     638:	462c      	mov	r4, r5
+     63a:	e7d9      	b.n	5f0 <_ZN5hwlib35spi_bus_bit_banged_sclk_mosi_miso_214write_and_readEjPKhPh+0x24>
+     63c:	b003      	add	sp, #12
+     63e:	e8bd 8ff0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, pc}
