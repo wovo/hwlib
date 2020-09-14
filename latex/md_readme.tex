@@ -1,0 +1,33 @@
+Hwlib is a C++ classic-\/\+O\+O-\/style library for close-\/to-\/the-\/hardware programming. It is used in a number of Computer Science courses at the Hogeschool Utrecht, H\+B\+O-\/\+I\+CT.
+
+The typical blink-\/a-\/led application code using hwlib (assuming a target board like the Arduino Uno that has a default led) is\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{C++\}}
+\DoxyCodeLine{\#include "hwlib.hpp"}
+\DoxyCodeLine{}
+\DoxyCodeLine{int main( void )\{   }
+\DoxyCodeLine{   auto led = hwlib::target::led;}
+\DoxyCodeLine{   hwlib::blink( led );}
+\DoxyCodeLine{\}}
+\end{DoxyCode}
+
+
+For the documentation\+: run 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{doxygen doxyfiles/doxyfile}
+\end{DoxyCode}
+
+
+and open index.\+html (which redirects to html/index.\+html).
+
+\DoxyHorRuler{0}
+
+
+(c) Wouter van Ooijen (\href{mailto:wouter@voti.nl}{\texttt{ wouter@voti.\+nl}}) 2017-\/2019
+
+Distributed under the Boost Software License, Version 1.\+0. (See accompanying file L\+I\+C\+E\+N\+S\+E\+\_\+1\+\_\+0.\+txt or copy at \href{http://www.boost.org/LICENSE_1_0.txt}{\texttt{ http\+://www.\+boost.\+org/\+L\+I\+C\+E\+N\+S\+E\+\_\+1\+\_\+0.\+txt}}) ~\newline
+
+
+note\+: include/hwlib-\/arduino-\/due-\/system-\/sam3xa.\+inc is (c) atmel, under asf license. 
