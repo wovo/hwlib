@@ -37,7 +37,7 @@
 /// - HWLIB_TARGET_teensy_40 : Teensy 4.0 (MIMXRT1062 chip)
 #ifdef HWLIB_TARGET_teensy_40
    #define HWLIB_TARGET 
-   #include HWLIB_INCLUDE( targets/hwlib-mimxrt1062.hpp)
+   #include HWLIB_INCLUDE( targets/hwlib-teensy_40.hpp)
 #endif
 
 /// - HWLIB_TARGET_my_first_devboard : board with Arduino Nano (ATMega328P chip)
