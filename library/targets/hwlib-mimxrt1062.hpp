@@ -13,11 +13,11 @@
 
 // this file contains Doxygen lines
 /// @file
+#include "mimxrt1062.h"
 
 #ifndef HWLIB_MIMXRT1062
 #define HWLIB_MIMXRT1062
 
-#include "mimxrt1062.h"
 namespace mimxrt1062
 {
     /**
@@ -160,7 +160,7 @@ namespace mimxrt1062
      * @param n Index in the IOMUXC.SW_MUX_CTL_PAD register array from the manufacturer header file 
      * @param mask The mask that needs to be written to the register. 0b0101 to set it to GPIO for example. Read the reference manual for information on this
      */
-    void setIOMUX(int n, uint32_t mask)
+    inline void writeIOMUX(int n, uint32_t mask)
     {
         IOMUXC->SW_MUX_CTL_PAD[n] |= mask;
     }

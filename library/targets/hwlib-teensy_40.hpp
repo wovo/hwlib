@@ -13,10 +13,11 @@
 
 // this file contains Doxygen lines
 /// @file
-#ifndef TEENSY_40
-#define TEENSY_40
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 #include "hwlib-mimxrt1062.hpp"
+
+#ifndef TEENSY_40
+#define TEENSY_40
 namespace teensy_40
 {
     enum class pins
@@ -63,7 +64,7 @@ namespace teensy_40
         public:
         pin_out(pins pin)
         {
-            mimxrt1062::setIOMUX((int)pin,0b0101);
+            mimxrt1062::writeIOMUX((int)pin,0b0101);
             GPIO2->GDIR = 0b100;
             GPIO2->DR = 0b100;
         }
