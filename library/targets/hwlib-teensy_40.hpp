@@ -20,32 +20,37 @@
 #define TEENSY_40
 namespace teensy_40
 {
+    /**
+     * @brief This enum class holds every IOMUXC_SW_CTL_PAD array index number for each teensy pin. This array comes from the manufactures header file.
+     * @details From the Arduino IDE header file from Paul Stoffregen, the correct index numbers for the corresponding teensy gpio pins were deducted.
+     * 
+     */
     enum class pins
     {
-        d0 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_03,
-        d1 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_02,
-        d2 = (int)mimxrt1062::chip_gpio_chip_pin::gpio4_04,
-        d3 = (int)mimxrt1062::chip_gpio_chip_pin::gpio4_05,
-        d4 = (int)mimxrt1062::chip_gpio_chip_pin::gpio4_06,
-        d5 = (int)mimxrt1062::chip_gpio_chip_pin::gpio4_08,
-        d6 = (int)mimxrt1062::chip_gpio_chip_pin::gpio2_10,
-        d7 = (int)mimxrt1062::chip_gpio_chip_pin::gpio2_17,
-        d8 = (int)mimxrt1062::chip_gpio_chip_pin::gpio2_16,
-        d9 = (int)mimxrt1062::chip_gpio_chip_pin::gpio2_11,
-        d10 = (int)mimxrt1062::chip_gpio_chip_pin::gpio2_00,
-        d11 = (int)mimxrt1062::chip_gpio_chip_pin::gpio2_02,
-        d12 = (int)mimxrt1062::chip_gpio_chip_pin::gpio2_01,
-        d13 = (int)mimxrt1062::chip_gpio_chip_pin::gpio2_03,
-        d14 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_18,
-        d15 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_19,
-        d16 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_23,
-        d17 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_22,
-        d18 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_17,
-        d19 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_16,
-        d20 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_26,
-        d21 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_27,
-        d22 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_24,
-        d23 = (int)mimxrt1062::chip_gpio_chip_pin::gpio1_25,
+        d0 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_03,
+        d1 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02,
+        d2 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_04,
+        d3 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_05,
+        d4 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_06,
+        d5 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_08,
+        d6 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_10,
+        d7 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_B1_01,
+        d8 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_B1_00,
+        d9 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_11,
+        d10 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_00,
+        d11 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_02,
+        d12 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_01,
+        d13 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_03,
+        d14 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_02,
+        d15 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_03,
+        d16 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_07,
+        d17 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_06,
+        d18 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_01,
+        d19 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_00,
+        d20 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_10,
+        d21 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_11,
+        d22 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_08,
+        d23 = kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_09,
         A0 = d14,
         A1 = d15,
         A2 = d16,
@@ -55,8 +60,13 @@ namespace teensy_40
         A6 = d20,
         A7 = d21,
         A8 = d22,
-        A9 = d23
+        A9 = d23,
     };
+
+    inline void init_chip()
+    {
+        CCM->CCGR0 |= (0b11 << 30);
+    }
 
     class pin_out : public hwlib::pin_out
     {
@@ -65,10 +75,9 @@ namespace teensy_40
         pin_out(pins pin)
         {
             mimxrt1062::writeIOMUX((int)pin,0b0101);
-            //this is hardcoded for pin 13 for now
-            GPIO2->GDIR |= 0b11111111111111111111111111111111;
-            GPIO2->DR |= 0b11111111111111111111111111111111;
-            //CCM_ANALOG->PLL_ARM
+            //this is hardcoded for pin 13 (led) for now
+            GPIO1->GDIR |= 0b11111111111111111111111111111111;
+            GPIO1->DR |= 0b11111111111111111111111111111111;
         }
 
         void write(bool x)
