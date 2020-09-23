@@ -155,7 +155,7 @@ namespace mimxrt1062
     };
 
     /**
-     * @brief Function to set a IO multiplex register to a mode using a mask
+     * @brief Function to set a IO multiplex register to a mode using a mask. 
      * 
      * @param n Index in the IOMUXC.SW_MUX_CTL_PAD register array from the manufacturer header file 
      * @param mask The mask that needs to be written to the register. 0b0101 to set it to GPIO for example. Read the reference manual for information on this

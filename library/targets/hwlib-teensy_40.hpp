@@ -65,8 +65,10 @@ namespace teensy_40
         pin_out(pins pin)
         {
             mimxrt1062::writeIOMUX((int)pin,0b0101);
-            GPIO2->GDIR = 0b100;
-            GPIO2->DR = 0b100;
+            //this is hardcoded for pin 13 for now
+            GPIO2->GDIR |= 0b11111111111111111111111111111111;
+            GPIO2->DR |= 0b11111111111111111111111111111111;
+            //CCM_ANALOG->PLL_ARM
         }
 
         void write(bool x)
