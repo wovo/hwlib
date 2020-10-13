@@ -21,23 +21,30 @@
 namespace teensy_40
 {
     /**
-     * @brief This Struct contains information about the relation of the Teensy board pin with the chip Core
+     * @brief This Struct contains information about the relation of the Teensy board pin with the chip Core.
      * 
      */
     struct pin
     {
         /**
-         * @brief The array index number within the IOMUXC->SW_MUX_CTL_PAD array from the manufacturer header file, used to set a chip pad(pin) to a GPIO port
+         * @brief The corresponding array index number within the IOMUXC->SW_MUX_CTL_PAD and SW_PAD_CTL_PAD arrays for the pin from the manufacturer header file, used to set a chip pad(pin) to a GPIO port and configurate.
          * 
          */
-        unsigned int iomuxc_sw_mux_ctl_pad_GPIO_number;
+        unsigned int IOMUXC_array_pad_number;
+        /**
+         * @brief The GPIO port adress in int format to write the registers for each port
+         * 
+         */
+        unsigned int port_base;
         /**
          * @brief Bit number from the pin within the chip GPIO port
          * 
          */
-        unsigned int  port_bit_mask;
+        unsigned int  port_bit_mask_number;
 
-        constexpr pin(unsigned int iomuxc_sw_mux_ctl_pad_GPIO_number,unsigned int port_bit_mask=0): iomuxc_sw_mux_ctl_pad_GPIO_number(iomuxc_sw_mux_ctl_pad_GPIO_number),port_bit_mask(port_bit_mask){};
+
+       constexpr pin(unsigned int IOMUXC_array_pad_number,unsigned int port_base, unsigned int port_bit_mask_number=0): 
+          IOMUXC_array_pad_number(IOMUXC_array_pad_number),port_base(port_base),port_bit_mask_number(port_bit_mask_number){};
     };
     
     /**
@@ -46,30 +53,30 @@ namespace teensy_40
      */
     constexpr pin pin_struct_array[24] =
     {
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_03,3},   //d0
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02,2},   //d1
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_04,4},     //d2
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_05,5},     //d3
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_06,6},     //d4
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_08,8},     //d5
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_10,10},     //d6
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B1_01,17},     //d7
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B1_00,16},     //d8
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_11,11},     //d9
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_00,0},      //d10
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_02,2},      //d11
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_01,1},      //d12
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_03,3},      //d13
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_02,18},  //d14
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_03,19},  //d15
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_07,23},  //d16
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_06,22},  //d17
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_01,17},  //d18
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_00,16},  //d19
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_10,26},  //d20
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_11,27},  //d21
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_08,24},  //d22
-        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_09,25}   //d23
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_03,GPIO6_BASE,3},   //d0
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02,GPIO6_BASE,2},   //d1
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_04,GPIO9_BASE,4},     //d2
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_05,GPIO9_BASE,5},     //d3
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_06,GPIO9_BASE,6},     //d4
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_08,GPIO9_BASE,8},     //d5
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_10,GPIO7_BASE,10},     //d6
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B1_01,GPIO7_BASE,17},     //d7
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B1_00,GPIO7_BASE,16},     //d8
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_11,GPIO7_BASE,11},     //d9
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_00,GPIO7_BASE,0},      //d10
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_02,GPIO7_BASE,2},      //d11
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_01,GPIO7_BASE,1},      //d12
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_03,GPIO7_BASE,3},      //d13
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_02,GPIO6_BASE,18},  //d14
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_03,GPIO6_BASE,19},  //d15
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_07,GPIO6_BASE,23},  //d16
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_06,GPIO6_BASE,22},  //d17
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_01,GPIO6_BASE,17},  //d18
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_00,GPIO6_BASE,16},  //d19
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_10,GPIO6_BASE,26},  //d20
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_11,GPIO6_BASE,27},  //d21
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_08,GPIO6_BASE,24},  //d22
+        {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_09,GPIO6_BASE,25}   //d23 the analogs pins need to be placed under here in the future
     };
 
     enum class pins
@@ -98,58 +105,41 @@ namespace teensy_40
         d21,
         d22,
         d23,
-        A0 = d14,
-        A1 = d15,
-        A2 = d16,
-        A3 = d17,
-        A4 = d18,
-        A5 = d19,
-        A6 = d20,
-        A7 = d21,
-        A8 = d22,
-        A9 = d23,
     };
-
-
-    inline void init_chip()
-    {
-        
-       CCM->CCGR0 |= (0b11 << 30);
-       IOMUXC->SW_MUX_CTL_PAD[(int)pins::d13] |= 0b0101;
-       GPIO2->GDIR |= (1<<3);
-       GPIO2->DR_SET |= (1<<3); 
-        return;
-    }
 
     class pin_out : public hwlib::pin_out
     {
-
+        private:
+        const pin & myPin;
         public:
-        pin_out(pins pin_number)
+        pin_out(pins pin_number):myPin(pin_struct_array[(int)pin_number])
         {
-            mimxrt1062::writeIOMUX(pin_struct_array[(int)pin_number].iomuxc_sw_mux_ctl_pad_GPIO_number,0b0101);
-            //this is hardcoded for pin 13 (led) for now
-            //CCM->CCGR0 |= (0b11 << 30); // set the clock to gpio block 2 on
-        //    IOMUXC_SW_MUX_CTL_PAD_GPIO_B0_03 = 5; // pin 13
-        //    IOMUXC_SW_PAD_CTL_PAD_GPIO_B0_03 = IOMUXC_PAD_DSE(7);
-        //    GPIO2_GDIR |= (1 << 3);
-        //    GPIO2_DR_SET = (1 << 3);
-
+            mimxrt1062::writeIOMUXCTL(myPin.IOMUXC_array_pad_number,0b0101);
+	        reinterpret_cast<GPIO_Type*>(myPin.port_base)->GDIR |= (1<<myPin.port_bit_mask_number);
         }
 
         void write(bool x)
         {
-            return;
+            reinterpret_cast<GPIO_Type*>(myPin.port_base)->DR |= ((int)x << myPin.port_bit_mask_number);
         }
 
         void flush()
+        {}
+
+        void toggle()
         {
-            return;
+            reinterpret_cast<GPIO_Type*>(myPin.port_base)->DR_TOGGLE |= (1 << myPin.port_bit_mask_number);
+            //myPin.port->DR_TOGGLE |= (1 << myPin.port_bit_mask_number);
         }
     };
 
 
 };     //namespace teensy_40
+
+/**
+ * @brief This namespace lets the hwlib::target point to hwlib::teensy_40
+ * 
+ */
 namespace hwlib
 {
     namespace target = ::teensy_40;
