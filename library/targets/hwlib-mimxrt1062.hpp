@@ -40,6 +40,7 @@ namespace mimxrt1062
      */
     inline void writeIOMUXCPAD(int n, uint32_t mask)
     {
+
         IOMUXC->SW_PAD_CTL_PAD[n] |= mask;
     }
 

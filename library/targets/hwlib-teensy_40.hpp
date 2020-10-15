@@ -111,26 +111,62 @@ namespace teensy_40
     {
         private:
         const pin & myPin;
+        const uint32_t configMask = 0b00011000010111000;
         public:
         pin_out(pins pin_number):myPin(pin_struct_array[(int)pin_number])
         {
             mimxrt1062::writeIOMUXCTL(myPin.IOMUXC_array_pad_number,0b0101);
+            mimxrt1062::writeIOMUXCPAD(myPin.IOMUXC_array_pad_number,configMask);
 	        reinterpret_cast<GPIO_Type*>(myPin.port_base)->GDIR |= (1<<myPin.port_bit_mask_number);
         }
 
         void write(bool x)
         {
-            reinterpret_cast<GPIO_Type*>(myPin.port_base)->DR |= ((int)x << myPin.port_bit_mask_number);
+            if (x)
+            {
+            reinterpret_cast<GPIO_Type*>(myPin.port_base)->DR |= (1 << myPin.port_bit_mask_number);
+            }
+            else
+            {
+            reinterpret_cast<GPIO_Type*>(myPin.port_base)->DR_CLEAR |= (1 << myPin.port_bit_mask_number);
+            }
         }
 
-        void flush()
+        void flush() 
         {}
-
+        /**
+         * @brief Function to Toggle the GPIO on and off
+         * 
+         */
         void toggle()
         {
             reinterpret_cast<GPIO_Type*>(myPin.port_base)->DR_TOGGLE |= (1 << myPin.port_bit_mask_number);
-            //myPin.port->DR_TOGGLE |= (1 << myPin.port_bit_mask_number);
         }
+    };
+
+    class pin_in : public hwlib::pin_in
+    {
+        private:
+        const pin & myPin;
+        uint32_t configMask = 0b10011000010111000; 
+        public:
+        pin_in(pins pin_number):myPin(pin_struct_array[(int)pin_number])
+        {
+            mimxrt1062::writeIOMUXCTL(myPin.IOMUXC_array_pad_number,0b0101);
+            mimxrt1062::writeIOMUXCPAD(myPin.IOMUXC_array_pad_number,configMask);
+            reinterpret_cast<GPIO_Type*>(myPin.port_base)->GDIR &= (0 << myPin.port_bit_mask_number);
+        }
+
+        bool read()
+        {
+            return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type*>(myPin.port_base)->DR) & (1 << myPin.port_bit_mask_number);
+        }
+
+        void refresh()
+        {
+            reinterpret_cast<GPIO_Type*>(myPin.port_base)->DR_CLEAR |= (1 << myPin.port_bit_mask_number);
+        }
+
     };
 
 
