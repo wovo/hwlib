@@ -1,3 +1,4 @@
+///@file
 // ==========================================================================
 //
 // File      : hwlib-mimxrt1062.hpp
@@ -12,7 +13,6 @@
 // ==========================================================================
 
 // this file contains Doxygen lines
-/// @file
 #include "mimxrt1062.h"
 
 #ifndef HWLIB_MIMXRT1062
@@ -40,7 +40,6 @@ namespace mimxrt1062
      */
     inline void writeIOMUXCPAD(int n, uint32_t mask)
     {
-
         IOMUXC->SW_PAD_CTL_PAD[n] |= mask;
     }
 

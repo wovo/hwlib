@@ -1,3 +1,4 @@
+///@file
 // ==========================================================================
 //
 // File      : hwlib-teensy_40.hpp
@@ -12,7 +13,6 @@
 // ==========================================================================
 
 // this file contains Doxygen lines
-/// @file
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 #include "hwlib-mimxrt1062.hpp"
 
@@ -79,6 +79,11 @@ namespace teensy_40
         {kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_09,GPIO6_BASE,25}   //d23 the analogs pins need to be placed under here in the future
     };
 
+    /**
+     * @brief Enumerator with the pins.
+     * @details Each entry corresponds to a number that maps to the index number from the pin_struct_array
+     * 
+     */
     enum class pins
     {
         d0 =0,
@@ -148,7 +153,7 @@ namespace teensy_40
     {
         private:
         const pin & myPin;
-        uint32_t configMask = 0b10011000010111000; 
+        uint32_t configMask = 0b10011000010111000; // config mask for setting the pin_in pull up and such. starting from p. 559 
         public:
         pin_in(pins pin_number):myPin(pin_struct_array[(int)pin_number])
         {
