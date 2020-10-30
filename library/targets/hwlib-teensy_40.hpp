@@ -20,6 +20,8 @@
 #define TEENSY_40
 namespace teensy_40
 {
+    uint64_t ticks_per_us();
+    uint64_t now_us();
     /**
      * @brief This Struct contains information about the relation of the Teensy board pin with the chip Core.
      * 
@@ -184,5 +186,71 @@ namespace teensy_40
 namespace hwlib
 {
     namespace target = ::teensy_40;
+
+    #ifdef _HWLIB_ONCE
+    uint64_t now_ticks()
+    {
+        return mimxrt1062::now_ticks();
+    }
+
+    uint64_t ticks_per_us()
+    {
+        return mimxrt1062::ticks_per_us();
+    }
+
+    uint64_t now_us()
+    {
+        return now_ticks() / ticks_per_us();
+    }
+
+    // busy waits
+
+    void wait_ns_busy(int_fast32_t n)
+    {
+        wait_us_busy((n + 999) / 1000);
+    }
+
+    void wait_us_busy(int_fast32_t n)
+    {
+        auto end = now_us() + n;
+        while (now_us() < end)
+        {
+        }
+    }
+
+    void wait_ms_busy(int_fast32_t n)
+    {
+        while (n > 0)
+        {
+            wait_us_busy(1000);
+            --n;
+        }
+    }
+
+    // non-busy waits
+
+    void HWLIB_WEAK wait_ns(int_fast32_t n)
+    {
+        wait_us((n + 999) / 1000);
+    }
+
+    void HWLIB_WEAK wait_us(int_fast32_t n)
+    {
+        auto end = now_us() + n;
+        while (now_us() < end)
+        {
+            // background::do_background_work();
+        }
+    }
+
+    void HWLIB_WEAK wait_ms(int_fast32_t n)
+    {
+        while (n > 0)
+        {
+            wait_us(1000);
+            --n;
+        }
+    }
+    #endif // _HWLIB_ONCE
 };
 #endif // TEENSY_40
