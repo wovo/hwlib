@@ -20,6 +20,71 @@
 
 namespace mimxrt1062
 {
+    /**
+     * @brief Struct containing all the information needed to map the right Teensy pin to the right core pad/pin.
+     * 
+     */
+    struct core_pin
+    {
+        uint32_t core_number;
+        uint32_t GPIO_port_base_adress;
+        uint8_t port_bit_number;
+        uint32_t IOMUXC_MUX_control_register_array_index;
+        uint32_t IOMUXC_PAD_control_register_array_index;
+        uint32_t LPUART_base_adress;
+
+        // constructor
+        constexpr core_pin(uint8_t core_number, uint32_t GPIO_port_base_adress, uint8_t port_bit_number, uint32_t IOMUXC_MUX_control_register_array_index, uint32_t IOMUXC_PAD_control_register_array_index, uint32_t LPUART_base_adress = 0): 
+        core_number(core_number), GPIO_port_base_adress(GPIO_port_base_adress), port_bit_number(port_bit_number), 
+        IOMUXC_MUX_control_register_array_index(IOMUXC_MUX_control_register_array_index),  
+        IOMUXC_PAD_control_register_array_index(IOMUXC_PAD_control_register_array_index),
+        LPUART_base_adress(LPUART_base_adress){};
+    };
+
+    constexpr core_pin core_pin_struct_array[40] =
+    {
+        {0,GPIO6_BASE,3,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_03,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B0_03,LPUART6_BASE},
+        {1,GPIO6_BASE,2,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_02,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B0_02,LPUART6_BASE},
+        {2,GPIO9_BASE,4,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_04,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_04},
+        {3,GPIO9_BASE,5,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_05,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_05},
+        {4,GPIO9_BASE,6,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_06,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_06},
+        {5,GPIO9_BASE,8,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_08,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_08},
+        {6,GPIO7_BASE,10,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_10,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B0_10},
+        {7,GPIO7_BASE,17,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B1_01,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B1_01,LPUART4_BASE},
+        {8,GPIO7_BASE,16,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B1_00,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B1_00,LPUART4_BASE},
+        {9,GPIO7_BASE,11,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_11,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B0_11},
+        {10,GPIO7_BASE,0,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_00,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B0_00},
+        {11,GPIO7_BASE,2,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_02,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B0_02},
+        {12,GPIO7_BASE,1,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_01,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B0_01},
+        {13,GPIO7_BASE,3,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_03,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B0_03},
+        {14,GPIO6_BASE,18,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_02,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_02,LPUART2_BASE},
+        {15,GPIO6_BASE,19,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_03,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_03,LPUART2_BASE},
+        {16,GPIO6_BASE,23,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_07,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_07,LPUART3_BASE},
+        {17,GPIO6_BASE,22,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_06,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_06,LPUART3_BASE},
+        {18,GPIO6_BASE,17,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_01,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_01},
+        {19,GPIO6_BASE,16,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_00,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_00},
+        {20,GPIO6_BASE,26,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_10,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_10,LPUART8_BASE},
+        {21,GPIO6_BASE,27,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_11,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_11,LPUART8_BASE},
+        {22,GPIO6_BASE,24,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_08,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_08},
+        {23,GPIO6_BASE,25,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_09,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_09},
+        {24,GPIO6_BASE,12,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_12,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B0_12,LPUART1_BASE},
+        {25,GPIO6_BASE,13,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B0_13,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B0_13,LPUART1_BASE},
+        {26,GPIO6_BASE,30,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_14,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_14},
+        {27,GPIO6_BASE,31,kIOMUXC_SW_MUX_CTL_PAD_GPIO_AD_B1_15,kIOMUXC_SW_PAD_CTL_PAD_GPIO_AD_B1_15},
+        {28,GPIO8_BASE,18,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_32,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_32,LPUART7_BASE},
+        {29,GPIO9_BASE,31,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_31,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_31,LPUART7_BASE},
+        {30,GPIO8_BASE,23,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_37,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_37},
+        {31,GPIO8_BASE,22,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_36,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_36},
+        {32,GPIO7_BASE,12,kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_12,kIOMUXC_SW_PAD_CTL_PAD_GPIO_B0_12},
+        {33,GPIO9_BASE,7,kIOMUXC_SW_MUX_CTL_PAD_GPIO_EMC_07,kIOMUXC_SW_PAD_CTL_PAD_GPIO_EMC_07},
+        {34,GPIO8_BASE,15,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_03,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_03},
+        {35,GPIO8_BASE,14,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_02,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_02},
+        {36,GPIO8_BASE,13,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_01,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_01},
+        {37,GPIO8_BASE,12,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_00,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_00},
+        {38,GPIO8_BASE,17,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_05,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_05},
+        {39,GPIO8_BASE,16,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_04,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_04}
+    };
+
 
     /**
      * @brief Function to set a IO multiplex register to a mode using a mask. 
@@ -27,8 +92,9 @@ namespace mimxrt1062
      * @param n Index in the IOMUXC SW_MUX_CTL_PAD array corresponding to the register adresses from the manufacturer file.
      * @param mask The mask that needs to be written to the register. 0b0101 to set it to GPIO for example. Read the reference manual for information on this.
      */
-    inline void writeIOMUXCTL(int n, uint32_t mask)
+    inline void writeIOMUXMUXCTL(int n, uint32_t mask)
     {
+        IOMUXC->SW_MUX_CTL_PAD[n] &= ~(0b111); 
         IOMUXC->SW_MUX_CTL_PAD[n] |= mask;
     }
 
@@ -38,9 +104,12 @@ namespace mimxrt1062
      * @param n Index in the IOMUXC SW_PAD_CTL_PAD array corresponding to the register adresses from the manufacturer file.
      * @param mask The mask that needs to be written to the register. Read the reference manual for information on this.
      */
-    inline void writeIOMUXCPAD(int n, uint32_t mask)
+    inline void writeIOMUXPADCTL(int n, uint32_t mask)
     {
-        IOMUXC->SW_PAD_CTL_PAD[n] |= mask;
+         IOMUXC->SW_PAD_CTL_PAD[n] &= ~(0b111111 << 10);
+         IOMUXC->SW_PAD_CTL_PAD[n] &= ~(0b11111 << 3);
+         IOMUXC->SW_PAD_CTL_PAD[n] &= ~0b1;
+         IOMUXC->SW_PAD_CTL_PAD[n] |= mask;
     }
 
     /// the number of ticks per us
@@ -54,12 +123,6 @@ namespace mimxrt1062
         static bool init_done = false;
         if (!init_done)
         {
-
-            // kill the watchdog
-            //WDT->WDT_MR = WDT_MR_WDDIS;
-
-            // switch to the 84 MHz crystal/PLL clock
-            //   sam3xa::SystemInit();
 
             //   EFC0->EEFC_FMR = EEFC_FMR_FWS(4);
             //   EFC1->EEFC_FMR = EEFC_FMR_FWS(4);
