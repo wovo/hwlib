@@ -20,13 +20,14 @@
 
 namespace mimxrt1062
 {
+
     /**
      * @brief Struct containing all the information needed to map the right Teensy pin to the right core pad/pin and all config registers.
      * 
      */
     struct core_pin
     {
-        uint32_t core_number;
+        uint8_t core_number;
         uint32_t GPIO_port_base_adress;
         uint8_t GPIO_port_bit_number;
         uint32_t IOMUXC_MUX_control_register_array_index;

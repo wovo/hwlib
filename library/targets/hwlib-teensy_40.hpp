@@ -32,18 +32,10 @@ namespace teensy_40
      * @return uint64_t 
      */
     uint64_t now_us();
-    
-    /// \cond INTERNAL
-    void uart_init();
-    /// \endcond
-
-    bool uart_char_available();
-    char uart_getc();
-    void uart_putc(char c); 
 
     /**
      * @brief Enumerator with the pins.
-     * @details Each entry corresponds to a number that maps to the index number from the pin_struct_array
+     * @details Each entry corresponds to a number that maps to the index number from the core_pin_struct_array
      * 
      */
     enum class pins : uint8_t
@@ -156,89 +148,99 @@ namespace teensy_40
         }
     };
 
-    /**
-     * @brief Class containing the constructor and functions to use the Teensy 4.0 uart ports.
-     * 
-     */
-    class uart_port
-    {
-        // Uart is on the PLL3 clock which is 480 Mhz wired to a divider by 6. 
-        private:
-        const mimxrt1062::core_pin & rx;
-        const mimxrt1062::core_pin & tx;
-        uint32_t baudrate;
-        uint8_t muxCtlConfigmask = 0b010; // uart config number for the mux ctl register
-        uint32_t padCtlConfigmask = 0b00001000010110000; // config mask for setting the pin_in pull up and such. starting from p. 559, setting pull down in this case.
-        public:
-        uart_port(pins rx_pin_number, pins tx_pin_number, unsigned int x) : rx(mimxrt1062::core_pin_struct_array[(int)rx_pin_number]), tx(mimxrt1062::core_pin_struct_array[(int)tx_pin_number]), baudrate(x)
-        {
-            if (baudrate < 9600 || baudrate > 115200 )
-            {
-                baudrate = 115200;
-            }
-            // when the user creates a port of to consecutive pins, the uart_base_adress is actually the same, although, 
-            // a user can use the rx from port 6 and the tx from 0 for example
-            // because of this, rx and tx configurations are both set seperately. 
-            mimxrt1062::writeIOMUXMUXCTL(rx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
-            mimxrt1062::writeIOMUXMUXCTL(tx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
-            reinterpret_cast<GPIO_Type *>(tx.GPIO_port_base_adress)->GDIR |= 1 << tx.GPIO_port_bit_number;
-            
-            //======================================================
-            // setting all the CCM to UART clock gates on, this could be done more efficient, but this is it for now
-            CCM->CCGR3 &= ~(0b11 << 6);
-            CCM->CCGR3 |= (0b11 << 6); 
-            CCM->CCGR1 &= ~(0b11 << 24);
-            CCM->CCGR1 |= (0b11 << 24);
-            CCM->CCGR0 &= ~(0b11 << 28);
-            CCM->CCGR0 |= (0b11 << 28);
-            CCM->CCGR0 &= ~(0b11 << 12);
-            CCM->CCGR0 |= (0b11 << 12);
-            CCM->CCGR6 &= ~(0b11 << 14);
-            CCM->CCGR6 |= (0b11 << 14);
-            CCM->CCGR5 &= ~(0b11 << 24);
-            CCM->CCGR5 |= (0b11 << 24);
-            CCM->CCGR5 &= ~(0b11 << 26);
-            CCM->CCGR5 |= (0b11 << 26);
-            //======================================================
+    /// \cond INTERNAL
+    void uart_init();
+    /// \endcond 
 
-            //mimxrt1062::writeIOMUXPADCTL(rx.IOMUXC_PAD_control_register_array_index,padCtlConfigmask);
-            mimxrt1062::writeIOMUXPADCTL(tx.IOMUXC_PAD_control_register_array_index,padCtlConfigmask);
-            reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> CTRL &= ~(0b1 << 18); // clear the 18th bit 
-            reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> CTRL |= (0b1 << 18); // set the uart rx pin to recieve enable
-            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL &= ~(0b1 << 19); //clear the 19th bit
-            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL |= (0b1 << 19); // set tx pin to transmit enable
-            // baudrate = (480Mhz*1000000/6) / BAUD[0:12] * BAUD[24:28]+1
-            //uint32_t SystemCoreClock = 460; // Mhz
-            //uint32_t SBR = (((SystemCoreClock*1000'000)/6)/16)/baudrate;
-            reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
-            reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> BAUD |= 130; // set it to the right baudrate (130 (129.xxx) = 9600)
-            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
-            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD |= 130; // set it to the right baudrate
-        };
-        /**
-         * @brief Transmit a byte over the uart port 
-         * 
-         * @param value The byte you want to cout
-         */
-        void transmit(uint32_t value)
-        {
-            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> DATA |= value;
-        }
-    };
+    bool uart_char_available();
+    char uart_getc();
+    void uart_putc( char c );
+
+    #define _HWLIB_ONCE
     #ifdef _HWLIB_ONCE
-        void uart_init()
+
+    void uart_init()
+    {
+        static bool init_done = false;
+        if( init_done ){
+        return;
+        }
+        init_done = true;
+        //======================================================
+        //getting the pin info for uart config
+        const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1
+        const mimxrt1062::core_pin & tx = mimxrt1062::core_pin_struct_array[1]; // teensy 4.0 tx1
+        //======================================================
+        uint32_t baudrate = 76800; // this value was tested and works well, baudrate can only be between 9600 and 100.000.
+        uint8_t muxCtlConfigmask = 0b010; // uart config number for the mux ctl register
+        //======================================================
+        // setting all the CCM to UART clock gates on
+        CCM->CCGR3 &= ~(0b11 << 6);
+        CCM->CCGR3 |= (0b11 << 6);
+        // these are only needed when using other pins than rx and tx 0. Default is zero so these are not needed
+        // CCM->CCGR1 &= ~(0b11 << 24);
+        // CCM->CCGR1 |= (0b11 << 24);
+        // CCM->CCGR0 &= ~(0b11 << 28);
+        // CCM->CCGR0 |= (0b11 << 28);
+        // CCM->CCGR0 &= ~(0b11 << 12);
+        // CCM->CCGR0 |= (0b11 << 12);
+        // CCM->CCGR6 &= ~(0b11 << 14);
+        // CCM->CCGR6 |= (0b11 << 14);
+        // CCM->CCGR5 &= ~(0b11 << 24);
+        // CCM->CCGR5 |= (0b11 << 24);
+        // CCM->CCGR5 &= ~(0b11 << 26);
+        // CCM->CCGR5 |= (0b11 << 26);
+        //======================================================
+        // setting the iomux to uart
+        mimxrt1062::writeIOMUXMUXCTL(rx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
+        mimxrt1062::writeIOMUXMUXCTL(tx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
+        //======================================================
+        // setting everything else from UART, note that only consecutive rx and tx pins can be used. So rx1 and tx1 and rx2 and tx2 not rx1 and tx3.
+        reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> CTRL &= ~(0b1 << 18); // disable rx
+        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL &= ~(0b1 << 19); // disable tx
+        // baudrate = (PLL3 clock*1000000/6) / BAUD[0:12] * BAUD[24:28]+1
+        // Wasn't able to find out the right clockspeed for this formula (should be 480 according to reference manual?) found out that a SBR of 130 = 9600 Baud, so deduced to this formula. magic. Seems to have something to do with the PLL bypass, but can't figure it out.
+        uint32_t SBR = 20'000'000/16/baudrate;
+
+        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD &= ~(0b11111 << 23); // clear OSR
+        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD |= 0b01111 << 23; // set OSR to 15
+        reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
+        reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> BAUD |= SBR; // set it to the right baudrate (130 (129.xxx) = 9600)
+        
+        reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> CTRL |= (0b1 << 18); // set the uart rx pin to recieve enable
+        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL |= (0b1 << 19); // set tx pin to transmit enable
+    
+    }
+
+    bool uart_char_available(){
+    uart_init();
+    const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
+    return ( reinterpret_cast<LPUART_Type*>(rx.LPUART_base_adress) -> STAT & (0b1 << 21)) != 0; // return if the STAT[RDRF] is full (0 is empty, 1 is full)
+    }
+
+    char uart_getc(){
+    // uart_init() is not needed because uart_char_available does that
+    while( ! uart_char_available() ){
+        // TODO: hwlib::background::do_background_work();	
+    }
+    const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
+    return reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> DATA; 
+    }
+
+    void uart_putc( char c )
+    {
+        uart_init();	
+        const mimxrt1062::core_pin & tx = mimxrt1062::core_pin_struct_array[1]; // teensy 4.0 tx1
+        while(reinterpret_cast<LPUART_Type*>(tx.LPUART_base_adress) -> STAT & (0b1 << 22) == 0)
         {
-            static bool uart_init_bool = false;
-            if (uart_init_bool)
-            {
-                return;
-            }
-            uart_init_bool = true;
+        // TODO: hwlib::background::do_background_work();	
+        }
+        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> DATA |= c;
+    }
 
-        } 
-    #endif //_HWLIB_ONCE
-
+    #endif // _HWLIB_ONCE
 }; //namespace teensy_40
+#endif // TEENSY_40
 
 /**
  * @brief This namespace lets the hwlib::target point to hwlib::teensy_40
@@ -246,7 +248,22 @@ namespace teensy_40
  */
 namespace hwlib
 {
-    namespace target = ::teensy_40;
+namespace target = ::teensy_40;
+
+void HWLIB_WEAK uart_putc( char c )
+{
+    teensy_40::uart_putc( c );
+}
+
+bool HWLIB_WEAK uart_char_available()
+{
+return teensy_40::uart_char_available();
+}
+
+char HWLIB_WEAK uart_getc( )
+{
+return teensy_40::uart_getc();
+}
 
 #ifdef _HWLIB_ONCE
     uint64_t now_ticks()
@@ -314,4 +331,3 @@ namespace hwlib
     }
 #endif // _HWLIB_ONCE
 };     // namespace hwlib
-#endif // TEENSY_40
