@@ -40,60 +40,6 @@ namespace teensy_40
     bool uart_char_available();
     char uart_getc();
     void uart_putc(char c); 
-    /**
-     * @brief This Struct contains information about the relation of the Teensy board pin with the chip Core.
-     * 
-     */
-    struct pin
-    {
-        /**
-         * @brief The corresponding array index number within the IOMUXC->SW_MUX_CTL_PAD and SW_PAD_CTL_PAD arrays for the pin from the manufacturer header file, used to set a chip pad(pin) to a GPIO port and configurate.
-         * 
-         */
-        unsigned int IOMUXC_SW_MUX_CTL_PAD_arrayIndex;
-        /**
-         * @brief The GPIO port adress in int format to write the registers for each port
-         * 
-         */
-        unsigned int GPIO_port_base;
-        /**
-         * @brief Bit number from the pin within the chip GPIO port
-         * 
-         */
-        unsigned int port_bit_mask_number;
-
-        constexpr pin(unsigned int IOMUXC_SW_MUX_CTL_PAD_arrayIndex, unsigned int GPIO_port_base, unsigned int port_bit_mask_number = 0) : IOMUXC_SW_MUX_CTL_PAD_arrayIndex(IOMUXC_SW_MUX_CTL_PAD_arrayIndex), GPIO_port_base(GPIO_port_base), port_bit_mask_number(port_bit_mask_number){};
-    };
-
-    /**
-     * @brief Uart_pin class containing all information for the use of UART protocols
-     * 
-     */
-     struct uart_pin
-    {
-        /**
-         * @brief The corresponding array index number within the IOMUXC->SW_MUX_CTL_PAD and SW_PAD_CTL_PAD arrays for the pin from the manufacturer header file, used to set a chip pad(pin) to a GPIO port and configurate.
-         * 
-         */
-        unsigned int IOMUXC_SW_MUX_CTL_PAD_arrayIndex;
-        /**
-         * @brief The GPIO port adress in int format to write the registers for each port
-         * 
-         */
-        unsigned int GPIO_port_base;
-        /**
-         * @brief The UART port adress in int format, to be used for uart things
-         * 
-         */
-        unsigned int LPUART_port_base;
-        /**
-         * @brief Bit number from the pin within the chip GPIO port
-         * 
-         */
-        unsigned int port_bit_mask_number;
-
-        constexpr uart_pin(unsigned int IOMUXC_SW_MUX_CTL_PAD_arrayIndex, unsigned int GPIO_port_base, unsigned int LPUART_port_base, unsigned int port_bit_mask_number = 0) : IOMUXC_SW_MUX_CTL_PAD_arrayIndex(IOMUXC_SW_MUX_CTL_PAD_arrayIndex), GPIO_port_base(GPIO_port_base), LPUART_port_base(LPUART_port_base), port_bit_mask_number(port_bit_mask_number){};
-    };
 
     /**
      * @brief Enumerator with the pins.
@@ -159,18 +105,18 @@ namespace teensy_40
         {
             mimxrt1062::writeIOMUXMUXCTL(myPin.IOMUXC_MUX_control_register_array_index, 0b0101);
             mimxrt1062::writeIOMUXPADCTL(myPin.IOMUXC_PAD_control_register_array_index, configMask);
-            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->GDIR |= 1 << myPin.port_bit_number;
+            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->GDIR |= 1 << myPin.GPIO_port_bit_number;
         }
 
         void write(bool x)
         {
             if (x)
             {
-                reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR |= (1 << myPin.port_bit_number);
+                reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR |= (1 << myPin.GPIO_port_bit_number);
             }
             else
             {
-                reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myPin.port_bit_number);
+                reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myPin.GPIO_port_bit_number);
             }
         }
 
@@ -183,7 +129,7 @@ namespace teensy_40
          */
         void toggle()
         {
-            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_TOGGLE |= (1 << myPin.port_bit_number);
+            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_TOGGLE |= (1 << myPin.GPIO_port_bit_number);
         }
     };
 
@@ -201,12 +147,12 @@ namespace teensy_40
         }
         bool read()
         {
-            return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR) & (1 << myPin.port_bit_number);
+            return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR) & (1 << myPin.GPIO_port_bit_number);
         }
 
         void refresh()
         {
-            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myPin.port_bit_number);
+            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myPin.GPIO_port_bit_number);
         }
     };
 
@@ -216,19 +162,58 @@ namespace teensy_40
      */
     class uart_port
     {
+        // Uart is on the PLL3 clock which is 480 Mhz wired to a divider by 6. 
         private:
         const mimxrt1062::core_pin & rx;
         const mimxrt1062::core_pin & tx;
         uint32_t baudrate;
         uint8_t muxCtlConfigmask = 0b010; // uart config number for the mux ctl register
-        uint32_t padCtlConfigmask = 0b10011000010111000; // config mask for setting the pin_in pull up and such. starting from p. 559, setting pull down in this case.
+        uint32_t padCtlConfigmask = 0b00001000010110000; // config mask for setting the pin_in pull up and such. starting from p. 559, setting pull down in this case.
         public:
         uart_port(pins rx_pin_number, pins tx_pin_number, unsigned int x) : rx(mimxrt1062::core_pin_struct_array[(int)rx_pin_number]), tx(mimxrt1062::core_pin_struct_array[(int)tx_pin_number]), baudrate(x)
         {
+            if (baudrate < 9600 || baudrate > 115200 )
+            {
+                baudrate = 115200;
+            }
+            // when the user creates a port of to consecutive pins, the uart_base_adress is actually the same, although, 
+            // a user can use the rx from port 6 and the tx from 0 for example
+            // because of this, rx and tx configurations are both set seperately. 
             mimxrt1062::writeIOMUXMUXCTL(rx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
-            mimxrt1062::writeIOMUXMUXCTL(tx.IOMUXC_PAD_control_register_array_index,muxCtlConfigmask);
-            reinterpret_cast<GPIO_Type *>(rx.GPIO_port_base_adress)->GDIR &= (0 << rx.port_bit_number);
-            reinterpret_cast<GPIO_Type *>(tx.GPIO_port_base_adress)->GDIR &= (1 << tx.port_bit_number);
+            mimxrt1062::writeIOMUXMUXCTL(tx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
+            reinterpret_cast<GPIO_Type *>(tx.GPIO_port_base_adress)->GDIR |= 1 << tx.GPIO_port_bit_number;
+            
+            //======================================================
+            // setting all the CCM to UART clock gates on, this could be done more efficient, but this is it for now
+            CCM->CCGR3 &= ~(0b11 << 6);
+            CCM->CCGR3 |= (0b11 << 6); 
+            CCM->CCGR1 &= ~(0b11 << 24);
+            CCM->CCGR1 |= (0b11 << 24);
+            CCM->CCGR0 &= ~(0b11 << 28);
+            CCM->CCGR0 |= (0b11 << 28);
+            CCM->CCGR0 &= ~(0b11 << 12);
+            CCM->CCGR0 |= (0b11 << 12);
+            CCM->CCGR6 &= ~(0b11 << 14);
+            CCM->CCGR6 |= (0b11 << 14);
+            CCM->CCGR5 &= ~(0b11 << 24);
+            CCM->CCGR5 |= (0b11 << 24);
+            CCM->CCGR5 &= ~(0b11 << 26);
+            CCM->CCGR5 |= (0b11 << 26);
+            //======================================================
+
+            //mimxrt1062::writeIOMUXPADCTL(rx.IOMUXC_PAD_control_register_array_index,padCtlConfigmask);
+            mimxrt1062::writeIOMUXPADCTL(tx.IOMUXC_PAD_control_register_array_index,padCtlConfigmask);
+            reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> CTRL &= ~(0b1 << 18); // clear the 18th bit 
+            reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> CTRL |= (0b1 << 18); // set the uart rx pin to recieve enable
+            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL &= ~(0b1 << 19); //clear the 19th bit
+            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL |= (0b1 << 19); // set tx pin to transmit enable
+            // baudrate = (480Mhz*1000000/6) / BAUD[0:12] * BAUD[24:28]+1
+            //uint32_t SystemCoreClock = 460; // Mhz
+            //uint32_t SBR = (((SystemCoreClock*1000'000)/6)/16)/baudrate;
+            reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
+            reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> BAUD |= 130; // set it to the right baudrate (130 (129.xxx) = 9600)
+            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
+            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD |= 130; // set it to the right baudrate
         };
         /**
          * @brief Transmit a byte over the uart port 
@@ -237,8 +222,7 @@ namespace teensy_40
          */
         void transmit(uint32_t value)
         {
-            return;
-            
+            reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> DATA |= value;
         }
     };
     #ifdef _HWLIB_ONCE

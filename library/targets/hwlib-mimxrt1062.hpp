@@ -21,24 +21,25 @@
 namespace mimxrt1062
 {
     /**
-     * @brief Struct containing all the information needed to map the right Teensy pin to the right core pad/pin.
+     * @brief Struct containing all the information needed to map the right Teensy pin to the right core pad/pin and all config registers.
      * 
      */
     struct core_pin
     {
         uint32_t core_number;
         uint32_t GPIO_port_base_adress;
-        uint8_t port_bit_number;
+        uint8_t GPIO_port_bit_number;
         uint32_t IOMUXC_MUX_control_register_array_index;
         uint32_t IOMUXC_PAD_control_register_array_index;
         uint32_t LPUART_base_adress;
 
         // constructor
-        constexpr core_pin(uint8_t core_number, uint32_t GPIO_port_base_adress, uint8_t port_bit_number, uint32_t IOMUXC_MUX_control_register_array_index, uint32_t IOMUXC_PAD_control_register_array_index, uint32_t LPUART_base_adress = 0): 
-        core_number(core_number), GPIO_port_base_adress(GPIO_port_base_adress), port_bit_number(port_bit_number), 
+        constexpr core_pin(uint8_t core_number, uint32_t GPIO_port_base_adress, uint8_t GPIO_port_bit_number, uint32_t IOMUXC_MUX_control_register_array_index, uint32_t IOMUXC_PAD_control_register_array_index, uint32_t LPUART_base_adress = 0): 
+        core_number(core_number), GPIO_port_base_adress(GPIO_port_base_adress), GPIO_port_bit_number(GPIO_port_bit_number), 
         IOMUXC_MUX_control_register_array_index(IOMUXC_MUX_control_register_array_index),  
         IOMUXC_PAD_control_register_array_index(IOMUXC_PAD_control_register_array_index),
-        LPUART_base_adress(LPUART_base_adress){};
+        LPUART_base_adress(LPUART_base_adress)
+        {};
     };
 
     constexpr core_pin core_pin_struct_array[40] =
@@ -87,7 +88,8 @@ namespace mimxrt1062
 
 
     /**
-     * @brief Function to set a IO multiplex register to a mode using a mask. 
+     * @brief Function to set a IO multiplex register to a mode using a mask.
+     * @details notice that the first three bits are always set to zero when writing in this register, so set those bits as well. 
      * 
      * @param n Index in the IOMUXC SW_MUX_CTL_PAD array corresponding to the register adresses from the manufacturer file.
      * @param mask The mask that needs to be written to the register. 0b0101 to set it to GPIO for example. Read the reference manual for information on this.
@@ -100,6 +102,7 @@ namespace mimxrt1062
 
     /**
      * @brief Function to set an IO multiplex config register to a mode using a mask.
+     * @details Notice that the whole registerd is set to 0 except the reserved adresses, in other words, every bit needs to be set to a desired value.
      * 
      * @param n Index in the IOMUXC SW_PAD_CTL_PAD array corresponding to the register adresses from the manufacturer file.
      * @param mask The mask that needs to be written to the register. Read the reference manual for information on this.
