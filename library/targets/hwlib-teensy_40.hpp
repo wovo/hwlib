@@ -156,7 +156,6 @@ namespace teensy_40
     char uart_getc();
     void uart_putc( char c );
 
-    #define _HWLIB_ONCE
     #ifdef _HWLIB_ONCE
 
     void uart_init()
@@ -177,7 +176,7 @@ namespace teensy_40
         // setting all the CCM to UART clock gates on
         CCM->CCGR3 &= ~(0b11 << 6);
         CCM->CCGR3 |= (0b11 << 6);
-        // these are only needed when using other pins than rx and tx 0. Default is zero so these are not needed
+        // these are only needed when using other pins than rx and tx 0. Default is rx and tx zero so these are not needed
         // CCM->CCGR1 &= ~(0b11 << 24);
         // CCM->CCGR1 |= (0b11 << 24);
         // CCM->CCGR0 &= ~(0b11 << 28);
@@ -200,7 +199,7 @@ namespace teensy_40
         reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL &= ~(0b1 << 19); // disable tx
         // baudrate = (PLL3 clock*1000000/6) / BAUD[0:12] * BAUD[24:28]+1
         // Wasn't able to find out the right clockspeed for this formula (should be 480 according to reference manual?) found out that a SBR of 130 = 9600 Baud, so deduced to this formula. magic. Seems to have something to do with the PLL bypass, but can't figure it out.
-        uint32_t SBR = 20'000'000/16/baudrate;
+        uint32_t SBR = 20'000'000/(16*baudrate);
 
         reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD &= ~(0b11111 << 23); // clear OSR
         reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD |= 0b01111 << 23; // set OSR to 15
@@ -212,6 +211,19 @@ namespace teensy_40
     
     }
 
+    inline void dont_optimize()
+    {
+        volatile int i = 0;
+        if (i < 10)
+        {
+            i++;
+        }
+        else
+        {
+            i = 0;
+        }
+    }
+
     bool uart_char_available(){
     uart_init();
     const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
@@ -220,7 +232,9 @@ namespace teensy_40
 
     char uart_getc(){
     // uart_init() is not needed because uart_char_available does that
-    while( ! uart_char_available() ){
+    while( ! uart_char_available() )
+    { 
+        dont_optimize();
         // TODO: hwlib::background::do_background_work();	
     }
     const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
@@ -231,8 +245,9 @@ namespace teensy_40
     {
         uart_init();	
         const mimxrt1062::core_pin & tx = mimxrt1062::core_pin_struct_array[1]; // teensy 4.0 tx1
-        while(reinterpret_cast<LPUART_Type*>(tx.LPUART_base_adress) -> STAT & (0b1 << 22) == 0)
+        while((reinterpret_cast<LPUART_Type*>(tx.LPUART_base_adress) -> STAT & (0b1 << 22)) == 0)
         {
+            dont_optimize();
         // TODO: hwlib::background::do_background_work();	
         }
         reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> DATA |= c;
