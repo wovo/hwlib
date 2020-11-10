@@ -170,7 +170,9 @@ namespace teensy_40
         const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1
         const mimxrt1062::core_pin & tx = mimxrt1062::core_pin_struct_array[1]; // teensy 4.0 tx1
         //======================================================
-        uint32_t baudrate = 76800; // this value was tested and works well, baudrate can only be between 9600 and 100.000.
+        // this baudrate value was tested and works well, baudrate can only be between 9600 and 100.000. 
+        // 115200 gives to high offset because I was not able to find out which clock UART runs on (should be 480 Mhz, but this didn't work in the formula, see TODO below)
+        uint32_t baudrate = 38400;
         uint8_t muxCtlConfigmask = 0b010; // uart config number for the mux ctl register
         //======================================================
         // setting all the CCM to UART clock gates on
@@ -199,6 +201,7 @@ namespace teensy_40
         reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL &= ~(0b1 << 19); // disable tx
         // baudrate = (PLL3 clock*1000000/6) / BAUD[0:12] * BAUD[24:28]+1
         // Wasn't able to find out the right clockspeed for this formula (should be 480 according to reference manual?) found out that a SBR of 130 = 9600 Baud, so deduced to this formula. magic. Seems to have something to do with the PLL bypass, but can't figure it out.
+        // TODO: Find the right settings to crank up the 20'000'000 number to 480'000'000 (or whatever else). So you know for sure how many Mhz is send to the UART clock, so the formula works better and higher baudrates can be found. (this 20 Mhz is backwards calculated because i knew a SBR value of 130 gave me 9600 baud)
         uint32_t SBR = 20'000'000/(16*baudrate);
 
         reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD &= ~(0b11111 << 23); // clear OSR
