@@ -26,11 +26,7 @@ namespace teensy_40
      * @return uint64_t The ticks per microsecond
      */
     uint64_t ticks_per_us();
-    /**
-     * @brief 
-     * 
-     * @return uint64_t 
-     */
+
     uint64_t now_us();
 
     /**
@@ -86,6 +82,24 @@ namespace teensy_40
         rx5
     };
 
+    /**
+     * @brief Enumerator that holds the numbers that map the analog pins to the right index in the core_pin_struct_array
+     * 
+     */
+    enum class ad_pins : uint32_t
+    {
+        a0 = 14,
+        a1,
+        a2,
+        a3,
+        a4,
+        a5,
+        a6,
+        a7,
+        a8,
+        a9
+    };
+
     class pin_out : public hwlib::pin_out
     {
     private:
@@ -113,8 +127,7 @@ namespace teensy_40
         }
 
         void flush()
-        {
-        }
+        {}
         /**
          * @brief Function to Toggle the GPIO on and off
          * 
@@ -146,6 +159,30 @@ namespace teensy_40
         {
             reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myPin.GPIO_port_bit_number);
         }
+    };
+
+    class pin_adc : public hwlib::adc
+    {
+        // p. 3328
+        private:
+        const mimxrt1062::core_pin & myPin;
+        uint32_t configMask = 0b0; // config mask, still to set
+        public:
+        pin_adc(ad_pins pin_number): myPin(mimxrt1062::core_pin_struct_array[(int)pin_number])
+        {   // disable keeper NOTE on p.3331
+            // enable the adc
+            // enable the adc clock? IPG_clk, IPG_clk_root. Gating needs to be done maybe?
+            // calibrate using the on chip calibration function
+            // ask wouter if hardware average function need to be enabled by setting AVGE in ADC control register? p.3332
+            // set ADC_CFG[mode] to continuous conversion i think? p. 3334
+        }; // constructor, still to make complete
+        adc_value_type read()
+        {
+            //read if conversion complete flag in COCO n is set. 
+            //read from the ADC1 -> R register
+            
+        }
+
     };
 
     /// \cond INTERNAL
