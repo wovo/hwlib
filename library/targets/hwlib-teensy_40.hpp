@@ -86,7 +86,7 @@ namespace teensy_40
      * @brief Enumerator that holds the numbers that map the analog pins to the right index in the core_pin_struct_array
      * 
      */
-    enum class ad_pins : uint32_t
+    enum class ad_pins : uint8_t
     {
         a0 = 14,
         a1,
@@ -150,6 +150,7 @@ namespace teensy_40
             mimxrt1062::writeIOMUXPADCTL(myPin.IOMUXC_PAD_control_register_array_index, configMask);
             reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->GDIR &= (0 << myPin.GPIO_port_base_adress);
         }
+
         bool read()
         {
             return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR) & (1 << myPin.GPIO_port_bit_number);
@@ -163,24 +164,62 @@ namespace teensy_40
 
     class pin_adc : public hwlib::adc
     {
-        // p. 3328
+        // p. 3328 consumers guide
         private:
         const mimxrt1062::core_pin & myPin;
-        uint32_t configMask = 0b0; // config mask, still to set
+        uint32_t configMask = 0b00000000010110000; // config mask, everything default, except PKE (bit 12) which turns off the pull/keeper
         public:
-        pin_adc(ad_pins pin_number): myPin(mimxrt1062::core_pin_struct_array[(int)pin_number])
-        {   // disable keeper NOTE on p.3331
-            // enable the adc
-            // enable the adc clock? IPG_clk, IPG_clk_root. Gating needs to be done maybe?
+        pin_adc(ad_pins pin_number) : hwlib::adc(12), myPin(mimxrt1062::core_pin_struct_array[(int)pin_number])
+        {   
+            if (myPin.ad_channel == 255) // what to do if pin_number is not an adc pin
+            {
+                return;
+            }
+            mimxrt1062::writeIOMUXPADCTL(myPin.IOMUXC_PAD_control_register_array_index,configMask); // disable keeper, NOTE on p.3331
+            mimxrt1062::writeIOMUXMUXCTL(myPin.IOMUXC_MUX_control_register_array_index, 0b0101); // enable the gpio that adc uses
+            // enable the adc clocks to adc1.
+            CCM->CCGR1 &= ~(0b11 <<16); // adc1
+            CCM->CCGR1 |= (0b11 << 16); // adc1
+            // CCM->CCGR1 &= ~(0b11 <<8); // adc2
+            // CCM->CCGR1 |= (0b11 << 8); // adc2
+
+            ADC1->GC &= ~(0b11111111); // set to: no cal, single conversion, no hardware average, no compare function, no compare function greater than, no compare function range, no DMA, Asynchronous clock enabled for output.
+            ADC1->GC |=  (0b00000001);
+            // ADC2->GC &= ~(0b11111111); // set to: no cal, single conversion, no hardware average, no compare function, no compare function greater than, no compare function range, no DMA, Asynchronous clock enabled for output.
+            // ADC2->GC |=  (0b00000001);
+            
+            uint32_t config = 0;
+            config |= (0b10<<2); // adc conversion to 12 bit resolution
+            config |= (0b1<<4); // long sampling on (ADLSMP bit)
+            config |= (0b11<<8); // sample period to 25 clocks (highest, ADSTS bits)
+            config |= (0b11); // Asynchronous clock as input
+            config |= (0b01 << 5); // divide input clock by 2
+            ADC1->CFG &= ~(0b1111111111111111); // adc1
+            ADC1->CFG |= config;
+            // ADC2->CFG &= ~(0b1111111111111111); // adc2
+            // ADC2->CFG |= config;
+
             // calibrate using the on chip calibration function
-            // ask wouter if hardware average function need to be enabled by setting AVGE in ADC control register? p.3332
-            // set ADC_CFG[mode] to continuous conversion i think? p. 3334
-        }; // constructor, still to make complete
+            ADC1->GC |= (0b1 << 7);
+            while((ADC1->GC & (0b1 << 7)) != 0){} // check if the CAL bit is still high, if not, calibration is done
+            // ADC2->GC |= (0b1 << 7);
+            // while((ADC2->GC & (0b1 << 7)) != 0){} // check if the CAL bit is still high, if not, calibration is done
+        };
+        
         adc_value_type read()
         {
-            //read if conversion complete flag in COCO n is set. 
-            //read from the ADC1 -> R register
-            
+            if (myPin.ad_channel == 0xFFFFFFFF)
+            {
+                return 0xFFFFFFFF;
+            }
+            ADC1->HC[0] = myPin.ad_channel;
+            while(ADC1->HS & 0b1){} //wait till the conversion complete (ADACT p. 3368)
+            return (adc_value_type)ADC1->R[0]; //read from the ADC1 -> R register
+        }
+
+        void refresh()
+        {
+            return;
         }
 
     };
