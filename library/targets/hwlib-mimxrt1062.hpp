@@ -27,24 +27,49 @@ namespace mimxrt1062
      */
     struct core_pin
     {
+        /**
+         * @brief The base adress to the GPIO port.
+         * 
+         */
         uint32_t GPIO_port_base_adress;
+        /**
+         * @brief The (bit) number this pin is within the GPIO port.
+         * 
+         */
         uint8_t GPIO_port_bit_number;
+        /**
+         * @brief The base adress to the multiplexer control register to multiplex a chip pad to a hardware block.
+         * 
+         */
         uint32_t IOMUXC_MUX_control_register_array_index;
+        /**
+         * @brief The base adress to the chip pad configuration adress.
+         * 
+         */
         uint32_t IOMUXC_PAD_control_register_array_index;
-        uint32_t LPUART_base_adress;
+        /**
+         * @brief The base adress to the serial port.
+         * @details This base adress maps to the base adress of a serial port. The bitnumber within te port is the same as the GPIO_port_bit_number. This port is used for UART communication and defaults to 0XFFFFFFFF.
+         * 
+         */
+        uint32_t serial_base_adress;
+        /**
+         * @brief The ad conversion channel number. 
+         * @details this value defaults to 0xFFFFFFFF.
+         */
         uint32_t ad_channel;
 
         // constructor
-        constexpr core_pin(uint32_t GPIO_port_base_adress, uint8_t GPIO_port_bit_number, uint32_t IOMUXC_MUX_control_register_array_index, uint32_t IOMUXC_PAD_control_register_array_index, uint32_t LPUART_base_adress = 0XFFFFFFFF, uint32_t ad_channel = 0XFFFFFFFF): 
+        constexpr core_pin(uint32_t GPIO_port_base_adress, uint8_t GPIO_port_bit_number, uint32_t IOMUXC_MUX_control_register_array_index, uint32_t IOMUXC_PAD_control_register_array_index, uint32_t serial_base_adress = 0XFFFFFFFF, uint32_t ad_channel = 0XFFFFFFFF): 
         GPIO_port_base_adress(GPIO_port_base_adress), GPIO_port_bit_number(GPIO_port_bit_number), 
         IOMUXC_MUX_control_register_array_index(IOMUXC_MUX_control_register_array_index),  
         IOMUXC_PAD_control_register_array_index(IOMUXC_PAD_control_register_array_index),
-        LPUART_base_adress(LPUART_base_adress),
+        serial_base_adress(serial_base_adress),
         ad_channel(ad_channel)
         {};
     };
     /**
-     * @brief Struct containing the core pin structs that map a port and bitnumber to the configuration registers
+     * @brief Struct containing the core pin structs that map a chip pad to the configuration register adresses and IO ports
      * 
      */
     constexpr core_pin core_pin_struct_array[40] =
@@ -89,19 +114,6 @@ namespace mimxrt1062
         {GPIO8_BASE,12,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_00,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_00},
         {GPIO8_BASE,17,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_05,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_05},
         {GPIO8_BASE,16,kIOMUXC_SW_MUX_CTL_PAD_GPIO_SD_B0_04,kIOMUXC_SW_PAD_CTL_PAD_GPIO_SD_B0_04}
-    };
-
-    const uint8_t pin_to_channel[] = { // pg 482
-	7,	// 0/A0  AD_B1_02
-	8,	// 1/A1  AD_B1_03
-	12,	// 2/A2  AD_B1_07
-	11,	// 3/A3  AD_B1_06
-	6,	// 4/A4  AD_B1_01
-	5,	// 5/A5  AD_B1_00
-	15,	// 6/A6  AD_B1_10
-	0,	// 7/A7  AD_B1_11
-	13,	// 8/A8  AD_B1_08
-	14,	// 9/A9  AD_B1_09
     };
 
 

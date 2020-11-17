@@ -169,7 +169,7 @@ namespace teensy_40
         const mimxrt1062::core_pin & myPin;
         uint32_t configMask = 0b00000000010110000; // config mask, everything default, except PKE (bit 12) which turns off the pull/keeper
         public:
-        pin_adc(ad_pins pin_number) : hwlib::adc(12), myPin(mimxrt1062::core_pin_struct_array[(int)pin_number])
+        pin_adc(pins pin_number) : hwlib::adc(12), myPin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {   
             if (myPin.ad_channel == 255) // what to do if pin_number is not an adc pin
             {
@@ -273,20 +273,20 @@ namespace teensy_40
         mimxrt1062::writeIOMUXMUXCTL(tx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
         //======================================================
         // setting everything else from UART, note that only consecutive rx and tx pins can be used. So rx1 and tx1 and rx2 and tx2 not rx1 and tx3.
-        reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> CTRL &= ~(0b1 << 18); // disable rx
-        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL &= ~(0b1 << 19); // disable tx
+        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> CTRL &= ~(0b1 << 18); // disable rx
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> CTRL &= ~(0b1 << 19); // disable tx
         // baudrate = (PLL3 clock*1000000/6) / BAUD[0:12] * BAUD[24:28]+1
         // Wasn't able to find out the right clockspeed for this formula (should be 480 according to reference manual?) found out that a SBR of 130 = 9600 Baud, so deduced to this formula. magic. Seems to have something to do with the PLL bypass, but can't figure it out.
         // TODO: Find the right settings to crank up the 20'000'000 number to 480'000'000 (or whatever else). So you know for sure how many Mhz is send to the UART clock, so the formula works better and higher baudrates can be found. (this 20 Mhz is backwards calculated because i knew a SBR value of 130 gave me 9600 baud)
         uint32_t SBR = 20'000'000/(16*baudrate);
 
-        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD &= ~(0b11111 << 23); // clear OSR
-        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> BAUD |= 0b01111 << 23; // set OSR to 15
-        reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
-        reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> BAUD |= SBR; // set it to the right baudrate (130 (129.xxx) = 9600)
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD &= ~(0b11111 << 23); // clear OSR
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD |= 0b01111 << 23; // set OSR to 15
+        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
+        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> BAUD |= SBR; // set it to the right baudrate (130 (129.xxx) = 9600)
         
-        reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> CTRL |= (0b1 << 18); // set the uart rx pin to recieve enable
-        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> CTRL |= (0b1 << 19); // set tx pin to transmit enable
+        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> CTRL |= (0b1 << 18); // set the uart rx pin to recieve enable
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> CTRL |= (0b1 << 19); // set tx pin to transmit enable
     
     }
 
@@ -306,7 +306,7 @@ namespace teensy_40
     bool uart_char_available(){
     uart_init();
     const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
-    return ( reinterpret_cast<LPUART_Type*>(rx.LPUART_base_adress) -> STAT & (0b1 << 21)) != 0; // return if the STAT[RDRF] is full (0 is empty, 1 is full)
+    return ( reinterpret_cast<LPUART_Type*>(rx.serial_base_adress) -> STAT & (0b1 << 21)) != 0; // return if the STAT[RDRF] is full (0 is empty, 1 is full)
     }
 
     char uart_getc(){
@@ -317,19 +317,19 @@ namespace teensy_40
         // TODO: hwlib::background::do_background_work();	
     }
     const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
-    return reinterpret_cast<LPUART_Type *>(rx.LPUART_base_adress) -> DATA; 
+    return reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> DATA; 
     }
 
     void uart_putc( char c )
     {
         uart_init();	
         const mimxrt1062::core_pin & tx = mimxrt1062::core_pin_struct_array[1]; // teensy 4.0 tx1
-        while((reinterpret_cast<LPUART_Type*>(tx.LPUART_base_adress) -> STAT & (0b1 << 22)) == 0)
+        while((reinterpret_cast<LPUART_Type*>(tx.serial_base_adress) -> STAT & (0b1 << 22)) == 0)
         {
             dont_optimize();
         // TODO: hwlib::background::do_background_work();	
         }
-        reinterpret_cast<LPUART_Type *>(tx.LPUART_base_adress) -> DATA |= c;
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> DATA |= c;
     }
 
     #endif // _HWLIB_ONCE
