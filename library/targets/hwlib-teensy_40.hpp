@@ -208,13 +208,13 @@ namespace teensy_40
         
         adc_value_type read()
         {
-            if (myPin.ad_channel == 0xFFFFFFFF)
+            if (myPin.ad_channel == 0xFFFFFFFF) // if channel is this number, the wrong pin is used (need to be a0 / a9)
             {
                 return 0xFFFFFFFF;
             }
-            ADC1->HC[0] = myPin.ad_channel;
+            ADC1->HC[0] = myPin.ad_channel; // write channel in hc to start reading the pin and conversion process
             while(ADC1->HS & 0b1){} //wait till the conversion complete (ADACT p. 3368)
-            return (adc_value_type)ADC1->R[0]; //read from the ADC1 -> R register
+            return (adc_value_type)ADC1->R[0]; //read from the ADC1 -> R0 register
         }
 
         void refresh()
