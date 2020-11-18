@@ -104,8 +104,7 @@ namespace teensy_40
     {
     private:
         const mimxrt1062::core_pin &myCorePin;
-        const uint32_t configMask = 0b00001000010110000; // config mask for setting the pin_in pull up and such. starting from p. 559, setting pull down in this case
-
+        const uint32_t configMask = ((0b0 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b0<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
     public:
         pin_out(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
@@ -145,13 +144,13 @@ namespace teensy_40
     {
     private:
         const mimxrt1062::core_pin &myCorePin;
-        uint32_t configMask = 0b10011000010111000; // config mask for setting the pin_in pull down and such. starting from p. 559, setting pull down in this case
+         const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b111 << 3) /*DSE*/ | 0b0 /*SRE*/ );
     public:
         pin_in(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
             mimxrt1062::writeIOMUXMUXCTL(myCorePin.IOMUXC_MUX_control_register_array_index, 0b0101);
             mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_PAD_control_register_array_index, configMask);
-            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= (0 << myCorePin.GPIO_port_base_adress);
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress);
         }
 
         bool read()
@@ -170,7 +169,7 @@ namespace teensy_40
         // p. 3328 consumers guide
         private:
         const mimxrt1062::core_pin & myCorePin;
-        uint32_t configMask = 0b00000000010110000; // config mask, everything default, except PKE (bit 12) which turns off the pull/keeper
+        const uint32_t configMask = ((0b0 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b0<<13) /*PUE*/ | (0b0 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
         public:
         pin_adc(pins pin_number) : hwlib::adc(12), myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {   
@@ -235,8 +234,7 @@ namespace teensy_40
     {
         private:
         const mimxrt1062::core_pin & myCorePin;
-        const uint32_t configMask = 0b01010100001011000; // config mask for setting the pin_in pull up and such. starting from p. 559. setting: 100k pull up, keep disabled, pull/keeper disabled, open drain enabled (for now?)
-
+        const uint32_t configMask = ((0b0 << 16) /*HYS*/| (0b10 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b0 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b01 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
         public:
         pin_oc(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
@@ -245,7 +243,7 @@ namespace teensy_40
         }
         bool read()
         {
-            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= (0 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
             return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number);
         }
         void write(bool x)
