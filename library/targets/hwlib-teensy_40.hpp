@@ -243,7 +243,7 @@ namespace teensy_40
         }
         bool read()
         {
-            //reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
             return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number);
         }
         void write(bool x)
@@ -253,16 +253,6 @@ namespace teensy_40
                 ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
                 : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
             ) = (1 << myCorePin.GPIO_port_bit_number);
-            // if (x)
-            // {
-            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress);
-            // }
-            // else
-            // {
-            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number);
-            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR = (1 << myCorePin.GPIO_port_bit_number);
-            // }
-   
         }
         void refresh()
         {
@@ -272,6 +262,7 @@ namespace teensy_40
 
         void flush()
         {
+            // what to do?
             return;
         }
 
