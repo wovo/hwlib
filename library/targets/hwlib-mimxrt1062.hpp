@@ -139,10 +139,12 @@ namespace mimxrt1062
      */
     inline void writeIOMUXPADCTL(int n, uint32_t mask)
     {
-         IOMUXC->SW_PAD_CTL_PAD[n] &= ~(0b111111 << 10);
-         IOMUXC->SW_PAD_CTL_PAD[n] &= ~(0b11111 << 3);
-         IOMUXC->SW_PAD_CTL_PAD[n] &= ~0b1;
-         IOMUXC->SW_PAD_CTL_PAD[n] |= mask;
+        //  IOMUXC->SW_PAD_CTL_PAD[n] &= ~(0b111111 << 10);
+        //  IOMUXC->SW_PAD_CTL_PAD[n] &= ~(0b11111 << 3);
+        //  IOMUXC->SW_PAD_CTL_PAD[n] &= ~0b1;
+        uint32_t clearMask = ~((0b111111 << 10) | (0b11111 << 3) | 0b1);
+        IOMUXC->SW_PAD_CTL_PAD[n] &= clearMask;
+        IOMUXC->SW_PAD_CTL_PAD[n] |= mask;
     }
 
     /// the number of ticks per us

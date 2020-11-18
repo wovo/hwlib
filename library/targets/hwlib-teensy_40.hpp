@@ -103,62 +103,65 @@ namespace teensy_40
     class pin_out : public hwlib::pin_out
     {
     private:
-        const mimxrt1062::core_pin &myPin;
+        const mimxrt1062::core_pin &myCorePin;
         const uint32_t configMask = 0b00001000010110000; // config mask for setting the pin_in pull up and such. starting from p. 559, setting pull down in this case
 
     public:
-        pin_out(pins pin_number) : myPin(mimxrt1062::core_pin_struct_array[(int)pin_number])
+        pin_out(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
-            mimxrt1062::writeIOMUXMUXCTL(myPin.IOMUXC_MUX_control_register_array_index, 0b0101);
-            mimxrt1062::writeIOMUXPADCTL(myPin.IOMUXC_PAD_control_register_array_index, configMask);
-            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->GDIR |= 1 << myPin.GPIO_port_bit_number;
+            mimxrt1062::writeIOMUXMUXCTL(myCorePin.IOMUXC_MUX_control_register_array_index, 0b0101);
+            mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_PAD_control_register_array_index, configMask);
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number);
         }
 
         void write(bool x)
         {
             if (x)
             {
-                reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR |= (1 << myPin.GPIO_port_bit_number);
+                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET = (1 << myCorePin.GPIO_port_bit_number);
             }
             else
             {
-                reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myPin.GPIO_port_bit_number);
+                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
             }
         }
 
         void flush()
-        {}
+        {
+            //what to do?
+            return;
+        }
         /**
          * @brief Function to Toggle the GPIO on and off
          * 
          */
         void toggle()
         {
-            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_TOGGLE |= (1 << myPin.GPIO_port_bit_number);
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_TOGGLE |= (1 << myCorePin.GPIO_port_bit_number);
         }
     };
 
     class pin_in : public hwlib::pin_in
     {
     private:
-        const mimxrt1062::core_pin &myPin;
-        uint32_t configMask = 0b10011000010111000; // config mask for setting the pin_in pull up and such. starting from p. 559, setting pull down in this case
+        const mimxrt1062::core_pin &myCorePin;
+        uint32_t configMask = 0b10011000010111000; // config mask for setting the pin_in pull down and such. starting from p. 559, setting pull down in this case
     public:
-        pin_in(pins pin_number) : myPin(mimxrt1062::core_pin_struct_array[(int)pin_number])
+        pin_in(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
-            mimxrt1062::writeIOMUXMUXCTL(myPin.IOMUXC_MUX_control_register_array_index, 0b0101);
-            mimxrt1062::writeIOMUXPADCTL(myPin.IOMUXC_PAD_control_register_array_index, configMask);
-            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->GDIR &= (0 << myPin.GPIO_port_base_adress);
+            mimxrt1062::writeIOMUXMUXCTL(myCorePin.IOMUXC_MUX_control_register_array_index, 0b0101);
+            mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_PAD_control_register_array_index, configMask);
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= (0 << myCorePin.GPIO_port_base_adress);
         }
 
         bool read()
         {
-            return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR) & (1 << myPin.GPIO_port_bit_number);
+            return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number);
         }
 
         void refresh()
         {
-            reinterpret_cast<GPIO_Type *>(myPin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myPin.GPIO_port_bit_number);
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
         }
     };
 
@@ -166,17 +169,17 @@ namespace teensy_40
     {
         // p. 3328 consumers guide
         private:
-        const mimxrt1062::core_pin & myPin;
+        const mimxrt1062::core_pin & myCorePin;
         uint32_t configMask = 0b00000000010110000; // config mask, everything default, except PKE (bit 12) which turns off the pull/keeper
         public:
-        pin_adc(pins pin_number) : hwlib::adc(12), myPin(mimxrt1062::core_pin_struct_array[(int)pin_number])
+        pin_adc(pins pin_number) : hwlib::adc(12), myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {   
-            if (myPin.ad_channel == 255) // what to do if pin_number is not an adc pin
+            if (myCorePin.ad_channel == 255) // what to do if pin_number is not an adc pin
             {
                 return;
             }
-            mimxrt1062::writeIOMUXPADCTL(myPin.IOMUXC_PAD_control_register_array_index,configMask); // disable keeper, NOTE on p.3331
-            mimxrt1062::writeIOMUXMUXCTL(myPin.IOMUXC_MUX_control_register_array_index, 0b0101); // enable the gpio that adc uses
+            mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_PAD_control_register_array_index,configMask); // disable keeper, NOTE on p.3331
+            mimxrt1062::writeIOMUXMUXCTL(myCorePin.IOMUXC_MUX_control_register_array_index, 0b0101); // enable the gpio that adc uses
             // enable the adc clocks to adc1.
             CCM->CCGR1 &= ~(0b11 <<16); // adc1
             CCM->CCGR1 |= (0b11 << 16); // adc1
@@ -208,16 +211,58 @@ namespace teensy_40
         
         adc_value_type read()
         {
-            if (myPin.ad_channel == 0xFFFFFFFF) // if channel is this number, the wrong pin is used (need to be a0 / a9)
+            if (myCorePin.ad_channel == 0xFFFFFFFF) // if channel is this number, the wrong pin is used (need to be a0 / a9)
             {
                 return 0xFFFFFFFF;
             }
-            ADC1->HC[0] = myPin.ad_channel; // write channel in hc to start reading the pin and conversion process
+            ADC1->HC[0] = myCorePin.ad_channel; // write channel in hc to start reading the pin and start the conversion process
             while(ADC1->HS & 0b1){} //wait till the conversion complete (ADACT p. 3368)
             return (adc_value_type)ADC1->R[0]; //read from the ADC1 -> R0 register
         }
 
         void refresh()
+        {
+            // didn't know what a refresh should do here, just did a new calibration for now.
+             // calibrate using the on chip calibration function
+            ADC1->GC |= (0b1 << 7);
+            while((ADC1->GC & (0b1 << 7)) != 0){} // check if the CAL bit is still high, if not, calibration is done
+            return;
+        }
+
+    };
+    
+    class pin_oc : public hwlib::pin_oc
+    {
+        private:
+        const mimxrt1062::core_pin & myCorePin;
+        const uint32_t configMask = 0b01010100001011000; // config mask for setting the pin_in pull up and such. starting from p. 559. setting: 100k pull up, keep disabled, pull/keeper disabled, open drain enabled (for now?)
+
+        public:
+        pin_oc(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
+        {
+            mimxrt1062::writeIOMUXMUXCTL(myCorePin.IOMUXC_MUX_control_register_array_index,0b0101); 
+            mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_MUX_control_register_array_index,configMask);
+        }
+        bool read()
+        {
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= (0 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
+            return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number);
+        }
+        void write(bool x)
+        {
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
+            (x 
+                ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
+                : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
+            ) = (1 << myCorePin.GPIO_port_bit_number);
+        }
+        void refresh()
+        {
+            write(0);
+            return;
+        }
+
+        void flush()
         {
             return;
         }
