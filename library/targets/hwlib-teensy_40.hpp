@@ -277,7 +277,8 @@ namespace teensy_40
     void uart_putc( char c );
 
     #ifdef _HWLIB_ONCE
-
+    // NOTICE! To use UART on the Teensy 4.0, you need to use pin 0 (rx) and pin 1 (tx) in combination with an TTL to USB hardware piece. 
+    // Teensy does not have this on board (as fas as I know), and so it is not implemented to use the standard USB
     void uart_init()
     {
         static bool init_done = false;
