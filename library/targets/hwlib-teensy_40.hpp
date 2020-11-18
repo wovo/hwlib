@@ -234,7 +234,7 @@ namespace teensy_40
     {
         private:
         const mimxrt1062::core_pin & myCorePin;
-        const uint32_t configMask = ((0b0 << 16) /*HYS*/| (0b10 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b0 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b01 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
+        const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b11 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b01 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
         public:
         pin_oc(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
@@ -243,7 +243,7 @@ namespace teensy_40
         }
         bool read()
         {
-            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
+            //reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
             return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number);
         }
         void write(bool x)
@@ -253,6 +253,16 @@ namespace teensy_40
                 ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
                 : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
             ) = (1 << myCorePin.GPIO_port_bit_number);
+            // if (x)
+            // {
+            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress);
+            // }
+            // else
+            // {
+            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number);
+            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR = (1 << myCorePin.GPIO_port_bit_number);
+            // }
+   
         }
         void refresh()
         {
