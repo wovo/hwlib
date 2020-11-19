@@ -176,10 +176,10 @@ public:
    
    bool base_read(){
       return (( port.IDR & mask ) != 0 );   
-   }   
-   
+   }
+
    void base_write( bool v ){
-      port.BSRR |= ( v ? mask : ( mask << 16 ));
+        port.BSRR |= ( v ? ( mask << 16 ): mask);
    }
    
 };
