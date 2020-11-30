@@ -113,7 +113,7 @@ namespace teensy_40
             reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number);
         }
 
-        void write(bool x)
+        void write(bool x) override
         {
             (x 
                 ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
@@ -121,10 +121,9 @@ namespace teensy_40
             ) = (1 << myCorePin.GPIO_port_bit_number);
         }
 
-        void flush()
+        void flush() override
         {
             //what to do?
-            return;
         }
         /**
          * @brief Function to Toggle the GPIO on and off
@@ -149,12 +148,12 @@ namespace teensy_40
             reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number);
         }
 
-        bool read()
+        bool read() override
         {
-            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number)) != 0;
+            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->PSR) & (1 << myCorePin.GPIO_port_bit_number)) != 0;
         }
 
-        void refresh()
+        void refresh() override
         {
             // does this even do something?
             reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
@@ -205,7 +204,7 @@ namespace teensy_40
             // while((ADC2->GC & (0b1 << 7)) != 0){} // check if the CAL bit is still high, if not, calibration is done
         };
         
-        adc_value_type read()
+        adc_value_type read() override
         {
             if (myCorePin.ad_channel == 0xFFFFFFFF) // if channel is this number, the wrong pin is used (need to be a0 / a9)
             {
@@ -216,7 +215,7 @@ namespace teensy_40
             return (adc_value_type)ADC1->R[0]; //read from the ADC1 -> R0 register
         }
 
-        void refresh()
+        void refresh() override
         {
             // didn't know what a refresh should do here, just did a new calibration for now.
              // calibrate using the on chip calibration function
@@ -245,7 +244,7 @@ namespace teensy_40
 
         bool read() override
         {
-            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number)) != 0; 
+            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->PSR) & (1 << myCorePin.GPIO_port_bit_number)) != 0; 
         }
 
         void refresh() override
@@ -262,10 +261,9 @@ namespace teensy_40
         void direction_flush() override
         {
             // Function not implemented, calling set input or output immidiately sets the pin direction
-            return;
         }
 
-        void write( bool x )
+        void write( bool x ) override
         {
             (x 
                 ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
@@ -273,10 +271,9 @@ namespace teensy_40
             ) = (1 << myCorePin.GPIO_port_bit_number);
         }
 
-        void flush()
+        void flush() override
         {
             // Function not implemented, calling write immidiately writes a pin
-            return;
         }
 
     };
@@ -285,7 +282,8 @@ namespace teensy_40
     {
         private:
         const mimxrt1062::core_pin & myCorePin;
-        const uint32_t configMask = ((0b0 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b0<<13) /*PUE*/ | (0b0 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b11 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
+       // const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b0<<13) /*PUE*/ | (0b0 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b11 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
+        const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b111 << 3) /*DSE*/ | 0b0 /*SRE*/ );
         public:
         pin_oc(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
@@ -294,26 +292,24 @@ namespace teensy_40
         }
         bool read() override
         {
-            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
-            //reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET |= (1 << myCorePin.GPIO_port_bit_number);
-            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number)) != 0;
+            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->PSR) & (1 << myCorePin.GPIO_port_bit_number)) != 0;
         }
         void write(bool x) override
         {
-            // if (x)
-            // {
-            //    reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number); // set the pin to read mode
-            // }
-            // else
-            // {
-            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
-            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
-            // }
-            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
-            (x 
-                ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
-                : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
-            ) |= (1 << myCorePin.GPIO_port_bit_number);
+            if (x)
+            {
+               reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number); // set the pin to read mode
+            }
+            else
+            {
+                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
+                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
+            }
+            // reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
+            // (x 
+            //     ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
+            //     : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
+            // ) |= (1 << myCorePin.GPIO_port_bit_number);
             
             //           if( x ){
             //      slave.direction_set_input(); 
@@ -325,13 +321,11 @@ namespace teensy_40
         void refresh() override
         {
             write(0);
-            return;
         }
 
         void flush() override
         {
             // what to do?
-            return;
         }
 
     };
