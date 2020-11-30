@@ -115,14 +115,10 @@ namespace teensy_40
 
         void write(bool x)
         {
-            if (x)
-            {
-                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET = (1 << myCorePin.GPIO_port_bit_number);
-            }
-            else
-            {
-                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
-            }
+            (x 
+                ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
+                : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
+            ) = (1 << myCorePin.GPIO_port_bit_number);
         }
 
         void flush()
@@ -150,16 +146,17 @@ namespace teensy_40
         {
             mimxrt1062::writeIOMUXMUXCTL(myCorePin.IOMUXC_MUX_control_register_array_index, 0b0101);
             mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_PAD_control_register_array_index, configMask);
-            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress);
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number);
         }
 
         bool read()
         {
-            return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number);
+            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number)) != 0;
         }
 
         void refresh()
         {
+            // does this even do something?
             reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
         }
     };
@@ -227,6 +224,60 @@ namespace teensy_40
             while((ADC1->GC & (0b1 << 7)) != 0){} // check if the CAL bit is still high, if not, calibration is done
             return;
         }
+    };
+
+    class pin_in_out : public hwlib::pin_in_out
+    {
+        private:
+        const mimxrt1062::core_pin & myCorePin;
+        const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b111 << 3) /*DSE*/ | 0b0 /*SRE*/ );
+        public:
+        pin_in_out(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
+        {
+            mimxrt1062::writeIOMUXMUXCTL(myCorePin.IOMUXC_MUX_control_register_array_index,0b0101); 
+            mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_MUX_control_register_array_index,configMask);
+        }
+
+        void direction_set_input() override
+        {
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number); // set the pin to read mode
+        }
+
+        bool read() override
+        {
+            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number)) != 0; 
+        }
+
+        void refresh() override
+        {
+            // does this even do something?
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
+        }
+
+          void direction_set_output() override
+        {    
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
+        }
+
+        void direction_flush() override
+        {
+            // Function not implemented, calling set input or output immidiately sets the pin direction
+            return;
+        }
+
+        void write( bool x )
+        {
+            (x 
+                ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
+                : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
+            ) = (1 << myCorePin.GPIO_port_bit_number);
+        }
+
+        void flush()
+        {
+            // Function not implemented, calling write immidiately writes a pin
+            return;
+        }
 
     };
     
@@ -234,33 +285,50 @@ namespace teensy_40
     {
         private:
         const mimxrt1062::core_pin & myCorePin;
-        const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b11 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b01 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
+        const uint32_t configMask = ((0b0 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b0<<13) /*PUE*/ | (0b0 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b11 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
         public:
         pin_oc(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
             mimxrt1062::writeIOMUXMUXCTL(myCorePin.IOMUXC_MUX_control_register_array_index,0b0101); 
             mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_MUX_control_register_array_index,configMask);
         }
-        bool read()
+        bool read() override
         {
             reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_base_adress); // set the pin to read mode
-            return reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number);
+            //reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET |= (1 << myCorePin.GPIO_port_bit_number);
+            return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR) & (1 << myCorePin.GPIO_port_bit_number)) != 0;
         }
-        void write(bool x)
+        void write(bool x) override
         {
+            // if (x)
+            // {
+            //    reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number); // set the pin to read mode
+            // }
+            // else
+            // {
+            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
+            //     reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
+            // }
             reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
             (x 
                 ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
                 : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
-            ) = (1 << myCorePin.GPIO_port_bit_number);
+            ) |= (1 << myCorePin.GPIO_port_bit_number);
+            
+            //           if( x ){
+            //      slave.direction_set_input(); 
+            //   } else {		  
+            //      slave.direction_set_output(); 
+            //      slave.write( 0 );
+            //   }		
         }
-        void refresh()
+        void refresh() override
         {
             write(0);
             return;
         }
 
-        void flush()
+        void flush() override
         {
             // what to do?
             return;
