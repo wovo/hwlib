@@ -227,6 +227,7 @@ namespace teensy_40
 
     class pin_in_out : public hwlib::pin_in_out
     {
+        // mind that the setting of directions, can require a wait in some cases. The chip needs some time to actually set the direction to input or output. 
         private:
         const mimxrt1062::core_pin & myCorePin;
         const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b111 << 3) /*DSE*/ | 0b0 /*SRE*/ );
@@ -268,7 +269,7 @@ namespace teensy_40
             (x 
                 ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
                 : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
-            ) = (1 << myCorePin.GPIO_port_bit_number);
+            ) |= (1 << myCorePin.GPIO_port_bit_number);
         }
 
         void flush() override
@@ -280,10 +281,10 @@ namespace teensy_40
     
     class pin_oc : public hwlib::pin_oc
     {
+        // Mind that to use this class, an external 4k7 pull up or pull down is needed. For i2c a pull up is needed.
         private:
         const mimxrt1062::core_pin & myCorePin;
-       // const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b0<<13) /*PUE*/ | (0b0 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b11 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
-        const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b111 << 3) /*DSE*/ | 0b0 /*SRE*/ );
+        const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b0<<13) /*PUE*/ | (0b0 << 12) /*PKE*/ | (0b1 << 11) /*ODE*/ |  (0b11 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
         public:
         pin_oc(pins pin_number) : myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {
@@ -299,28 +300,87 @@ namespace teensy_40
             if (x)
             {
                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number); // set the pin to read mode
+               // These nops are needed to give the gdir register time to set the pin to input mode. I used NOPS to make sure it isn't gonna do something else and it
+               // waits the shortest amount of time possible. This is the EXACT amount needed, anything less will give errors and undefined behaviour.
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
             }
             else
             {
                 reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
-                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
+                // These nops are needed to give the gdir register time to set the pin to input mode. I used NOPS to make sure it isn't gonna do something else and it
+               // waits the shortest amount of time possible. This is the EXACT amount needed, anything less will give errors and undefined behaviour.
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                asm("nop");
+                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to zero
             }
-            // reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
-            // (x 
-            //     ? reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_SET 
-            //     : reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR
-            // ) |= (1 << myCorePin.GPIO_port_bit_number);
-            
-            //           if( x ){
-            //      slave.direction_set_input(); 
-            //   } else {		  
-            //      slave.direction_set_output(); 
-            //      slave.write( 0 );
-            //   }		
         }
         void refresh() override
         {
-            write(0);
+            //does this even do something?
+            reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
         }
 
         void flush() override
