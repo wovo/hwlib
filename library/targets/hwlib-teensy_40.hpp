@@ -123,7 +123,7 @@ namespace teensy_40
 
         void flush() override
         {
-            //what to do?
+            // what to do?
         }
         /**
          * @brief Function to Toggle the GPIO on and off
@@ -300,80 +300,14 @@ namespace teensy_40
             if (x)
             {
                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number); // set the pin to read mode
-               // These nops are needed to give the gdir register time to set the pin to input mode. I used NOPS to make sure it isn't gonna do something else and it
-               // waits the shortest amount of time possible. This is the EXACT amount needed, anything less will give errors and undefined behaviour.
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
+                // this wait is necessary for letting the pin go to another mode. (32 asm("nops") also do the trick)
+                hwlib::wait_us_busy(1);
             }
             else
             {
                 reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
-                // These nops are needed to give the gdir register time to set the pin to input mode. I used NOPS to make sure it isn't gonna do something else and it
-               // waits the shortest amount of time possible. This is the EXACT amount needed, anything less will give errors and undefined behaviour.
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
-                asm("nop");
+                // this wait is necessary for letting the pin go to another mode. (32 asm("nops") also do the trick)
+                hwlib::wait_us_busy(1);
                 reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to zero
             }
         }
