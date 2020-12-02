@@ -100,6 +100,48 @@ namespace teensy_40
         a9
     };
 
+    /**
+     * @brief This inline function waits exactly 32 nop instructions and is only used by the pin_oc type. Do not use.
+     * @details When the chip switches between a gpio pin as in input or ouput, some time is needed to "let the pin adjust"
+     * after trial and error, I deduced that 32 nops were exactly right. No info in the datasheet on this.
+     * 
+     */
+    inline void wait_32_nops()
+    {
+         asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+         asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+         asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+         asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+         asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+         asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+        asm("nop");
+         asm("nop");
+        asm("nop");
+    }
+
     class pin_out : public hwlib::pin_out
     {
     private:
@@ -295,20 +337,24 @@ namespace teensy_40
         {
             return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->PSR) & (1 << myCorePin.GPIO_port_bit_number)) != 0;
         }
+        /**
+         * @brief This function writes a bit over the oc pin
+         * @details Notice that for both a zero and a 1, this function also waits 1 us_busy to make sure the output pin is set to either input or ouput as is necessary for an oc pin in this style.
+         * 
+         * @param x the bit that needs to be written
+         */
         void write(bool x) override
         {
             if (x)
             {
                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number); // set the pin to read mode
-                // this wait is necessary for letting the pin go to another mode. (32 asm("nops") also do the trick)
-                hwlib::wait_us_busy(1);
+                wait_32_nops();
             }
             else
             {
                 reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
                 // this wait is necessary for letting the pin go to another mode. (32 asm("nops") also do the trick)
-                hwlib::wait_us_busy(1);
-                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to zero
+                wait_32_nops();
             }
         }
         void refresh() override
