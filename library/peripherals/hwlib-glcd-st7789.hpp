@@ -83,8 +83,11 @@ class st7789_spi_dc_cs_rst : public st7789, public window {
 private:
 
    static auto constexpr wsize = xy( 240, 240 );
+
+   // AVR8 bug
+   static auto constexpr bufsize = (( int32_t ) wsize.x ) * (( int32_t ) wsize.y );
    
-   uint8_t buffer[ wsize.x * wsize.y ];
+   uint8_t buffer[ bufsize ];
         
    void write_implementation( 
       xy pos, 
@@ -183,7 +186,7 @@ public:
       auto transaction = bus.transaction( cs );
       transaction.write( static_cast< uint8_t >( commands::RAMWR ) );     
       dc.write( 1 ); dc.flush();
-      for( int i = 0; i < 240 * 240; ++i ){
+      for( int32_t i = 0; i < bufsize; ++i ){
          transaction.write( ( buffer[ i ] << 2 ) & 0xC0 );
          transaction.write( ( buffer[ i ] << 4 ) & 0xC0 );
          transaction.write( ( buffer[ i ] << 6 ) & 0xC0 );
