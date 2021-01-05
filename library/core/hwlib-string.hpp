@@ -83,7 +83,7 @@ private:
    char * const content;
 
    // dummy char returned on out-of-bounds accesses
-   static char dummy; 
+   static char dummy;
    
    // only string< N > is allowed to construct a string_base
    template< size_t > friend class string;
@@ -571,7 +571,7 @@ public:
 //  
 //============================================================================
 
-#ifndef HWLIB_TARGET_arduino_uno
+#ifndef BMPTK_CHIP_atmega328
  
 /// compare for equality
 template< typename T >   
@@ -664,5 +664,11 @@ public:
    }
    /// \endcond    
 };
+
+#ifdef _HWLIB_ONCE 
+
+char string_base::dummy = '\0';
+
+#endif
 
 }; // namespace hwlib

@@ -25,18 +25,33 @@ namespace hwlib {
 /// Window operations (clear, write) can be buffered.
 /// A flush() call is required to make sure that all previous operations
 /// take effect.
-class window {
+class window : public noncopyable {
 private:
 
    /// write a pixel - implementation
    /// 
    /// This NVI function writes a the color col to the pixel at location loc.
    /// Loc is guaranteed to be within the window, and the color
-   /// is guranteed to be not transparent.
+   /// is guaranteed to be not transparent or unspecified.
    virtual void write_implementation( 
       xy pos, 
       color col
    ) = 0;      
+   
+   /// clear the display - implementation
+   /// 
+   /// This NVI function writes a the color to all pixels of the window.
+   /// The color is guaranteed to be not transparent or unspecified.
+   ///
+   /// The default implementation writes to all pixels in sequence.
+   /// A concrete window can provide a faster implementation.       
+   virtual void clear_implementation( 
+      color col
+   ){ 
+      for( const auto p : all( size ) ){
+         write_implementation( p, col.specify( background ) );    
+      }          
+   }   
    
 public:
 
@@ -59,8 +74,14 @@ public:
    /// construct a window by specifying its size and foreground and background colors.
    ///
    /// The default is white foreground on black background
-   window( xy size, color foreground = white, color background = black )
-      : size{ size }, background{ background }, foreground{ foreground }
+   window( 
+      xy size, 
+      color foreground = white, 
+      color background = black 
+   ): 
+      size{ size }, 
+      background{ background }, 
+      foreground{ foreground }
    {}
    
    /// write a pixel
@@ -69,32 +90,18 @@ public:
    /// If either the color is transparent, or the location is outside the window 
    /// the call has no effect. When no color is specified, the window's
    /// foreground color is used.  
-   ///@{
    void write( 
       xy pos, 
-      color col 
+      color col = unspecified
    ){
-      if(  ( ! col.is_transparent )
+      if(  ( ! col.is_transparent() )
         && ( pos.x >= 0 ) && ( pos.x < size.x ) 
         && ( pos.y >= 0 ) && ( pos.y < size.y ) 
       ){
-         write_implementation( pos, col );
+         write_implementation( pos, col.specify( foreground ) );
       }   
    }
-   void write( 
-      xy pos 
-   ){
-      write( pos, foreground );
-   }
-   ///@}
 
-   /// flush the pixel buffer
-   ///
-   /// This function fluhses the pixel buffer: it writes pixels that
-   /// have not yet been written.
-   /// Flushing might occur as a side-effect of other operations.
-   virtual void flush() = 0;
-   
    /// write a rectangle of pixels
    /// 
    /// This function writes a rectangle of pixels, as specified by img,
@@ -103,34 +110,31 @@ public:
       xy pos, 
       const image & img
    ){                 
-      for( const auto p : all( size ) ){
+      for( const auto p : all( img.size ) ){
          write( pos + p, img[ p ] );
       }
    }
    
    /// clear the window
    /// 
-   /// This function clears the windows by writing the background
-   /// color to all pixels.
-   /// The default implementation writes to all pixels in sequence.
-   /// A concrete window can provide a faster implementation.    
-   virtual void clear(){
-      for( const auto p : all( size ) ){
-         write( p, background );    
+   /// This function clears the windows by writing the specified
+   /// color to all pixels.   
+   /// When no color is specified, the background
+   /// color is used.
+   virtual void clear(
+      color col = unspecified
+   ){
+      if( col != transparent ){
+         clear_implementation( col.specify( background ) );
       }        
    }
    
-   /// clear the window
-   /// 
-   /// This function clears the windows by writing the specified
-   /// color to all pixels.
-   /// The default implementation writes to all pixels in sequence.
-   /// A concrete window can provide a faster implementation.    
-   virtual void clear( color col ){
-      for( const auto p : all( size ) ){
-         write( p, col );    
-      }        
-   }
+   /// flush the pixel buffer
+   ///
+   /// This function flushes the pixel buffer: it writes pixels that
+   /// have not yet been written.
+   /// Flushing might occur as a side-effect of other operations.
+   virtual void flush() = 0;
    
 }; // class window
 

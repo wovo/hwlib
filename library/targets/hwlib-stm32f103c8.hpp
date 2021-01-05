@@ -220,6 +220,7 @@ public:
 
    void refresh() override {}
 
+
 };
 
 /// pin_out implementation for an stm32f103c8
@@ -324,7 +325,54 @@ public:
    void refresh() override {}
    void direction_flush() override {}
 
-};   
+};
+
+/// 36kHz output on pin chip PA6 (blue pill A6)
+///
+/// This class provides a 36 kHz output on chip pin PA6
+///  that can be enabled or disabled by calling
+/// write( 1 ) resp. write( 0 ).
+class a6_36kHz : public hwlib::pin_out {
+public:
+
+    /// create the 36kHz output
+    a6_36kHz(){
+       RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;  // Enable GPIO port a
+       RCC->APB1ENR |= RCC_APB1ENR_TIM3EN ; // Enable Timer 3
+
+
+       GPIOA->CRL = GPIO_CRL_MODE6 | GPIO_CRL_CNF6_1; // Set Pin A6 to alternate function Push-Pull
+
+       TIM3->ARR = 221; // Auto reload value
+       TIM3->PSC = 0; // Capture Compare preload, for duty cycle
+       TIM3->CCR1  = 111;
+
+       TIM3->CCMR1  = TIM_CCMR1_OC1M | TIM_CCMR1_OC1PE;
+       TIM3->EGR |= TIM_EGR_UG; // Trigger update for Timer 3 (to preload)
+
+       write( 0 );
+
+       TIM3->CR1 |= TIM_CR1_ARPE; // Enable auto-  reload preload on Timer 3
+       TIM3->CR1 |= TIM_CR1_CEN; // Enable Timer 3
+
+    }
+
+    /// enable or disable the 36 kHz output
+    //
+    /// Calling write( 1 ) enables the 36 kHz output, calling write( 0 )
+    /// disables the output and makes the output low.
+    void write( bool b ) override {
+       if( b ){
+          TIM3->CCER |= TIM_CCER_CC1E;
+       } else {
+          TIM3->CCER &= ~TIM_CCER_CC1E;
+       }
+    }
+
+    void flush() override {};
+
+}; // class a6_36kHz
+
 
 /// pin_oc implementation for an stm32f103c8
 class pin_oc : public hwlib::pin_oc, private pin_base {
@@ -510,13 +558,17 @@ bool uart_char_available(){
 
 char uart_getc(){
    // uart_init() is not needed because uart_char_available does that
-   while( ! uart_char_available() ){}
+   while( ! uart_char_available() ){
+      hwlib::background::do_background_work();	   
+   }	   
    return hw_uart->UART_RHR; 
 }
 
 void uart_putc( char c ){
    uart_init(); 
-   while( ( hw_uart->UART_SR & 2 ) == 0 ){}
+   while( ( hw_uart->UART_SR & 2 ) == 0 ){
+      hwlib::background::do_background_work();	   
+   }
    hw_uart->UART_THR = c;
 }
 */
@@ -533,7 +585,11 @@ const auto target_board = target_boards::blue_pill;
    
 void wait_ns( int_fast32_t n );
 void wait_us( int_fast32_t n );
-void wait_ms( int_fast32_t n ); 
+void wait_ms( int_fast32_t n );
+
+void wait_ns_busy( int_fast32_t n );
+void wait_us_busy( int_fast32_t n );
+void wait_ms_busy( int_fast32_t n );
 
 #define HWLIB_USE_HW_UART 
 #ifdef HWLIB_USE_HW_UART
@@ -568,7 +624,7 @@ char HWLIB_WEAK uart_getc( ){
 }
 
 #endif
-#ifdef HWLIB_ONCE
+#ifdef _HWLIB_ONCE
 
 uint64_t now_ticks(){
    return target::now_ticks();
@@ -580,12 +636,46 @@ uint64_t ticks_per_us(){
 
 uint64_t now_us(){
    return now_ticks() / ticks_per_us();
-}   
+}
+
+
+// Busy waits
+void wait_ns_busy( int_fast32_t n ){
+   wait_us_busy( ( n + 999 ) / 1000 );
+}
 
 void wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){}
 }
+
+void wait_ms_busy( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us_busy( 1000 );
+      --n;
+   }
+}
+
+
+void HWLIB_WEAK wait_ns( int_fast32_t n ){
+   wait_us( ( n + 999 ) / 1000 );
+}
+
+void HWLIB_WEAK wait_us( int_fast32_t n ){
+   auto end = now_us() + n;
+   while( now_us() < end ){
+      background::do_background_work();
+   }
+}
+
+void HWLIB_WEAK wait_ms( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us( 1000 );
+      --n;
+   }
+}
+
+
 
 #endif
 

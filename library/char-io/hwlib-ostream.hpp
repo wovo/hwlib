@@ -217,9 +217,9 @@ constexpr _flush flush;
 /// Most formatting features of std::ostream are supported.
 /// Floating point values are not supported.
 /// 
-/// This class is abstract: a concrete subclass must implement putc()
-/// and, flush().
-class ostream {
+/// This class is abstract: a concrete subclass 
+/// must implement putc() and flush().
+class ostream : public noncopyable {
 private:
    
    uint_fast16_t field_width;

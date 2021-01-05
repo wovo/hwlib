@@ -16,13 +16,12 @@
 #ifndef HWLIB_ARDUINO_DUE_H
 #define HWLIB_ARDUINO_DUE_H
 
-#define _HWLIB_TARGET_WAIT_US_BUSY
 #include HWLIB_INCLUDE( ../hwlib-all.hpp )
 
 #define register
 #include "sam.h"
-
 #include HWLIB_INCLUDE( hwlib-arduino-due-system-sam3xa.inc )
+#undef register
 
 /// \brief
 /// hwlib HAL for the Arduino Due
@@ -271,7 +270,11 @@ const HWLIB_WEAK ad_seq_type & ad_seq_info( uint32_t channel ){
  
 Pio & __attribute__((weak)) port_registers( uint32_t port ){
    
-   // a bit of a cludge to put this here:
+   // a bit of a hack to put this here:
+
+   // kill the watchdog
+   WDT->WDT_MR = WDT_MR_WDDIS;
+
    // enable the clock to all GPIO ports
    PMC->PMC_PCER0 = ( 0x3F << 11 );  
 
@@ -379,14 +382,14 @@ public:
       }
    {}     
    
-   void write( bool v ) override {
+   void HWLIB_INLINE write( bool v ) override {
       ( v 
          ?  port.PIO_SODR 
          :  port.PIO_CODR 
       )  = mask;
    }
 
-   void flush() override {}
+   void HWLIB_INLINE flush() override {}
 
 };
 
@@ -572,6 +575,8 @@ class d2_36kHz : public hwlib::pin_out {
       }
    }
    
+   void flush() override {}
+   
 }; // class d2_36kHz
 
 #ifdef NONO
@@ -627,7 +632,7 @@ public:
    /// get an adc reading
    ///
    /// This function performs and ADC conversion and returns the result.
-   adc_value_type get() override {
+   adc_value_type read() override {
        
       // select this one channel
       ADC->ADC_CHER = 0x01 << channel;  
@@ -650,6 +655,8 @@ public:
       // return the conversion result
       return ADC->ADC_LCDR & 0x0000'0FFF;
    }
+
+   void refresh() override {}
 };
 #endif
 
@@ -731,6 +738,8 @@ public:
       // return the conversion result
       return ADC->ADC_CDR[ channel ] & 0x0000'0FFF;
    }
+   
+   void refresh() override {}
 };
 
 /// the number of ticks per us
@@ -834,13 +843,17 @@ bool uart_char_available(){
 
 char uart_getc(){
    // uart_init() is not needed because uart_char_available does that
-   while( ! uart_char_available() ){}
+   while( ! uart_char_available() ){
+	   hwlib::background::do_background_work();	
+   }
    return hw_uart->UART_RHR; 
 }
 
 void uart_putc( char c ){
    uart_init();	
-   while( ( hw_uart->UART_SR & 2 ) == 0 ){}
+   while( ( hw_uart->UART_SR & 2 ) == 0 ){
+	   hwlib::background::do_background_work();	
+   }
    hw_uart->UART_THR = c;
 }
 
@@ -906,10 +919,43 @@ uint64_t now_us(){
    return now_ticks() / ticks_per_us();
 }   
 
-void HWLIB_WEAK wait_us_busy( int_fast32_t n ){
+// busy waits
+
+void wait_ns_busy( int_fast32_t n ){
+   wait_us_busy( ( n + 999 ) / 1000 );
+}
+
+void wait_us_busy( int_fast32_t n ){
    auto end = now_us() + n;
    while( now_us() < end ){}
 }
+
+void wait_ms_busy( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us_busy( 1000 );
+      --n;
+   }   
+} 
+
+// non-busy waits
+
+void HWLIB_WEAK wait_ns( int_fast32_t n ){
+   wait_us( ( n + 999 ) / 1000 );
+}
+
+void HWLIB_WEAK wait_us( int_fast32_t n ){
+   auto end = now_us() + n;
+   while( now_us() < end ){
+      background::do_background_work();	   
+   }
+}
+
+void HWLIB_WEAK wait_ms( int_fast32_t n ){
+   while( n > 0 ){
+      wait_us( 1000 );
+      --n;
+   }   
+} 
 
 #endif
 

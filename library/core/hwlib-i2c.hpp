@@ -36,7 +36,7 @@ namespace hwlib {
 ///
 /// An implementation can implement these operations 
 /// (when it can perform these functions more efficiently than the default
-/// implementatiosn):
+/// implementation):
 ///    - read_ack()
 ///    - write_ack()
 ///    - write_nack()
@@ -130,12 +130,12 @@ public:
    ///    - read_ack for each byte *except* the first when first_byte == true
    ///    - write to output each byte.   
    virtual void read( 
-      bool first_write,
+      bool first_read,
       uint8_t data[], 
       size_t n  
    ){
       for( uint_fast8_t i = 0; i < n; i++ ){
-         if( ( ! first_write ) || ( i > 0 )){
+         if( ( ! first_read ) || ( i > 0 )){
             write_ack();
          }   
          data[ i ] = read_byte();
@@ -159,6 +159,7 @@ public:
 /// The destructor will close the transaction.   
 class i2c_write_transaction {
 private:
+
    i2c_primitives & primitives;
       
 public:
@@ -220,8 +221,9 @@ public:
 /// The destructor will close the transaction.
 class i2c_read_transaction {
 private:
+
    i2c_primitives & primitives;    
-   bool first_write;
+   bool first_read;
 	  
 public:
    
@@ -231,7 +233,7 @@ public:
       uint_fast8_t a 
    ): 
        primitives( primitives ),
-       first_write( false )
+       first_read( true )
    {
       primitives.write_start();
       primitives.write( ( a << 1 ) | 0x01 );		
@@ -240,11 +242,22 @@ public:
 
    /// read a single bytes
    ///
+   /// This function reads a single byte from the slave
+   uint_fast8_t read( 
+      uint8_t & data 
+   ){	 
+      primitives.read( first_read, &data, 1 );			  
+      first_read = false;
+      return data;
+   }
+   
+   /// read a single bytes
+   ///
    /// This function reads and returns  a single byte from the slave
    uint_fast8_t read_byte(){	 
       uint8_t data;
-      primitives.read( first_write, &data, 1 );			  
-      first_write = false;
+      primitives.read( first_read, &data, 1 );			  
+      first_read = false;
       return data;
    }
    
@@ -258,163 +271,19 @@ public:
       uint8_t data[], 
       size_t n 
    ){	 
-      primitives.read( first_write, data, n );			  
-      first_write = false;
+      primitives.read( first_read, data, n );			  
+      first_read = false;
    }
    
    /// terminate (close) the read transaction
    ~i2c_read_transaction(){
+      primitives.write_nack();
       primitives.write_stop();         		  
    }
      
 }; // class i2c_read_transaction 
 
    
-// ==========================================================================
-//
-// i2c bus transactions
-//
-// ==========================================================================
-   
-/// transactions on an i2c bus   
-class i2c_bus_transactions {
-private:
-
-   i2c_primitives & primitives;	
-   
-public:    
-
-   /// construct from the primitives
-   i2c_bus_transactions( i2c_primitives & primitives ):
-      primitives( primitives )
-   {}	  
-       
-   /// returns a write transaction	   
-   i2c_write_transaction write( uint_fast8_t a ){
-       return i2c_write_transaction( primitives, a );
-   }
-         
-   /// returns a read transaction		 
-   i2c_read_transaction read( uint_fast8_t a ){
-       return i2c_read_transaction( primitives, a );
-   }
-         
-}; // class i2c_bus_transactions
-
-
-// ==========================================================================
-//
-// i2c channel transactions
-//
-// ==========================================================================
-
-/// transactions on a channel on an i2c bus
-///
-/// An i2c bus channel is the communication channel to a specific 
-/// slave chip on the i2c bus, identified by its slave address.
-class i2c_channel_transactions {
-private:
-
-   i2c_primitives & primitives;		
-   uint_fast8_t a;
-   	
-public:    
-
-   /// construct from the primitives and the slave address
-   i2c_channel_transactions( 
-      i2c_primitives & primitives,
-      uint_fast8_t a
-   ):   
-      primitives( primitives ),   
-      a( a )
-   {}	  
-      
-   /// returns a write transaction oibject	  
-   i2c_write_transaction write(){
-       return i2c_write_transaction( primitives, a );
-   }
-         
-   /// returns a read transaction object		 
-   i2c_read_transaction read(){
-       return i2c_read_transaction( primitives, a );
-   }
-         
-}; // class i2c_channel_transactions
-
-
-// ==========================================================================
-//
-// i2c channel
-//
-// ==========================================================================
-
-/// a channel to a specific i2c slave
-class i2c_channel {
-public:	
-   
-   /// the i2c primitives
-   i2c_primitives & primitives;
-   
-   /// the i2c transactions
-   i2c_channel_transactions transactions;	  
-
-   /// construct from the primitives and the slave address
-   i2c_channel( 
-      i2c_primitives & primitives,
-	  uint_fast8_t a 
-   ):
-      primitives( primitives ), transactions( primitives, a )
-   {}
-   
-   /// i2c write transaction
-   ///
-   /// This function writes n bytes from data[] to the slave 
-   ///
-   /// Note that n is a byte, hence the maximum number of bytes is 255.
-   virtual void write( 
-      const uint8_t data[], 
-      size_t n 
-   ){
-      auto t = transactions.write();
-      t.write( data, n );	  
-   }
-
-   /// single byte i2c write transaction
-   ///
-   /// This function writes the byte d to the slave 
-   virtual void write( 
-      const uint8_t d
-   ){
-      auto t = transactions.write();
-      t.write( &d, 1 );	  
-   }
-
-   /// i2c read transaction
-   /// 
-   /// This function reads n bytes from the slave 
-   ///
-   /// Note that n is a byte, hence the maximum number of bytes is 255. 
-   virtual void read(  
-      uint8_t data[], 
-      size_t n 
-   ){
-      auto t = transactions.read();
-      t.read( data, n );	  
-   }	   
-	  
-   /// i2c single byte read transaction
-   /// 
-   /// This function reads one byte from the slave 
-   virtual void read(  
-      uint8_t & d
-   ){
-      auto t = transactions.read();
-      t.read( &d, 1 );	  
-   }	   
-	  
-}; // class i2c_channel
-
-
 // ==========================================================================
 //
 // i2c bus
@@ -424,54 +293,25 @@ public:
 /// i2c bus master interface
 /// 
 /// This class abstracts the interface of a master to an I2C bus.
-class i2c_bus : protected i2c_primitives {
-protected:
-
-   i2c_bus():
-      primitives( *this ),
-      transactions( *this )
-   {}   
-   
+class i2c_bus : public noncopyable {
 public:
 
    /// low-level i2c bus operations
    i2c_primitives & primitives;
-   
-   /// multi-step i2c-bus transactions
-   i2c_bus_transactions transactions;
 
-   /// single i2c write transaction
-   ///
-   /// This function writes n bytes from data[] to the slave at address a.
-   ///
-   /// Note that n is a byte, hence the maximum number of bytes is 255.
-   virtual void write( 
-      uint_fast8_t a, 
-      const uint8_t data[], 
-      size_t n 
-   ){
-      auto t = transactions.write( a );
-      t.write( data, n );	  
+   i2c_bus( i2c_primitives & primitives ):
+       primitives( primitives )
+   {}   
+   
+   /// returns a write transaction	   
+   i2c_write_transaction write( uint_fast8_t a ){
+       return i2c_write_transaction( primitives, a );
    }
-
-   /// single i2c read transaction
-   /// 
-   /// This function reads n bytes from the slave at address a to data[].
-   ///
-   /// Note that n is a byte, hence the maximum number of bytes is 255. 
-   virtual void read( 
-      uint_fast8_t a, 
-      uint8_t data[], 
-      size_t n 
-   ){
-      auto t = transactions.read( a );
-      t.read( data, n );	  
-   }	   
-   
-   /// return a channel to the slave at the address a
-   i2c_channel channel( uint_fast8_t a ){
-      return i2c_channel( primitives, a );
-   }	  
+         
+   /// returns a read transaction		 
+   i2c_read_transaction read( uint_fast8_t a ){
+       return i2c_read_transaction( primitives, a );
+   }     
      
 }; // class i2c_bus  
 
@@ -488,11 +328,15 @@ public:
 /// This class implements a bit-banged master interface to an I2C bus.
 /// Limitations:
 ///    - only the 7-bit address format is supported
-///    - clock stretching by the slave is not supporte
+///    - clock stretching by the slave is not supported
 ///    - only a single master is supported
 ///    - the speed is fixed at ~ 100 kHz or somewhat lower
-class i2c_bus_bit_banged_scl_sda : public i2c_bus {
+class i2c_bus_bit_banged_scl_sda : 
+   public i2c_primitives, 
+   public i2c_bus
+{
 private:
+
    pin_oc & scl, & sda;
    
    void wait_half_period(){
@@ -504,7 +348,10 @@ private:
       wait_half_period();
       sda.write( x ); sda.flush();
       scl.write( 1 ); scl.flush();
-      wait_half_period();
+
+      do {
+         wait_half_period();
+      } while( ! scl.read() );
    }
 
    bool read_bit() override {
@@ -512,7 +359,11 @@ private:
       sda.write( 1 ); sda.flush();
       wait_half_period();  
       scl.write( 1 ); scl.flush();
-      wait_half_period();
+
+      do {
+         wait_half_period();
+      } while( ! scl.read() );
+
       sda.refresh();
       bool result = sda.read();
       wait_half_period();    
@@ -544,37 +395,11 @@ public:
    /// This constructor creates a bit-banged I2C bus master
    /// from the scl and sda pins.
    i2c_bus_bit_banged_scl_sda( pin_oc & scl, pin_oc & sda ):
-      scl( scl ), sda( sda )
+      i2c_bus( *(i2c_primitives*) this ), scl( scl ), sda( sda )
    {
       scl.write( 1 ); scl.flush();
       sda.write( 1 ); sda.flush();
    }
-   
-   /// write to a connect I2C slave device   
-   /// 
-   /// This function writes n bytes of data to the device with address a
-   /// that is connected to the I2C bus.
-   void write( 
-      uint_fast8_t a, 
-      const uint8_t data[], 
-      size_t n 
-   ) override {
-      auto t = transactions.write( a );
-      t.write( data, n );  
-   }
-   
-   /// read from a connected I2C slave device
-   /// 
-   /// This function reads n bytes of data from the device with address a
-   /// that is connected to the I2C bus.
-   void read( 
-      uint_fast8_t a, 
-      uint8_t data[], 
-      size_t n 
-   ) override {
-      auto t = transactions.read( a );
-      t.read( data, n );       
-   }      
    
 }; // class i2c_bus_bit_banged_scl_sda    
    

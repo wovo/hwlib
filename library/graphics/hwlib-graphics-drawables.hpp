@@ -24,7 +24,7 @@ namespace hwlib {
 // ==========================================================================
 
 /// interface to an drawable object
-class drawable {
+class drawable : public noncopyable {
 public:
 
    /// the location where the object is drawn
@@ -38,8 +38,8 @@ public:
    /// \details
    /// You must supply the window.
    ///
-   /// If buffering is specified, the actuial drawing can be delayed
-   /// until flush() is aclled.
+   /// If buffering is specified, the actual drawing can be delayed
+   /// until flush() is called.
    virtual void draw( window & w ) = 0;    
 
 }; // class drawable
@@ -56,7 +56,6 @@ class line : public drawable {
 private:   
    xy     end;
    color  ink;
-   bool   use_foreground;
    
    static void swap( int_fast16_t & a, int_fast16_t & b ){
       auto t = a; 
@@ -69,19 +68,12 @@ private:
    }
 
 public:
-   /// create a line object with a specific color
-   line( xy start, xy end, color ink )
-      : drawable{ start }, end{ end }, ink{ ink }, use_foreground( false )
-   {}   
-   
-   /// create a line object in the foreground coloor
-   line( xy start, xy end )
-      : drawable{ start }, end{ end }, ink{ black }, use_foreground( true )
+   /// create a line object 
+   line( xy start, xy end, color ink = unspecified )
+      : drawable{ start }, end{ end }, ink{ ink }
    {}   
    
    void draw( window & w ) override { 
-   
-      color col = use_foreground ? w.foreground : ink;
        
       int_fast16_t x0 = start.x;
       int_fast16_t y0 = start.y;
@@ -130,7 +122,7 @@ public:
             yDraw = y;
          }
 
-         w.write( xy( xDraw, yDraw ), col );
+         w.write( xy( xDraw, yDraw ), ink );
 
          if( E > 0 ){
             E += TwoDyTwoDx; //E += 2*Dy - 2*Dx;
@@ -146,6 +138,43 @@ public:
 
 // ==========================================================================
 //
+// rectangle
+//
+// ==========================================================================
+
+/// a rectangle object 
+class rectangle : public drawable  {
+private:
+
+   xy end;
+   color ink;
+
+public:
+
+   rectangle( 
+      const xy & start, const xy & end,
+      const color & ink = unspecified
+   ):
+      drawable{ start },
+      end( end ), ink( ink )
+   {}
+
+   void draw( hwlib::window & w ) override {
+      line( 
+         xy( start.x, start.y ), xy( start.x,   end.y + 1 ), ink ).draw( w );
+      line( 
+         xy( end.x,   start.y ), xy( end.x,     end.y + 1 ), ink ).draw( w );
+      line( 
+         xy( start.x, start.y ), xy( end.x + 1, start.y   ), ink ).draw( w );
+      line( 
+         xy( start.x, end.y   ), xy( end.x + 1, end.y     ), ink ).draw( w );
+   }
+
+};
+
+
+// ==========================================================================
+//
 // circle
 //
 // ==========================================================================
@@ -155,24 +184,15 @@ class circle : public drawable {
 private:   
    uint_fast16_t  radius;
    color          ink;
-   bool           use_foreground;
    
 public:
-   /// create a circle object of a specific color
+   /// create a circle object 
    circle( 
       xy start, 
       uint_fast16_t radius, 
-      color ink 
+      color ink = unspecified
    )
-      : drawable{ start }, radius{ radius }, ink{ ink }, use_foreground( false )
-   {}     
-   
-   /// create a circle object of the foregroudn color
-   circle( 
-      xy start, 
-      uint_fast16_t radius
-   )
-      : drawable{ start }, radius{ radius }, ink{ black }, use_foreground( true )
+      : drawable{ start }, radius{ radius }, ink{ ink }
    {}     
    
    void draw( window & w ) override { 
@@ -183,8 +203,6 @@ public:
       }
    
       // http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
-      
-      color col = use_foreground ? w.foreground : ink;      
    
       int_fast16_t fx = 1 - radius;
       int_fast16_t ddFx = 1;
@@ -193,26 +211,27 @@ public:
       int_fast16_t y = radius;
     
       // top and bottom
-      w.write( start + xy( 0, + radius ), col );
-      w.write( start + xy( 0, - radius ), col );
+      w.write( start + xy( 0, + radius ), ink );
+      w.write( start + xy( 0, - radius ), ink );
 
       // left and right 
-      w.write( start + xy( + radius, 0 ), col );
-      w.write( start + xy( - radius, 0 ), col );
+      w.write( start + xy( + radius, 0 ), ink );
+      w.write( start + xy( - radius, 0 ), ink );
          
-      //if( bg != transparent ){
+      // filled circle
+      if(0){
    
          // top and bottom
-         w.write( start + xy( 0, + radius ), col );
-         w.write( start + xy( 0, - radius ), col );
+         w.write( start + xy( 0, + radius ), ink );
+         w.write( start + xy( 0, - radius ), ink );
 
          // left and right
          line(  
               start - xy( radius, 0 ), 
               start + xy( radius, 0 ), 
-              col 
+              ink 
           ).draw( w );
-      //} 
+      } 
     
       while( x < y ){
       
@@ -226,33 +245,34 @@ public:
          ddFx += 2;
          fx += ddFx;   
                     
-         w.write( start + xy( + x, + y ), col );
-         w.write( start + xy( - x, + y ), col );
-         w.write( start + xy( + x, - y ), col );
-         w.write( start + xy( - x, - y ), col );
-         w.write( start + xy( + y, + x ), col );
-         w.write( start + xy( - y, + x ), col );
-         w.write( start + xy( + y, - x ), col );
-         w.write( start + xy( - y, - x ), col );
+         w.write( start + xy( + x, + y ), ink );
+         w.write( start + xy( - x, + y ), ink );
+         w.write( start + xy( + x, - y ), ink );
+         w.write( start + xy( - x, - y ), ink );
+         w.write( start + xy( + y, + x ), ink );
+         w.write( start + xy( - y, + x ), ink );
+         w.write( start + xy( + y, - x ), ink );
+         w.write( start + xy( - y, - x ), ink );
             
-         //if( bg != transparent  ){
+         // filled circle
+         if(0) if( ! ink.is_transparent()  ){
             line( 
                start + xy( -x,  y ), 
                start + xy(  x,  y ), 
-               col ).draw( w );
+               ink ).draw( w );
             line( 
                start + xy( -x, -y ), 
                start + xy(  x, -y ), 
-               col ).draw( w );
+               ink ).draw( w );
             line( 
                start + xy( -y,  x ), 
                start + xy(  y,  x ), 
-               col ).draw( w );
+               ink ).draw( w );
             line( 
                start + xy( -y, -x ), 
                start + xy(  y, -x ), 
-               col ).draw( w );
-         //}
+               ink ).draw( w );
+         }
       }
    }   
     

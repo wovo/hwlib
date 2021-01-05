@@ -20,6 +20,7 @@ namespace hwlib {
 enum class target_boards {
    none,
    arduino_uno,
+   my_first_dev_board,
    arduino_due,
    blue_pill
 };

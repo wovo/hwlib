@@ -27,13 +27,20 @@
 
 #include <cstdint>
 #include <array>
-//#include <stddef.h>
+#include <cstddef>
 #include <type_traits>
+#include <numeric>
 
 #include HWLIB_INCLUDE( core/hwlib-defines.hpp )
 #include HWLIB_INCLUDE( core/hwlib-targets.hpp )
 #include HWLIB_INCLUDE( core/hwlib-panic.hpp )
+#include HWLIB_INCLUDE( core/hwlib-noncopyable.hpp )
 #include HWLIB_INCLUDE( core/hwlib-common.hpp )
+#include HWLIB_INCLUDE( core/hwlib-ratio.hpp )
+#include HWLIB_INCLUDE( core/hwlib-background.hpp )
+#include HWLIB_INCLUDE( core/hwlib-xy.hpp )
+#include HWLIB_INCLUDE( core/hwlib-color.hpp )
+#include HWLIB_INCLUDE( core/hwlib-random.hpp )
 #include HWLIB_INCLUDE( core/hwlib-wait.hpp )
 
 #include HWLIB_INCLUDE( pins/hwlib-pin.hpp )
@@ -57,7 +64,6 @@
 #include HWLIB_INCLUDE( char-io/hwlib-istream.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-bb-uart.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-console.hpp )
-#include HWLIB_INCLUDE( core/hwlib-xy.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-terminal.hpp )
 #include HWLIB_INCLUDE( char-io/hwlib-terminal-demos.hpp )
 
@@ -67,13 +73,15 @@
 #include HWLIB_INCLUDE( core/hwlib-adc.hpp )
 #include HWLIB_INCLUDE( core/hwlib-dac.hpp )
 #include HWLIB_INCLUDE( core/hwlib-dac-demos.hpp )
+#include HWLIB_INCLUDE( core/hwlib-servo.hpp )
 #include HWLIB_INCLUDE( core/hwlib-i2c.hpp )
 #include HWLIB_INCLUDE( core/hwlib-spi.hpp )
 
-#include HWLIB_INCLUDE( graphics/hwlib-graphics-color.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-image.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-image-decorators.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-font.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window.hpp )
+#include HWLIB_INCLUDE( graphics/hwlib-graphics-canvas.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-drawables.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window-decorators.hpp )
 #include HWLIB_INCLUDE( graphics/hwlib-graphics-window-demos.hpp )
@@ -87,7 +95,11 @@
 #include HWLIB_INCLUDE( peripherals/hwlib-hd44780.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-glcd-5510.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-glcd-oled.hpp )
+#ifndef __AVR__
+#include HWLIB_INCLUDE( peripherals/hwlib-glcd-st7789.hpp )
+#endif
 #include HWLIB_INCLUDE( peripherals/hwlib-matrix-keypad.hpp )
+#include HWLIB_INCLUDE( peripherals/hwlib-servo-background.hpp )
 
 
 #endif // HWLIB_ALL_H

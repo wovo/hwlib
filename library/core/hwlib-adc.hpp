@@ -20,7 +20,7 @@ namespace hwlib {
 /// A/D input interface
 ///
 /// This class abstracts the interface to an ADC (Analog to Digital Converter).
-class adc {
+class adc : public noncopyable {
 public:
 
    /// the number of bits in the result returned by read()
@@ -30,7 +30,7 @@ public:
    typedef uint_fast32_t adc_value_type; 
    
    /// the maximum value that can be meaningfully written using write())
-   const uint_fast8_t adc_max_value;   
+   const adc_value_type adc_max_value;   
 
    /// do an A/D conversion and return the result
    /// 
@@ -42,7 +42,7 @@ public:
    /// specify the number of bits
    adc( uint_fast8_t n_bits ): 
       adc_n_bits{ n_bits },
-	  adc_max_value( static_cast< adc_value_type >( ( 1 << n_bits ) - 1 ))
+      adc_max_value( ( static_cast< adc_value_type >( 1 ) << n_bits ) - 1 )
    {
       if( n_bits > static_cast<int>( 8 * sizeof( adc_value_type ))){
          // the number of bits won't fit in the return type of read()

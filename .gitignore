@@ -4,6 +4,8 @@ _codelite.project
 __codelite.workspace
 __codelite.session
 __codelite.tags
+_cpp_flags
+_linker_flags
 refactoring.db
 ~$*.docx
 .project
@@ -17,8 +19,8 @@ refactoring.db
 *.lst
 *.exe
 *.pdf
+_run.bat
 _dummy.jpg
 bmptk_*_stack.c
-_push.bat
 _doxygen.bat
 html

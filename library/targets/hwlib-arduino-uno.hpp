@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// File      : hwlib-uno.hpp
+// File      : hwlib-arduino-uno.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
 // Copyright : wouter@voti.nl 2017-2019
 //
@@ -16,64 +16,8 @@
 #ifndef HWLIB_UNO_H
 #define HWLIB_UNO_H
 
-#define _HWLIB_TARGET_WAIT_US_BUSY
-#include HWLIB_INCLUDE( ../hwlib-all.hpp )
+#include "hwlib-atmega328.hpp"
 
-#include <stdint.h>
-
-#include "avr/io.h"
-
-
-/// \brief
-/// hwlib HAL for the Arduino Uno
-///
-/// \image html uno-pcb.jpg
-///
-/// This namespace contains the hwlib implementation of the pins, timing
-/// and (sotware) UART output for the Arduino Uno (ATMega328P chip).
-///
-/// The port and pin parameters to the constructors of the pin classes
-/// can either use ATMega328P port and pin numbers, or the Arduino names.
-///
-/// The Uno has an on-board LED connected to port 1 (= port B) pin 5.
-///
-/// The chip runs at 5 Volt and that is the level on its IO pins.
-///
-/// \image html uno-pinout.png
-///
-/// The Arduino Nano and Arduino Pro Mini that use the same ATMega328P chip
-/// can also be used with this library, 
-/// but have a very different form factor and pinout.
-///
-/// The Nano has an USB connector and an USB-to-serial connector and
-/// can run the Arduino bootloader, but is often sold without the bootloader.
-/// An AVRisp2 programmer can be used to program a Nano directly, or you
-/// can use it to load the Arduino bootloader and use the Nano as you
-/// would use an Uno.
-///
-/// \image html nano-pinout.png
-///
-/// The Pro Mini is little more than the micro-controler chip and a few
-/// necessary components (crystal, capacitors). 
-/// It has neither an USB-to-serial converter nor a standard
-/// 6-pin AVRisp2 header, so you must make the correct connections yourself.
-///
-/// \image html mini-pro-pinout.png
-///
-/// AVR microcontrollers use a Hardvard-architecture with a strict
-/// separation between data memory (RAM and special registers) 
-/// and code memory (Flash). 
-/// Consequently all data, including constant data, must be stored in RAM.
-/// Other architectures can store constant data in ROM, 
-/// which is often much larger than RAM.
-/// 
-///
-/// References:
-///    - <A HREF="https://www.arduino.cc/en/uploads/Main/arduino-uno-schematic.pdf">
-///       Arduino Uno circuit reference diagram</A> (pdf)
-///    - <A HREF="http://www.atmel.com/images/atmel-8271-8-bit-avr-microcontroller-atmega48a-48pa-88a-88pa-168a-168pa-328-328p_datasheet_complete.pdf">
-///       ATMega328P datasheet</A> (pdf)
-///
 namespace uno {
 
 /// Arduino Uno pin names
@@ -117,7 +61,7 @@ const pin_info_type pin_info_array[ (int) pins::SIZE_THIS_IS_NOT_A_PIN ] = {
    
    { 2,  0 },  // a0
    { 2,  1 },  // a1
-   { 2,  2 },  // a1
+   { 2,  2 },  // a2
    { 2,  3 },  // a3
    { 2,  4 },  // a4
    { 2,  5 },  // a5
@@ -142,113 +86,19 @@ const pin_info_type & HWLIB_WEAK pin_info( pins name ){
    return pin_info_array[ n ];
 }
 
-volatile uint8_t & HWLIB_WEAK port_data( uint_fast8_t port ){
-   switch( port ){
-      // case 0  : return PORTA;
-      case 1  : return PORTB;
-      case 2  : return PORTC;
-      case 3  : return PORTD;
-      default : break;
-   }   
-   HWLIB_PANIC_WITH_LOCATION; 
-   // doesn't return
-}
+using pin_adc = atmega328::pin_adc;
 
-volatile uint8_t & HWLIB_WEAK port_input( uint_fast8_t port ){
-   switch( port ){
-      // case 0  : return DDRA;
-      case 1  : return PINB;
-      case 2  : return PINC;
-      case 3  : return PIND;
-      default : break;
-   }   
-   HWLIB_PANIC_WITH_LOCATION; 
-   // doesn't return
-}
-
-volatile uint8_t & HWLIB_WEAK port_direction( uint_fast8_t port ){
-   switch( port ){
-      // case 0  : return DDRA;
-      case 1  : return DDRB;
-      case 2  : return DDRC;
-      case 3  : return DDRD;
-      default : break;
-   }   
-   HWLIB_PANIC_WITH_LOCATION; 
-   // doesn't return
-}
-
-void HWLIB_WEAK configure_as_gpio( uint_fast8_t port, uint_fast8_t pin ){
-   if( port == 3 ){
-      if( pin == 0 ) {
-         UCSR0B &= ~ 0x10; // disable UART receive
-      }
-      if( pin == 1 ){
-         UCSR0B &= ~ 0x08; // disable UART transmit
-      }
-   }
-}
-
-class pin_adc : public hwlib::adc {
-private:
-   uint_fast8_t pin;
-
+class pin_in : public atmega328::pin_in {
 public:
-
-   pin_adc( uint_fast8_t pin ):
-      adc( 10 ),
-      pin( pin )
-   {
-      
-      // reference is AVCC
-      ADMUX = 0x01 << REFS0;
-	  
-      // Enable the ADC and prescale
-      ADCSRA = 7 | ( 0x01 << ADEN );  
-   }
-
-   uint_fast32_t read() override {
-	   
-      // select the ADC input pin 
-      ADMUX = ( 0x01 << REFS0 ) | pin;
-
-      // start the conversion.
-      ADCSRA |= 0x01 << ADSC;
-
-      // wait for the conversion to finish
-      while ( (ADCSRA & ( 0x01 << ADSC )) != 0 ){}
-
-      return ADCW;
-   }
-
-   void refresh() override {}
-   
-};
-
-/// \endcond
-   
-/// pin_in implementation for an ATMega328P
-class pin_in : public hwlib::pin_in {
-private:
-
-   volatile uint8_t & port_in;
-   uint8_t mask;
- 
-public:
-
-   /// Arduino Uno pin_in constructor from ATMega328P port/pin numbers
+   /// pin_in constructor from ATMega328P port/pin numbers
    ///
    /// This call creates a pin_in from an ATMega328P port/pin
    /// number pair.
    ///
    /// This constructor sets the pin direction to input.
    pin_in( uint8_t port_number, uint8_t pin_number ): 
-      port_in{ port_input( port_number ) }, 
-      mask( 0x1 << pin_number )
-   {
-      configure_as_gpio( port_number, pin_number );
-      port_direction( port_number ) &= ~mask;
-   }
+      atmega328::pin_in( port_number, pin_number )
+   {}      
    
    /// Arduino Uno pin_in constructor from an Uno pin name
    ///
@@ -260,37 +110,21 @@ public:
          pin_info( name ).port, 
          pin_info( name ).pin 
       }
-   {}
-   
-   bool read() override {
-      return ( port_in & mask ) != 0;   
-   }
-   
-   void refresh() override {}
-   
+   {}   
 };
 
-/// pin_out implementation for a ATMega328P
-class pin_out : public hwlib::pin_out {
-private:
-   volatile uint8_t & port_out;
-   uint8_t mask;
-   
+class pin_out : public atmega328::pin_out {
 public:
 
-   /// Arduino Uno pin_out constructor from ATMega328P port/pin numbers
+   /// pin_out constructor from ATMega328P port/pin numbers
    ///
    /// This call creates a pin_out from an ATMega328P port/pin
    /// number pair.
    ///
    /// This constructor sets the pin direction to output.
    pin_out( uint8_t port_number, uint8_t pin_number ): 
-      port_out{ port_data( port_number ) }, 
-      mask( 0x1 << pin_number )
-   {
-      configure_as_gpio( port_number, pin_number );
-      port_direction( port_number ) |= mask;
-   }
+      atmega328::pin_out( port_number, pin_number )
+   {}      
    
    /// Arduino Uno pin_out constructor from an Uno pin name
    ///
@@ -303,31 +137,12 @@ public:
          pin_info( name ).pin 
       }
    {}   
-   
-   void write( bool v ) override {
-      if( v ){
-         port_out |= mask;
-      } else {
-         port_out &= ~mask;
-      }
-   }
-
-   void flush() override {}
-
 };
 
-/// pin_in_out implementation for a ATMega328P
-class pin_in_out : public hwlib::pin_in_out {
-private:
-
-   volatile uint8_t & port_in;
-   volatile uint8_t & port_out;
-   uint8_t port_number;
-   uint8_t mask;
-   
+class pin_in_out : public atmega328::pin_in_out { 
 public:
 
-   /// Arduino Uno pin_in_out constructor
+   /// ATmega pin_in_out constructor
    ///
    /// Constructor for a ATMega328P input/output pin.
    ///
@@ -338,13 +153,8 @@ public:
    /// to input or output, a direction_set function must
    /// be called to do so.
    pin_in_out( uint8_t port_number, uint8_t pin_number ): 
-      port_in{ port_input( port_number ) }, 
-      port_out{ port_data( port_number ) }, 
-      port_number( port_number ),
-      mask( 0x1 << pin_number )
-   {
-      configure_as_gpio( port_number, pin_number );
-   }
+      atmega328::pin_in_out( port_number, pin_number )
+   {}      
    
    /// Arduino Uno pin_in_out constructor from an Uno pin name
    ///
@@ -358,45 +168,10 @@ public:
          pin_info( name ).port, 
          pin_info( name ).pin 
       }
-   {}   
-   
-   virtual void direction_set_input() override {
-      port_direction( port_number ) &= ~ mask;
-   }
-   
-   bool read() override {
-      return ( port_in & mask ) != 0;   
-   }
-   
-   virtual void direction_set_output() override {
-      port_direction( port_number ) |= mask;   
-   }
-   
-   void write( bool v ) override {
-      if( v ){
-         port_out |= mask;
-      } else {
-         port_out &= ~mask;
-      }
-   }
-   
-   void refresh() override {}
-   
-   void flush() override {}
-
-   void direction_flush() override {}
-   
+   {}      
 };   
 
-/// pin_oc implementation for a ATMega328P
-class pin_oc : public hwlib::pin_oc {
-private:
-
-   volatile uint8_t & port_in;
-   volatile uint8_t & port_out;
-   uint8_t port_number;
-   uint8_t mask;
-   
+class pin_oc : public atmega328::pin_oc {   
 public:
 
    /// Arduino Uno pin_oc constructor
@@ -408,13 +183,8 @@ public:
    ///
    /// This constructor sets the pin to high (high-impedance). 
    pin_oc( uint8_t port_number, uint8_t pin_number ): 
-      port_in{ port_input( port_number ) }, 
-      port_out{ port_data( port_number ) }, 
-      port_number( port_number ),
-      mask( 0x1 << pin_number )
-   {
-      configure_as_gpio( port_number, pin_number );
-   }
+      atmega328::pin_oc( port_number, pin_number )
+   {}      
    
    /// Arduino Uno pin_oc constructor from an Uno pin name
    ///
@@ -427,55 +197,8 @@ public:
          pin_info( name ).pin 
       }
    {}    
-   
-   bool read() override {
-      return ( port_in & mask ) != 0;   
-   }   
-   
-   void write( bool v ) override {
-      if( v ){
-         port_direction( port_number ) &= ~ mask;
-      } else {
-         port_direction( port_number ) |= mask;
-         port_out &= ~mask;
-      }
-   }
-
-   void refresh() override {}
-   
-   void flush() override {}
 };
 
-/*
-// should be part of due, anders for Uno!
-class shield_lcd_mcufriend {
-private:
-   pin_out rst, cs, rs, wr, rd;
-   pin_in_out d0, d1, d2, d3, d4, d5, d6, d7;
-   ::hwlib::port_in_out_from_pins data;
-      
-public:
-   ::hwlib::glcd_mcufriend_2_4 lcd;
-
-   shield_lcd_mcufriend():   
-      rst{ pins::a4 },
-      cs{  pins::a3 },
-      rs{  pins::a2 },
-      wr{  pins::a1 },
-      rd{  pins::a0 },
-      d0{  pins::d8 },
-      d1{  pins::d9 },
-      d2{  pins::d2 },
-      d3{  pins::d3 },
-      d4{  pins::d4 },
-      d5{  pins::d5 },
-      d6{  pins::d6 },
-      d7{  pins::d7 },
-      data{ d0, d1, d2, d3, d4, d5, d6, d7 },
-      lcd{ rst, cs, rs, wr, rd, data }
-   {}    
-};
-*/
 static inline uint16_t last_low = 0;
 static inline uint32_t high = 0;
 
@@ -493,13 +216,13 @@ static uint64_t now_ticks(){
    last_low = low;
 
    return (low | high);
+}  
 
 }; // namespace uno
 
 namespace hwlib {
 
 namespace target = ::uno;
-const auto target_chip  = target_chips::atmega328p;
 const auto target_board = target_boards::arduino_uno;
    
 #ifdef _HWLIB_ONCE
@@ -549,4 +272,4 @@ uint64_t now_ticks(){
 
 }; //namespace hwlib   
 
-#endif // HWLIB_UNO_H      for( uint16_t i = 0; i < 10'000; ++i );
+#endif // HWLIB_UNO_H    

@@ -20,7 +20,7 @@ namespace hwlib {
 /// a font
 /// 
 /// A font provides an image for each supported character
-class font {
+class font : public noncopyable {
 public:
 
    /// get image for a character
@@ -28,6 +28,5 @@ public:
    /// This function returns the image for the specified character.
    virtual const image & operator[]( char c ) const = 0;
 };
-
 
 }; // namespace hwlib

@@ -124,8 +124,8 @@ private:
    
 public:   
    
-   void clear() override {
-      unsigned char d = (( background == white ) ? 0 : 0xFF );
+   void clear_implementation( color c ) override {
+      unsigned char d = (( c == white ) ? 0 : 0xFF );
       command( 0x80 | 0 );   
       command( 0x40 | 0 );  
       for( uint_fast16_t i = 0; i < 504; i++ ){

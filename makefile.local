@@ -24,7 +24,18 @@
 # where to find bmptk
 BMPTK             ?= $(RELATIVE)/../bmptk
 
-# where to find Catch
-CATCH             := $(RELATIVE)/../Catch2
+# where to find rtos
+RTOS              ?= $(RELATIVE)/../rtos
 
-SEARCH +=  $(RELATIVE)/../boost_1_66_0
+# where to find Catch
+CATCH             ?= $(RELATIVE)/../Catch2
+
+# where to find Boost
+BOOST             ?= $(RELATIVE)/../boost_1_69_0
+
+# where to find SFML (for windows)
+#SFML              ?= $(RELATIVE)/../SFML-2.5.1
+
+SFML := $(RELATIVE)/../SFML-2.5.1-32
+
+

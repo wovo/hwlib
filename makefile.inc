@@ -23,7 +23,12 @@ HEADERS           += hwlib-all.hpp
 HEADERS           += core/hwlib-defines.hpp
 HEADERS           += core/hwlib-targets.hpp
 HEADERS           += core/hwlib-panic.hpp
+HEADERS           += core/hwlib-noncopyable.hpp
 HEADERS           += core/hwlib-common.hpp
+HEADERS           += core/hwlib-ratio.hpp
+HEADERS           += core/hwlib-background.hpp
+HEADERS           += core/hwlib-color.hpp
+HEADERS           += core/hwlib-random.hpp
 HEADERS           += core/hwlib-wait.hpp
 
 HEADERS           += pins/hwlib-pin.hpp
@@ -57,13 +62,15 @@ HEADERS           += core/hwlib-xy.hpp
 HEADERS           += core/hwlib-adc.hpp
 HEADERS           += core/hwlib-dac.hpp
 HEADERS           += core/hwlib-dac-demos.hpp
+HEADERS           += core/hwlib-servo.hpp
 HEADERS           += core/hwlib-i2c.hpp
 HEADERS           += core/hwlib-spi.hpp
 
-HEADERS           += graphics/hwlib-graphics-color.hpp
 HEADERS           += graphics/hwlib-graphics-image.hpp
+HEADERS           += graphics/hwlib-graphics-image-decorators.hpp
 HEADERS           += graphics/hwlib-graphics-font.hpp
 HEADERS           += graphics/hwlib-graphics-window.hpp
+HEADERS           += graphics/hwlib-graphics-canvas.hpp
 HEADERS           += graphics/hwlib-graphics-drawables.hpp
 HEADERS           += graphics/hwlib-graphics-window-decorators.hpp
 HEADERS           += graphics/hwlib-graphics-window-demos.hpp
@@ -77,12 +84,52 @@ HEADERS           += peripherals/hwlib-hc595.hpp
 HEADERS           += peripherals/hwlib-hd44780.hpp
 HEADERS           += peripherals/hwlib-glcd-5510.hpp
 HEADERS           += peripherals/hwlib-glcd-oled.hpp
+HEADERS           += peripherals/hwlib-glcd-st7789.hpp
+HEADERS           += peripherals/hwlib-matrix-keypad.hpp
+HEADERS           += peripherals/hwlib-servo-background.hpp
 
-HEADERS           += targets/hwlib-arduino-due.hpp
+HEADERS           += targets/hwlib-atmega328.hpp
 HEADERS           += targets/hwlib-arduino-uno.hpp
+HEADERS           += targets/hwlib-my-first-dev-board.hpp
+HEADERS           += targets/hwlib-arduino-due.hpp
 HEADERS           += targets/hwlib-blue-pill.hpp
 HEADERS           += targets/hwlib-stm32f103c8.hpp
 #HEADERS           += targets/hwlib-stm32f030x6.hpp
 HEADERS           += targets/hwlib-db103.hpp
-HEADERS           += targets/hwlib-native.hpp
+HEADERS           += targets/hwlib-native-windows.hpp
+HEADERS           += targets/hwlib-native-linux.hpp
+HEADERS           += targets/hwlib-native-sfml.hpp
 HEADERS           += targets/hwlib-none.hpp
+
+RELATIVE ?= $(HWLIB)
+ifneq ($(wildcard $(HWLIB)/makefile.custom),)
+   include $(HWLIB)/makefile.custom
+else ifneq ($(wildcard $(HWLIB)/../makefile.custom),)
+   include $(HWLIB)/../makefile.custom
+else 
+   include $(HWLIB)/makefile.local
+endif
+
+# add Catch
+SEARCH            += $(CATCH)/single_include
+SEARCH            += $(CATCH)/single_include/catch2
+
+# add Boost
+SEARCH            += $(BOOST)
+
+# add SFML
+ifeq ($(TARGET),native)
+   ifeq ($(OS),Windows_NT)
+      SEARCH            += $(SFML)/include
+      LINKER_FLAGS      += -L$(SFML)/lib 
+      LINKER_FLAGS      += -lsfml-graphics-s -lsfml-window-s -lsfml-system-s 
+      LINKER_FLAGS      += -lopengl32 -lgdi32 -lws2_32 -lwinmm
+      DEFINES           += -DSFML_STATIC
+   else
+      LINKER_FLAGS      += -lsfml-graphics -lsfml-window -lsfml-system 
+      DEFINES           += -DSFML_STATIC
+   endif
+endif
+
+# defer to bmptk 
+include           $(BMPTK)/Makefile.inc

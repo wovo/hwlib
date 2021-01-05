@@ -27,7 +27,7 @@ namespace hwlib {
 /// input/output pin interface
 /// 
 /// This class abstracts the interface for an input/output pin.
-class pin_in_out {
+class pin_in_out : public noncopyable  {
 public:
 
    /// set the direction of a pin to input
@@ -104,7 +104,7 @@ public:
 /// input pin interface
 /// 
 /// This class abstracts the interface for an input-only pin.
-class pin_in {
+class pin_in : public noncopyable {
 public:
 
    /// @copydoc pin_in_out::read()
@@ -126,7 +126,7 @@ public:
 /// output pin interface
 /// 
 /// This class abstracts the interface for an output-only pin.
-class pin_out {
+class pin_out : public noncopyable {
 public:
 
    /// @copydoc pin_in_out::write()  
@@ -148,7 +148,7 @@ public:
 /// 
 /// This class abstracts the interface for 
 /// an open-collector input/output pin.
-class pin_oc {
+class pin_oc : public noncopyable {
 public:
 
    /// read the pin

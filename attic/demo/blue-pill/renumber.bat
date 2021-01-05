@@ -1,0 +1,1 @@
+bmptk-make renumber

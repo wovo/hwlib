@@ -33,6 +33,8 @@ namespace hwlib {
 class xy final {
 public:
 
+   using value_t = int_fast16_t;
+
    /// x value of the pair
    int_fast16_t x;
    
@@ -77,6 +79,11 @@ public:
       };         
    }    
 
+   /// reverse multiply by an integer
+   friend constexpr xy operator*( int n, const xy & rhs ){
+      return rhs * n;
+   }    
+
    /// test whether two xy values are equal
    constexpr bool operator==( const xy & rhs ) const {
       return ( x == rhs.x ) && ( y == rhs.y );
@@ -86,6 +93,10 @@ public:
    constexpr bool operator!=( const xy & rhs ) const {
       return ! ( *this == rhs );
    }
+   
+   friend constexpr xy transpose( const xy & rhs ){
+      return xy( rhs.y, rhs.x );      
+   }      
 
 }; 
 
@@ -169,7 +180,10 @@ class xy_all_t all( xy v );
 /// An xy pair is printed in [x,y] format
 ///
 /// \relates xy
-ostream & operator<<( ostream & lhs, xy rhs );
+template< typename T >
+T & operator<<( T & lhs, xy rhs ){
+   return lhs << "[" << rhs.x << ":" << rhs.y << "]";
+}
 
 
 // ===========================================================================
@@ -180,14 +194,9 @@ ostream & operator<<( ostream & lhs, xy rhs );
 
 #ifdef _HWLIB_ONCE
 
-ostream & operator<<( ostream & lhs, xy rhs ){
-   return lhs << "[" << rhs.x << ":" << rhs.y << "]";
-}
-
 class xy_all_t all( xy v ){
    return xy_all_t( v );
 }
-
 
 #endif // #ifdef _HWLIB_ONCE
 

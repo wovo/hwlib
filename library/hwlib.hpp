@@ -34,6 +34,12 @@
    #include HWLIB_INCLUDE( targets/hwlib-arduino-uno.hpp )
 #endif
 
+/// - HWLIB_TARGET_my_first_devboard : board with Arduino Nano (ATMega328P chip)
+#ifdef HWLIB_TARGET_my_first_dev_board
+   #define HWLIB_TARGET
+   #include HWLIB_INCLUDE( targets/hwlib-my-first-dev-board.hpp )
+#endif
+
 /// - HWLIB_TARGET_arduino_due : Arduino Due(ATSAM3X8E chip chip)
 #ifdef HWLIB_TARGET_arduino_due
    #define HWLIB_TARGET
@@ -57,10 +63,16 @@
    #include HWLIB_INCLUDE( hwlib-scouting-lock.hpp )
 #endif
 
-/// - HWLIB_TARGET_native : native target (Windows or Linux PC)
-#ifdef HWLIB_TARGET_native
+/// - HWLIB_TARGET_native : Windows native
+#ifdef HWLIB_TARGET_Windows
    #define HWLIB_TARGET
-   #include HWLIB_INCLUDE( targets/hwlib-native.hpp )
+   #include HWLIB_INCLUDE( targets/hwlib-native-sfml.hpp )
+#endif
+
+/// - HWLIB_TARGET_native : Linux native 
+#ifdef HWLIB_TARGET_Linux
+   #define HWLIB_TARGET
+   #include HWLIB_INCLUDE( targets/hwlib-native-sfml.hpp )
 #endif
 
 #ifdef HWLIB_TARGET_pyd
