@@ -165,7 +165,6 @@ namespace teensy_40
 
         void flush() override
         {
-            // what to do?
         }
         /**
          * @brief Function to Toggle the GPIO on and off
@@ -211,7 +210,7 @@ namespace teensy_40
         public:
         pin_adc(pins pin_number) : hwlib::adc(12), myCorePin(mimxrt1062::core_pin_struct_array[(int)pin_number])
         {   
-            if (myCorePin.ad_channel == 255) // what to do if pin_number is not an adc pin
+            if (myCorePin.ad_channel == 0XFFFFFFFF) // what to do if pin_number is not an adc pin
             {
                 return;
             }
@@ -259,8 +258,7 @@ namespace teensy_40
 
         void refresh() override
         {
-            // didn't know what a refresh should do here, just did a new calibration for now.
-             // calibrate using the on chip calibration function
+            // calibrate using the on chip calibration function
             ADC1->GC |= (0b1 << 7);
             while((ADC1->GC & (0b1 << 7)) != 0){} // check if the CAL bit is still high, if not, calibration is done
             return;
@@ -316,7 +314,7 @@ namespace teensy_40
 
         void flush() override
         {
-            // Function not implemented, calling write immidiately writes a pin
+            // Function not implemented, calling write immidiately writes to a pin
         }
 
     };
@@ -337,24 +335,18 @@ namespace teensy_40
         {
             return (reinterpret_cast<uint32_t>(reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->PSR) & (1 << myCorePin.GPIO_port_bit_number)) != 0;
         }
-        /**
-         * @brief This function writes a bit over the oc pin
-         * @details Notice that for both a zero and a 1, this function also waits 1 us_busy to make sure the output pin is set to either input or ouput as is necessary for an oc pin in this style.
-         * 
-         * @param x the bit that needs to be written
-         */
+       
         void write(bool x) override
         {
             if (x)
             {
                reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR &= ~(1 << myCorePin.GPIO_port_bit_number); // set the pin to read mode
-                wait_32_nops();
+                wait_32_nops(); // this is needed (tested thoroughly!) do not touch. This is the shortest time that is needed to wait to let the pins change the input mode
             }
             else
             {
                 reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->GDIR |= (1 << myCorePin.GPIO_port_bit_number); // set the pin to write mode
-                // this wait is necessary for letting the pin go to another mode. (32 asm("nops") also do the trick)
-                wait_32_nops();
+                wait_32_nops(); // this is needed (tested thoroughly!) do not touch. This is the shortest time that is needed to wait to let the pins change the input mode
             }
         }
         void refresh() override
@@ -365,7 +357,6 @@ namespace teensy_40
 
         void flush() override
         {
-            // what to do?
         }
 
     };
@@ -380,7 +371,8 @@ namespace teensy_40
 
     #ifdef _HWLIB_ONCE
     // NOTICE! To use UART on the Teensy 4.0, you need to use pin 0 (rx) and pin 1 (tx) in combination with an TTL to USB hardware piece. 
-    // Teensy does not have this on board (as fas as I know), and so it is not implemented to use the standard USB
+    // Teensy does not have this on board (as fas as I know), and so it is not implemented to use the standard USB. Other TX or RX pins will not work.
+    // I used a USB to TTL converter to read out the UART pins. Works good.
     void uart_init()
     {
         static bool init_done = false;
@@ -460,8 +452,8 @@ namespace teensy_40
     // uart_init() is not needed because uart_char_available does that
     while( ! uart_char_available() )
     { 
-        dont_optimize();
-        // TODO: hwlib::background::do_background_work();	
+        //dont_optimize();
+        hwlib::background::do_background_work();	
     }
     const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
     return reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> DATA; 
@@ -473,8 +465,8 @@ namespace teensy_40
         const mimxrt1062::core_pin & tx = mimxrt1062::core_pin_struct_array[1]; // teensy 4.0 tx1
         while((reinterpret_cast<LPUART_Type*>(tx.serial_base_adress) -> STAT & (0b1 << 22)) == 0)
         {
-            dont_optimize();
-        // TODO: hwlib::background::do_background_work();	
+            //dont_optimize();
+            hwlib::background::do_background_work();	
         }
         reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> DATA |= c;
     }
@@ -558,7 +550,7 @@ return teensy_40::uart_getc();
         auto end = now_us() + n;
         while (now_us() < end)
         {
-            // background::do_background_work();
+            background::do_background_work();
         }
     }
 

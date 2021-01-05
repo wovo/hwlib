@@ -70,6 +70,8 @@ namespace mimxrt1062
     };
     /**
      * @brief Struct containing the core pin structs that map a chip pad to the configuration register adresses and IO ports
+     * @details all this info is gotten from the consumer reference manual in combination with the Arduino IDE library. This may be a bit vague 
+     * but every pin was tested for it's functionality and confirmed working
      * 
      */
     constexpr core_pin core_pin_struct_array[40] =
@@ -139,9 +141,6 @@ namespace mimxrt1062
      */
     inline void writeIOMUXPADCTL(int n, uint32_t mask)
     {
-        //  IOMUXC->SW_PAD_CTL_PAD[n] &= ~(0b111111 << 10);
-        //  IOMUXC->SW_PAD_CTL_PAD[n] &= ~(0b11111 << 3);
-        //  IOMUXC->SW_PAD_CTL_PAD[n] &= ~0b1;
         uint32_t clearMask = ~((0b111111 << 10) | (0b11111 << 3) | 0b1);
         IOMUXC->SW_PAD_CTL_PAD[n] &= clearMask;
         IOMUXC->SW_PAD_CTL_PAD[n] |= mask;
@@ -150,7 +149,7 @@ namespace mimxrt1062
     /// the number of ticks per us
     int_fast64_t HWLIB_WEAK ticks_per_us()
     {
-        return 600; // this number should be the same as the cpu freq in Mhz
+        return 600; // this number should be the same as the cpu freq in Mhz, do not touch if you do not know what you are doing
     }
 
     uint_fast64_t HWLIB_WEAK now_ticks()
