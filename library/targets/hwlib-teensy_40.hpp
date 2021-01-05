@@ -178,6 +178,7 @@ namespace teensy_40
 
     class pin_in : public hwlib::pin_in
     {
+    // this class also has pull up and pull down enable functions as these are later added by WOVO to hwlib-examples. The pin is pull down by default
     private:
         const mimxrt1062::core_pin &myCorePin;
          const uint32_t configMask = ((0b1 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b111 << 3) /*DSE*/ | 0b0 /*SRE*/ );
@@ -198,6 +199,26 @@ namespace teensy_40
         {
             // does this even do something?
             reinterpret_cast<GPIO_Type *>(myCorePin.GPIO_port_base_adress)->DR_CLEAR |= (1 << myCorePin.GPIO_port_bit_number);
+        }
+        /**
+         * @brief Function to enable the embedded 22k pull up resistor. The pin_in class is pulled down by default. 
+         * 
+         */
+        void pullup_enable()
+        {
+            uint32_t pullupConfigMask = ((0b1 << 16) /*HYS*/| (0b11 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b111 << 3) /*DSE*/ | 0b0 /*SRE*/ );
+            mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_PAD_control_register_array_index, pullupConfigMask);
+            wait_32_nops();
+        }
+
+        /**
+         * @brief Function to disable the 22k pull up resistor (after calling pullup_enable for example) and enable the embedded 100k pull down resistor, which is the standard setting by default.
+         * 
+         */
+        void pulldown_enable()
+        {
+            mimxrt1062::writeIOMUXPADCTL(myCorePin.IOMUXC_PAD_control_register_array_index, configMask);
+            wait_32_nops();
         }
     };
 
