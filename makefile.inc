@@ -84,6 +84,7 @@ HEADERS           += peripherals/hwlib-hc595.hpp
 HEADERS           += peripherals/hwlib-hd44780.hpp
 HEADERS           += peripherals/hwlib-glcd-5510.hpp
 HEADERS           += peripherals/hwlib-glcd-oled.hpp
+HEADERS           += peripherals/hwlib-glcd-st7789.hpp
 HEADERS           += peripherals/hwlib-matrix-keypad.hpp
 HEADERS           += peripherals/hwlib-servo-background.hpp
 
@@ -100,7 +101,7 @@ HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-native-sfml.hpp
 HEADERS           += targets/hwlib-none.hpp
 
-RELATIVE ?= $(BMPTK)/..
+RELATIVE ?= $(HWLIB)
 ifneq ($(wildcard $(HWLIB)/makefile.custom),)
    include $(HWLIB)/makefile.custom
 else ifneq ($(wildcard $(HWLIB)/../makefile.custom),)

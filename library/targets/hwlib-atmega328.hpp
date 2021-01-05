@@ -23,6 +23,14 @@
 
 #include "avr/io.h"
 
+extern "C" void HWLIB_WEAK __cxa_pure_virtual(){
+   for(;;){
+      // This if for the side-effect only:
+      // a never-ending loop without side-effect is UB.
+      (void)PORTB;
+   }
+}
+
 namespace atmega328 {
 
 volatile uint8_t & HWLIB_WEAK port_data( uint_fast8_t port ){
@@ -64,10 +72,10 @@ volatile uint8_t & HWLIB_WEAK port_direction( uint_fast8_t port ){
 void HWLIB_WEAK configure_as_gpio( uint_fast8_t port, uint_fast8_t pin ){
    if( port == 3 ){
       if( pin == 0 ) {
-         UCSR0B &= ~ 0x10; // disable UART receive
+         UCSR0B = UCSR0B & ~ 0x10; // disable UART receive
       }
       if( pin == 1 ){
-         UCSR0B &= ~ 0x08; // disable UART transmit
+         UCSR0B = UCSR0B & ~ 0x08; // disable UART transmit
       }
    }
 }
@@ -96,7 +104,7 @@ public:
       ADMUX = ( 0x01 << REFS0 ) | pin;
 
       // start the conversion.
-      ADCSRA |= 0x01 << ADSC;
+      ADCSRA = ADCSRA | ( 0x01 << ADSC );
 
       // wait for the conversion to finish
       while ( (ADCSRA & ( 0x01 << ADSC )) != 0 ){}
@@ -118,9 +126,9 @@ private:
    
    void write( bool v ){
       if( v ){
-         port_out |= mask;
+         port_out = port_out | mask;
       } else {
-         port_out &= ~mask;
+         port_out = port_out & ~mask;
       }
    }   
  
@@ -138,7 +146,7 @@ public:
       mask( 0x1 << pin_number )
    {
       configure_as_gpio( port_number, pin_number );
-      port_direction( port_number ) &= ~mask;
+      port_direction( port_number ) = port_direction( port_number ) & ~mask;
    }
       
    bool read() override {
@@ -176,14 +184,14 @@ public:
       mask( 0x1 << pin_number )
    {
       configure_as_gpio( port_number, pin_number );
-      port_direction( port_number ) |= mask;
+      port_direction( port_number ) = port_direction( port_number ) | mask;
    }
      
    void write( bool v ) override {
       if( v ){
-         port_out |= mask;
+         port_out = port_out | mask;
       } else {
-         port_out &= ~mask;
+         port_out = port_out & ~mask;
       }
    }
 
@@ -219,7 +227,7 @@ public:
    }
       
    virtual void direction_set_input() override {
-      port_direction( port_number ) &= ~ mask;
+      port_direction( port_number ) = port_direction( port_number ) & ~ mask;
    }
    
    bool read() override {
@@ -227,14 +235,14 @@ public:
    }
    
    virtual void direction_set_output() override {
-      port_direction( port_number ) |= mask;   
+      port_direction( port_number ) = port_direction( port_number ) | mask;   
    }
    
    void write( bool v ) override {
       if( v ){
-         port_out |= mask;
+         port_out = port_out | mask;
       } else {
-         port_out &= ~mask;
+         port_out = port_out & ~mask;
       }
    }
    
@@ -286,10 +294,10 @@ public:
    
    void write( bool v ) override {
       if( v ){
-         port_direction( port_number ) &= ~ mask;
+         port_direction( port_number ) = port_direction( port_number ) & ~ mask;
       } else {
-         port_direction( port_number ) |= mask;
-         port_out &= ~mask;
+         port_direction( port_number ) = port_direction( port_number ) | mask;
+         port_out = port_out & ~mask;
       }
    }
 

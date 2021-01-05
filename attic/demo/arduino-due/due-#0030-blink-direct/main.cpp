@@ -23,13 +23,13 @@ int main( void ){
       PIOB->PIO_SODR = 0x01 << 27;
 
       // wait some time
-      for( volatile uint32_t i = 0; i < 100'000; i++ ){}
+      for( uint32_t i = 0; i < 100'000; i++ ){ asm("nop"); }
 
       // make the GPIO pin low
       PIOB->PIO_CODR = 0x01 << 27;
 
       // again, wait some time
-      for( volatile uint32_t i = 0; i < 100'000; i++ ){}
+      for( uint32_t i = 0; i < 100'000; i++ ){ asm("nop"); }
 
    }      
 }

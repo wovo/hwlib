@@ -17,4 +17,4 @@ RELATIVE          ?= .
 HWLIB             := $(RELATIVE)
 
 # defer to the makefile.inc
-include           $(HWLIB)/Makefile.inc
+include           $(HWLIB)/makefile.inc

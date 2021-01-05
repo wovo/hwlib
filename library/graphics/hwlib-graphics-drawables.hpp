@@ -142,23 +142,20 @@ public:
 //
 // ==========================================================================
 
-class rectangle {
-protected:
-   xy start, end;
-   
-private:
-   color ink;
-
+class rectangle : public drawable  {
 public:
+   xy end;
+   color ink;
 
    rectangle( 
       const xy & start, const xy & end,
       const color & ink = unspecified
    ):
-      start( start ), end( end ), ink( ink )
+      drawable{ start },
+      end( end ), ink( ink )
    {}
 
-   virtual void draw( hwlib::window & w ){
+   void draw( hwlib::window & w ) override {
       line( 
          xy( start.x, start.y ), xy( start.x,   end.y + 1 ), ink ).draw( w );
       line( 

@@ -54,7 +54,7 @@ public:
    /// background constructor
    ///
    /// The constructor will add this backround item 
-   /// to the list of backround items.
+   /// to the list of background items.
    background():
 	  next( first )
    {
@@ -63,16 +63,16 @@ public:
    
    /// background destructor
    ///
-   /// The destructor will remove this backround item 
-   /// from the list of backround items.
+   /// The destructor will remove this background item 
+   /// from the list of background items.
    ~background(){
 	   
       // find the pointer that points to us
       for( background **p = &first; *p != nullptr; p = &(*p)->next ){
          if( (*p) == this ){
 			 
-			//remove us from the list:
-			// make it point to the next background itenm
+            //remove us from the list:
+            // make it point to the next background item
             (*p) = next;
             return;			
 		 }
@@ -90,8 +90,8 @@ public:
    static void do_background_work(){
 	 
       // do not run any background work when called from background
-	  // work: this would seriously impact stack use and delay granularity
-	  if( running ){
+      // work: this would seriously impact stack use and delay granularity
+      if( running ){
          return;
       }		 
 	   
@@ -100,7 +100,7 @@ public:
          current = first;
       }
 	  
-	  // if there is a current work item
+      // if there is a current work item
       if( current != nullptr ){
 		  
 		 // run it	  

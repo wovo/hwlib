@@ -133,7 +133,7 @@ public:
    /// construct from a pin_out
    pin_direct_from_out_t( pin_out & slave ): slave( slave ){}
 
-   void write( bool v ) override {
+   void HWLIB_INLINE write( bool v ) override {
       slave.write( v );
 	   slave.flush();
    }

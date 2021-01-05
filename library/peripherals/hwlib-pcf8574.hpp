@@ -107,8 +107,8 @@ public:
    ///
    /// This constructor creates an interface to a pcf8574 I2C
    /// I/O extender chip from an I2C bus channel.
-   pcf8574( i2c_bus & bus, uint_fast8_t address = 0x28 ):
-      bus( bus), address( address ), dirty( false ) {}    
+   pcf8574( i2c_bus & bus, uint_fast8_t address ):
+      bus( bus ), address( address ), dirty( false ) {}    
 
    uint_fast8_t number_of_pins() override {
       return 8;

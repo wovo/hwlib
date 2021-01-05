@@ -33,6 +33,8 @@ namespace hwlib {
 class xy final {
 public:
 
+   using value_t = int_fast16_t;
+
    /// x value of the pair
    int_fast16_t x;
    

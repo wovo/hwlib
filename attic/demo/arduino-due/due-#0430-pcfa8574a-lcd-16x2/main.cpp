@@ -15,11 +15,11 @@
 namespace target = hwlib::target;
 
 int main( void ){
-   auto scl            = hwlib::target::pin_oc( hwlib::target::pins::a0 );
-   auto sda            = hwlib::target::pin_oc( hwlib::target::pins::a1 );
+   auto scl            = hwlib::target::pin_oc( hwlib::target::pins::scl );
+   auto sda            = hwlib::target::pin_oc( hwlib::target::pins::sda );
       
    auto i2c_bus        = hwlib::i2c_bus_bit_banged_scl_sda{ scl,sda };
-   auto chip           = hwlib::pcf8574a{ i2c_bus, 0x3F };
+   auto chip           = hwlib::pcf8574a{ i2c_bus, 0x27 };
     
    auto d4 = hwlib::pin_out_from( chip.p4 );
    auto d5 = hwlib::pin_out_from( chip.p5 );

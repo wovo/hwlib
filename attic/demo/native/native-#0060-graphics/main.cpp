@@ -16,7 +16,8 @@ int main(int argc, char **argv){
    hwlib::circle circle2( hwlib::xy( 30, 10 ), 10, hwlib::red );
    circle2.draw( w );
    
-   
+   hwlib::rectangle rect1( hwlib::xy( 50, 50 ), hwlib::xy( 20, 10 ), hwlib::yellow );
+   rect1.draw( w );
    
    w.flush();
    
