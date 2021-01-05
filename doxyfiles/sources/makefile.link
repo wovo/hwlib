@@ -10,7 +10,7 @@
 # 
 #############################################################################
 
-SERIAL_PORT     ?= COM6
+uart_port     ?= COM6
 
 # defer to the next-level makefile.link
 RELATIVE          ?= .

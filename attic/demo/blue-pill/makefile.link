@@ -14,7 +14,7 @@
 
 # common settings for Blue-Pill projects
 TARGET            ?= blue_pill
-SERIAL_PORT       ?= COM4
+uart_port       ?= COM4
 CONSOLE_BAUDRATE  ?= 2400
 
 ifneq ($(OS),Windows_NT)

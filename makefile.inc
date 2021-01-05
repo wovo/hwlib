@@ -99,6 +99,7 @@ HEADERS           += targets/hwlib-db103.hpp
 HEADERS           += targets/hwlib-native-windows.hpp
 HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-native-sfml.hpp
+HEADERS           += targets/hwlib-teensy_40.hpp
 HEADERS           += targets/hwlib-none.hpp
 
 RELATIVE ?= $(HWLIB)

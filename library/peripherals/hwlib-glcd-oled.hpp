@@ -130,7 +130,7 @@ public:
 	   cursor( 255, 255 )
    {
       // wait for the controller to be ready for the initialization       
-      wait_ms( 20 );
+     wait_ms( 20 );
    }      
    
    /// send a command without data
@@ -453,7 +453,7 @@ public:
       bus.write( address ).write( 
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
-      );     
+      );  
    }
    
    void flush() override {
