@@ -199,76 +199,12 @@ public:
    {}    
 };
 
-static inline uint16_t last_low = 0;
-static inline uint32_t high = 0;
-
-static uint64_t now_ticks(){
-   static bool init_done = false;
-   if(!init_done){
-      TCCR1B = 0x01;
-      init_done = true;
-   }
-   uint16_t low = TCNT1L;
-   low |= (TCNT1H<<8);
-   if(low < last_low){
-      high += 0x1ULL << 16;
-   }
-   last_low = low;
-
-   return (low | high);
-}  
-
 }; // namespace uno
 
 namespace hwlib {
 
 namespace target = ::uno;
 const auto target_board = target_boards::arduino_uno;
-   
-#ifdef _HWLIB_ONCE
-   
-void HWLIB_WEAK wait_us_asm( int n ){ 
-    // first int parameter is passd in r24/r25
-    __asm volatile(                  // clocks
-       "1:  cp    r1, r24     \t\n"   // 1
-       "    cpc   r1, r25     \t\n"   // 1
-       "    brge  3f          \t\n"   // 1
-       "    rcall 3f          \t\n"   // 7
-       "    rjmp  2f          \t\n"   // 2
-       "2:  sbiw  r24, 0x01   \t\n"   // 2
-       "    rjmp  1b          \t\n"   // 2
-       "3:                    \t\n"   // 16 total
-       : : "r" ( n )                  // uses (reads) n
-   ); 
-    
-}
-
-void HWLIB_WEAK wait_us_busy( int_fast32_t n ){ 
-   while( n > 0 ){
-      if( n < 10'000 ){
-          wait_us_asm( n );
-          return;
-      }
-      wait_us_asm( 1'000 );
-      n -= 1'000;
-   }
-} 
-
-void HWLIB_WEAK uart_putc( char c ){
-   static target::pin_out pin( 3, 1 );
-   uart_putc_bit_banged_pin( c, pin );
-}
-
-char HWLIB_WEAK uart_getc(){
-   static target::pin_in pin( 1, 6 );
-   return uart_getc_bit_banged_pin( pin );
-}
-	
-uint64_t now_ticks(){
-   return target::now_ticks();
-}
-
-#endif
 
 }; //namespace hwlib   
 
