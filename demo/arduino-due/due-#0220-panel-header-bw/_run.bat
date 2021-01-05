@@ -1,1 +1,0 @@
-bmptk-make run

@@ -34,8 +34,8 @@ CATCH             ?= $(RELATIVE)/../Catch2
 BOOST             ?= $(RELATIVE)/../boost_1_69_0
 
 # where to find SFML (for windows)
-SFML              ?= $(RELATIVE)/../SFML-2.5.1
+#SFML              ?= $(RELATIVE)/../SFML-2.5.1
 
-SFML := $(RELATIVE)/../SFML-2.5.1
+SFML := $(RELATIVE)/../SFML-2.5.1-32
 
 

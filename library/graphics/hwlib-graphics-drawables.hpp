@@ -142,14 +142,10 @@ public:
 //
 // ==========================================================================
 
-/// a rectangle object 
 class rectangle : public drawable  {
-private:
-
+public:
    xy end;
    color ink;
-
-public:
 
    rectangle( 
       const xy & start, const xy & end,
