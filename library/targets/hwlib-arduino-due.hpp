@@ -742,6 +742,127 @@ public:
    void refresh() override {}
 };
 
+/// A hardware SPI implementation for a ATSAM3X8E
+class hwspi : public hwlib::spi_bus {
+public:
+   /// \brief
+   /// the spi modes
+   enum SPI_MODE : uint8_t{
+      SPI_MODE0 = 0x02,
+      SPI_MODE1 = 0x00, 
+      SPI_MODE2 = 0x03,
+      SPI_MODE3 = 0x01
+   };
+
+private:
+   uint8_t chipselect:2;
+
+   constexpr uint32_t SPI_PCS(uint32_t npcs) {
+      return (~(1 << npcs) & 0xf) << 16;
+   }
+
+   void spi_write(uint_fast16_t wData){
+      while ( (SPI0->SPI_SR & SPI_SR_TXEMPTY) == 0 ) ;
+      SPI0->SPI_TDR = wData | SPI_PCS( chipselect ) ;
+      while ( (SPI0->SPI_SR & SPI_SR_TDRE) == 0 ) ;  
+   }
+
+   uint_fast16_t spi_read(){
+      while ( (SPI0->SPI_SR & SPI_SR_RDRF) == 0 ) ;
+      return SPI0->SPI_RDR & 0xFFFF ;            
+   }
+
+   void configure_pin(const uint32_t dwMask){
+      uint32_t dwSR;
+
+      PIOA->PIO_IDR = dwMask;
+      dwSR = PIOA->PIO_ABSR;
+      PIOA->PIO_ABSR &= (~dwMask & dwSR);
+      PIOA->PIO_PDR = dwMask;
+
+      /* Disable interrupts on the pin(s) */
+      PIOA->PIO_IDR = dwMask;
+      // disable pull ups            
+      PIOA->PIO_PUDR = dwMask;
+   }
+
+public:
+   /// \brief
+   /// hardware spi constructor
+   /// \param chipselect the used cs\n
+   /// cs pins are:\n
+   /// NPCS0 = PA28 Peripheral A = d10\n
+   /// NPCS1 = PA29 Peripheral A = d4\n
+   /// NPCS2 = PA30 Peripheral A = nc\n
+   /// NPCS3 = PA31 Peripheral A = nc\n
+   /// \param spimode the desired spi mode
+   /// \param spi_divider the spi divider to calculate the spi speed\n
+   /// 84 mhz / 21 = 4mhz\n
+   /// \param loopback to enable or disable the loopback in hardware\n
+   /// this connects the mosi to the miso if enabled\n    
+   hwspi(uint8_t chipselect = 0, SPI_MODE spimode = SPI_MODE0, uint8_t spi_divider = 21, bool loopback = 0):
+      chipselect(chipselect)
+   {
+      // disable write protection spi
+      REG_SPI0_WPMR=0x53504900;
+
+      // disable spi
+      SPI0->SPI_CR = SPI_CR_SPIDIS;
+
+      switch(chipselect){
+            case 1:
+               // CS1 is pin 4 on the due
+               configure_pin(PIO_PA29A_SPI0_NPCS1);
+               break;
+            case 2:
+               // not available on arduino due pcb
+               configure_pin(PIO_PA30A_SPI0_NPCS2);
+               break;
+            case 3:
+               // not available on arduino due pcb
+               configure_pin(PIO_PA31A_SPI0_NPCS3);
+               break;
+            default:
+               // CS0 is pin 10 on the due.
+               configure_pin(PIO_PA28A_SPI0_NPCS0);
+               break;                    
+      }
+
+      // configure miso, mosi and clk pins
+      configure_pin(PIO_PA25A_SPI0_MISO);
+      configure_pin(PIO_PA26A_SPI0_MOSI);
+      configure_pin(PIO_PA27A_SPI0_SPCK);
+
+      // enable pheripheral clock
+      PMC->PMC_PCER0 = 1 << ID_SPI0;
+
+      // Execute a software reset of the SPI twice 
+      SPI0->SPI_CR = SPI_CR_SWRST;
+      SPI0->SPI_CR = SPI_CR_SWRST;        
+
+      // Set SPI configuration parameters.
+      SPI0->SPI_MR = SPI_MR_MSTR | SPI_MR_PS | SPI_MR_MODFDIS | loopback << 7;
+      SPI0->SPI_CSR[chipselect] = (spimode & 0x03) | SPI_CSR_SCBR(spi_divider) | 
+         SPI_CSR_DLYBCT(0) | SPI_CSR_DLYBS(1) | SPI_CSR_CSAAT;   
+
+      // Enable SPI
+      SPI0->SPI_CR = SPI_CR_SPIEN;                     
+   }
+
+   /// \brief
+   /// write and reads from the hardware spi bus
+   void write_and_read( 
+      const size_t n, 
+      const uint8_t data_out[], 
+      uint8_t data_in[] 
+   ) override{
+      for(uint_fast32_t i = 0; i < n; i++){
+            spi_write(data_out[i]);
+            data_in[i] = spi_read();
+      }
+   }
+};
+
 /// the number of ticks per us
 uint_fast64_t HWLIB_WEAK ticks_per_us(){
    return 84;
