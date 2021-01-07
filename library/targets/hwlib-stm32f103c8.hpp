@@ -189,6 +189,7 @@ namespace stm32f103c8 {
         }
 
     };
+
 /// \endcond 
 
 /// pin_in implementation for an stm32f103c8
