@@ -13,8 +13,8 @@
 // this file contains Doxygen lines
 /// @file
 
-#ifndef HWLIB_STM32F103C8_H
-#define HWLIB_STM32F103C8_H
+#ifndef HWLIB_TERMITE_H
+#define HWLIB_TERMITE_H
 
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
@@ -22,6 +22,7 @@
 #define register
 
 #include "stm32f103xb.h"
+#include <cmath>
 
 #undef register
 
@@ -50,7 +51,8 @@ namespace stm32f103c8 {
         a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15,
         b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15,
         c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15,
-        led,
+        led_red,led_green,led_blue,i2c_scl,i2c_sda,eeprom_scl,eeprom_sda,
+        spi_cs,spi_sclk,spi_miso,spi_mosi,uart_tx,uart_rx,
 /// \cond INTERNAL    
         SIZE_THIS_IS_NOT_A_PIN
 /// \endcond   
@@ -119,7 +121,21 @@ namespace stm32f103c8 {
                 {2, 14},  // c14
                 {2, 15},  // c15
 
-                {2, 13}   // led
+                {2, 14},   // led_red
+                {2, 15},   // led_green
+                {2, 13},   // led_blue
+                {1, 8},   // i2c_scl
+                {1, 9},   // i2c_sda
+                {1, 10},   // eeprom_scl
+                {1, 11},   // eeprom_sda
+                {0, 4},   // spi_cs
+                {0, 5},   // spi_sclk
+                {0, 6},   // spi_miso
+                {0, 7},   // spi_mosi
+                {0, 9},   // uart_tx
+                {0, 10}   // uart_rx
+
+
 
         };
 
@@ -430,23 +446,23 @@ namespace stm32f103c8 {
         static bool init_done = false;
         if (!init_done) {
 
-            // switch to the 72 MHz crystal/PLL clock, from stm32x.cpp,
+            // switch to the 64 MHz crystal/PLL clock
             // some values taken from
             // https://github.com/rogerclarkmelbourne/STM32duino-bootloader
 
-            // Flash 2 wait state
+            // Flash 2 wait state. This is necessary for clockspeeds higher than 48MHz.
             FLASH->ACR &= (uint32_t) ((uint32_t) ~FLASH_ACR_LATENCY);
             FLASH->ACR |= (uint32_t) FLASH_ACR_LATENCY_2;
 
             // Enable Prefetch Buffer
             FLASH->ACR |= FLASH_ACR_PRFTBE;
 
-            // enable HSE and wait for it
+            // enable HSE and wait for it. The HSE runs at 16MHz.
             RCC->CR |= RCC_CR_HSEON;
             while ((RCC->CR & RCC_CR_HSERDY) == 0) {}
 
 
-            //  PLL configuration: PLLCLK = HSE * 9 = 72 MHz
+            //  PLL configuration: We set the pll to use the HSE and multiply it by 4. The pllclk now runs at 64MHz.
             RCC->CFGR &= (uint32_t) ((uint32_t) ~(
                     RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMULL));
             RCC->CFGR |= (uint32_t) (RCC_CFGR_PLLSRC | RCC_CFGR_PLLMULL4);
@@ -455,27 +471,27 @@ namespace stm32f103c8 {
             RCC->CR |= RCC_CR_PLLON;
             while ((RCC->CR & RCC_CR_PLLRDY) == 0) {}
 
-            // HCLK = SYSCLK
+            // We set the predivider of the pll to a division of 1.
             RCC->CFGR |= (uint32_t) RCC_CFGR_HPRE_DIV1;
 
-            // PCLK2 = HCLK
+            // The APB1 prescaler is set for a division of 1. This means that it runs at 64MHz.
             RCC->CFGR |= (uint32_t) RCC_CFGR_PPRE2_DIV1;
 
-            // PCLK1 = HCLK / 2
+            // The APB2 prescaler is set for a division of 2. This means that it runs at 32MHz.
             RCC->CFGR |= (uint32_t) RCC_CFGR_PPRE1_DIV2;
 
-            // Select PLL as system clock source
+            // Select PLL as system clock source.
             RCC->CFGR &= (uint32_t) ((uint32_t) ~(RCC_CFGR_SW));
             RCC->CFGR |= (uint32_t) RCC_CFGR_SW_PLL;
 
-            // Wait till PLL is used as system clock source
+            // Wait till PLL is used as system clock source. The system clock source will now run at 64MHz.
             while ((RCC->CFGR & (uint32_t) RCC_CFGR_SWS) != (uint32_t) 0x08) {}
 
             // start the systick timer
             SysTick->CTRL = 0;         // stop the timer
             SysTick->LOAD = 0xFFFFFF;  // use its as a 24-bit timer
             SysTick->VAL = 0;         // clear the timer
-            SysTick->CTRL = 5;         // start the timer, 1:1
+            SysTick->CTRL = 5;         // start the timer without any division by setting it to the external source.
 
             init_done = true;
         }
@@ -510,7 +526,16 @@ namespace stm32f103c8 {
 
 #ifdef _HWLIB_ONCE
 
-// Uart * hw_uart = UART;
+    // If hwlib gets to cpp20 minimum make this consteval.
+    constexpr uint32_t calculateBoutRate(long long  bout) {
+        long long  fck = 64000000; // PCLK2 is getting 64 MHz
+        fck *= 100; //doing fck x100 so we don't get floats.
+        long long  usartdiv = (fck/bout)/16;
+        unsigned int mantissa = std::round(usartdiv/100);
+        unsigned int devider = std::round(((usartdiv-(mantissa*100))*16)/100);
+        uint32_t baudrateReg = mantissa<<4u | devider;
+        return baudrateReg;
+    }
 
     void uart_init() {
         static bool init_done = false;
@@ -518,6 +543,7 @@ namespace stm32f103c8 {
             return;
         }
         init_done = true;
+
 
         RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;      // enable GPIOA clock
         RCC->APB2ENR |= RCC_APB2ENR_USART1EN;    // enable USART1 clock
@@ -528,9 +554,9 @@ namespace stm32f103c8 {
         GPIOA->CRH |= GPIO_CRH_MODE9_1 | GPIO_CRH_MODE9_0;  // 0b11 50MHz output
         GPIOA->CRH |= GPIO_CRH_CNF9_1;    // PA9: output @ 50MHz - Alt-function Push-pull
         GPIOA->CRH |= GPIO_CRH_CNF10_0;   // PA10 RX - Mode = 0b00 (input) - CNF = 0b01 (input floating)
-        USART1->BRR = 5 | (208 << 4);
+        USART1->BRR = calculateBoutRate(HWLIB_BAUDRATE);
         // configure USART1 registers
-        USART1->CR1 = USART_CR1_TE | USART_CR1_UE;
+        USART1->CR1 = USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
 
     }
 
@@ -551,7 +577,7 @@ namespace stm32f103c8 {
     void uart_putc(char c) {
         uart_init();
         while (!(USART1->SR & USART_SR_TXE_Msk)) {
-            __NOP();
+            hwlib::background::do_background_work();
         }
         USART1->DR = c;
     }
@@ -668,4 +694,4 @@ char HWLIB_WEAK uart_getc( ){
 
 }; //namespace hwlib   
 
-#endif // #ifdef HWLIB_STM32F103C8_H
+#endif // #ifdef HWLIB_TERMITE_H
