@@ -101,6 +101,15 @@ namespace stm32f1xx {
                RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
                AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_1;
             }
+            
+            // b04 = NJTRST
+            if(( port_number == 1 ) && ( pin_number == 04 )){
+               // https://electronics.stackexchange.com/questions/318115/stm32f103-how-to-use-pb4-as-normal-gpio-njtrst-remap-not-working
+               //MODIFY_REG(AFIO->MAPR, AFIO_MAPR_SWJ_CFG, AFIO_MAPR_SWJ_CFG_NOJNTRST)
+               
+               RCC->APB2ENR |=1;             // Enable AFIO clock
+               AFIO->MAPR |= (1<<26);
+            }   
         }
 
         bool base_read() {
