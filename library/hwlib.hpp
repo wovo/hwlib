@@ -52,6 +52,12 @@
    #include HWLIB_INCLUDE( targets/hwlib-arduino-due.hpp )
 #endif
 
+/// - HWLIB_TARGET_stm32f103c8 
+#ifdef HWLIB_TARGET_stm32f108c8
+   #define HWLIB_TARGET
+   #include HWLIB_INCLUDE( targets/hwlib-stm32f103c8.hpp )
+#endif
+
 /// - HWLIB_TARGET_blue_pill : Blue Pill board (stm32f103c8 chip)
 #ifdef HWLIB_TARGET_blue_pill
    #define HWLIB_TARGET

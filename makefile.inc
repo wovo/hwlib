@@ -92,9 +92,14 @@ HEADERS           += targets/hwlib-atmega328.hpp
 HEADERS           += targets/hwlib-arduino-uno.hpp
 HEADERS           += targets/hwlib-my-first-dev-board.hpp
 HEADERS           += targets/hwlib-arduino-due.hpp
-HEADERS           += targets/hwlib-blue-pill.hpp
+
+HEADERS           += targets/hwlib-stm32f1xx.hpp
 HEADERS           += targets/hwlib-stm32f103c8.hpp
+HEADERS           += targets/hwlib-blue-pill.hpp
+HEADERS           += targets/hwlib-termite.hpp
+
 #HEADERS           += targets/hwlib-stm32f030x6.hpp
+
 HEADERS           += targets/hwlib-db103.hpp
 HEADERS           += targets/hwlib-native-windows.hpp
 HEADERS           += targets/hwlib-native-linux.hpp
