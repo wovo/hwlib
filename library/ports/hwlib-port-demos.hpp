@@ -109,7 +109,7 @@ private:
    uint_fast16_t us;
    
    uint_fast64_t next;
-   int_fast8_t position = 0;
+   int_fast8_t position = -1;
    int_fast8_t direction = 1;
    
    void work() override {
