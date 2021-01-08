@@ -22,7 +22,8 @@ enum class target_boards {
    arduino_uno,
    my_first_dev_board,
    arduino_due,
-   blue_pill
+   blue_pill,
+   termite
 };
 
 enum class target_chips {

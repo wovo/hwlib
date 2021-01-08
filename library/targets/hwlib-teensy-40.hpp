@@ -273,9 +273,13 @@ namespace teensy_40
                 return 0xFFFFFFFF;
             }
             ADC1->HC[0] = myCorePin.ad_channel; // write channel in hc to start reading the pin and start the conversion process
+<<<<<<< HEAD:library/targets/hwlib-teensy_40.hpp
             //while(ADC1->HS & 0b1){} //wait till the conversion complete (ADACT p. 3368)
             while((ADC1->HS & 0b1) == 0){}  //wait till the coco conversion bit is complete (p.3359 )
             //hwlib::wait_ms(50);
+=======
+            while((ADC1->HS & 0b1) == 0 ){} //wait till the conversion complete (ADACT p. 3368)
+>>>>>>> ed53470805443a48d42aa89b0146c2b5b1de484a:library/targets/hwlib-teensy-40.hpp
             return (adc_value_type)ADC1->R[0]; //read from the ADC1 -> R0 register
         }
 

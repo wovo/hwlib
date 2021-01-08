@@ -37,7 +37,7 @@
 /// - HWLIB_TARGET_teensy_40 : Teensy 4.0 (MIMXRT1062 chip)
 #ifdef HWLIB_TARGET_teensy_40
    #define HWLIB_TARGET 
-   #include HWLIB_INCLUDE( targets/hwlib-teensy_40.hpp)
+   #include HWLIB_INCLUDE( targets/hwlib-teensy-40.hpp)
 #endif
 
 /// - HWLIB_TARGET_my_first_devboard : board with Arduino Nano (ATMega328P chip)
@@ -52,10 +52,22 @@
    #include HWLIB_INCLUDE( targets/hwlib-arduino-due.hpp )
 #endif
 
+/// - HWLIB_TARGET_stm32f103c8 
+#ifdef HWLIB_TARGET_stm32f108c8
+   #define HWLIB_TARGET
+   #include HWLIB_INCLUDE( targets/hwlib-stm32f103c8.hpp )
+#endif
+
 /// - HWLIB_TARGET_blue_pill : Blue Pill board (stm32f103c8 chip)
 #ifdef HWLIB_TARGET_blue_pill
    #define HWLIB_TARGET
    #include HWLIB_INCLUDE( targets/hwlib-blue-pill.hpp )
+#endif
+
+/// - HWLIB_TARGET_blue_pill : Termite board (https://github.com/CvRXX/termite) (STM32F103CBT6 chip)
+#ifdef HWLIB_TARGET_termite
+#define HWLIB_TARGET
+#include HWLIB_INCLUDE( targets/hwlib-termite.hpp )
 #endif
 
 /// - HWLIB_TARGET_stm32f103c8 : stm32f103c8 chip

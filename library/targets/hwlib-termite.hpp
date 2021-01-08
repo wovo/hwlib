@@ -1,6 +1,6 @@
 // ==========================================================================
 //
-// File      : hwlib-stm32f103c8.hpp
+// File      : hwlib-termite.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
 // Copyright : wouter@voti.nl 2017
 //
@@ -13,19 +13,20 @@
 // this file contains Doxygen lines
 /// @file
 
-#ifndef HWLIB_BLUE_PILL_H
-#define HWLIB_BLUE_PILL_H
+#ifndef HWLIB_TERMITE_H
+#define HWLIB_TERMITE_H
 
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
 namespace stm32f1xx {
-   
+
 /// GPIO pin names
    enum class pins {
       a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15,
       b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15,
       c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15,
-      led,
+      led_red,led_green,led_blue,i2c_scl,i2c_sda,eeprom_scl,eeprom_sda,
+      spi_cs,spi_sclk,spi_miso,spi_mosi,uart_tx,uart_rx,
 /// \cond INTERNAL    
       SIZE_THIS_IS_NOT_A_PIN
 /// \endcond   
@@ -33,11 +34,11 @@ namespace stm32f1xx {
 
 /// \cond INTERNAL    
    struct pin_info_type {
-      uint8_t port;
-      uint8_t pin;
+       uint8_t port;
+       uint8_t pin;
    };
-
-    const HWLIB_WEAK pin_info_type &pin_info(pins name) {
+   
+   const HWLIB_WEAK pin_info_type &pin_info( pins name ) {
 
       static const pin_info_type pin_info_array[ (int) pins::SIZE_THIS_IS_NOT_A_PIN ] = {
          { 0,  0 },  // a0
@@ -66,7 +67,6 @@ namespace stm32f1xx {
          { 1,  5 },  // b5
          { 1,  6 },  // b6
          { 1,  7 },  // b7
- 
          { 1,  8 },  // b8
          { 1,  9 },  // b9
          { 1, 10 },  // b10
@@ -94,10 +94,21 @@ namespace stm32f1xx {
          { 2, 14 },  // c14
          { 2, 15 },  // c15
 
-         { 2, 13 }   // led
-
+         { 2, 14 },  // led_red
+         { 2, 15 },  // led_green
+         { 2, 13 },  // led_blue
+         { 1,  8 },  // i2c_scl
+         { 1,  9 },  // i2c_sda
+         { 1, 10 },  // eeprom_scl
+         { 1, 11 },  // eeprom_sda
+         { 0,  4 },  // spi_cs
+         { 0,  5 },  // spi_sclk
+         { 0,  6 },  // spi_miso
+         { 0,  7 },  // spi_mosi
+         { 0,  9 },  // uart_tx
+         { 0, 10 }   // uart_rx
       };
-
+       
       uint_fast8_t n = static_cast< uint_fast8_t>( name );
       if (n >= static_cast< uint_fast8_t>( pins::SIZE_THIS_IS_NOT_A_PIN )) {
           HWLIB_PANIC_WITH_LOCATION;
@@ -105,21 +116,20 @@ namespace stm32f1xx {
       return pin_info_array[ n ];
 
    }
-    
-/// \endcond      
+/// \endcond   
 
-}; // end namespace stm32f1xx 
+}; // namespace termite
 
 #include HWLIB_INCLUDE( hwlib-stm32f1xx.hpp )
 
-namespace stm32f103c8 = ::stm32f1xx;   
+namespace termite = ::stm32f1xx;   
 
 namespace hwlib {
 
-   namespace target = ::stm32f103c8;
+   namespace target = ::termite;
    const auto target_chip = target_chips::stm32f103c8;
-   const auto target_board = target_boards::blue_pill;
+   const auto target_board = target_boards::termite;
     
 };    
 
-#endif // #ifdef HWLIB_BLUE_PILL_H
+#endif // #ifdef HWLIB_TERMITE_H
