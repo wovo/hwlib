@@ -87,13 +87,20 @@ namespace stm32f1xx {
             config_word |= conf << config_offset;
         }
 
-        pin_base(uint32_t port_number, uint32_t pin_number, uint32_t conf) :
-                port{port_registers(port_number)},
-                config_word{(pin_number < 8) ? port.CRL : port.CRH},
-                pin{pin_number},
-                config_offset{4 * (pin_number % 8)},
-                mask{0x1U << pin_number} {
-            config(conf);
+        pin_base( uint32_t port_number, uint32_t pin_number, uint32_t conf ):
+                port{ port_registers( port_number ) },
+                config_word{ ( pin_number < 8 ) ? port.CRL : port.CRH },
+                pin{ pin_number },
+                config_offset{ 4 * (pin_number % 8) },
+                mask{ 0x1U << pin_number } 
+        {
+            config( conf );
+            
+            // a15 = JTDI pin
+            if(( port_number == 0 ) && ( pin_number == 15 )){
+               GPIOA->CRH = GPIOA->CRH & ~ ( 0b1111 << 2 ); 
+               // GPIO_CRL_MODE15 | GPIO_CRL_CNF6_1; // Set Pin A15 to default function (GPIO)
+            }
         }
 
         bool base_read() {
@@ -259,7 +266,7 @@ namespace stm32f1xx {
             RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;  // Enable GPIO port a
             RCC->APB1ENR |= RCC_APB1ENR_TIM3EN; // Enable Timer 3
 
-
+            // this resets the other pins to theirv default!!!
             GPIOA->CRL = GPIO_CRL_MODE6 | GPIO_CRL_CNF6_1; // Set Pin A6 to alternate function Push-Pull
 
             TIM3->ARR = 221; // Auto reload value
@@ -519,7 +526,7 @@ namespace hwlib {
 
 #else
 
-    void HWLIB_WEAK uart_putc( char c ){
+   void HWLIB_WEAK uart_putc( char c ){
    static target::pin_out pin( 0, 9 );
    uart_putc_bit_banged_pin( c, pin );
 }
@@ -566,7 +573,6 @@ char HWLIB_WEAK uart_getc( ){
             --n;
         }
     }
-
 
     void HWLIB_WEAK wait_ns(int_fast32_t n) {
         wait_us((n + 999) / 1000);
