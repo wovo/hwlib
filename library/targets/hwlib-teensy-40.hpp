@@ -273,7 +273,7 @@ namespace teensy_40
                 return 0xFFFFFFFF;
             }
             ADC1->HC[0] = myCorePin.ad_channel; // write channel in hc to start reading the pin and start the conversion process
-            while(ADC1->HS & 0b1){} //wait till the conversion complete (ADACT p. 3368)
+            while((ADC1->HS & 0b1) == 0 ){} //wait till the conversion complete (ADACT p. 3368)
             return (adc_value_type)ADC1->R[0]; //read from the ADC1 -> R0 register
         }
 
