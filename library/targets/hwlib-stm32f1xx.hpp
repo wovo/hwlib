@@ -98,8 +98,8 @@ namespace stm32f1xx {
             
             // a15 = JTDI pin
             if(( port_number == 0 ) && ( pin_number == 15 )){
-               GPIOA->CRH = GPIOA->CRH & ~ ( 0b1111 << 2 ); 
-               // GPIO_CRL_MODE15 | GPIO_CRL_CNF6_1; // Set Pin A15 to default function (GPIO)
+               RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
+               AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_1;                    s
             }
         }
 
@@ -264,7 +264,7 @@ namespace stm32f1xx {
         /// create the 36kHz output
         a6_36kHz() {
             RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;  // Enable GPIO port a
-            RCC->APB1ENR |= RCC_APB1ENR_TIM3EN; // Enable Timer 3
+            RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;  // Enable Timer 3
 
             // this resets the other pins to theirv default!!!
             GPIOA->CRL = GPIO_CRL_MODE6 | GPIO_CRL_CNF6_1; // Set Pin A6 to alternate function Push-Pull
