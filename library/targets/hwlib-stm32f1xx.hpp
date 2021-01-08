@@ -99,7 +99,7 @@ namespace stm32f1xx {
             // a15 = JTDI pin
             if(( port_number == 0 ) && ( pin_number == 15 )){
                RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
-               AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_1;                    s
+               AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_1;
             }
         }
 
