@@ -16,9 +16,6 @@
 #ifndef HWLIB_TERMITE_H
 #define HWLIB_TERMITE_H
 
-#ifndef HWLIB_BLUE_PILL_H
-#define HWLIB_BLUE_PILL_H
-
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
 namespace stm32f1xx {
@@ -41,7 +38,7 @@ namespace stm32f1xx {
        uint8_t pin;
    };
    
-   const HWLIB_WEAK pin_info_type &pin_info(pins name) {
+   const HWLIB_WEAK pin_info_type &pin_info( pins name ) {
 
       static const pin_info_type pin_info_array[ (int) pins::SIZE_THIS_IS_NOT_A_PIN ] = {
          { 0,  0 },  // a0
@@ -97,7 +94,6 @@ namespace stm32f1xx {
          { 2, 14 },  // c14
          { 2, 15 },  // c15
 
-         { 2, 13 }   // led
          { 2, 14 },  // led_red
          { 2, 15 },  // led_green
          { 2, 13 },  // led_blue
@@ -117,7 +113,7 @@ namespace stm32f1xx {
       if (n >= static_cast< uint_fast8_t>( pins::SIZE_THIS_IS_NOT_A_PIN )) {
           HWLIB_PANIC_WITH_LOCATION;
       }
-      return pin_info_array[ n ]
+      return pin_info_array[ n ];
 
    }
 /// \endcond   
@@ -126,7 +122,7 @@ namespace stm32f1xx {
 
 #include HWLIB_INCLUDE( hwlib-stm32f1xx.hpp )
 
-namespace stm32f103c8 = ::stm32f1xx;   
+namespace termite = ::stm32f1xx;   
 
 namespace hwlib {
 
