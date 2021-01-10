@@ -88,6 +88,8 @@ HEADERS           += peripherals/hwlib-glcd-st7789.hpp
 HEADERS           += peripherals/hwlib-matrix-keypad.hpp
 HEADERS           += peripherals/hwlib-servo-background.hpp
 
+HEADERS           += shields/hwlib-arduino-multifunction-shield.hpp
+
 HEADERS           += targets/hwlib-atmega328.hpp
 HEADERS           += targets/hwlib-arduino-uno.hpp
 HEADERS           += targets/hwlib-my-first-dev-board.hpp

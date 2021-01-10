@@ -13,6 +13,7 @@ graphics        : graphic window stuff
 peripherals     : peripheral chips 
 pins            : GPIO pins
 ports           : ports (bundels of pins)
+shields         : add-ons to targets
 targets         : target micro-controllers and boards
 
 hwlib.cpp       : must be compiled and linked along
