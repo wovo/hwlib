@@ -23,13 +23,15 @@ enum class target_boards {
    my_first_dev_board,
    arduino_due,
    blue_pill,
-   termite
+   termite,
+   longan_nano
 };
 
 enum class target_chips {
    atmega328p,
    atsam3x8e,
-   stm32f103c8
+   stm32f103c8,
+   gd32v103c8
 };
    
 }; // namespace hwlib   

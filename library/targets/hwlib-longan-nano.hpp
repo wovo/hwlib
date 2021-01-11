@@ -16,4 +16,10 @@
 
 #include HWLIB_INCLUDE( hwlib-gd32v103c8.hpp ) 
 
+namespace hwlib {
+
+    const auto target_board = target_boards::longan_nano;
+    
+};   
+
 #endif // #ifdef HWLIB_LONGAN_NANO_H
