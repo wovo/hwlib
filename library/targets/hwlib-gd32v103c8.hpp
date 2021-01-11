@@ -108,8 +108,8 @@ namespace gd32v103c8 {
 
 namespace hwlib {
 
-    namespace target = ::stm32f103c8;
-    const auto target_chip = target_chips::stm32f103c8;
+    namespace target = ::gd32v103c8;
+    const auto target_chip = target_chips::gd32v103c8;
     
 };    
 
