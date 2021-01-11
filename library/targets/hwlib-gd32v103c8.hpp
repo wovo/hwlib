@@ -1,8 +1,8 @@
 // ==========================================================================
 //
-// File      : hwlib-stm32f103c8.hpp
+// File      : hwlib-gd32v103c8.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2021
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -11,12 +11,12 @@
 // ==========================================================================
 
 
-#ifndef HWLIB_STM32F103C8_H
-#define HWLIB_STM32F103C8_H
+#ifndef HWLIB_GD32V103C8_H
+#define HWLIB_GD32V103C8_H
 
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
-namespace stm32f1xx {
+namespace gd32v103c8 {
    
 /// GPIO pin names
     enum class pins {
@@ -104,11 +104,7 @@ namespace stm32f1xx {
     
 /// \endcond      
 
-}; // end namespace stm32f1xx 
-
-#include HWLIB_INCLUDE( hwlib-stm32f1xx.hpp )
-
-namespace stm32f103c8 = ::stm32f1xx;   
+}; // end namespace gd32v103c8  
 
 namespace hwlib {
 
@@ -117,4 +113,4 @@ namespace hwlib {
     
 };    
 
-#endif // #ifdef HWLIB_STM32F103C8_H
+#endif // #ifdef HWLIB_GD32V103C8_H
