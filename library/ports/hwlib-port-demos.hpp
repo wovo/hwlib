@@ -103,37 +103,52 @@ void HWLIB_NORETURN snake( port_oc & port, uint_fast16_t ms ){
 //
 // ===========================================================================
 
-class kitt_background : public background {
+class kitt_background : public periodic {
 private:
    port_out & port;
-   uint_fast16_t us;
-   
-   uint_fast64_t next;
    int_fast8_t position = -1;
    int_fast8_t direction = 1;
    
    void work() override {
-      auto now = now_us();       
-      if( now > next ){
-          next += us;
-          position += direction;
-          if( direction > 0 ){
-             if( position + 1 == (int_fast8_t)port.number_of_pins() ){
-                direction = -1; 
-             }
-          } else {
-             if( position == 0 ){
-                direction = +1; 
-             }
-          }
-          port.write( 0b01 << position );
-          port.flush();
+      position += direction;
+      if( direction > 0 ){
+         if( position + 1 == (int_fast8_t)port.number_of_pins() ){
+            direction = -1; 
+         }
+      } else {
+         if( position == 0 ){
+            direction = +1; 
+         }
       }
+      port.write( 0b01 << position );
+      port.flush();
    }
    
 public:   
    kitt_background( port_out & port, uint_fast16_t ms = 100 ):
-      port( port ), us( ms * 1000 ), next( now_us() )
+      periodic( ms * 1000 ), port( port )
+   {}
+     
+};
+
+
+class walk_background : public periodic {
+private:
+   port_out & port;
+   int_fast8_t position = -1;
+   
+   void work() override {
+      position++;
+      if( position == (int_fast8_t)port.number_of_pins() ){
+         position = 0;
+      }
+      port.write( 0b01 << position );
+      port.flush();
+   }
+   
+public:   
+   walk_background( port_out & port, uint_fast16_t ms = 100 ):
+      periodic( ms * 1000 ), port( port )
    {}
      
 };
