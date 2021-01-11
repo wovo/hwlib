@@ -95,6 +95,9 @@ HEADERS           += targets/hwlib-arduino-uno.hpp
 HEADERS           += targets/hwlib-my-first-dev-board.hpp
 HEADERS           += targets/hwlib-arduino-due.hpp
 
+HEADERS           += targets/hwlib-gd32v103c8.hpp
+HEADERS           += targets/hwlib-longan-nano.hpp
+
 HEADERS           += targets/hwlib-stm32f1xx.hpp
 HEADERS           += targets/hwlib-stm32f103c8.hpp
 HEADERS           += targets/hwlib-blue-pill.hpp
