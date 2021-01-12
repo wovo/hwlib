@@ -56,5 +56,4 @@ clean:
 	$(REMOVE) -rf html
 	cd demo && $(MAKE) clean   
 	cd test && $(MAKE) clean   
-	@echo "**** cleanup completed succesfully"  
-   			
+	@echo "**** cleanup completed succesfully"  		

@@ -394,6 +394,15 @@ namespace teensy_40
     // NOTICE! To use UART on the Teensy 4.0, you need to use pin 0 (rx) and pin 1 (tx) in combination with an TTL to USB hardware piece. 
     // Teensy does not have this on board (as fas as I know), and so it is not implemented to use the standard USB. Other TX or RX pins will not work.
     // I used a USB to TTL converter to read out the UART pins. Works good.
+    void binCout(uint32_t byte)
+{
+	for (int i = 31; i >= 0; i--)
+	{
+		auto b = byte >> i;
+		b &= 1;
+		hwlib::cout << b;
+	}
+}
     void uart_init()
     {
         static bool init_done = false;
@@ -410,6 +419,8 @@ namespace teensy_40
         // 115200 gives to high offset because I was not able to find out which clock UART runs on (should be 480 Mhz, but this didn't work in the formula, see TODO below)
         uint32_t baudrate = 38400;
         uint8_t muxCtlConfigmask = 0b010; // uart config number for the mux ctl register
+        const uint32_t txConfigMask = ((0b0 << 16) /*HYS*/| (0b00 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b11 << 6) /*SPEED*/ | (0b011 << 3) /*DSE*/ | 0b1 /*SRE*/ );
+        const uint32_t rxConfigMask = ((0b1 << 16) /*HYS*/| (0b11 << 14) /*PUS*/ | (0b1<<13) /*PUE*/ | (0b1 << 12) /*PKE*/ | (0b0 << 11) /*ODE*/ |  (0b10 << 6) /*SPEED*/ | (0b110 << 3) /*DSE*/ | 0b0 /*SRE*/ );
         //======================================================
         // setting all the CCM to UART clock gates on
         CCM->CCGR3 &= ~(0b11 << 6);
@@ -431,23 +442,45 @@ namespace teensy_40
         // setting the iomux to uart
         mimxrt1062::writeIOMUXMUXCTL(rx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
         mimxrt1062::writeIOMUXMUXCTL(tx.IOMUXC_MUX_control_register_array_index,muxCtlConfigmask);
+        mimxrt1062::writeIOMUXPADCTL(tx.IOMUXC_MUX_control_register_array_index,txConfigMask);
+        mimxrt1062::writeIOMUXPADCTL(rx.IOMUXC_MUX_control_register_array_index,rxConfigMask);
         //======================================================
         // setting everything else from UART, note that only consecutive rx and tx pins can be used. So rx1 and tx1 and rx2 and tx2 not rx1 and tx3.
-        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> CTRL &= ~(0b1 << 18); // disable rx
-        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> CTRL &= ~(0b1 << 19); // disable tx
+        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> CTRL &= ~(0b11 << 18); // disable rx and tx
+        hwlib::wait_ms(1);
+        // hwlib::cout << hwlib::bin << reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> CTRL << "\n\n";
         // baudrate = (PLL3 clock*1000000/6) / BAUD[0:12] * BAUD[24:28]+1
         // Wasn't able to find out the right clockspeed for this formula (should be 480 according to reference manual?) found out that a SBR of 130 = 9600 Baud, so deduced to this formula. magic. Seems to have something to do with the PLL bypass, but can't figure it out.
         // TODO: Find the right settings to crank up the 20'000'000 number to 480'000'000 (or whatever else). So you know for sure how many Mhz is send to the UART clock, so the formula works better and higher baudrates can be found. (this 20 Mhz is backwards calculated because i knew a SBR value of 130 gave me 9600 baud)
         uint32_t SBR = 20'000'000/(16*baudrate);
-
-        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD &= ~(0b11111 << 23); // clear OSR
-        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD |= 0b01111 << 23; // set OSR to 15
-        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
-        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> BAUD |= SBR; // set it to the right baudrate (130 (129.xxx) = 9600)
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> STAT |= (0b1 << 28); // invert the rx pin
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD &= ~(0b11111 << 24); // clear OSR
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD |= (0b01110 << 24); // set OSR to 15
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD |= SBR; // set it to the right baudrate (130 (129.xxx) = 9600)
+        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> CTRL |= (0b11 << 18); // set the uart recieve and transmit enable
+        hwlib::wait_ms(1);
+        hwlib::cout << "PARAM: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> PARAM);
+        hwlib::cout << "\nGLOBAL: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> GLOBAL);
+        hwlib::cout << "\nBAUD: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> BAUD);
+        hwlib::cout << "\nSTAT: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> STAT);
+        hwlib::cout << "\nCTRL: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> CTRL);
+        hwlib::cout << "\nDATA: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> DATA);
+        hwlib::cout << "\nMATCH: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> MATCH);
+        hwlib::cout << "\nMODIR: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> MODIR);
+        hwlib::cout << "\nFIFO: ";
+        binCout(reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> FIFO);
+        hwlib::cout << "\n";
         
-        reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> CTRL |= (0b1 << 18); // set the uart rx pin to recieve enable
-        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> CTRL |= (0b1 << 19); // set tx pin to transmit enable
-    
+       
     }
 
     inline void dont_optimize()
@@ -464,29 +497,43 @@ namespace teensy_40
     }
 
     bool uart_char_available(){
-    uart_init();
-    const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
-    return ( reinterpret_cast<LPUART_Type*>(rx.serial_base_adress) -> STAT & (0b1 << 21)) != 0; // return if the STAT[RDRF] is full (0 is empty, 1 is full)
+        uart_init();
+        const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1
+        uint32_t readdata = reinterpret_cast<LPUART_Type*>(rx.serial_base_adress)->STAT;
+         if (readdata & (0b1 << 24))
+        {
+            hwlib::cout << "Reciever active\n";
+        }
+        if (readdata & (0b1 << 19))
+        {
+            hwlib::cout << "FIFO overflow error\n";
+        }
+        if (readdata & (0b1 << 17))
+        {
+            hwlib::cout << "framing error\n";
+        }
+        if (readdata & (0b1 << 16))
+        {
+            hwlib::cout << "parity error\n";
+        }
+        
+        return (readdata & (0b1 << 21)); // return the STAT[RDRF] value
     }
 
     char uart_getc(){
-    // uart_init() is not needed because uart_char_available does that
-    while( ! uart_char_available() )
-    { 
-        //dont_optimize();
-        hwlib::background::do_background_work();	
-    }
-    const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1	
-    return reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> DATA; 
+        const mimxrt1062::core_pin & rx = mimxrt1062::core_pin_struct_array[0]; // teensy 4.0 rx1
+        while( !uart_char_available()){ 
+            hwlib::background::do_background_work();	
+        }
+        return reinterpret_cast<LPUART_Type *>(rx.serial_base_adress) -> DATA; 
     }
 
     void uart_putc( char c )
     {
         uart_init();	
         const mimxrt1062::core_pin & tx = mimxrt1062::core_pin_struct_array[1]; // teensy 4.0 tx1
-        while((reinterpret_cast<LPUART_Type*>(tx.serial_base_adress) -> STAT & (0b1 << 22)) == 0)
+        while(!(reinterpret_cast<LPUART_Type*>(tx.serial_base_adress) -> STAT & (0b1 << 22)))
         {
-            //dont_optimize();
             hwlib::background::do_background_work();	
         }
         reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> DATA |= c;
