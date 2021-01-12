@@ -21,7 +21,7 @@
 
 // the STM header files use 'register' in the pre-C++17 sense
 #define register
-#include "stm32v103.h"
+#include "stm32f103xb.h"
 #undef register
 
 /// \brief

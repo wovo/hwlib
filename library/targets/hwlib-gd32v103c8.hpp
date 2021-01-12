@@ -18,7 +18,7 @@
 
 // the STM header files use 'register' in the pre-C++17 sense
 #define register
-#include "gd32vf103xb.h"
+#include "gd32v103.h" 
 #undef register
 
 namespace gd32v103c8 {
