@@ -16,6 +16,11 @@
 
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
+// the STM header files use 'register' in the pre-C++17 sense
+#define register
+#include "gd32vf103xb.h"
+#undef register
+
 namespace gd32v103c8 {
    
 /// GPIO pin names
