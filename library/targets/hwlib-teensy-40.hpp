@@ -465,7 +465,7 @@ namespace teensy_40
         // Wasn't able to find out the right clockspeed for this formula (should be 480 according to reference manual?) found out that a SBR of 130 = 9600 Baud, so deduced to this formula. magic. Seems to have something to do with the PLL bypass, but can't figure it out.
         // TODO: Find the right settings to crank up the 20'000'000 number to 480'000'000 (or whatever else). So you know for sure how many Mhz is send to the UART clock, so the formula works better and higher baudrates can be found. (this 20 Mhz is backwards calculated because i knew a SBR value of 130 gave me 9600 baud)
         uint32_t SBR = 20'000'000/(16*baudrate);
-        //reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> STAT |= (0b1 << 28); // invert the rx pin WHY DOES THIS DO SOMEHTING? BUT NOT THE OTHER WAY AROUND, ASK WOUTER
+        reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> STAT |= (0b1 << 27); // invert the rx pin WHY DOES THIS DO SOMEHTING? BUT NOT THE OTHER WAY AROUND, ASK WOUTER
         reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD &= ~(0b11111 << 24); // clear OSR
         reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD |= (0b01110 << 24); // set OSR to 15
         reinterpret_cast<LPUART_Type *>(tx.serial_base_adress) -> BAUD &= ~(0b1111111111111); // clear the SBR within BAUD register
