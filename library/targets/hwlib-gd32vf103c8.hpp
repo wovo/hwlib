@@ -11,8 +11,8 @@
 // ==========================================================================
 
 
-#ifndef HWLIB_GD32V103C8_H
-#define HWLIB_GD32V103C8_H
+#ifndef HWLIB_GD32VF103C8_H
+#define HWLIB_GD32VF103C8_H
 
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
@@ -21,7 +21,7 @@
 #include "gd32v103.h" 
 #undef register
 
-namespace gd32v103c8 {
+namespace gd32v103xx {
    
 /// GPIO pin names
     enum class pins {
@@ -109,13 +109,17 @@ namespace gd32v103c8 {
     
 /// \endcond      
 
-}; // end namespace gd32v103c8  
+}; // end namespace gd32vf103xx 
+
+#include HWLIB_INCLUDE( hwlib-gd32vf103xx.hpp )
+
+namespace gd32vf103c8 = ::gd32vf1xx;   
 
 namespace hwlib {
 
-    namespace target = ::gd32v103c8;
-    const auto target_chip = target_chips::gd32v103c8;
+    namespace target = ::gd32vf103c8;
+    const auto target_chip = target_chips::gd32vf103c8;
     
 };    
 
-#endif // #ifdef HWLIB_GD32V103C8_H
+#endif // #ifdef HWLIB_GD32VF103C8_H

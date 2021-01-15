@@ -1,8 +1,8 @@
 // ==========================================================================
 //
-// File      : hwlib-stm32f103c8.hpp
+// File      : hwlib-gd32v103c8.hpp
 // Part of   : C++ hwlib library for close-to-the-hardware OO programming
-// Copyright : wouter@voti.nl 2017
+// Copyright : wouter@voti.nl 2021
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -13,40 +13,24 @@
 // this file contains Doxygen lines
 /// @file
 
-#ifndef HWLIB_STM32F1xx_H
-#define HWLIB_STM32F1xx_H
+#ifndef HWLIB_GD32VF103XX_H
+#define HWLIB_GD32VF103XX_H
 
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
 // the STM header files use 'register' in the pre-C++17 sense
 //#define register
-#include "stm32f103xb.h"
+#include "gd32vf103.h" 
 //#undef register
 
-/// \brief
-/// hwlib HAL for the stm32f1xx chips
-/// 
-/// This namespace contains the hwlib implementation of the pins, timing
-/// and (software) UART output.
-///
-/// Initially, the chip runs from its HSI internal RC oscillator at 8 MHz. 
-/// The first wait call configures the chip to run at 72 MHz, 
-/// assuming an 8 MHz crystal.
-///
-/// The chip runs at 3.3 Volt and that is the level on its IO pins.
-///
-/// References:
-///    - <A HREF="http://www.st.com/content/ccc/resource/technical/document/reference_manual/59/b9/ba/7f/11/af/43/d5/CD00171190.pdf/files/CD00171190.pdf/jcr:content/translations/en.CD00171190.pdf">
-///       RM0008 STM32F1xxx reference manual</A> (pdf)
-///
-namespace stm32f1xx {
-
+namespace gd32vf103c8 {
+   
 // the 
 //   - enum class pins
 //   - struct pin_info_type
 //   - pin_info array 
 // must have been declared before this file is included
-
+   
 /// \cond INTERNAL 
     GPIO_TypeDef &__attribute__((weak)) port_registers(uint32_t port) {
 
@@ -498,108 +482,13 @@ namespace stm32f1xx {
 
 #endif
 
-}; // namespace stm32f1xx
+}; // end namespace gd32vf103c8  
 
 namespace hwlib {
 
-    void wait_ns(int_fast32_t n);
+    namespace target = ::gd32vf103c8;
+    const auto target_chip = target_chips::gd32vf103c8;
+    
+};    
 
-    void wait_us(int_fast32_t n);
-
-    void wait_ms(int_fast32_t n);
-
-    void wait_ns_busy(int_fast32_t n);
-
-    void wait_us_busy(int_fast32_t n);
-
-    void wait_ms_busy(int_fast32_t n);
-
-#define HWLIB_USE_HW_UART
-#ifdef HWLIB_USE_HW_UART
-
-    void HWLIB_WEAK uart_putc(char c) {
-        stm32f1xx::uart_putc(c);
-    }
-
-    bool HWLIB_WEAK uart_char_available() {
-        return stm32f1xx::uart_char_available();
-    }
-
-    char HWLIB_WEAK uart_getc() {
-        return stm32f1xx::uart_getc();
-    }
-
-#else
-
-   void HWLIB_WEAK uart_putc( char c ){
-   static target::pin_out pin( 0, 9 );
-   uart_putc_bit_banged_pin( c, pin );
-}
-
-bool HWLIB_WEAK uart_char_available(){
-   static target::pin_in pin( 0, 8 );
-   return ! pin.read();
-}
-
-char HWLIB_WEAK uart_getc( ){
-   static target::pin_in pin( 0, 8 );
-   return uart_getc_bit_banged_pin( pin );
-}
-
-#endif
-#ifdef _HWLIB_ONCE
-
-    uint64_t now_ticks() {
-        return stm32f1xx::now_ticks();
-    }
-
-    uint64_t ticks_per_us() {
-        return stm32f1xx::ticks_per_us();
-    }
-
-    uint64_t now_us() {
-        return now_ticks() / ticks_per_us();
-    }
-
-
-// Busy waits
-    void wait_ns_busy(int_fast32_t n) {
-        wait_us_busy((n + 999) / 1000);
-    }
-
-    void wait_us_busy(int_fast32_t n) {
-        auto end = now_us() + n;
-        while (now_us() < end) {}
-    }
-
-    void wait_ms_busy(int_fast32_t n) {
-        while (n > 0) {
-            wait_us_busy(1000);
-            --n;
-        }
-    }
-
-    void HWLIB_WEAK wait_ns(int_fast32_t n) {
-        wait_us((n + 999) / 1000);
-    }
-
-    void HWLIB_WEAK wait_us(int_fast32_t n) {
-        auto end = now_us() + n;
-        while (now_us() < end) {
-            background::do_background_work();
-        }
-    }
-
-    void HWLIB_WEAK wait_ms(int_fast32_t n) {
-        while (n > 0) {
-            wait_us(1000);
-            --n;
-        }
-    }
-
-
-#endif
-
-}; //namespace hwlib   
-
-#endif // #ifdef HWLIB_STM32F1xx_H
+#endif // #ifdef HWLIB_GD32VF103XX_H

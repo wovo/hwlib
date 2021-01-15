@@ -64,9 +64,9 @@
    #include HWLIB_INCLUDE( targets/hwlib-blue-pill.hpp )
 #endif
 
-#ifdef HWLIB_TARGET_gd32v103c8
+#ifdef HWLIB_TARGET_gd32vf103c8
    #define HWLIB_TARGET
-   #include HWLIB_INCLUDE( targets/hwlib-gd32v103c8.hpp )
+   #include HWLIB_INCLUDE( targets/hwlib-gd32vf103c8.hpp )
 #endif
 
 #ifdef HWLIB_TARGET_longan_nano

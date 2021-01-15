@@ -31,7 +31,7 @@ enum class target_chips {
    atmega328p,
    atsam3x8e,
    stm32f103c8,
-   gd32v103c8
+   gd32vf103c8
 };
    
 }; // namespace hwlib   

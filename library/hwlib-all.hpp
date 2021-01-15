@@ -30,6 +30,7 @@
 #include <cstddef>
 #include <type_traits>
 #include <numeric>
+#include <cmath>
 
 #include HWLIB_INCLUDE( core/hwlib-defines.hpp )
 #include HWLIB_INCLUDE( core/hwlib-targets.hpp )
