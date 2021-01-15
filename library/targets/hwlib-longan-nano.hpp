@@ -14,7 +14,7 @@
 #ifndef HWLIB_LONGAN_NANO_H
 #define HWLIB_LONGAN_NANO_H
 
-#include HWLIB_INCLUDE( hwlib-gd32v103c8.hpp ) 
+#include HWLIB_INCLUDE( hwlib-gd32vf103c8.hpp ) 
 
 namespace hwlib {
 
