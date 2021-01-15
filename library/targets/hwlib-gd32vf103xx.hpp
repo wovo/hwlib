@@ -16,14 +16,12 @@
 #ifndef HWLIB_GD32VF103XX_H
 #define HWLIB_GD32VF103XX_H
 
-#include HWLIB_INCLUDE(../hwlib-all.hpp)
-
 // the STM header files use 'register' in the pre-C++17 sense
 //#define register
 #include "gd32vf103.h" 
 //#undef register
 
-namespace gd32vf103c8 {
+namespace gd32vf103xx {
    
 // the 
 //   - enum class pins
@@ -78,7 +76,8 @@ namespace gd32vf103c8 {
                 mask{ 0x1U << pin_number } 
         {
             config( conf );
-            
+
+/*            
             // a15 = JTDI pin
             if(( port_number == 0 ) && ( pin_number == 15 )){
                RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
@@ -90,7 +89,9 @@ namespace gd32vf103c8 {
                RCC->APB2ENR = RCC->APB2ENR | 0b01; // Enable AFIO clock
                AFIO->MAPR = ( AFIO->MAPR & ( ~ ( 0b111 <<24 )))  | ( 0b001 << 24 ); // JTA+SW-DP, but without NJRST
             }   
-        }
+ */
+
+       }
 
         bool base_read() {
             return ((port.IDR & mask) != 0);
@@ -242,6 +243,7 @@ namespace gd32vf103c8 {
 
     };
 
+/*
 /// 36kHz output on pin chip PA6 (blue pill A6)
 ///
 /// This class provides a 36 kHz output on chip pin PA6
@@ -287,7 +289,7 @@ namespace gd32vf103c8 {
         void flush() override {};
 
     }; // class a6_36kHz
-
+*/
 
 /// pin_oc implementation for an stm32f103c8
     class pin_oc : public hwlib::pin_oc, private pin_base {
@@ -339,7 +341,7 @@ namespace gd32vf103c8 {
 
 /// returns the number of ticks since some fixed starting point
     uint_fast64_t HWLIB_WEAK now_ticks() {
-
+/*
         static bool init_done = false;
         if (!init_done) {
 
@@ -408,7 +410,8 @@ namespace gd32vf103c8 {
         // return the aggregated ticks value
         // the counter runs at 1 MHz
         return (low | high);
-
+*/
+return 0;
     }
 
 /// \cond INTERNAL    
@@ -423,6 +426,7 @@ namespace gd32vf103c8 {
 
 #ifdef _HWLIB_ONCE
 
+/*
     // If hwlib gets to cpp20 minimum make this consteval.
     constexpr uint32_t calculateBoutRate(long long  bout) {
         long long  fck = 64000000; // PCLK2 is getting 64 MHz
@@ -433,7 +437,7 @@ namespace gd32vf103c8 {
         uint32_t baudrateReg = mantissa<<4u | devider;
         return baudrateReg;
     }
-
+*/
     void uart_init() {
         static bool init_done = false;
         if (init_done) {
@@ -448,19 +452,20 @@ namespace gd32vf103c8 {
         GPIOA->CRH &= ~(GPIO_CRH_CNF9 | GPIO_CRH_MODE9);   // reset PA9
         GPIOA->CRH &= ~(GPIO_CRH_CNF10 | GPIO_CRH_MODE10);  // reset PA10
 
-        GPIOA->CRH |= GPIO_CRH_MODE9_1 | GPIO_CRH_MODE9_0;  // 0b11 50MHz output
-        GPIOA->CRH |= GPIO_CRH_CNF9_1;    // PA9: output @ 50MHz - Alt-function Push-pull
-        GPIOA->CRH |= GPIO_CRH_CNF10_0;   // PA10 RX - Mode = 0b00 (input) - CNF = 0b01 (input floating)
-        USART1->BRR = calculateBoutRate(HWLIB_BAUDRATE);
+//        GPIOA->CRH |= GPIO_CRH_MODE9_1 | GPIO_CRH_MODE9_0;  // 0b11 50MHz output
+//        GPIOA->CRH |= GPIO_CRH_CNF9_1;    // PA9: output @ 50MHz - Alt-function Push-pull
+//        GPIOA->CRH |= GPIO_CRH_CNF10_0;   // PA10 RX - Mode = 0b00 (input) - CNF = 0b01 (input floating)
+//        USART1->BRR = calculateBoutRate(HWLIB_BAUDRATE);
         // configure USART1 registers
-        USART1->CR1 = USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
+//        USART1->CR1 = USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
 
     }
 
 
     bool uart_char_available() {
         uart_init();
-        return (USART1->SR & USART_SR_RXNE_Msk);
+//        return (USART1->SR & USART_SR_RXNE_Msk);
+return 0;
     }
 
     char uart_getc() {
@@ -468,27 +473,21 @@ namespace gd32vf103c8 {
         while (!uart_char_available()) {
             hwlib::background::do_background_work();
         }
-        return USART1->DR;
+//        return USART1->DR;
+return 0;
     }
 
     void uart_putc(char c) {
         uart_init();
-        while (!(USART1->SR & USART_SR_TXE_Msk)) {
-            hwlib::background::do_background_work();
-        }
-        USART1->DR = c;
+//        while (!(USART1->SR & USART_SR_TXE_Msk)) {
+//            hwlib::background::do_background_work();
+//        }
+//        USART1->DR = c;
     }
 
 
 #endif
 
-}; // end namespace gd32vf103c8  
-
-namespace hwlib {
-
-    namespace target = ::gd32vf103c8;
-    const auto target_chip = target_chips::gd32vf103c8;
-    
-};    
+}; // end namespace gd32vf103xx  
 
 #endif // #ifdef HWLIB_GD32VF103XX_H

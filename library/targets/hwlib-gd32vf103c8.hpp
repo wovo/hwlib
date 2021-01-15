@@ -16,7 +16,7 @@
 
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
-namespace gd32v103xx {
+namespace gd32vf103xx {
    
 /// GPIO pin names
     enum class pins {
@@ -108,7 +108,7 @@ namespace gd32v103xx {
 
 #include HWLIB_INCLUDE( hwlib-gd32vf103xx.hpp )
 
-namespace gd32vf103c8 = ::gd32vf1xx;   
+namespace gd32vf103c8 = ::gd32vf103xx;   
 
 namespace hwlib {
 
