@@ -64,6 +64,12 @@
    #include HWLIB_INCLUDE( targets/hwlib-blue-pill.hpp )
 #endif
 
+/// - HWLIB_TARGET_termite : Termite board (stm32f103c8 chip) https://github.com/CvRXX/termite
+#ifdef HWLIB_TARGET_termite
+#define HWLIB_TARGET
+   #include HWLIB_INCLUDE( targets/hwlib-termite.hpp )
+#endif
+
 #ifdef HWLIB_TARGET_gd32vf103c8
    #define HWLIB_TARGET
    #include HWLIB_INCLUDE( targets/hwlib-gd32vf103c8.hpp )
