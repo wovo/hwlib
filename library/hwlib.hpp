@@ -107,5 +107,6 @@
    #include HWLIB_INCLUDE( targets/hwlib-none.hpp )
 #endif
 
+#include HWLIB_INCLUDE( shields/hwlib-arduino-multifunction-shield.hpp )
 
 #endif // HWLIB_ALL_H

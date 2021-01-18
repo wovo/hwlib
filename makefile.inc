@@ -90,6 +90,10 @@ HEADERS           += peripherals/hwlib-servo-background.hpp
 
 HEADERS           += shields/hwlib-arduino-multifunction-shield.hpp
 
+HEADERS           += targets/hwlib-nrf528xx.hpp
+HEADERS           += targets/hwlib-nrf52833.hpp
+HEADERS           += targets/hwlib-micro-bit.hpp
+
 HEADERS           += targets/hwlib-atmega328.hpp
 HEADERS           += targets/hwlib-arduino-uno.hpp
 HEADERS           += targets/hwlib-my-first-dev-board.hpp

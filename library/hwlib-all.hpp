@@ -102,6 +102,4 @@
 #include HWLIB_INCLUDE( peripherals/hwlib-matrix-keypad.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-servo-background.hpp )
 
-#include HWLIB_INCLUDE( shields/hwlib-arduino-multifunction-shield.hpp )
-
 #endif // HWLIB_ALL_H
