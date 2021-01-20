@@ -304,6 +304,88 @@ namespace stm32f1xx {
 
     }; // class a6_36kHz
 
+    class spi_bus_hardware : public hwlib::spi_bus {
+    private:
+
+
+        void write_and_read(
+                const size_t n,
+                const uint8_t data_out[],
+                uint8_t data_in[]
+        ) override {
+            for( uint_fast8_t i = 0; i < n; i++ ) {
+                if (data_out != nullptr) {
+                    SPI1->DR = (uint32_t)data_out[i]; //Write a byte to SPI hardware
+                    while (!(SPI1->SR & SPI_SR_TXE)) { // Wait for byte to be processed by SPI hardware
+                        hwlib::wait_ns_busy(1);
+                    }
+                }
+
+                if (data_in != nullptr) {
+                    while (!SPI1->SR & SPI_SR_RXNE) { //Wait for byte to be received
+                        hwlib::wait_ns_busy(1);
+                    }
+                    data_in[i] = SPI1->DR;
+                    *data_in++;
+                }
+            }
+        }
+
+    public:
+
+        /// construct a hardware spi bus for the stm32f1xx
+        ///
+        /// This constructor creates a hardware spi bus
+        /// on the default spi1 pins.
+        ///
+        ///
+        /// When the SPI bus is used for either only writing or only reading,
+        /// the unused pin argument can be specified as pin_out_dummy or
+        /// pin_in_dummy.
+        ///
+        ///
+        /// Default pins are:
+        /// SCK:    A5
+        /// MOSI:   A7
+        /// NSS:    A4
+        /// MISO:   A6
+        spi_bus_hardware(
+
+        ){
+            // Setup all the ports needed by the SPI bus
+            RCC->APB2ENR |= RCC_APB2ENR_SPI1EN; //enable clock signal to spi
+            RCC->APB2ENR |= RCC_APB2ENR_IOPAEN; //enable clock signal to peripheralport A (this is were spi ports reside)
+
+            GPIOA->CRL &= ~(GPIO_CRL_CNF5 | GPIO_CRL_MODE5);//sck
+            GPIOA->CRL &= ~(GPIO_CRL_CNF7 | GPIO_CRL_MODE7);//mosi
+            GPIOA->CRL &= ~(GPIO_CRL_CNF4 | GPIO_CRL_MODE4);//nss
+            GPIOA->CRL &= ~(GPIO_CRL_CNF6 | GPIO_CRL_MODE6);// miso
+
+
+            GPIOA->CRL |= GPIO_CRL_MODE5_0 | GPIO_CRL_MODE5_1; //sck
+            GPIOA->CRL |= GPIO_CRL_CNF5_1;
+
+            GPIOA->CRL |= GPIO_CRL_MODE7_0 | GPIO_CRL_MODE7_1; //mosi
+            GPIOA->CRL |= GPIO_CRL_CNF7_1;
+
+            GPIOA->CRL |= GPIO_CRL_MODE4_0 | GPIO_CRL_MODE4_1; //nss
+            GPIOA->CRL |= GPIO_CRL_CNF4_1;
+
+            GPIOA->CRL |= GPIO_CRL_CNF6_0; // miso
+
+
+
+
+
+
+
+            SPI1->CR1 |= SPI_CR1_CPOL; //Invert clock polarity
+
+            SPI1->CR2 |= SPI_CR2_SSOE; //Slave select will output
+            SPI1->CR1 |= SPI_CR1_MSTR | SPI_CR1_SPE; //Make us the master and enable spi
+        }
+
+    };
 
 /// pin_oc implementation for an stm32f103c8
     class pin_oc : public hwlib::pin_oc, private pin_base {
