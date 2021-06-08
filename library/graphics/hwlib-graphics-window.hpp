@@ -51,6 +51,11 @@ private:
       for( const auto p : all( size ) ){
          write_implementation( p, col.specify( background ) );    
       }          
+      if(0) for( int x = 0; x < size.x; ++x ){
+         for( int y = 0; y < size.y; ++y ){
+            write_implementation( xy( x, y ), col.specify( background ) );    
+         }   
+      }          
    }   
    
 public:
@@ -82,7 +87,7 @@ public:
       size{ size }, 
       background{ background }, 
       foreground{ foreground }
-   {}
+   { clear( background ); }
    
    /// write a pixel
    /// 

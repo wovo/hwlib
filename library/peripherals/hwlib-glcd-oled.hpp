@@ -316,7 +316,7 @@ private:
 	      buffer[ x ] = d;
 		   t.write( d );
       }        
-	  cursor = xy( 255, 255 );
+	   cursor = xy( 255, 255 );
    }   
      
 public:

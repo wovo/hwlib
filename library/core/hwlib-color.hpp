@@ -142,14 +142,15 @@ public:
    
    /// reports whether two colors are equal   
    constexpr bool operator== ( const color c ) const {
-      return special != color_special::normal 
-         ? special == c.special
-         : ( 
-               ( red    == c.red ) 
-            && ( green  == c.green ) 
-            && ( blue   == c.blue )
-         ); 
-   }
+      return special == color_special::normal 
+         ? ( 
+              ( special  == c.special )
+           && ( red      == c.red ) 
+           && ( green    == c.green ) 
+           && ( blue     == c.blue )
+         )
+         : special == c.special;
+   }            
 
    /// reports whether two colors are unequal
    constexpr bool operator!= ( const color c ) const {
@@ -181,12 +182,12 @@ T & operator<<( T & lhs, const color & rhs ){
    } else {
       lhs << "[";
       lhs.base( 16 );
-      lhs.width( 4 );
       lhs.fill( '0' );
       return lhs   
-         << rhs.red << "," 
-         << rhs.green << ","
-         << rhs.blue << "]";
+         // << lhs.width( 2 ) << (int)rhs.special   << "," 
+         << lhs.width( 2 ) << rhs.red   << "," 
+         << lhs.width( 2 ) << rhs.green << ","
+         << lhs.width( 2 ) << rhs.blue  << "]";
    }
 }
 

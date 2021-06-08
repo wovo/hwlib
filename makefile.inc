@@ -139,6 +139,7 @@ ifeq ($(TARGET),native)
       SEARCH            += $(SFML)/include
       LINKER_FLAGS      += -L$(SFML)/lib 
       LINKER_FLAGS      += -lsfml-graphics-s -lsfml-window-s -lsfml-system-s 
+      LINKER_FLAGS      += -lfreetype
       LINKER_FLAGS      += -lopengl32 -lgdi32 -lws2_32 -lwinmm
       DEFINES           += -DSFML_STATIC
    else
