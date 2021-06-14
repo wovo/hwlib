@@ -330,6 +330,7 @@ public:
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
       );     
+      clear();      
    }
    
    void flush() override {}  
@@ -394,7 +395,7 @@ public:
       command( ssd1306_commands::display_all_on_resume );  
       command( ssd1306_commands::normal_display );
       command( ssd1306_commands::display_on );
-      
+      clear();      
    }
    
    void clear_implementation(  color c ) override {
@@ -454,6 +455,7 @@ public:
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
       );  
+      clear();      
    }
    
    void flush() override {
@@ -527,6 +529,7 @@ public:
          ssd1306_initialization, 
          sizeof( ssd1306_initialization ) / sizeof( uint8_t ) 
       );     
+      clear();
    }
    
    void flush() override {

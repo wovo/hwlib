@@ -179,6 +179,8 @@ public:
       wait_ms( 100 );
       command( commands::DISPON );
       wait_ms( 100 );
+      
+      clear();      
    }     
 
    void flush() override {

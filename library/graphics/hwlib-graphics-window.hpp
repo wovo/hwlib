@@ -46,7 +46,7 @@ private:
    /// The default implementation writes to all pixels in sequence.
    /// A concrete window can provide a faster implementation.       
    virtual void clear_implementation( 
-      color col
+      color col = unspecified
    ){ 
       for( const auto p : all( size ) ){
          write_implementation( p, col.specify( background ) );    
@@ -87,7 +87,7 @@ public:
       size{ size }, 
       background{ background }, 
       foreground{ foreground }
-   { clear( background ); }
+   {}
    
    /// write a pixel
    /// 
