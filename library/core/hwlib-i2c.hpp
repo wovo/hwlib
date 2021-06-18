@@ -161,6 +161,7 @@ class i2c_write_transaction {
 private:
 
    i2c_primitives & primitives;
+   bool end_with_stop;
       
 public:
    
@@ -169,11 +170,21 @@ public:
       i2c_primitives & primitives,
       uint_fast8_t a 
    ): 
-       primitives( primitives )
+       primitives( primitives ),
+       end_with_stop( true )
    {
       primitives.write_start();
       primitives.write( a << 1 );		  
    }
+   
+   /// prepare for a repeated start
+   ///
+   /// Calling this function causes the transaction
+   /// to omit the terminating stop, so the nextr transaction
+   /// starts with a repeated start.
+   void prepare_repeated_start(){
+      end_with_stop = false;
+   }   
    
    /// write a single byte
    /// 
@@ -201,7 +212,11 @@ public:
    /// terminate (close) the write transaction
    ~i2c_write_transaction(){
       primitives.read_ack();
-      primitives.write_stop();		  
+      if( end_with_stop ){
+         primitives.write_stop();		  
+      } else {
+         primitives.write_bit( 1 );
+      }
    }
 	  
 }; // class i2c_write_transaction  
