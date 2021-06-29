@@ -33,7 +33,7 @@ private:
    int_fast16_t pulse_us;	   
    
    void work() override {
-      
+
       // time for the next pulse has arrived
       if( hwlib::now_us() > next_pulse ){
          next_pulse += 20'000;
@@ -89,12 +89,18 @@ public:
       const servo_properties & properties = servo_properties(),
       bool use_busy_waiting = true
    ):
+      // note: none of these initializations must wait!
       servo( properties ),
       pin( pin ),
       next_pulse( hwlib::now_us() ),
       pulse_end( 0 ),
       use_busy_waiting( use_busy_waiting ),
-      pulse_active( false )
+      pulse_active( false ),
+      
+      // added 2021-06-29: 
+      // otherwise an undefined wait can occur because pulse_us
+      // is undefined before the first write_us call
+      pulse_us( 1 )
    {}
       
 };

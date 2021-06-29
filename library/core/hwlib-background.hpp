@@ -41,6 +41,9 @@ namespace hwlib {
 ///
 /// For all background jobs: be careful to preserve the object!
 ///
+/// Note: the constructor of a bckground object must take care not to
+/// invoke waiting while the object construction isn't yet finished.
+///
 class background_base : public noncopyable {
 private:
 
