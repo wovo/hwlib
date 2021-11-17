@@ -31,6 +31,7 @@ enum class target_chips {
    atmega328p,
    atsam3x8e,
    stm32f103c8,
+   stm32f401cc,
    gd32vf103c8
 };
    

@@ -19,9 +19,9 @@
 #include HWLIB_INCLUDE(../hwlib-all.hpp)
 
 // the STM header files use 'register' in the pre-C++17 sense
-//#define register
+#define register
 #include "stm32f103xb.h"
-//#undef register
+#undef register
 
 /// \brief
 /// hwlib HAL for the stm32f1xx chips
@@ -322,11 +322,11 @@ namespace stm32f1xx {
                 }
 
                 if (data_in != nullptr) {
-                    while (!SPI1->SR & SPI_SR_RXNE) { //Wait for byte to be received
+                    while (! (SPI1->SR & SPI_SR_RXNE) ) { //Wait for byte to be received
                         hwlib::wait_ns_busy(1);
                     }
-                    data_in[i] = SPI1->DR;
-                    *data_in++;
+                    *data_in = SPI1->DR;
+                    data_in++;
                 }
             }
         }

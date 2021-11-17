@@ -84,6 +84,7 @@ HEADERS           += peripherals/hwlib-hc595.hpp
 HEADERS           += peripherals/hwlib-hd44780.hpp
 HEADERS           += peripherals/hwlib-glcd-5510.hpp
 HEADERS           += peripherals/hwlib-glcd-oled.hpp
+HEADERS           += peripherals/hwlib-apa102.hpp
 HEADERS           += peripherals/hwlib-glcd-st7789.hpp
 HEADERS           += peripherals/hwlib-matrix-keypad.hpp
 HEADERS           += peripherals/hwlib-servo-background.hpp
@@ -105,6 +106,8 @@ HEADERS           += targets/hwlib-longan-nano.hpp
 
 HEADERS           += targets/hwlib-stm32f1xx.hpp
 HEADERS           += targets/hwlib-stm32f103c8.hpp
+HEADERS           += targets/hwlib-stm32f4xx.hpp
+HEADERS           += targets/hwlib-stm32f401cc.hpp
 HEADERS           += targets/hwlib-blue-pill.hpp
 HEADERS           += targets/hwlib-termite.hpp
 

@@ -191,7 +191,7 @@ const HWLIB_WEAK pin_info_type & pin_info( pins name ){
 /// \endcond  
 
 
-/// Arduino Due pin names
+/// Arduino Due ADC pin names
 /// 
 /// These are the ADC pins of an Arduino Due board.
 enum class ad_pins {

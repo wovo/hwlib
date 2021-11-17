@@ -26,7 +26,11 @@ namespace hwlib {
    
 /// properties of a servo
 ///
-/// This struct stores the properties of an (individual) servo.   
+/// This struct stores the properties of an (individual) servo:
+/// - the range (angle) over which the shaft can rotate (in degrees)
+/// - the pulse widths that corresponds to this range
+///
+/// The defaults values are 0..180 degrees and 500 .. 2500 uS.
 struct servo_properties {
    
    /// the minimum pulse duration
@@ -187,7 +191,7 @@ servo_dummy_t servo_dummy;
 /// constructor function invert().
 class servo_invert_t : public servo {
 private:
-	
+
    servo & minion;
    
 public:
@@ -233,7 +237,7 @@ servo_invert_t invert( servo & s ){
 /// constructor function all().
 class servo_all_t : public servo {
 private:
-	
+
    static constexpr int max_servos = 16;  
    servo * servos[ max_servos ];   
    
@@ -261,7 +265,7 @@ public:
    ):
       servo( properties ),
       servos { 
-	     &p0,  &p1,  &p2,  &p3,  &p4,  &p5,  &p6, &p7, 
+        &p0,  &p1,  &p2,  &p3,  &p4,  &p5,  &p6, &p7, 
         &p8,  &p9,  &p10, &p11, &p12, &p13, &p14, &p15 
       }{}            
    
@@ -323,6 +327,5 @@ servo_all_t all(
 }   
 
 #endif // _HWLIB_ONCE
-
 
 }; // namespace hwlib
