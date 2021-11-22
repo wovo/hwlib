@@ -118,6 +118,7 @@ HEADERS           += targets/hwlib-native-windows.hpp
 HEADERS           += targets/hwlib-native-linux.hpp
 HEADERS           += targets/hwlib-native-sfml.hpp
 HEADERS           += targets/hwlib-teensy-40.hpp
+HEADERS           += targets/hwlib-pi-pico.hpp
 HEADERS           += targets/hwlib-none.hpp
 
 RELATIVE ?= $(HWLIB)

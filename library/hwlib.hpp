@@ -96,6 +96,11 @@
    #include HWLIB_INCLUDE( hwlib-scouting-lock.hpp )
 #endif
 
+#ifdef BMPTK_TARGET_pi_pico
+   #define HWLIB_TARGET
+   #include HWLIB_INCLUDE( hwlib-pi-pico.hpp )
+#endif
+
 /// - HWLIB_TARGET_native : Windows native
 #ifdef HWLIB_TARGET_Windows
    #define HWLIB_TARGET

@@ -524,7 +524,7 @@ namespace stm32f4xx {
     void uart_putc(char c) {
         uart_init();
         while (( USART1->SR & USART_SR_TXE ) == 0 ) {
-            hwlib::background::do_background_work();
+//            hwlib::background::do_background_work();
         }
         USART1->DR = c;
     }
