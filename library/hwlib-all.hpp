@@ -102,5 +102,6 @@
 #endif
 #include HWLIB_INCLUDE( peripherals/hwlib-matrix-keypad.hpp )
 #include HWLIB_INCLUDE( peripherals/hwlib-servo-background.hpp )
+#include HWLIB_INCLUDE( peripherals/hwlib-sr04.hpp )
 
 #endif // HWLIB_ALL_H

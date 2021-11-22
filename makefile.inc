@@ -88,6 +88,7 @@ HEADERS           += peripherals/hwlib-apa102.hpp
 HEADERS           += peripherals/hwlib-glcd-st7789.hpp
 HEADERS           += peripherals/hwlib-matrix-keypad.hpp
 HEADERS           += peripherals/hwlib-servo-background.hpp
+HEADERS           += peripherals/hwlib-sr04.hpp
 
 HEADERS           += shields/hwlib-arduino-multifunction-shield.hpp
 
